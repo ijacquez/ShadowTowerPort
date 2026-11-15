@@ -1,7 +1,9 @@
 #include "recomp.h"
 #include "disable_warnings.h"
 
-void sub_80046270(uint8_t* rdram, recomp_context* ctx) {
+void ST_SelectSpatialCandidates(uint8_t* rdram, recomp_context* ctx) {
+    // Select candidate record indices by intersecting coordinate-indexed
+    // bitsets. The selected indices are consumed by the geometry query.
     uint64_t hi = 0, lo = 0, result = 0;
     unsigned int rounding_mode = DEFAULT_ROUNDING_MODE;
     int c1cs = 0; 

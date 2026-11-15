@@ -48,7 +48,7 @@ void sub_80016030(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x80015A94
     // subu        $s0, $v0, $a1
     ctx->r16 = SUB32(ctx->r2, ctx->r5);
-    sub_80015A94(rdram, ctx);
+    ST_AddSectorsToCdPosition(rdram, ctx);
     goto after_0;
     // subu        $s0, $v0, $a1
     ctx->r16 = SUB32(ctx->r2, ctx->r5);

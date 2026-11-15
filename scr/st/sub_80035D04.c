@@ -230,7 +230,7 @@ L_80035E60:
     // jal         0x80049544
     // addu        $a0, $s1, $zero
     ctx->r4 = ADD32(ctx->r17, 0);
-    sub_80049544(rdram, ctx);
+    ST_RunCollisionQuery(rdram, ctx);
     goto after_2;
     // addu        $a0, $s1, $zero
     ctx->r4 = ADD32(ctx->r17, 0);

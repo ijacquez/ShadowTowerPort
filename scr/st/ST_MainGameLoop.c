@@ -301,7 +301,7 @@ L_80014B74:
     // jal         0x80014544
     // nop
 
-    sub_80014544(rdram, ctx);
+    ST_LoadInitialGameState(rdram, ctx);
 
     goto after_26;
     // nop
@@ -462,7 +462,7 @@ L_80014BD4:
     // jal         0x800456F8
     // nop
 
-    sub_800456F8(rdram, ctx);
+    ST_UpdateLevelStreaming(rdram, ctx);
 
     goto after_42;
     // nop

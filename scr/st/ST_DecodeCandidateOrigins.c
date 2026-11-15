@@ -1,7 +1,8 @@
 #include "recomp.h"
 #include "disable_warnings.h"
 
-void sub_8004656C(uint8_t* rdram, recomp_context* ctx) {
+void ST_DecodeCandidateOrigins(uint8_t* rdram, recomp_context* ctx) {
+    // Decode selected 12-byte records into 16-byte coordinate entries.
     uint64_t hi = 0, lo = 0, result = 0;
     unsigned int rounding_mode = DEFAULT_ROUNDING_MODE;
     int c1cs = 0; 

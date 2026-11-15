@@ -408,7 +408,7 @@ L_80046210:
     // jal         0x80015A94
     // addu        $a2, $a0, $zero
     ctx->r6 = ADD32(ctx->r4, 0);
-    sub_80015A94(rdram, ctx);
+    ST_AddSectorsToCdPosition(rdram, ctx);
     goto after_7;
     // addu        $a2, $a0, $zero
     ctx->r6 = ADD32(ctx->r4, 0);

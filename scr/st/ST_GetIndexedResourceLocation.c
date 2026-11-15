@@ -1,7 +1,10 @@
 #include "recomp.h"
 #include "disable_warnings.h"
 
-void sub_80015CD0(uint8_t* rdram, recomp_context* ctx) {
+void ST_GetIndexedResourceLocation(uint8_t* rdram, recomp_context* ctx) {
+    // Read consecutive 16-bit sector offsets from the selected index table.
+    // Return their difference in bytes; optionally convert the first offset
+    // to a CD position relative to the resource's base position.
     uint64_t hi = 0, lo = 0, result = 0;
     unsigned int rounding_mode = DEFAULT_ROUNDING_MODE;
     int c1cs = 0; 
@@ -46,7 +49,7 @@ void sub_80015CD0(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x80015A94
     // addu        $a1, $s1, $zero
     ctx->r5 = ADD32(ctx->r17, 0);
-    sub_80015A94(rdram, ctx);
+    ST_AddSectorsToCdPosition(rdram, ctx);
     goto after_0;
     // addu        $a1, $s1, $zero
     ctx->r5 = ADD32(ctx->r17, 0);

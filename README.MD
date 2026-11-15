@@ -72,7 +72,7 @@ sub_8004E324()    — more math
 sub_80053AA4()    — more GTE math
 sub_8003BC40()    — state machine with cases
 sub_8005735C()    — calls function pointer at dword_801B592C+4 (player script?)
-sub_800456F8()    — CD work, SsVabClose
+ST_UpdateLevelStreaming() — level streaming state machine
 sub_8003E734()    — possibly copies player coords/rotation
 sub_80058288()    — more global data updates
 ProcessAssetLoadQueue()

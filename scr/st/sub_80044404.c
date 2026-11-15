@@ -48,7 +48,7 @@ void sub_80044404(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x800456F8
     // sb          $v1, 0x12($s0)
     MEM_B(0X12, ctx->r16) = ctx->r3;
-    sub_800456F8(rdram, ctx);
+    ST_UpdateLevelStreaming(rdram, ctx);
     goto after_1;
     // sb          $v1, 0x12($s0)
     MEM_B(0X12, ctx->r16) = ctx->r3;

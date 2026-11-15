@@ -1,7 +1,8 @@
 #include "recomp.h"
 #include "disable_warnings.h"
 
-void sub_80015EC8(uint8_t* rdram, recomp_context* ctx) {
+void ST_GetIndexedResourceSize(uint8_t* rdram, recomp_context* ctx) {
+    // Adjacent 16-bit entries delimit a resource in 2048-byte sectors.
     uint64_t hi = 0, lo = 0, result = 0;
     unsigned int rounding_mode = DEFAULT_ROUNDING_MODE;
     int c1cs = 0; 

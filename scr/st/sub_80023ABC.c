@@ -38,7 +38,7 @@ void sub_80023ABC(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x80015EC8
     // addu        $s5, $a3, $zero
     ctx->r21 = ADD32(ctx->r7, 0);
-    sub_80015EC8(rdram, ctx);
+    ST_GetIndexedResourceSize(rdram, ctx);
     goto after_0;
     // addu        $s5, $a3, $zero
     ctx->r21 = ADD32(ctx->r7, 0);
@@ -50,7 +50,7 @@ void sub_80023ABC(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x80015EC8
     // addu        $s0, $v0, $zero
     ctx->r16 = ADD32(ctx->r2, 0);
-    sub_80015EC8(rdram, ctx);
+    ST_GetIndexedResourceSize(rdram, ctx);
     goto after_1;
     // addu        $s0, $v0, $zero
     ctx->r16 = ADD32(ctx->r2, 0);

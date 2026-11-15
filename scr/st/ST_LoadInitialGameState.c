@@ -1,7 +1,8 @@
 #include "recomp.h"
 #include "disable_warnings.h"
+#include "ST_PlayerState.h"
 
-void sub_80014544(uint8_t* rdram, recomp_context* ctx) {
+void ST_LoadInitialGameState(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
     unsigned int rounding_mode = DEFAULT_ROUNDING_MODE;
     int c1cs = 0; 
@@ -62,7 +63,7 @@ void sub_80014544(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x80014450
     // sw          $s6, 0x10($sp)
     MEM_W(0X10, ctx->r29) = ctx->r22;
-    sub_80014450(rdram, ctx);
+    ST_ReadFixedWidthDecimalLine(rdram, ctx);
     goto after_2;
     // sw          $s6, 0x10($sp)
     MEM_W(0X10, ctx->r29) = ctx->r22;
@@ -88,7 +89,7 @@ void sub_80014544(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x80014450
     // sb          $v0, 0x4($v1)
     MEM_B(0X4, ctx->r3) = ctx->r2;
-    sub_80014450(rdram, ctx);
+    ST_ReadFixedWidthDecimalLine(rdram, ctx);
     goto after_3;
     // sb          $v0, 0x4($v1)
     MEM_B(0X4, ctx->r3) = ctx->r2;
@@ -108,7 +109,7 @@ void sub_80014544(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x80014450
     // sw          $v0, 0x248($s0)
     MEM_W(0X248, ctx->r16) = ctx->r2;
-    sub_80014450(rdram, ctx);
+    ST_ReadFixedWidthDecimalLine(rdram, ctx);
     goto after_4;
     // sw          $v0, 0x248($s0)
     MEM_W(0X248, ctx->r16) = ctx->r2;
@@ -122,11 +123,11 @@ void sub_80014544(uint8_t* rdram, recomp_context* ctx) {
     // sll         $v0, $v0, 12
     ctx->r2 = S32(ctx->r2) << 12;
     // addiu       $v0, $v0, -0x640
-    ctx->r2 = ADD32(ctx->r2, -0X640);
+    ctx->r2 = ADD32(ctx->r2, -ST_PLAYER_COLLISION_Y_OFFSET);
     // jal         0x80014450
     // sw          $v0, 0x24C($s0)
     MEM_W(0X24C, ctx->r16) = ctx->r2;
-    sub_80014450(rdram, ctx);
+    ST_ReadFixedWidthDecimalLine(rdram, ctx);
     goto after_5;
     // sw          $v0, 0x24C($s0)
     MEM_W(0X24C, ctx->r16) = ctx->r2;
@@ -142,7 +143,7 @@ void sub_80014544(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x80014450
     // sw          $v0, 0x250($s0)
     MEM_W(0X250, ctx->r16) = ctx->r2;
-    sub_80014450(rdram, ctx);
+    ST_ReadFixedWidthDecimalLine(rdram, ctx);
     goto after_6;
     // sw          $v0, 0x250($s0)
     MEM_W(0X250, ctx->r16) = ctx->r2;
@@ -154,7 +155,7 @@ void sub_80014544(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x80014450
     // addu        $s4, $v0, $zero
     ctx->r20 = ADD32(ctx->r2, 0);
-    sub_80014450(rdram, ctx);
+    ST_ReadFixedWidthDecimalLine(rdram, ctx);
     goto after_7;
     // addu        $s4, $v0, $zero
     ctx->r20 = ADD32(ctx->r2, 0);
@@ -186,7 +187,7 @@ L_80014658:
     // jal         0x80014450
     // sw          $v0, 0x14($sp)
     MEM_W(0X14, ctx->r29) = ctx->r2;
-    sub_80014450(rdram, ctx);
+    ST_ReadFixedWidthDecimalLine(rdram, ctx);
     goto after_8;
     // sw          $v0, 0x14($sp)
     MEM_W(0X14, ctx->r29) = ctx->r2;
@@ -198,7 +199,7 @@ L_80014658:
     // jal         0x80014450
     // addu        $s0, $v0, $zero
     ctx->r16 = ADD32(ctx->r2, 0);
-    sub_80014450(rdram, ctx);
+    ST_ReadFixedWidthDecimalLine(rdram, ctx);
     goto after_9;
     // addu        $s0, $v0, $zero
     ctx->r16 = ADD32(ctx->r2, 0);

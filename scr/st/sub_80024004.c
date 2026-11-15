@@ -143,7 +143,7 @@ L_800240C8:
     // jal         0x80015EC8
     // andi        $a1, $s2, 0xFFFF
     ctx->r5 = ctx->r18 & 0XFFFF;
-    sub_80015EC8(rdram, ctx);
+    ST_GetIndexedResourceSize(rdram, ctx);
     goto after_3;
     // andi        $a1, $s2, 0xFFFF
     ctx->r5 = ctx->r18 & 0XFFFF;

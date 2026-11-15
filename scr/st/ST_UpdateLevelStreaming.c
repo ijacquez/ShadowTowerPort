@@ -1,7 +1,7 @@
 #include "recomp.h"
 #include "disable_warnings.h"
 
-void sub_800456F8(uint8_t* rdram, recomp_context* ctx) 
+void ST_UpdateLevelStreaming(uint8_t* rdram, recomp_context* ctx) 
 {
     //for (int i = 0; i < 16; i++) {
     //    uint32_t entryAddr = 0x801DD228 + i * 8;
@@ -213,7 +213,7 @@ L_800457D0:
     // jal         0x80015EC8
     // sll         $a1, $a1, 1
     ctx->r5 = S32(ctx->r5) << 1;
-    sub_80015EC8(rdram, ctx);
+    ST_GetIndexedResourceSize(rdram, ctx);
     goto after_0;
     // sll         $a1, $a1, 1
     ctx->r5 = S32(ctx->r5) << 1;
@@ -351,6 +351,9 @@ L_8004586C:
     // nop
 
 L_800458B4:
+    // The preceding load's callback advances to this stage. Queue the next
+    // resource and copy the loaded level table into its fixed RAM region.
+    // See COLLISION_GEOMETRY.md for the verified collision-data path.
     // addiu       $a0, $zero, 0x1
     ctx->r4 = ADD32(0, 0X1);
     // lui         $a3, 0x8004

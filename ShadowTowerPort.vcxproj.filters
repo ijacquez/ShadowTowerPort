@@ -1848,7 +1848,7 @@
     <ClCompile Include="scr\st\sub_80014F90.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_80015A94.c">
+    <ClCompile Include="scr\st\ST_AddSectorsToCdPosition.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\AsyncStructForcedLoadSync.c">
@@ -1863,7 +1863,7 @@
     <ClCompile Include="scr\st\sub_80015BCC.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_80015CD0.c">
+    <ClCompile Include="scr\st\ST_GetIndexedResourceLocation.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\sub_80015D54.c">
@@ -1875,7 +1875,7 @@
     <ClCompile Include="scr\st\sub_80015DFC.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_80015EC8.c">
+    <ClCompile Include="scr\st\ST_GetIndexedResourceSize.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\KF_CDReadSectorsInternal.c">
@@ -2052,7 +2052,7 @@
     <ClCompile Include="scr\st\sub_80040F04.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_80041D4C.c">
+    <ClCompile Include="scr\st\ST_PlayerUpdateTurning.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\sub_80042B9C.c">
@@ -2082,7 +2082,7 @@
     <ClCompile Include="scr\st\ProcessAssetLoadQueue.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_80048AD0.c">
+    <ClCompile Include="scr\st\ST_QueryLevelGeometry.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\sub_80049AAC.c">
@@ -2346,10 +2346,10 @@
     <ClCompile Include="scr\st\sub_800154E8.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_800158F4.c">
+    <ClCompile Include="scr\st\ST_BcdToBinary.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_800159D4.c">
+    <ClCompile Include="scr\st\ST_SectorToCdPosition.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\sub_800164B4.c">
@@ -2484,7 +2484,7 @@
     <ClCompile Include="scr\st\sub_800402AC.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_800420A0.c">
+    <ClCompile Include="scr\st\ST_PlayerUpdateMovement.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\sub_800443F4.c">
@@ -2502,7 +2502,7 @@
     <ClCompile Include="scr\st\sub_800455F4.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_800456F8.c">
+    <ClCompile Include="scr\st\ST_UpdateLevelStreaming.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\sub_800468C0.c">
@@ -2535,7 +2535,7 @@
     <ClCompile Include="scr\st\sub_800562D4.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_800573BC.c">
+    <ClCompile Include="scr\st\ST_InitDefaultControlBindings.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\sub_800574C0.c">
@@ -2706,16 +2706,16 @@
     <ClCompile Include="scr\st\sub_8003618C.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_8004162C.c">
+    <ClCompile Include="scr\st\ST_PlayerMoveWithCollision.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_8004557C.c">
+    <ClCompile Include="scr\st\ST_OnLevelDataChunkLoaded.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\sub_8004567C.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_8004656C.c">
+    <ClCompile Include="scr\st\ST_DecodeCandidateOrigins.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\sub_8005066C.c">
@@ -2766,10 +2766,10 @@
     <ClCompile Include="scr\st\sub_80014410.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_80014450.c">
+    <ClCompile Include="scr\st\ST_ReadFixedWidthDecimalLine.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_80014544.c">
+    <ClCompile Include="scr\st\ST_LoadInitialGameState.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\sub_80015024.c">
@@ -2799,10 +2799,10 @@
     <ClCompile Include="scr\st\sub_80015848.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_80015914.c">
+    <ClCompile Include="scr\st\ST_BinaryToBcd.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_80015950.c">
+    <ClCompile Include="scr\st\ST_CdPositionToSector.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\sub_80016030.c">
@@ -3033,7 +3033,7 @@
     <ClCompile Include="scr\st\sub_80045648.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_80046270.c">
+    <ClCompile Include="scr\st\ST_SelectSpatialCandidates.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\sub_80046604.c">
@@ -3042,7 +3042,7 @@
     <ClCompile Include="scr\st\sub_80047884.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_80049544.c">
+    <ClCompile Include="scr\st\ST_RunCollisionQuery.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\sub_80050288.c">
@@ -3333,6 +3333,9 @@
       <Filter>Исходные файлы\scr\st</Filter>
     </ClInclude>
     <ClInclude Include="scr\st\funcs.h">
+      <Filter>Исходные файлы\scr\st</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\st\ST_PlayerState.h">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClInclude>
     <ClInclude Include="scr\_context.h">

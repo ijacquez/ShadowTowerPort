@@ -1,7 +1,7 @@
 #include "recomp.h"
 #include "disable_warnings.h"
 
-void sub_80049544(uint8_t* rdram, recomp_context* ctx) {
+void ST_RunCollisionQuery(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
     unsigned int rounding_mode = DEFAULT_ROUNDING_MODE;
     int c1cs = 0; 
@@ -32,7 +32,7 @@ void sub_80049544(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x80048AD0
     // nop
 
-    sub_80048AD0(rdram, ctx);
+    ST_QueryLevelGeometry(rdram, ctx);
     goto after_0;
     // nop
 

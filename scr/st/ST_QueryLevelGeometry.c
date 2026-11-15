@@ -1,7 +1,9 @@
 #include "recomp.h"
 #include "disable_warnings.h"
 
-void sub_80048AD0(uint8_t* rdram, recomp_context* ctx) {
+void ST_QueryLevelGeometry(uint8_t* rdram, recomp_context* ctx) {
+    // Select and decode nearby level records, then test shared geometry.
+    // See COLLISION_GEOMETRY.md for the loading and query data flow.
     uint64_t hi = 0, lo = 0, result = 0;
     unsigned int rounding_mode = DEFAULT_ROUNDING_MODE;
     int c1cs = 0; 
@@ -118,7 +120,7 @@ void sub_80048AD0(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x80046270
     // sw          $v1, 0x10C($s4)
     MEM_W(0X10C, ctx->r20) = ctx->r3;
-    sub_80046270(rdram, ctx);
+    ST_SelectSpatialCandidates(rdram, ctx);
     goto after_0;
     // sw          $v1, 0x10C($s4)
     MEM_W(0X10C, ctx->r20) = ctx->r3;
@@ -151,7 +153,7 @@ L_80048BD8:
     // jal         0x8004656C
     // addiu       $a0, $sp, 0x10
     ctx->r4 = ADD32(ctx->r29, 0X10);
-    sub_8004656C(rdram, ctx);
+    ST_DecodeCandidateOrigins(rdram, ctx);
     goto after_1;
     // addiu       $a0, $sp, 0x10
     ctx->r4 = ADD32(ctx->r29, 0X10);

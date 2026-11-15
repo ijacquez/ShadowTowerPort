@@ -1,7 +1,7 @@
 #include "recomp.h"
 #include "disable_warnings.h"
 
-void sub_80015950(uint8_t* rdram, recomp_context* ctx) {
+void ST_CdPositionToSector(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
     unsigned int rounding_mode = DEFAULT_ROUNDING_MODE;
     int c1cs = 0; 
@@ -20,7 +20,7 @@ void sub_80015950(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x800158F4
     // nop
 
-    sub_800158F4(rdram, ctx);
+    ST_BcdToBinary(rdram, ctx);
     goto after_0;
     // nop
 
@@ -30,7 +30,7 @@ void sub_80015950(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x800158F4
     // addu        $s1, $v0, $zero
     ctx->r17 = ADD32(ctx->r2, 0);
-    sub_800158F4(rdram, ctx);
+    ST_BcdToBinary(rdram, ctx);
     goto after_1;
     // addu        $s1, $v0, $zero
     ctx->r17 = ADD32(ctx->r2, 0);
@@ -40,7 +40,7 @@ void sub_80015950(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x800158F4
     // addu        $s0, $v0, $zero
     ctx->r16 = ADD32(ctx->r2, 0);
-    sub_800158F4(rdram, ctx);
+    ST_BcdToBinary(rdram, ctx);
     goto after_2;
     // addu        $s0, $v0, $zero
     ctx->r16 = ADD32(ctx->r2, 0);

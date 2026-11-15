@@ -18,7 +18,7 @@ void sub_800541F4(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x80015950
     // addu        $a0, $s0, $zero
     ctx->r4 = ADD32(ctx->r16, 0);
-    sub_80015950(rdram, ctx);
+    ST_CdPositionToSector(rdram, ctx);
     goto after_0;
     // addu        $a0, $s0, $zero
     ctx->r4 = ADD32(ctx->r16, 0);
@@ -30,7 +30,7 @@ void sub_800541F4(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x80015950
     // addiu       $s0, $s0, -0x1DC
     ctx->r16 = ADD32(ctx->r16, -0X1DC);
-    sub_80015950(rdram, ctx);
+    ST_CdPositionToSector(rdram, ctx);
     goto after_1;
     // addiu       $s0, $s0, -0x1DC
     ctx->r16 = ADD32(ctx->r16, -0X1DC);

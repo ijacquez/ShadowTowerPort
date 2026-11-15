@@ -693,7 +693,7 @@ L_800606B8:
     // jal         0x800573BC
     // nop
 
-    sub_800573BC(rdram, ctx);
+    ST_InitDefaultControlBindings(rdram, ctx);
     goto after_12;
     // nop
 

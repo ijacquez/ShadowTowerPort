@@ -46,7 +46,7 @@ void sub_800237A8(uint8_t* rdram, recomp_context* ctx)
     // jal         0x80015EC8
     // sw          $s1, 0x14($sp)
     MEM_W(0X14, ctx->r29) = ctx->r17;
-    sub_80015EC8(rdram, ctx);
+    ST_GetIndexedResourceSize(rdram, ctx);
     goto after_0;
     // sw          $s1, 0x14($sp)
     MEM_W(0X14, ctx->r29) = ctx->r17;
@@ -58,7 +58,7 @@ void sub_800237A8(uint8_t* rdram, recomp_context* ctx)
     // jal         0x80015EC8
     // addu        $s1, $v0, $zero
     ctx->r17 = ADD32(ctx->r2, 0);
-    sub_80015EC8(rdram, ctx);
+    ST_GetIndexedResourceSize(rdram, ctx);
     goto after_1;
     // addu        $s1, $v0, $zero
     ctx->r17 = ADD32(ctx->r2, 0);
@@ -180,7 +180,7 @@ L_80023880:
     // jal         0x80015EC8
     // andi        $a1, $a1, 0xFFFF
     ctx->r5 = ctx->r5 & 0XFFFF;
-    sub_80015EC8(rdram, ctx);
+    ST_GetIndexedResourceSize(rdram, ctx);
     goto after_8;
     // andi        $a1, $a1, 0xFFFF
     ctx->r5 = ctx->r5 & 0XFFFF;

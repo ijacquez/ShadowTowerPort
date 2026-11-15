@@ -157,7 +157,7 @@ L_800586D4:
     // jal         0x80015A94
     // nop
 
-    sub_80015A94(rdram, ctx);
+    ST_AddSectorsToCdPosition(rdram, ctx);
     goto after_4;
     // nop
 

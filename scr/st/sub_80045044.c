@@ -758,7 +758,7 @@ L_80045454:
     // jal         0x800456F8
     // nop
 
-    sub_800456F8(rdram, ctx);
+    ST_UpdateLevelStreaming(rdram, ctx);
     goto after_3;
     // nop
 

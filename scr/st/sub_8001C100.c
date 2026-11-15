@@ -31,7 +31,7 @@ void sub_8001C100(uint8_t* rdram, recomp_context* ctx)
     // jal         0x80046270
     // sh          $zero, 0x44CA($s0)
     MEM_H(0X44CA, ctx->r16) = 0;
-    sub_80046270(rdram, ctx);
+    ST_SelectSpatialCandidates(rdram, ctx);
     goto after_0;
     // sh          $zero, 0x44CA($s0)
     MEM_H(0X44CA, ctx->r16) = 0;

@@ -47,7 +47,7 @@ L_8003C990:
     // jal         0x800456F8
     // nop
 
-    sub_800456F8(rdram, ctx);
+    ST_UpdateLevelStreaming(rdram, ctx);
     goto after_2;
     // nop
 
@@ -122,7 +122,7 @@ L_8003CA04:
     // jal         0x800456F8
     // nop
 
-    sub_800456F8(rdram, ctx);
+    ST_UpdateLevelStreaming(rdram, ctx);
     goto after_5;
     // nop
 

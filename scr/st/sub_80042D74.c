@@ -1196,7 +1196,7 @@ L_80043390:
     // jal         0x80041D4C
     // nop
 
-    sub_80041D4C(rdram, ctx);
+    ST_PlayerUpdateTurning(rdram, ctx);
     goto after_40;
     // nop
 
@@ -1204,7 +1204,7 @@ L_80043390:
     // jal         0x800420A0
     // nop
 
-    sub_800420A0(rdram, ctx);
+    ST_PlayerUpdateMovement(rdram, ctx);
     goto after_41;
     // nop
 
@@ -1212,7 +1212,7 @@ L_80043390:
     // jal         0x8004162C
     // nop
 
-    sub_8004162C(rdram, ctx);
+    ST_PlayerMoveWithCollision(rdram, ctx);
     goto after_42;
     // nop
 
@@ -1388,7 +1388,7 @@ L_80043490:
     // jal         0x80041D4C
     // nop
 
-    sub_80041D4C(rdram, ctx);
+    ST_PlayerUpdateTurning(rdram, ctx);
     goto after_46;
     // nop
 
@@ -1396,7 +1396,7 @@ L_80043490:
     // jal         0x800420A0
     // nop
 
-    sub_800420A0(rdram, ctx);
+    ST_PlayerUpdateMovement(rdram, ctx);
     goto after_47;
     // nop
 
@@ -1404,7 +1404,7 @@ L_80043490:
     // jal         0x8004162C
     // nop
 
-    sub_8004162C(rdram, ctx);
+    ST_PlayerMoveWithCollision(rdram, ctx);
     goto after_48;
     // nop
 
@@ -2644,7 +2644,7 @@ L_80043BCC:
     // jal         0x80041D4C
     // nop
 
-    sub_80041D4C(rdram, ctx);
+    ST_PlayerUpdateTurning(rdram, ctx);
     goto after_91;
     // nop
 
@@ -2652,7 +2652,7 @@ L_80043BCC:
     // jal         0x800420A0
     // nop
 
-    sub_800420A0(rdram, ctx);
+    ST_PlayerUpdateMovement(rdram, ctx);
     goto after_92;
     // nop
 
@@ -2697,7 +2697,7 @@ L_80043C14:
     // jal         0x8004162C
     // nop
 
-    sub_8004162C(rdram, ctx);
+    ST_PlayerMoveWithCollision(rdram, ctx);
     goto after_94;
     // nop
 

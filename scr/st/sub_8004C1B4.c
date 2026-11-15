@@ -254,7 +254,7 @@ L_8004C2E8:
     // jal         0x80049544
     // sh          $v0, 0x22($s0)
     MEM_H(0X22, ctx->r16) = ctx->r2;
-    sub_80049544(rdram, ctx);
+    ST_RunCollisionQuery(rdram, ctx);
     goto after_4;
     // sh          $v0, 0x22($s0)
     MEM_H(0X22, ctx->r16) = ctx->r2;

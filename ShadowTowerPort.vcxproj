@@ -409,8 +409,8 @@
     <ClCompile Include="scr\st\strncmp.c" />
     <ClCompile Include="scr\st\sub_8001435C.c" />
     <ClCompile Include="scr\st\sub_80014410.c" />
-    <ClCompile Include="scr\st\sub_80014450.c" />
-    <ClCompile Include="scr\st\sub_80014544.c" />
+    <ClCompile Include="scr\st\ST_ReadFixedWidthDecimalLine.c" />
+    <ClCompile Include="scr\st\ST_LoadInitialGameState.c" />
     <ClCompile Include="scr\st\ST_MainGameLoop.c" />
     <ClCompile Include="scr\st\sub_80014CFC.c" />
     <ClCompile Include="scr\st\sub_80014D2C.c" />
@@ -436,11 +436,11 @@
     <ClCompile Include="scr\st\sub_800154E8.c" />
     <ClCompile Include="scr\st\sub_8001561C.c" />
     <ClCompile Include="scr\st\sub_80015848.c" />
-    <ClCompile Include="scr\st\sub_800158F4.c" />
-    <ClCompile Include="scr\st\sub_80015914.c" />
-    <ClCompile Include="scr\st\sub_80015950.c" />
-    <ClCompile Include="scr\st\sub_800159D4.c" />
-    <ClCompile Include="scr\st\sub_80015A94.c" />
+    <ClCompile Include="scr\st\ST_BcdToBinary.c" />
+    <ClCompile Include="scr\st\ST_BinaryToBcd.c" />
+    <ClCompile Include="scr\st\ST_CdPositionToSector.c" />
+    <ClCompile Include="scr\st\ST_SectorToCdPosition.c" />
+    <ClCompile Include="scr\st\ST_AddSectorsToCdPosition.c" />
     <ClCompile Include="scr\st\AsyncStructForcedLoadSync.c" />
     <ClCompile Include="scr\st\sub_80015B2C.c" />
     <ClCompile Include="scr\st\sub_80042CEC.c" />
@@ -448,11 +448,11 @@
     <ClCompile Include="scr\st\sub_8004CEE8.c" />
     <ClCompile Include="scr\st\VerifyChecksum.c" />
     <ClCompile Include="scr\st\sub_80015BCC.c" />
-    <ClCompile Include="scr\st\sub_80015CD0.c" />
+    <ClCompile Include="scr\st\ST_GetIndexedResourceLocation.c" />
     <ClCompile Include="scr\st\sub_80015D54.c" />
     <ClCompile Include="scr\st\sub_80015DA8.c" />
     <ClCompile Include="scr\st\sub_80015DFC.c" />
-    <ClCompile Include="scr\st\sub_80015EC8.c" />
+    <ClCompile Include="scr\st\ST_GetIndexedResourceSize.c" />
     <ClCompile Include="scr\st\KF_CDReadSectorsInternal.c" />
     <ClCompile Include="scr\st\sub_80015FF4.c" />
     <ClCompile Include="scr\st\sub_80016030.c" />
@@ -747,9 +747,9 @@
     <ClCompile Include="scr\st\sub_800402AC.c" />
     <ClCompile Include="scr\st\sub_80040F04.c" />
     <ClCompile Include="scr\st\sub_80041150.c" />
-    <ClCompile Include="scr\st\sub_8004162C.c" />
-    <ClCompile Include="scr\st\sub_80041D4C.c" />
-    <ClCompile Include="scr\st\sub_800420A0.c" />
+    <ClCompile Include="scr\st\ST_PlayerMoveWithCollision.c" />
+    <ClCompile Include="scr\st\ST_PlayerUpdateTurning.c" />
+    <ClCompile Include="scr\st\ST_PlayerUpdateMovement.c" />
     <ClCompile Include="scr\st\sub_80042620.c" />
     <ClCompile Include="scr\st\sub_80042900.c" />
     <ClCompile Include="scr\st\sub_80042B9C.c" />
@@ -763,7 +763,7 @@
     <ClCompile Include="scr\st\sub_80044EE8.c" />
     <ClCompile Include="scr\st\sub_80045010.c" />
     <ClCompile Include="scr\st\sub_80045044.c" />
-    <ClCompile Include="scr\st\sub_8004557C.c" />
+    <ClCompile Include="scr\st\ST_OnLevelDataChunkLoaded.c" />
     <ClCompile Include="scr\st\sub_80045594.c" />
     <ClCompile Include="scr\st\sub_800455AC.c" />
     <ClCompile Include="scr\st\sub_800455C4.c" />
@@ -771,18 +771,18 @@
     <ClCompile Include="scr\st\sub_800455F4.c" />
     <ClCompile Include="scr\st\sub_80045648.c" />
     <ClCompile Include="scr\st\sub_8004567C.c" />
-    <ClCompile Include="scr\st\sub_800456F8.c" />
+    <ClCompile Include="scr\st\ST_UpdateLevelStreaming.c" />
     <ClCompile Include="scr\st\sub_80045F90.c" />
     <ClCompile Include="scr\st\sub_80045FB8.c" />
     <ClCompile Include="scr\st\ProcessAssetLoadQueue.c" />
-    <ClCompile Include="scr\st\sub_80046270.c" />
-    <ClCompile Include="scr\st\sub_8004656C.c" />
+    <ClCompile Include="scr\st\ST_SelectSpatialCandidates.c" />
+    <ClCompile Include="scr\st\ST_DecodeCandidateOrigins.c" />
     <ClCompile Include="scr\st\sub_80046604.c" />
     <ClCompile Include="scr\st\sub_800468C0.c" />
     <ClCompile Include="scr\st\sub_80047884.c" />
-    <ClCompile Include="scr\st\sub_80048AD0.c" />
+    <ClCompile Include="scr\st\ST_QueryLevelGeometry.c" />
     <ClCompile Include="scr\st\sub_800492F4.c" />
-    <ClCompile Include="scr\st\sub_80049544.c" />
+    <ClCompile Include="scr\st\ST_RunCollisionQuery.c" />
     <ClCompile Include="scr\st\sub_800496C8.c" />
     <ClCompile Include="scr\st\sub_800498CC.c" />
     <ClCompile Include="scr\st\sub_80049AAC.c" />
@@ -894,7 +894,7 @@
     <ClCompile Include="scr\st\sub_80056AA0.c" />
     <ClCompile Include="scr\st\sub_8005735C.c" />
     <ClCompile Include="scr\st\sub_8005738C.c" />
-    <ClCompile Include="scr\st\sub_800573BC.c" />
+    <ClCompile Include="scr\st\ST_InitDefaultControlBindings.c" />
     <ClCompile Include="scr\st\sub_80057428.c" />
     <ClCompile Include="scr\st\sub_800574C0.c" />
     <ClCompile Include="scr\st\sub_8005755C.c" />
@@ -1276,6 +1276,7 @@
     <ClInclude Include="scr\resource.h" />
     <ClInclude Include="scr\st\disable_warnings.h" />
     <ClInclude Include="scr\st\funcs.h" />
+    <ClInclude Include="scr\st\ST_PlayerState.h" />
     <ClInclude Include="scr\_context.h" />
   </ItemGroup>
   <ItemGroup>

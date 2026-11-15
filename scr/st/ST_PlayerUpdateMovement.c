@@ -1,7 +1,12 @@
 #include "recomp.h"
 #include "disable_warnings.h"
+#include "ST_PlayerState.h"
 
-void sub_800420A0(uint8_t* rdram, recomp_context* ctx) {
+void ST_PlayerUpdateMovement(uint8_t* rdram, recomp_context* ctx) {
+    // Local X/Z accumulators approach +/-move limit by limit >> 2 while
+    // pressed, and approach zero by limit >> 3 when released. They are
+    // processed and rotated by yaw before collision-tested movement; they
+    // are not world-space position increments. See PLAYER_MOVEMENT.md.
     uint64_t hi = 0, lo = 0, result = 0;
     unsigned int rounding_mode = DEFAULT_ROUNDING_MODE;
     int c1cs = 0; 
@@ -38,9 +43,9 @@ void sub_800420A0(uint8_t* rdram, recomp_context* ctx) {
     // addiu       $a1, $v0, -0x70D8
     ctx->r5 = ADD32(ctx->r2, -0X70D8);
     // lw          $a0, 0x2E4($a1)
-    ctx->r4 = MEM_W(0X2E4, ctx->r5);
+    ctx->r4 = MEM_W(ST_PLAYER_MOVE_LIMIT, ctx->r5);
     // lw          $v1, 0x2C0($a1)
-    ctx->r3 = MEM_W(0X2C0, ctx->r5);
+    ctx->r3 = MEM_W(ST_PLAYER_LOCAL_MOVE_Z, ctx->r5);
     // sra         $v0, $a0, 2
     ctx->r2 = S32(ctx->r4) >> 2;
     // addu        $v1, $v1, $v0
@@ -57,10 +62,10 @@ void sub_800420A0(uint8_t* rdram, recomp_context* ctx) {
     MEM_W(0X20, ctx->r29) = ctx->r3;
     // j           L_8004219C
     // sw          $a0, 0x2C0($a1)
-    MEM_W(0X2C0, ctx->r5) = ctx->r4;
+    MEM_W(ST_PLAYER_LOCAL_MOVE_Z, ctx->r5) = ctx->r4;
     goto L_8004219C;
     // sw          $a0, 0x2C0($a1)
-    MEM_W(0X2C0, ctx->r5) = ctx->r4;
+    MEM_W(ST_PLAYER_LOCAL_MOVE_Z, ctx->r5) = ctx->r4;
 L_800420FC:
     // lhu         $v0, 0x24($v1)
     ctx->r2 = MEM_HU(0X24, ctx->r3);
@@ -79,9 +84,9 @@ L_800420FC:
     // addiu       $a1, $v0, -0x70D8
     ctx->r5 = ADD32(ctx->r2, -0X70D8);
     // lw          $a0, 0x2E4($a1)
-    ctx->r4 = MEM_W(0X2E4, ctx->r5);
+    ctx->r4 = MEM_W(ST_PLAYER_MOVE_LIMIT, ctx->r5);
     // lw          $v1, 0x2C0($a1)
-    ctx->r3 = MEM_W(0X2C0, ctx->r5);
+    ctx->r3 = MEM_W(ST_PLAYER_LOCAL_MOVE_Z, ctx->r5);
     // sra         $v0, $a0, 2
     ctx->r2 = S32(ctx->r4) >> 2;
     // subu        $v1, $v1, $v0
@@ -101,22 +106,22 @@ L_800420FC:
 L_80042134:
     // j           L_8004219C
     // sw          $v1, 0x2C0($a1)
-    MEM_W(0X2C0, ctx->r5) = ctx->r3;
+    MEM_W(ST_PLAYER_LOCAL_MOVE_Z, ctx->r5) = ctx->r3;
     goto L_8004219C;
     // sw          $v1, 0x2C0($a1)
-    MEM_W(0X2C0, ctx->r5) = ctx->r3;
+    MEM_W(ST_PLAYER_LOCAL_MOVE_Z, ctx->r5) = ctx->r3;
 L_8004213C:
     // j           L_8004219C
     // sw          $a0, 0x2C0($a1)
-    MEM_W(0X2C0, ctx->r5) = ctx->r4;
+    MEM_W(ST_PLAYER_LOCAL_MOVE_Z, ctx->r5) = ctx->r4;
     goto L_8004219C;
     // sw          $a0, 0x2C0($a1)
-    MEM_W(0X2C0, ctx->r5) = ctx->r4;
+    MEM_W(ST_PLAYER_LOCAL_MOVE_Z, ctx->r5) = ctx->r4;
 L_80042144:
     // addiu       $a0, $v0, -0x70D8
     ctx->r4 = ADD32(ctx->r2, -0X70D8);
     // lw          $v1, 0x2C0($a0)
-    ctx->r3 = MEM_W(0X2C0, ctx->r4);
+    ctx->r3 = MEM_W(ST_PLAYER_LOCAL_MOVE_Z, ctx->r4);
     // nop
 
     // blez        $v1, L_80042178
@@ -128,7 +133,7 @@ L_80042144:
     // nop
 
     // lw          $v0, 0x2E4($a0)
-    ctx->r2 = MEM_W(0X2E4, ctx->r4);
+    ctx->r2 = MEM_W(ST_PLAYER_MOVE_LIMIT, ctx->r4);
     // nop
 
     // sra         $v0, $v0, 3
@@ -138,17 +143,17 @@ L_80042144:
     // bgez        $v0, L_8004219C
     if (SIGNED(ctx->r2) >= 0) {
         // sw          $v0, 0x2C0($a0)
-        MEM_W(0X2C0, ctx->r4) = ctx->r2;
+        MEM_W(ST_PLAYER_LOCAL_MOVE_Z, ctx->r4) = ctx->r2;
         goto L_8004219C;
     }
     // sw          $v0, 0x2C0($a0)
-    MEM_W(0X2C0, ctx->r4) = ctx->r2;
+    MEM_W(ST_PLAYER_LOCAL_MOVE_Z, ctx->r4) = ctx->r2;
     // j           L_8004219C
     // sw          $zero, 0x2C0($a0)
-    MEM_W(0X2C0, ctx->r4) = 0;
+    MEM_W(ST_PLAYER_LOCAL_MOVE_Z, ctx->r4) = 0;
     goto L_8004219C;
     // sw          $zero, 0x2C0($a0)
-    MEM_W(0X2C0, ctx->r4) = 0;
+    MEM_W(ST_PLAYER_LOCAL_MOVE_Z, ctx->r4) = 0;
 L_80042178:
     // bgez        $v1, L_800421A0
     if (SIGNED(ctx->r3) >= 0) {
@@ -159,7 +164,7 @@ L_80042178:
     // lui         $v0, 0x801D
     ctx->r2 = S32(0X801D << 16);
     // lw          $v0, 0x2E4($a0)
-    ctx->r2 = MEM_W(0X2E4, ctx->r4);
+    ctx->r2 = MEM_W(ST_PLAYER_MOVE_LIMIT, ctx->r4);
     // nop
 
     // sra         $v0, $v0, 3
@@ -169,13 +174,13 @@ L_80042178:
     // blez        $v0, L_8004219C
     if (SIGNED(ctx->r2) <= 0) {
         // sw          $v0, 0x2C0($a0)
-        MEM_W(0X2C0, ctx->r4) = ctx->r2;
+        MEM_W(ST_PLAYER_LOCAL_MOVE_Z, ctx->r4) = ctx->r2;
         goto L_8004219C;
     }
     // sw          $v0, 0x2C0($a0)
-    MEM_W(0X2C0, ctx->r4) = ctx->r2;
+    MEM_W(ST_PLAYER_LOCAL_MOVE_Z, ctx->r4) = ctx->r2;
     // sw          $zero, 0x2C0($a0)
-    MEM_W(0X2C0, ctx->r4) = 0;
+    MEM_W(ST_PLAYER_LOCAL_MOVE_Z, ctx->r4) = 0;
 L_8004219C:
     // lui         $v0, 0x801D
     ctx->r2 = S32(0X801D << 16);
@@ -217,9 +222,9 @@ L_800421A0:
     // addiu       $a1, $v0, -0x70D8
     ctx->r5 = ADD32(ctx->r2, -0X70D8);
     // lw          $a0, 0x2E4($a1)
-    ctx->r4 = MEM_W(0X2E4, ctx->r5);
+    ctx->r4 = MEM_W(ST_PLAYER_MOVE_LIMIT, ctx->r5);
     // lw          $v1, 0x2B8($a1)
-    ctx->r3 = MEM_W(0X2B8, ctx->r5);
+    ctx->r3 = MEM_W(ST_PLAYER_LOCAL_MOVE_X, ctx->r5);
     // sra         $v0, $a0, 2
     ctx->r2 = S32(ctx->r4) >> 2;
     // addu        $v1, $v1, $v0
@@ -236,10 +241,10 @@ L_800421A0:
     MEM_W(0X18, ctx->r29) = ctx->r3;
     // j           L_800422BC
     // sw          $a0, 0x2B8($a1)
-    MEM_W(0X2B8, ctx->r5) = ctx->r4;
+    MEM_W(ST_PLAYER_LOCAL_MOVE_X, ctx->r5) = ctx->r4;
     goto L_800422BC;
     // sw          $a0, 0x2B8($a1)
-    MEM_W(0X2B8, ctx->r5) = ctx->r4;
+    MEM_W(ST_PLAYER_LOCAL_MOVE_X, ctx->r5) = ctx->r4;
 L_800421FC:
     // lhu         $v0, 0x2A($a0)
     ctx->r2 = MEM_HU(0X2A, ctx->r4);
@@ -277,9 +282,9 @@ L_80042210:
     // addiu       $a1, $v0, -0x70D8
     ctx->r5 = ADD32(ctx->r2, -0X70D8);
     // lw          $a0, 0x2E4($a1)
-    ctx->r4 = MEM_W(0X2E4, ctx->r5);
+    ctx->r4 = MEM_W(ST_PLAYER_MOVE_LIMIT, ctx->r5);
     // lw          $v1, 0x2B8($a1)
-    ctx->r3 = MEM_W(0X2B8, ctx->r5);
+    ctx->r3 = MEM_W(ST_PLAYER_LOCAL_MOVE_X, ctx->r5);
     // sra         $v0, $a0, 2
     ctx->r2 = S32(ctx->r4) >> 2;
     // subu        $v1, $v1, $v0
@@ -299,17 +304,17 @@ L_80042210:
 L_80042250:
     // j           L_800422BC
     // sw          $v1, 0x2B8($a1)
-    MEM_W(0X2B8, ctx->r5) = ctx->r3;
+    MEM_W(ST_PLAYER_LOCAL_MOVE_X, ctx->r5) = ctx->r3;
     goto L_800422BC;
     // sw          $v1, 0x2B8($a1)
-    MEM_W(0X2B8, ctx->r5) = ctx->r3;
+    MEM_W(ST_PLAYER_LOCAL_MOVE_X, ctx->r5) = ctx->r3;
 L_80042258:
     // j           L_800422BC
     // sw          $a0, 0x2B8($a1)
-    MEM_W(0X2B8, ctx->r5) = ctx->r4;
+    MEM_W(ST_PLAYER_LOCAL_MOVE_X, ctx->r5) = ctx->r4;
     goto L_800422BC;
     // sw          $a0, 0x2B8($a1)
-    MEM_W(0X2B8, ctx->r5) = ctx->r4;
+    MEM_W(ST_PLAYER_LOCAL_MOVE_X, ctx->r5) = ctx->r4;
 L_80042260:
     // lui         $v0, 0x801A
     ctx->r2 = S32(0X801A << 16);
@@ -317,7 +322,7 @@ L_80042264:
     // addiu       $a0, $v0, -0x70D8
     ctx->r4 = ADD32(ctx->r2, -0X70D8);
     // lw          $v1, 0x2B8($a0)
-    ctx->r3 = MEM_W(0X2B8, ctx->r4);
+    ctx->r3 = MEM_W(ST_PLAYER_LOCAL_MOVE_X, ctx->r4);
     // nop
 
     // blez        $v1, L_80042298
@@ -329,7 +334,7 @@ L_80042264:
     // nop
 
     // lw          $v0, 0x2E4($a0)
-    ctx->r2 = MEM_W(0X2E4, ctx->r4);
+    ctx->r2 = MEM_W(ST_PLAYER_MOVE_LIMIT, ctx->r4);
     // nop
 
     // sra         $v0, $v0, 3
@@ -339,17 +344,17 @@ L_80042264:
     // bgez        $v0, L_800422BC
     if (SIGNED(ctx->r2) >= 0) {
         // sw          $v0, 0x2B8($a0)
-        MEM_W(0X2B8, ctx->r4) = ctx->r2;
+        MEM_W(ST_PLAYER_LOCAL_MOVE_X, ctx->r4) = ctx->r2;
         goto L_800422BC;
     }
     // sw          $v0, 0x2B8($a0)
-    MEM_W(0X2B8, ctx->r4) = ctx->r2;
+    MEM_W(ST_PLAYER_LOCAL_MOVE_X, ctx->r4) = ctx->r2;
     // j           L_800422BC
     // sw          $zero, 0x2B8($a0)
-    MEM_W(0X2B8, ctx->r4) = 0;
+    MEM_W(ST_PLAYER_LOCAL_MOVE_X, ctx->r4) = 0;
     goto L_800422BC;
     // sw          $zero, 0x2B8($a0)
-    MEM_W(0X2B8, ctx->r4) = 0;
+    MEM_W(ST_PLAYER_LOCAL_MOVE_X, ctx->r4) = 0;
 L_80042298:
     // bgez        $v1, L_800422C0
     if (SIGNED(ctx->r3) >= 0) {
@@ -360,7 +365,7 @@ L_80042298:
     // lui         $t0, 0x801A
     ctx->r8 = S32(0X801A << 16);
     // lw          $v0, 0x2E4($a0)
-    ctx->r2 = MEM_W(0X2E4, ctx->r4);
+    ctx->r2 = MEM_W(ST_PLAYER_MOVE_LIMIT, ctx->r4);
     // nop
 
     // sra         $v0, $v0, 3
@@ -370,13 +375,13 @@ L_80042298:
     // blez        $v0, L_800422C0
     if (SIGNED(ctx->r2) <= 0) {
         // sw          $v0, 0x2B8($a0)
-        MEM_W(0X2B8, ctx->r4) = ctx->r2;
+        MEM_W(ST_PLAYER_LOCAL_MOVE_X, ctx->r4) = ctx->r2;
         goto L_800422C0;
     }
     // sw          $v0, 0x2B8($a0)
-    MEM_W(0X2B8, ctx->r4) = ctx->r2;
+    MEM_W(ST_PLAYER_LOCAL_MOVE_X, ctx->r4) = ctx->r2;
     // sw          $zero, 0x2B8($a0)
-    MEM_W(0X2B8, ctx->r4) = 0;
+    MEM_W(ST_PLAYER_LOCAL_MOVE_X, ctx->r4) = 0;
 L_800422BC:
     // lui         $t0, 0x801A
     ctx->r8 = S32(0X801A << 16);
@@ -420,7 +425,7 @@ L_800422C0:
     // addiu       $v1, $v1, -0x70D8
     ctx->r3 = ADD32(ctx->r3, -0X70D8);
     // sh          $v0, 0x2C8($v1)
-    MEM_H(0X2C8, ctx->r3) = ctx->r2;
+    MEM_H(ST_PLAYER_MOVE_MAGNITUDE, ctx->r3) = ctx->r2;
     // sll         $v0, $v0, 16
     ctx->r2 = S32(ctx->r2) << 16;
     // sra         $a0, $v0, 16
@@ -443,7 +448,7 @@ L_800422C0:
     MEM_W(0X18, ctx->r29) = 0;
 L_80042324:
     // lw          $v0, 0x2B8($v1)
-    ctx->r2 = MEM_W(0X2B8, ctx->r3);
+    ctx->r2 = MEM_W(ST_PLAYER_LOCAL_MOVE_X, ctx->r3);
     // nop
 
     // bgez        $v0, L_80042344
@@ -464,7 +469,7 @@ L_80042324:
     MEM_W(0X28, ctx->r29) = ctx->r2;
 L_80042344:
     // lw          $v0, 0x2C0($v1)
-    ctx->r2 = MEM_W(0X2C0, ctx->r3);
+    ctx->r2 = MEM_W(ST_PLAYER_LOCAL_MOVE_Z, ctx->r3);
     // nop
 
     // bgez        $v0, L_80042364
@@ -578,7 +583,7 @@ L_800423D4:
     // addiu       $s0, $sp, 0x38
     ctx->r16 = ADD32(ctx->r29, 0X38);
     // lhu         $v0, 0x27A($s1)
-    ctx->r2 = MEM_HU(0X27A, ctx->r17);
+    ctx->r2 = MEM_HU(ST_PLAYER_YAW, ctx->r17);
     // addu        $a1, $s0, $zero
     ctx->r5 = ADD32(ctx->r16, 0);
     // sh          $zero, 0x58($sp)
@@ -694,19 +699,19 @@ L_800423D4:
     ctx->r4 = ADD32(ctx->r2, ctx->r4);
     after_3:
     // lh          $v1, 0x1CC($s1)
-    ctx->r3 = MEM_HS(0X1CC, ctx->r17);
+    ctx->r3 = MEM_HS(ST_PLAYER_MOVE_X, ctx->r17);
     // lhu         $a1, 0x1CC($s1)
-    ctx->r5 = MEM_HU(0X1CC, ctx->r17);
+    ctx->r5 = MEM_HU(ST_PLAYER_MOVE_X, ctx->r17);
     // addu        $a3, $v0, $zero
     ctx->r7 = ADD32(ctx->r2, 0);
     // bgez        $v1, L_800424CC
     if (SIGNED(ctx->r3) >= 0) {
         // sh          $a3, 0x2C8($s1)
-        MEM_H(0X2C8, ctx->r17) = ctx->r7;
+        MEM_H(ST_PLAYER_MOVE_MAGNITUDE, ctx->r17) = ctx->r7;
         goto L_800424CC;
     }
     // sh          $a3, 0x2C8($s1)
-    MEM_H(0X2C8, ctx->r17) = ctx->r7;
+    MEM_H(ST_PLAYER_MOVE_MAGNITUDE, ctx->r17) = ctx->r7;
     // addiu       $v1, $v1, 0x3
     ctx->r3 = ADD32(ctx->r3, 0X3);
 L_800424CC:
@@ -715,36 +720,36 @@ L_800424CC:
     // subu        $a2, $a1, $v0
     ctx->r6 = SUB32(ctx->r5, ctx->r2);
     // lh          $a0, 0x1CE($s1)
-    ctx->r4 = MEM_HS(0X1CE, ctx->r17);
+    ctx->r4 = MEM_HS(ST_PLAYER_MOVE_Y, ctx->r17);
     // lhu         $a1, 0x1CE($s1)
-    ctx->r5 = MEM_HU(0X1CE, ctx->r17);
+    ctx->r5 = MEM_HU(ST_PLAYER_MOVE_Y, ctx->r17);
     // bgez        $a0, L_800424E8
     if (SIGNED(ctx->r4) >= 0) {
         // sh          $a2, 0x1CC($s1)
-        MEM_H(0X1CC, ctx->r17) = ctx->r6;
+        MEM_H(ST_PLAYER_MOVE_X, ctx->r17) = ctx->r6;
         goto L_800424E8;
     }
     // sh          $a2, 0x1CC($s1)
-    MEM_H(0X1CC, ctx->r17) = ctx->r6;
+    MEM_H(ST_PLAYER_MOVE_X, ctx->r17) = ctx->r6;
     // addiu       $a0, $a0, 0x3
     ctx->r4 = ADD32(ctx->r4, 0X3);
 L_800424E8:
     // sra         $v0, $a0, 2
     ctx->r2 = S32(ctx->r4) >> 2;
     // lh          $v1, 0x1D0($s1)
-    ctx->r3 = MEM_HS(0X1D0, ctx->r17);
+    ctx->r3 = MEM_HS(ST_PLAYER_MOVE_Z, ctx->r17);
     // lhu         $a0, 0x1D0($s1)
-    ctx->r4 = MEM_HU(0X1D0, ctx->r17);
+    ctx->r4 = MEM_HU(ST_PLAYER_MOVE_Z, ctx->r17);
     // subu        $a1, $a1, $v0
     ctx->r5 = SUB32(ctx->r5, ctx->r2);
     // bgez        $v1, L_80042504
     if (SIGNED(ctx->r3) >= 0) {
         // sh          $a1, 0x1CE($s1)
-        MEM_H(0X1CE, ctx->r17) = ctx->r5;
+        MEM_H(ST_PLAYER_MOVE_Y, ctx->r17) = ctx->r5;
         goto L_80042504;
     }
     // sh          $a1, 0x1CE($s1)
-    MEM_H(0X1CE, ctx->r17) = ctx->r5;
+    MEM_H(ST_PLAYER_MOVE_Y, ctx->r17) = ctx->r5;
     // addiu       $v1, $v1, 0x3
     ctx->r3 = ADD32(ctx->r3, 0X3);
 L_80042504:
@@ -761,13 +766,13 @@ L_80042504:
     // beq         $v0, $zero, L_80042524
     if (ctx->r2 == 0) {
         // sh          $v1, 0x1D0($s1)
-        MEM_H(0X1D0, ctx->r17) = ctx->r3;
+        MEM_H(ST_PLAYER_MOVE_Z, ctx->r17) = ctx->r3;
         goto L_80042524;
     }
     // sh          $v1, 0x1D0($s1)
-    MEM_H(0X1D0, ctx->r17) = ctx->r3;
+    MEM_H(ST_PLAYER_MOVE_Z, ctx->r17) = ctx->r3;
     // sh          $zero, 0x1CC($s1)
-    MEM_H(0X1CC, ctx->r17) = 0;
+    MEM_H(ST_PLAYER_MOVE_X, ctx->r17) = 0;
 L_80042524:
     // addiu       $v0, $a1, 0x3
     ctx->r2 = ADD32(ctx->r5, 0X3);
@@ -784,7 +789,7 @@ L_80042524:
     // addiu       $v0, $v1, 0x3
     ctx->r2 = ADD32(ctx->r3, 0X3);
     // sh          $zero, 0x1CE($s1)
-    MEM_H(0X1CE, ctx->r17) = 0;
+    MEM_H(ST_PLAYER_MOVE_Y, ctx->r17) = 0;
 L_8004253C:
     // andi        $v0, $v0, 0xFFFF
     ctx->r2 = ctx->r2 & 0XFFFF;
@@ -799,7 +804,7 @@ L_8004253C:
     // lui         $v0, 0x801C
     ctx->r2 = S32(0X801C << 16);
     // sh          $zero, 0x1D0($s1)
-    MEM_H(0X1D0, ctx->r17) = 0;
+    MEM_H(ST_PLAYER_MOVE_Z, ctx->r17) = 0;
 L_80042550:
     // addiu       $v1, $v0, 0x310
     ctx->r3 = ADD32(ctx->r2, 0X310);
@@ -821,7 +826,7 @@ L_80042568:
     // lh          $a0, 0x71A8($v1)
     ctx->r4 = MEM_HS(0X71A8, ctx->r3);
     // lhu         $v1, 0x1CC($s1)
-    ctx->r3 = MEM_HU(0X1CC, ctx->r17);
+    ctx->r3 = MEM_HU(ST_PLAYER_MOVE_X, ctx->r17);
     // sra         $v0, $v0, 2
     ctx->r2 = S32(ctx->r2) >> 2;
     // addu        $a2, $v1, $v0
@@ -829,11 +834,11 @@ L_80042568:
     // bgez        $a0, L_80042584
     if (SIGNED(ctx->r4) >= 0) {
         // sh          $a2, 0x1CC($s1)
-        MEM_H(0X1CC, ctx->r17) = ctx->r6;
+        MEM_H(ST_PLAYER_MOVE_X, ctx->r17) = ctx->r6;
         goto L_80042584;
     }
     // sh          $a2, 0x1CC($s1)
-    MEM_H(0X1CC, ctx->r17) = ctx->r6;
+    MEM_H(ST_PLAYER_MOVE_X, ctx->r17) = ctx->r6;
     // addiu       $a0, $a0, 0x3
     ctx->r4 = ADD32(ctx->r4, 0X3);
 L_80042584:
@@ -844,7 +849,7 @@ L_80042584:
     // addiu       $a0, $a0, -0x5EC8
     ctx->r4 = ADD32(ctx->r4, -0X5EC8);
     // lhu         $a1, 0x1D0($s1)
-    ctx->r5 = MEM_HU(0X1D0, ctx->r17);
+    ctx->r5 = MEM_HU(ST_PLAYER_MOVE_Z, ctx->r17);
     // lhu         $v1, 0x6160($a0)
     ctx->r3 = MEM_HU(0X6160, ctx->r4);
     // addu        $a1, $a1, $v0
@@ -860,13 +865,13 @@ L_80042584:
     // sra         $v0, $v0, 1
     ctx->r2 = S32(ctx->r2) >> 1;
     // sh          $a1, 0x1D0($s1)
-    MEM_H(0X1D0, ctx->r17) = ctx->r5;
+    MEM_H(ST_PLAYER_MOVE_Z, ctx->r17) = ctx->r5;
     // lhu         $v1, 0x6164($a0)
     ctx->r3 = MEM_HU(0X6164, ctx->r4);
     // addu        $v0, $a2, $v0
     ctx->r2 = ADD32(ctx->r6, ctx->r2);
     // sh          $v0, 0x1CC($s1)
-    MEM_H(0X1CC, ctx->r17) = ctx->r2;
+    MEM_H(ST_PLAYER_MOVE_X, ctx->r17) = ctx->r2;
     // sll         $v1, $v1, 16
     ctx->r3 = S32(ctx->r3) << 16;
     // sra         $v0, $v1, 16
@@ -882,7 +887,7 @@ L_80042584:
     // sll         $v0, $a3, 16
     ctx->r2 = S32(ctx->r7) << 16;
     // sh          $a1, 0x1D0($s1)
-    MEM_H(0X1D0, ctx->r17) = ctx->r5;
+    MEM_H(ST_PLAYER_MOVE_Z, ctx->r17) = ctx->r5;
     // sra         $a1, $v0, 16
     ctx->r5 = S32(ctx->r2) >> 16;
     // beq         $a1, $zero, L_80042604

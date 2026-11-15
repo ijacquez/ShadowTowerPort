@@ -1,7 +1,7 @@
 #include "recomp.h"
 #include "disable_warnings.h"
 
-void sub_80015A94(uint8_t* rdram, recomp_context* ctx) {
+void ST_AddSectorsToCdPosition(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
     unsigned int rounding_mode = DEFAULT_ROUNDING_MODE;
     int c1cs = 0; 
@@ -18,7 +18,7 @@ void sub_80015A94(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x80015950
     // addu        $s0, $a2, $zero
     ctx->r16 = ADD32(ctx->r6, 0);
-    sub_80015950(rdram, ctx);
+    ST_CdPositionToSector(rdram, ctx);
     goto after_0;
     // addu        $s0, $a2, $zero
     ctx->r16 = ADD32(ctx->r6, 0);
@@ -28,7 +28,7 @@ void sub_80015A94(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x800159D4
     // addu        $a1, $v0, $s1
     ctx->r5 = ADD32(ctx->r2, ctx->r17);
-    sub_800159D4(rdram, ctx);
+    ST_SectorToCdPosition(rdram, ctx);
     goto after_1;
     // addu        $a1, $v0, $s1
     ctx->r5 = ADD32(ctx->r2, ctx->r17);

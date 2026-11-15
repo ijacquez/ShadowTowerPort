@@ -5244,7 +5244,7 @@ L_800524C4:
     // jal         0x800456F8
     // nop
 
-    sub_800456F8(rdram, ctx);
+    ST_UpdateLevelStreaming(rdram, ctx);
     goto after_73;
     // nop
 
@@ -5497,7 +5497,7 @@ L_80052674:
     // jal         0x800456F8
     // nop
 
-    sub_800456F8(rdram, ctx);
+    ST_UpdateLevelStreaming(rdram, ctx);
     goto after_79;
     // nop
 
@@ -5527,7 +5527,7 @@ L_80052674:
     // jal         0x80046270
     // sh          $zero, 0x44CA($s0)
     MEM_H(0X44CA, ctx->r16) = 0;
-    sub_80046270(rdram, ctx);
+    ST_SelectSpatialCandidates(rdram, ctx);
     goto after_80;
     // sh          $zero, 0x44CA($s0)
     MEM_H(0X44CA, ctx->r16) = 0;

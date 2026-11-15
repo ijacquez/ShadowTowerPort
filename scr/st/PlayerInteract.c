@@ -251,7 +251,7 @@ L_80053BA4:
     // jal         0x80048AD0
     // sh          $v0, 0x26($sp)
     MEM_H(0X26, ctx->r29) = ctx->r2;
-    sub_80048AD0(rdram, ctx);
+    ST_QueryLevelGeometry(rdram, ctx);
     goto after_1;
     // sh          $v0, 0x26($sp)
     MEM_H(0X26, ctx->r29) = ctx->r2;

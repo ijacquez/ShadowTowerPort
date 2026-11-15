@@ -109,7 +109,7 @@ void sub_80057684(uint8_t* rdram, recomp_context* ctx)
     // jal         0x800573BC
     // sw          $zero, 0x8($v0)
     MEM_W(0X8, ctx->r2) = 0;
-    sub_800573BC(rdram, ctx);
+    ST_InitDefaultControlBindings(rdram, ctx);
     goto after_5;
     // sw          $zero, 0x8($v0)
     MEM_W(0X8, ctx->r2) = 0;

@@ -1,7 +1,10 @@
 #include "recomp.h"
 #include "disable_warnings.h"
 
-void sub_80014450(uint8_t* rdram, recomp_context* ctx) {
+void ST_ReadFixedWidthDecimalLine(uint8_t* rdram, recomp_context* ctx) {
+    // a0 points to an emulated cursor; a1 is the field width. Decode ASCII
+    // digits and a minus sign in that field, then advance past the next LF.
+    // This preserves the original reader's handling of non-digit characters.
     uint64_t hi = 0, lo = 0, result = 0;
     unsigned int rounding_mode = DEFAULT_ROUNDING_MODE;
     int c1cs = 0; 

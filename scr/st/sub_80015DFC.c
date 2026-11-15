@@ -50,7 +50,7 @@ void sub_80015DFC(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x80015CD0
     // addiu       $a2, $sp, 0x18
     ctx->r6 = ADD32(ctx->r29, 0X18);
-    sub_80015CD0(rdram, ctx);
+    ST_GetIndexedResourceLocation(rdram, ctx);
     goto after_1;
     // addiu       $a2, $sp, 0x18
     ctx->r6 = ADD32(ctx->r29, 0X18);

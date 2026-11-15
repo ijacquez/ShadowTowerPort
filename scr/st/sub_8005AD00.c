@@ -70,7 +70,7 @@ void sub_8005AD00(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x80015A94
     // addiu       $s4, $s0, 0x88
     ctx->r20 = ADD32(ctx->r16, 0X88);
-    sub_80015A94(rdram, ctx);
+    ST_AddSectorsToCdPosition(rdram, ctx);
     goto after_0;
     // addiu       $s4, $s0, 0x88
     ctx->r20 = ADD32(ctx->r16, 0X88);
