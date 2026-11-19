@@ -282,6 +282,9 @@ L_800423D4:
     after_1:
     // lhu         $v0, 0x18($sp)
     ctx->r2 = MEM_HU(0X18, ctx->r29);
+    // This stack halfword's prior writer is unknown. With the loaded game's
+    // zero-angle table entry, it cannot contribute to rotated X or Z; see
+    // docs/PLAYER_MOVEMENT.md for the matrix and executable evidence.
     // lhu         $v1, 0x1C($sp)
     ctx->r3 = MEM_HU(0X1C, ctx->r29);
     // lhu         $a0, 0x20($sp)

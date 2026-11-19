@@ -1115,9 +1115,12 @@ scr/st/ST_PlayerUpdateMovement.o scr/st/ST_PlayerUpdateTurning.o scr/st/ST_Playe
 
 .PHONY: test-player-movement
 test-player-movement:
-	$(CXX) $(CFLAGS) -std=c++17 -ffunction-sections -fdata-sections tests/player_movement_axis_test.cpp -Wl,--gc-sections -o /tmp/shadowtower-player-movement-axis-test
-	/tmp/shadowtower-player-movement-axis-test
-	$(CXX) $(CFLAGS) -std=c++17 tests/player_turning_test.cpp scr/st/ST_PlayerUpdateTurning.c scr/st/sub_8004A194.c -o /tmp/shadowtower-player-turning-test
-	/tmp/shadowtower-player-turning-test
-	$(CXX) $(CFLAGS) -std=c++17 tests/player_vertical_test.cpp scr/st/ST_PlayerMoveWithCollision.c -o /tmp/shadowtower-player-vertical-test
-	/tmp/shadowtower-player-vertical-test
+	mkdir -p scratchpad
+	$(CXX) $(CFLAGS) -std=c++17 tests/player_rotation_test.cpp scr/st/RotMatrix.c scr/gte.cpp PsyCross/src/gte/PsyX_GTE.cpp -o scratchpad/player-rotation-test
+	scratchpad/player-rotation-test
+	$(CXX) $(CFLAGS) -std=c++17 -ffunction-sections -fdata-sections tests/player_movement_axis_test.cpp -Wl,--gc-sections -o scratchpad/player-movement-axis-test
+	scratchpad/player-movement-axis-test
+	$(CXX) $(CFLAGS) -std=c++17 tests/player_turning_test.cpp scr/st/ST_PlayerUpdateTurning.c scr/st/sub_8004A194.c -o scratchpad/player-turning-test
+	scratchpad/player-turning-test
+	$(CXX) $(CFLAGS) -std=c++17 tests/player_vertical_test.cpp scr/st/ST_PlayerMoveWithCollision.c -o scratchpad/player-vertical-test
+	scratchpad/player-vertical-test

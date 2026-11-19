@@ -54,6 +54,25 @@ allocates `0x70` bytes and reads offset `0x1C`. Neither the called
 [RotMatrix](../scr/st/RotMatrix.c) writes that stack location. Its value
 therefore depends on the prior contents of emulated memory at that address.
 
+Its effect on the horizontal result can be resolved for the table in the
+supplied executable. The loader copies the `ST.EXE` payload to the address
+in its header; in the supplied file that address is `0x80011000`, and the
+payload begins at file offset `0x800`. The zero-angle word read by
+[RotMatrix](../scr/st/RotMatrix.c) at `0x80082280` is therefore at file
+offset `0x71A80`. Its bytes are `00 00 00 10`: the signed low halfword is
+zero and the high halfword is 4096. This can be checked with
+`xxd -g 2 -l 4 -s 0x71a80 Extracted/ST.EXE`; see the
+[executable loader](../scr/kf_cd.cpp).
+
+Movement passes rotation angles `(0, -yaw, 0)` to `RotMatrix`. With the
+above zero-angle entry, its X/Z rows have zero in their Y-input column for
+every yaw. The [GTE MVMVA implementation](../PsyCross/src/gte/PsyX_GTE.cpp)
+multiplies those matrix entries by the vector's Y halfword, so that halfword
+contributes zero to rotated X and Z. The subsequent angle and magnitude use
+those X/Z results. This conclusion depends on that executable table entry
+still containing the stated value when the function runs; the prior stack
+writer and any effects outside those horizontal outputs remain **OPEN**.
+
 The rotation uses `-yaw` and writes GTE results back to the stack before
 computing another angle and magnitude. The later code updates each signed
 player halfword at `0x1CC`, `0x1CE`, and
@@ -297,6 +316,15 @@ comparisons after the indicated 32-bit subtraction. The early `-1` returns
 do not continue scanning later records. **OPEN:** the record types and the
 physical interpretation of their dimensions have not been established.
 
+For this check in the player movement paths, query halfwords `0x1C` and
+`0x1E` are 256 and 1600. The dispatcher adds 1600 to query Y before calling
+the check. If the initial query Y is the player Y and the additions and
+subtractions do not wrap, the vertical comparisons accept a record Y in the
+inclusive interval from player Y to `player Y + 1600 + record[0x12]`.
+The horizontal comparison adds 256 to the indexed record's `0x04` value.
+These are properties of this particular check; they do not establish the
+player's physical height or all checks made by the dispatcher.
+
 ## Vertical movement
 
 In [ST_PlayerMoveWithCollision](../scr/st/ST_PlayerMoveWithCollision.c),
@@ -355,3 +383,8 @@ and [tests/player_turning_test.cpp](../tests/player_turning_test.cpp), and
 [tests/player_vertical_test.cpp](../tests/player_vertical_test.cpp). The
 vertical tests replace the collision query and other helpers with stubs; they
 do not exercise the complete geometry and collision pipeline.
+The [rotation test](../tests/player_rotation_test.cpp) also runs the actual
+`RotMatrix` and GTE operations for all 4096 yaw values, with three different
+input Y halfwords and a synthetic lookup table whose zero-angle word matches
+the executable. It checks the horizontal matrix coefficients and outputs;
+it does not identify the stack halfword's writer.
