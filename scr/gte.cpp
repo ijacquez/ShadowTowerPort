@@ -1,6 +1,6 @@
 ﻿#include "gte.h"
 #include "psx/gtereg.h"
-#include <string>
+#include <cstring>
     
 
 

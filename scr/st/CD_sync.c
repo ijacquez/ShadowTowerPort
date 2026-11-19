@@ -6,7 +6,7 @@ void CD_sync(uint8_t* rdram, recomp_context* ctx)
     printf("-->CD_sync\n");
     //// a1 = mode (0=wait, 1=poll)
     //// a2 = result buffer
-    //uint8_t* result_buf = ctx->r5 ? (uint8_t*)GET_PTR(ctx->r5) : nullptr;
+    //uint8_t* result_buf = ctx->r5 ? (uint8_t*)GET_PTR(ctx->r5) : NULL;
 
     //// Заполняем статус если буфер передан
     //if (result_buf) {
@@ -188,7 +188,7 @@ L_800698EC:
     // jal         0x80078AD4
     // addiu       $a0, $a0, 0x3B0C
     ctx->r4 = ADD32(ctx->r4, 0X3B0C);
-    printf(rdram, ctx);
+    /* printf(rdram, ctx); */
     goto after_3;
     // addiu       $a0, $a0, 0x3B0C
     ctx->r4 = ADD32(ctx->r4, 0X3B0C);

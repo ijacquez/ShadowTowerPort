@@ -70,7 +70,7 @@ void CdCheckISO9660(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x80078AD4
     // addiu       $a0, $a0, 0x3C9C
     ctx->r4 = ADD32(ctx->r4, 0X3C9C);
-    printf(rdram, ctx);
+    /* printf(rdram, ctx); */
     goto after_1;
     // addiu       $a0, $a0, 0x3C9C
     ctx->r4 = ADD32(ctx->r4, 0X3C9C);
@@ -121,7 +121,7 @@ L_8006AD90:
     // jal         0x80078AD4
     // addiu       $a0, $a0, 0x3CD0
     ctx->r4 = ADD32(ctx->r4, 0X3CD0);
-    printf(rdram, ctx);
+    /* printf(rdram, ctx); */
     goto after_3;
     // addiu       $a0, $a0, 0x3CD0
     ctx->r4 = ADD32(ctx->r4, 0X3CD0);
@@ -184,7 +184,7 @@ L_8006ADD0:
     // jal         0x80078AD4
     // addiu       $a0, $a0, 0x3D00
     ctx->r4 = ADD32(ctx->r4, 0X3D00);
-    printf(rdram, ctx);
+    /* printf(rdram, ctx); */
     goto after_5;
     // addiu       $a0, $a0, 0x3D00
     ctx->r4 = ADD32(ctx->r4, 0X3D00);
@@ -217,7 +217,7 @@ L_8006AE28:
     // jal         0x80078AD4
     // addiu       $a0, $a0, 0x3D24
     ctx->r4 = ADD32(ctx->r4, 0X3D24);
-    printf(rdram, ctx);
+    /* printf(rdram, ctx); */
     goto after_6;
     // addiu       $a0, $a0, 0x3D24
     ctx->r4 = ADD32(ctx->r4, 0X3D24);
@@ -365,7 +365,7 @@ L_8006AE6C:
     // jal         0x80078AD4
     // sw          $s2, 0x10($sp)
     MEM_W(0X10, ctx->r29) = ctx->r18;
-    printf(rdram, ctx);
+    /* printf(rdram, ctx); */
     goto after_8;
     // sw          $s2, 0x10($sp)
     MEM_W(0X10, ctx->r29) = ctx->r18;
@@ -442,7 +442,7 @@ L_8006AF88:
     // jal         0x80078AD4
     // addu        $a1, $a3, $zero
     ctx->r5 = ADD32(ctx->r7, 0);
-    printf(rdram, ctx);
+    /* printf(rdram, ctx); */
     goto after_9;
     // addu        $a1, $a3, $zero
     ctx->r5 = ADD32(ctx->r7, 0);

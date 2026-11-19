@@ -99,7 +99,7 @@ L_8007C0F8:
     // jal         0x80078AD4
     // andi        $a1, $a1, 0x3F
     ctx->r5 = ctx->r5 & 0X3F;
-    printf(rdram, ctx);
+    /* printf(rdram, ctx); */
     goto after_1;
     // andi        $a1, $a1, 0x3F
     ctx->r5 = ctx->r5 & 0X3F;

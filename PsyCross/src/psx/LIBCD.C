@@ -106,7 +106,8 @@ struct commandQueue g_cdComQueue[COMMAND_QUEUE_SIZE];
 int g_cdComQueueIndex = 0;
 int g_cdComQueueCount = 0;
 
-int g_cdCurrentSector = 0;
+extern uint32_t g_cdCurrentSector;
+// int g_cdCurrentSector = 0;
 int g_cdSectorSize = CD_SECTOR_SIZE_MODE2;	// default
 int g_cdCurrentTrack = 1;					// default
 int g_cdNumFrames = 0;

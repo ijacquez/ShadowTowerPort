@@ -198,7 +198,7 @@ L_80077C54:
     // jal         0x80078AD4
     // addu        $s0, $zero, $zero
     ctx->r16 = ADD32(0, 0);
-    printf(rdram, ctx);
+    /* printf(rdram, ctx); */
     goto after_1;
     // addu        $s0, $zero, $zero
     ctx->r16 = ADD32(0, 0);
@@ -223,7 +223,7 @@ L_80077C68:
     // jal         0x80078AD4
     // addiu       $s0, $s0, 0x1
     ctx->r16 = ADD32(ctx->r16, 0X1);
-    printf(rdram, ctx);
+    /* printf(rdram, ctx); */
     goto after_2;
     // addiu       $s0, $s0, 0x1
     ctx->r16 = ADD32(ctx->r16, 0X1);

@@ -4,7 +4,7 @@
 #include "PsyX/PsyX_render.h"
 #include "gpu/PsyX_GPU.h"
 #include "psx/libetc.h"
-#include <string>
+#include <cstring>
 
 static int SaveCount = 0;
 static int SaveTimer = 0;

@@ -1,6 +1,6 @@
 #include "recomp.h"
 #include "disable_warnings.h"
-#include <string>
+#include <cstring>
 
 void strcpy_recomp(uint8_t* rdram, recomp_context* ctx) 
 {

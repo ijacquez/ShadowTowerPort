@@ -2,7 +2,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include "kf_cd.h"
 #include "gte.h"
-#include <intrin.h>
+// #include <intrin.h>
 #include <stdio.h>
 
 #include "psx/libcd.h" 

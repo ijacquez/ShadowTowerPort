@@ -78,7 +78,7 @@ L_80079730:
     // jal         0x80078AD4
     // addiu       $a2, $a2, 0x7CC0
     ctx->r6 = ADD32(ctx->r6, 0X7CC0);
-    printf(rdram, ctx);
+    /* printf(rdram, ctx); */
     goto after_0;
     // addiu       $a2, $a2, 0x7CC0
     ctx->r6 = ADD32(ctx->r6, 0X7CC0);

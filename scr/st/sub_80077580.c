@@ -48,7 +48,7 @@ void sub_80077580(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x80078AD4
     // addiu       $a0, $a0, 0x3F84
     ctx->r4 = ADD32(ctx->r4, 0X3F84);
-    printf(rdram, ctx);
+    /* printf(rdram, ctx); */
     goto after_0;
     // addiu       $a0, $a0, 0x3F84
     ctx->r4 = ADD32(ctx->r4, 0X3F84);
@@ -256,7 +256,7 @@ L_800776A0:
     // jal         0x80078AD4
     // nop
 
-    printf(rdram, ctx);
+    /* printf(rdram, ctx); */
     goto after_3;
     // nop
 

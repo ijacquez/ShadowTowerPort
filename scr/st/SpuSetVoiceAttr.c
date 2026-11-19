@@ -1,7 +1,7 @@
 #include "recomp.h"
 #include "disable_warnings.h"
 #include "psx/libspu.h"
-#include <string>
+#include <cstring>
 
 void SpuSetVoiceAttr(uint8_t* rdram, recomp_context* ctx) 
 {

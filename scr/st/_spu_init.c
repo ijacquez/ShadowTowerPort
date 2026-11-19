@@ -109,7 +109,7 @@ L_8006BD2C:
     // jal         0x80078AD4
     // addiu       $a1, $a1, 0x3E60
     ctx->r5 = ADD32(ctx->r5, 0X3E60);
-    printf(rdram, ctx);
+    /* printf(rdram, ctx); */
     goto after_1;
     // addiu       $a1, $a1, 0x3E60
     ctx->r5 = ADD32(ctx->r5, 0X3E60);

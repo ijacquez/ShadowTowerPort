@@ -157,7 +157,7 @@ L_8006BFEC:
     // jal         0x80078AD4
     // addiu       $a1, $a1, 0x3E70
     ctx->r5 = ADD32(ctx->r5, 0X3E70);
-    printf(rdram, ctx);
+    /* printf(rdram, ctx); */
     goto after_2;
     // addiu       $a1, $a1, 0x3E70
     ctx->r5 = ADD32(ctx->r5, 0X3E70);
@@ -265,7 +265,7 @@ L_8006C080:
     // jal         0x80078AD4
     // addiu       $a1, $a1, 0x3E84
     ctx->r5 = ADD32(ctx->r5, 0X3E84);
-    printf(rdram, ctx);
+    /* printf(rdram, ctx); */
     goto after_5;
     // addiu       $a1, $a1, 0x3E84
     ctx->r5 = ADD32(ctx->r5, 0X3E84);

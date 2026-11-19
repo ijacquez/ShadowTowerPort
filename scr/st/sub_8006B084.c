@@ -94,7 +94,7 @@ void sub_8006B084(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x80078AD4
     // addiu       $a0, $a0, 0x3D7C
     ctx->r4 = ADD32(ctx->r4, 0X3D7C);
-    printf(rdram, ctx);
+    /* printf(rdram, ctx); */
     goto after_1;
     // addiu       $a0, $a0, 0x3D7C
     ctx->r4 = ADD32(ctx->r4, 0X3D7C);
@@ -127,7 +127,7 @@ L_8006B120:
     // jal         0x80078AD4
     // addiu       $a0, $a0, 0x3D9C
     ctx->r4 = ADD32(ctx->r4, 0X3D9C);
-    printf(rdram, ctx);
+    /* printf(rdram, ctx); */
     goto after_2;
     // addiu       $a0, $a0, 0x3D9C
     ctx->r4 = ADD32(ctx->r4, 0X3D9C);
@@ -321,7 +321,7 @@ L_8006B214:
     // jal         0x80078AD4
     // sw          $v0, 0x10($sp)
     MEM_W(0X10, ctx->r29) = ctx->r2;
-    printf(rdram, ctx);
+    /* printf(rdram, ctx); */
     goto after_5;
     // sw          $v0, 0x10($sp)
     MEM_W(0X10, ctx->r29) = ctx->r2;
@@ -410,7 +410,7 @@ L_8006B2CC:
     // jal         0x80078AD4
     // addu        $a1, $s2, $zero
     ctx->r5 = ADD32(ctx->r18, 0);
-    printf(rdram, ctx);
+    /* printf(rdram, ctx); */
     goto after_6;
     // addu        $a1, $s2, $zero
     ctx->r5 = ADD32(ctx->r18, 0);

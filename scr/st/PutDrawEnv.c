@@ -5,7 +5,7 @@
 #include "gpu/PsyX_GPU.h"
 #include "psx/libgte.h"
 #include "psx/libgpu.h"
-#include <string>
+#include <cstring>
 
 void PutDrawEnv(uint8_t* rdram, recomp_context* ctx) 
 {

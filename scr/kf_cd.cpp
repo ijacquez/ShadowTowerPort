@@ -1,6 +1,6 @@
 ﻿#include "recomp.h"
 #include "kf_cd.h"
-#include <string.h>
+#include <cstring>
 #include <unordered_map>
 static uint32_t g_cdReadyCb = 0;
 static uint32_t g_cdSyncCb = 0;
@@ -537,10 +537,10 @@ bool KFCD_FindFile(const char* filename, CdFile* out)
 
     // Разбираем путь по разделителям
     char* context = nullptr;
-    char* token = strtok_s(pathCopy, "\\/", &context);
+    char* token = strtok_r(pathCopy, "\\/", &context);
 
     while (token) {
-        char* nextToken = strtok_s(nullptr, "\\/", &context);
+        char* nextToken = strtok_r(nullptr, "\\/", &context);
         bool isLastComponent = (nextToken == nullptr);
 
         // Читаем директорию
@@ -567,7 +567,7 @@ bool KFCD_FindFile(const char* filename, CdFile* out)
             char* s = strchr(name, ';');
             if (s) *s = 0;
 
-            if (_stricmp(name, token) == 0) {
+            if (strcmp(name, token) == 0) {
                 uint32_t entryLBA = *(uint32_t*)(dirBuf + pos + 2);
                 uint32_t entrySize = *(uint32_t*)(dirBuf + pos + 10);
                 uint8_t flags = dirBuf[pos + 25];

@@ -8,7 +8,7 @@ void CdReady(uint8_t* rdram, recomp_context* ctx)
 
     // a1 = mode (0=wait, 1=poll)
     // a2 = result buffer
-    uint8_t* result_buf = ctx->r5 ? (uint8_t*)GET_PTR(ctx->r5) : nullptr;
+    uint8_t* result_buf = ctx->r5 ? (uint8_t*)GET_PTR(ctx->r5) : NULL;
 
     // Заполняем статус если буфер передан
     if (result_buf) {

@@ -30,7 +30,7 @@ void CD_init(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x80078AD4
     // addiu       $a1, $a1, 0xCBC
     ctx->r5 = ADD32(ctx->r5, 0XCBC);
-    printf(rdram, ctx);
+    /* printf(rdram, ctx); */
     goto after_1;
     // addiu       $a1, $a1, 0xCBC
     ctx->r5 = ADD32(ctx->r5, 0XCBC);
