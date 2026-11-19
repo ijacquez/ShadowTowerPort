@@ -165,7 +165,7 @@ L_80049610:
     // jal         0x8004F53C
     // addu        $a0, $s1, $zero
     ctx->r4 = ADD32(ctx->r17, 0);
-    sub_8004F53C(rdram, ctx);
+    ST_QueryIndexedCollisionRecords(rdram, ctx);
     goto after_3;
     // addu        $a0, $s1, $zero
     ctx->r4 = ADD32(ctx->r17, 0);

@@ -1,7 +1,10 @@
 #include "recomp.h"
 #include "disable_warnings.h"
 
-void sub_8004F53C(uint8_t* rdram, recomp_context* ctx) {
+// Scan the indexed 88-byte records for a collision-query match. The horizontal
+// and vertical tests, including the early -1 return, are documented in
+// docs/PLAYER_MOVEMENT.md.
+void ST_QueryIndexedCollisionRecords(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
     unsigned int rounding_mode = DEFAULT_ROUNDING_MODE;
     int c1cs = 0; 

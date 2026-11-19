@@ -746,7 +746,7 @@
     <ClCompile Include="scr\st\sub_80040024.c" />
     <ClCompile Include="scr\st\sub_800402AC.c" />
     <ClCompile Include="scr\st\sub_80040F04.c" />
-    <ClCompile Include="scr\st\sub_80041150.c" />
+    <ClCompile Include="scr\st\ST_ApplyDirectionalMovementWithCollision.c" />
     <ClCompile Include="scr\st\ST_PlayerMoveWithCollision.c" />
     <ClCompile Include="scr\st\ST_PlayerUpdateTurning.c" />
     <ClCompile Include="scr\st\ST_PlayerUpdateMovement.c" />
@@ -781,7 +781,7 @@
     <ClCompile Include="scr\st\sub_800468C0.c" />
     <ClCompile Include="scr\st\sub_80047884.c" />
     <ClCompile Include="scr\st\ST_QueryLevelGeometry.c" />
-    <ClCompile Include="scr\st\sub_800492F4.c" />
+    <ClCompile Include="scr\st\ST_SetCollisionReference.c" />
     <ClCompile Include="scr\st\ST_RunCollisionQuery.c" />
     <ClCompile Include="scr\st\sub_800496C8.c" />
     <ClCompile Include="scr\st\sub_800498CC.c" />
@@ -846,7 +846,7 @@
     <ClCompile Include="scr\st\sub_8004EE00.c" />
     <ClCompile Include="scr\st\sub_8004EE48.c" />
     <ClCompile Include="scr\st\sub_8004EEBC.c" />
-    <ClCompile Include="scr\st\sub_8004F53C.c" />
+    <ClCompile Include="scr\st\ST_QueryIndexedCollisionRecords.c" />
     <ClCompile Include="scr\st\sub_8004F718.c" />
     <ClCompile Include="scr\st\sub_8004F994.c" />
     <ClCompile Include="scr\st\sub_8004FB88.c" />

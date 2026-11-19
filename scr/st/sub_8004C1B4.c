@@ -614,7 +614,7 @@ L_8004C56C:
     // jal         0x800492F4
     // addiu       $a0, $s2, 0x74
     ctx->r4 = ADD32(ctx->r18, 0X74);
-    sub_800492F4(rdram, ctx);
+    ST_SetCollisionReference(rdram, ctx);
     goto after_9;
     // addiu       $a0, $s2, 0x74
     ctx->r4 = ADD32(ctx->r18, 0X74);

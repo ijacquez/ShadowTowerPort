@@ -1446,7 +1446,7 @@
     <ClCompile Include="scr\st\sub_8004EEBC.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_8004F53C.c">
+    <ClCompile Include="scr\st\ST_QueryIndexedCollisionRecords.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\sub_8004F718.c">
@@ -2508,7 +2508,7 @@
     <ClCompile Include="scr\st\sub_800468C0.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_800492F4.c">
+    <ClCompile Include="scr\st\ST_SetCollisionReference.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\sub_800496C8.c">
@@ -3006,7 +3006,7 @@
     <ClCompile Include="scr\st\sub_80040024.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_80041150.c">
+    <ClCompile Include="scr\st\ST_ApplyDirectionalMovementWithCollision.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\sub_80042620.c">

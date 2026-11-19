@@ -603,7 +603,7 @@ SRCS:= scr/st/AddPrim.c \
 	scr/st/sub_80040024.c \
 	scr/st/sub_800402AC.c \
 	scr/st/sub_80040F04.c \
-	scr/st/sub_80041150.c \
+	scr/st/ST_ApplyDirectionalMovementWithCollision.c \
 	scr/st/ST_PlayerMoveWithCollision.c \
 	scr/st/ST_PlayerUpdateTurning.c \
 	scr/st/ST_PlayerUpdateMovement.c \
@@ -638,7 +638,7 @@ SRCS:= scr/st/AddPrim.c \
 	scr/st/sub_800468C0.c \
 	scr/st/sub_80047884.c \
 	scr/st/ST_QueryLevelGeometry.c \
-	scr/st/sub_800492F4.c \
+	scr/st/ST_SetCollisionReference.c \
 	scr/st/ST_RunCollisionQuery.c \
 	scr/st/sub_800496C8.c \
 	scr/st/sub_800498CC.c \
@@ -703,7 +703,7 @@ SRCS:= scr/st/AddPrim.c \
 	scr/st/sub_8004EE00.c \
 	scr/st/sub_8004EE48.c \
 	scr/st/sub_8004EEBC.c \
-	scr/st/sub_8004F53C.c \
+	scr/st/ST_QueryIndexedCollisionRecords.c \
 	scr/st/sub_8004F718.c \
 	scr/st/sub_8004F994.c \
 	scr/st/sub_8004FB88.c \
@@ -1101,6 +1101,9 @@ CFLAGS:= -I./PsyCross/include -I./PsyCross/src -I./scr -fpermissive -I/usr/inclu
 Shadow_Tower: $(OBJS) $(PSYCROSS_OBJS) $(GLUE_OBJS)
 	$(CXX) -o $@ $^ -lSDL2 -lopenal
 
+scr/recomp.o: scr/st/recomp_overlays.inl scr/st/funcs.h
+scr/st/ST_PlayerUpdateMovement.o scr/st/ST_PlayerUpdateTurning.o scr/st/ST_PlayerMoveWithCollision.o: scr/st/ST_PlayerState.h
+
 %.o: %.c
 	$(CXX) $(CFLAGS) -o $@ -c $<
 
@@ -1109,3 +1112,12 @@ Shadow_Tower: $(OBJS) $(PSYCROSS_OBJS) $(GLUE_OBJS)
 
 %.o: %.cpp
 	$(CXX) $(CFLAGS) -o $@ -c $<
+
+.PHONY: test-player-movement
+test-player-movement:
+	$(CXX) $(CFLAGS) -std=c++17 -ffunction-sections -fdata-sections tests/player_movement_axis_test.cpp -Wl,--gc-sections -o /tmp/shadowtower-player-movement-axis-test
+	/tmp/shadowtower-player-movement-axis-test
+	$(CXX) $(CFLAGS) -std=c++17 tests/player_turning_test.cpp scr/st/ST_PlayerUpdateTurning.c scr/st/sub_8004A194.c -o /tmp/shadowtower-player-turning-test
+	/tmp/shadowtower-player-turning-test
+	$(CXX) $(CFLAGS) -std=c++17 tests/player_vertical_test.cpp scr/st/ST_PlayerMoveWithCollision.c -o /tmp/shadowtower-player-vertical-test
+	/tmp/shadowtower-player-vertical-test

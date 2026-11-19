@@ -1,7 +1,9 @@
 #include "recomp.h"
 #include "disable_warnings.h"
 
-void sub_800492F4(uint8_t* rdram, recomp_context* ctx) {
+// Copy a selected reference position and two halfwords into the shared query and
+// calculate its X/Z distance from the supplied position.
+void ST_SetCollisionReference(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
     unsigned int rounding_mode = DEFAULT_ROUNDING_MODE;
     int c1cs = 0; 

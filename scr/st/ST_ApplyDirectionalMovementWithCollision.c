@@ -1,7 +1,7 @@
 #include "recomp.h"
 #include "disable_warnings.h"
 
-void sub_80041150(uint8_t* rdram, recomp_context* ctx) {
+void ST_ApplyDirectionalMovementWithCollision(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
     unsigned int rounding_mode = DEFAULT_ROUNDING_MODE;
     int c1cs = 0; 
@@ -129,6 +129,8 @@ L_800411CC:
     MEM_W(0X5948, ctx->r5) = ctx->r2;
     // sw          $v1, 0x14($sp)
     MEM_W(0X14, ctx->r29) = ctx->r3;
+// Rebuild the query vector from the current candidate and stored movement.
+// A zero result applies the candidate; nonzero results enter the branches below.
 L_80041224:
     // lui         $v0, 0x801A
     ctx->r2 = S32(0X801A << 16);
@@ -276,6 +278,8 @@ L_800412E4:
     goto L_80041598;
     // sw          $a0, 0x250($v1)
     MEM_W(0X250, ctx->r3) = ctx->r4;
+// Limit correction processing to three nonzero results. A fourth query may
+// still return zero and apply its candidate before reaching this check.
 L_80041320:
     // slti        $v0, $v0, 0x3
     ctx->r2 = SIGNED(ctx->r2) < 0X3 ? 1 : 0;
@@ -307,6 +311,7 @@ L_80041320:
     }
     // lui         $v1, 0x801A
     ctx->r3 = S32(0X801A << 16);
+// Bit 0x2 uses query fields 0x3C, 0x8C, and 0x90 for X/Z correction.
 L_80041344:
     // andi        $v0, $s0, 0x2
     ctx->r2 = ctx->r16 & 0X2;
@@ -402,6 +407,7 @@ L_80041390:
     goto L_80041520;
     // mult        $s5, $v0
     result = S64(S32(ctx->r21)) * S64(S32(ctx->r2)); lo = S32(result >> 0); hi = S32(result >> 32);
+// Bit 0x8 selects the parallel correction using fields 0x44, 0x9C, 0xA0.
 L_800413C8:
     // andi        $v0, $s0, 0x8
     ctx->r2 = ctx->r16 & 0X8;
@@ -497,6 +503,7 @@ L_80041414:
     goto L_80041520;
     // mult        $s5, $v0
     result = S64(S32(ctx->r21)) * S64(S32(ctx->r2)); lo = S32(result >> 0); hi = S32(result >> 32);
+// Bits 0x10 and 0x40 select the VectorNormalS-based correction.
 L_8004144C:
     // beq         $v0, $zero, L_8004159C
     if (ctx->r2 == 0) {
@@ -509,7 +516,7 @@ L_8004144C:
     // jal         0x800492F4
     // addiu       $a0, $s1, 0x248
     ctx->r4 = ADD32(ctx->r17, 0X248);
-    sub_800492F4(rdram, ctx);
+    ST_SetCollisionReference(rdram, ctx);
     goto after_9;
     // addiu       $a0, $s1, 0x248
     ctx->r4 = ADD32(ctx->r17, 0X248);
@@ -733,6 +740,8 @@ L_80041584:
     goto L_80041224;
     // sw          $v0, 0x18($sp)
     MEM_W(0X18, ctx->r29) = ctx->r2;
+// Save the final candidate and add one quarter of the query's X/Z outputs
+// to the stored movement components. The query fields are signed halfwords.
 L_80041598:
     // lui         $v0, 0x801B
     ctx->r2 = S32(0X801B << 16);
