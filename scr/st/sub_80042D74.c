@@ -1,5 +1,6 @@
 #include "recomp.h"
 #include "disable_warnings.h"
+#include "ST_PlayerState.h"
 
 
 void sub_80042D74(uint8_t* rdram, recomp_context* ctx) 
@@ -1053,9 +1054,9 @@ L_80043304:
     // addiu       $a1, $v0, -0x70D8
     ctx->r5 = ADD32(ctx->r2, -0X70D8);
     // lhu         $v1, 0x22($a1)
-    ctx->r3 = MEM_HU(0X22, ctx->r5);
+    ctx->r3 = MEM_HU(ST_PLAYER_MOVE_PENALTY_TOTAL, ctx->r5);
     // lhu         $v0, 0x24($a1)
-    ctx->r2 = MEM_HU(0X24, ctx->r5);
+    ctx->r2 = MEM_HU(ST_PLAYER_MOVE_PENALTY_THRESHOLD, ctx->r5);
     // nop
 
     // sltu        $v0, $v0, $v1
@@ -1069,7 +1070,7 @@ L_80043304:
     // lui         $a0, 0x6666
     ctx->r4 = S32(0X6666 << 16);
     // lhu         $v0, 0x24($a1)
-    ctx->r2 = MEM_HU(0X24, ctx->r5);
+    ctx->r2 = MEM_HU(ST_PLAYER_MOVE_PENALTY_THRESHOLD, ctx->r5);
     // ori         $a0, $a0, 0x6667
     ctx->r4 = ctx->r4 | 0X6667;
     // subu        $v1, $v1, $v0
@@ -3194,9 +3195,9 @@ L_80043EE0:
     // addiu       $a1, $v0, -0x70D8
     ctx->r5 = ADD32(ctx->r2, -0X70D8);
     // lhu         $v1, 0x22($a1)
-    ctx->r3 = MEM_HU(0X22, ctx->r5);
+    ctx->r3 = MEM_HU(ST_PLAYER_MOVE_PENALTY_TOTAL, ctx->r5);
     // lhu         $v0, 0x24($a1)
-    ctx->r2 = MEM_HU(0X24, ctx->r5);
+    ctx->r2 = MEM_HU(ST_PLAYER_MOVE_PENALTY_THRESHOLD, ctx->r5);
     // nop
 
     // sltu        $v0, $v0, $v1
@@ -3236,7 +3237,7 @@ L_80043EE0:
     // lui         $v0, 0x801A
     ctx->r2 = S32(0X801A << 16);
     // lhu         $v0, 0x24($a1)
-    ctx->r2 = MEM_HU(0X24, ctx->r5);
+    ctx->r2 = MEM_HU(ST_PLAYER_MOVE_PENALTY_THRESHOLD, ctx->r5);
     // nop
 
     // multu       $v0, $a2
@@ -3244,7 +3245,7 @@ L_80043EE0:
     // mfhi        $t0
     ctx->r8 = hi;
     // lhu         $v0, 0x22($a1)
-    ctx->r2 = MEM_HU(0X22, ctx->r5);
+    ctx->r2 = MEM_HU(ST_PLAYER_MOVE_PENALTY_TOTAL, ctx->r5);
     // nop
 
     // multu       $v0, $a2

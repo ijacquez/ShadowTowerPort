@@ -1102,7 +1102,7 @@ Shadow_Tower: $(OBJS) $(PSYCROSS_OBJS) $(GLUE_OBJS)
 	$(CXX) -o $@ $^ -lSDL2 -lopenal
 
 scr/recomp.o: scr/st/recomp_overlays.inl scr/st/funcs.h
-scr/st/ST_PlayerUpdateMovement.o scr/st/ST_PlayerUpdateTurning.o scr/st/ST_PlayerMoveWithCollision.o scr/st/ST_BuildPlayerView.o scr/st/ST_TranslatePlayerPosition.o scr/st/ST_ClearPlayerMovementLimits.o: scr/st/ST_PlayerState.h
+scr/st/ST_PlayerUpdateMovement.o scr/st/ST_PlayerUpdateTurning.o scr/st/ST_PlayerMoveWithCollision.o scr/st/ST_BuildPlayerView.o scr/st/ST_TranslatePlayerPosition.o scr/st/ST_ClearPlayerMovementLimits.o scr/st/sub_80042D74.o scr/st/sub_8005A3A8.o: scr/st/ST_PlayerState.h
 
 %.o: %.c
 	$(CXX) $(CFLAGS) -o $@ -c $<

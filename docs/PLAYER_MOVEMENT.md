@@ -56,6 +56,28 @@ when current is below 20, or 4096 otherwise. The state machine calls
 movement-limit rules above. **OPEN:** the game meanings and all producers of
 these counters and targets have not been established.
 
+[sub_8005A3A8](../scr/st/sub_8005A3A8.c) sets the penalty total at player
+offset `0x22` from a halfword calculated by
+[sub_80059DC0](../scr/st/sub_80059DC0.c). The latter starts the halfword at
+zero and iterates player halfword slots beginning at `0x38`. For slot indices
+0 through 16, excluding 4, 5, 6, 11, 12, and 15, a slot other than `0xFFFF`
+indexes a 44-byte record at `0x801C7810`; the unsigned record halfword at
+`0x24` is added to the total with halfword wrapping. `sub_8005A3A8` sets the
+penalty threshold at player offset `0x24` to `120 + player[0] / 12`, using
+an unsigned halfword for `player[0]` and integer division. **OPEN:** the
+in-game names of the slot records, their summed field, and the base player
+halfword have not been established.
+
+On paths in [sub_8003DBE0](../scr/st/sub_8003DBE0.c) that reach its
+third-argument dispatch, values `0x08`, `0x10`, and `0x18` select the
+`0x194`/`0x196` pair. The code sets the target at `0x196` to 75. Depending
+on bits `0x08` and `0x10` of player word `0x2C`, it either clears the
+current counter and sets one of those bits, or sets the current counter to
+20. Dispatch value `0x80` selects the `0x19C`/`0x19E` pair and sets its
+target to 300. If bit `0x80` of player word `0x2C` is clear, the code clears
+the current counter and sets the bit; otherwise, it sets the current counter
+to 20. These are particular producers, not an exhaustive list.
+
 The routine processes the X/Z magnitudes and rotates the local vector by
 negative player yaw using the GTE. It also damps existing movement components
 and adds other contributions. The accumulators therefore are not directly

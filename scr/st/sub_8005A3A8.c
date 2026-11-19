@@ -1,5 +1,6 @@
 #include "recomp.h"
 #include "disable_warnings.h"
+#include "ST_PlayerState.h"
 
 void sub_8005A3A8(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
@@ -970,7 +971,7 @@ L_8005AA1C:
     // sh          $a1, 0xC($a3)
     MEM_H(0XC, ctx->r7) = ctx->r5;
     // sh          $v0, 0x22($a3)
-    MEM_H(0X22, ctx->r7) = ctx->r2;
+    MEM_H(ST_PLAYER_MOVE_PENALTY_TOTAL, ctx->r7) = ctx->r2;
     // mfhi        $t6
     ctx->r14 = hi;
     // srl         $v0, $t6, 3
@@ -980,11 +981,11 @@ L_8005AA1C:
     // beq         $s1, $zero, L_8005AA60
     if (ctx->r17 == 0) {
         // sh          $v0, 0x24($a3)
-        MEM_H(0X24, ctx->r7) = ctx->r2;
+        MEM_H(ST_PLAYER_MOVE_PENALTY_THRESHOLD, ctx->r7) = ctx->r2;
         goto L_8005AA60;
     }
     // sh          $v0, 0x24($a3)
-    MEM_H(0X24, ctx->r7) = ctx->r2;
+    MEM_H(ST_PLAYER_MOVE_PENALTY_THRESHOLD, ctx->r7) = ctx->r2;
     // jal         0x80059CEC
     // nop
 

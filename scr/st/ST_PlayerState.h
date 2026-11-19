@@ -3,6 +3,8 @@
 // Offsets into the player state in emulated RAM (base address 0x80198F28).
 // Access through MEM_* preserves the recompiler's memory and signedness rules.
 enum ST_PlayerStateOffset {
+    ST_PLAYER_MOVE_PENALTY_TOTAL = 0x22,
+    ST_PLAYER_MOVE_PENALTY_THRESHOLD = 0x24,
     ST_PLAYER_MOVE_X = 0x1CC,
     ST_PLAYER_MOVE_Y = 0x1CE,
     ST_PLAYER_MOVE_Z = 0x1D0,
