@@ -68,6 +68,14 @@ an unsigned halfword for `player[0]` and integer division. **OPEN:** the
 in-game names of the slot records, their summed field, and the base player
 halfword have not been established.
 
+[sub_80044674](../scr/st/sub_80044674.c) loads entry `0x1E0` from archive
+index 1 and copies its eighth length-prefixed section to `0x801C7810`. The
+same initialization associates archive index 1 with `COM/FDAT.T`. In the
+supplied archive, that section's payload begins at file offset `0x1397290`
+and is 13,824 bytes long. The 44-byte records used for the penalty total
+are indexed within this copied data. **OPEN:** the full record format and
+the in-game meaning of its halfword at `0x24` remain unestablished.
+
 On paths in [sub_8003DBE0](../scr/st/sub_8003DBE0.c) that reach its
 third-argument dispatch, values `0x08`, `0x10`, and `0x18` select the
 `0x194`/`0x196` pair. The code sets the target at `0x196` to 75. Depending
