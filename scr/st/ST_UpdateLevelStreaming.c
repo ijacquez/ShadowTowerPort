@@ -353,7 +353,7 @@ L_8004586C:
 L_800458B4:
     // The preceding load's callback advances to this stage. Queue the next
     // resource and copy the loaded level table into its fixed RAM region.
-    // See COLLISION_GEOMETRY.md for the verified collision-data path.
+    // See docs/COLLISION_GEOMETRY.md for the verified collision-data path.
     // addiu       $a0, $zero, 0x1
     ctx->r4 = ADD32(0, 0X1);
     // lui         $a3, 0x8004

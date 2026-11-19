@@ -1,5 +1,10 @@
 # PS1→PC Port Shadow Tower Projects
 
+Technical notes on [movement](docs/PLAYER_MOVEMENT.md),
+[coordinate units](docs/STAGE_UNITS.md),
+[collision geometry](docs/COLLISION_GEOMETRY.md), and
+[file formats](docs/FILE_FORMATS.md) are in `docs/`.
+
 ## Status: Early Stage
 
 ### EXE Structure

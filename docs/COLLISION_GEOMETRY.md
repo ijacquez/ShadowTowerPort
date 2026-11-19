@@ -17,10 +17,11 @@ next stage the state machine starts another resource request and uses
 12-byte records at `0x8017BED0` and the coordinate-indexed tables beginning
 at `0x801856D0` used by collision candidate selection.
 
-The copy routine is a generic word copy; the resource also serves other
-level systems. The exact resource name, complete file layout, and how the
-separate shared geometry resource is populated have not yet been established.
-Do not assume this buffer is a standalone collision mesh.
+For stage 0 these resources are entries 1 and 5 of `ST/COM/FDAT.T`: entry 1
+contains the copied level table, while entry 5 is the shared model archive
+loaded at `0x800F2C88`. The resource also serves other level systems; the
+full model and collision formats have not yet been established. See
+[STAGE_UNITS.md](STAGE_UNITS.md) for the archive offsets and a reproducible extraction.
 
 ## Querying collision geometry
 
@@ -43,8 +44,9 @@ Do not assume this buffer is a standalone collision mesh.
    ```
 
    The bytes are read unsigned; the subtraction above centers byte 11.
-   These are stored coordinate units. The code does not identify their
-   physical units or establish a Q12.4 convention.
+   These are stored coordinate units; model vertices and player positions use
+   the same scale. A spatial cell is 4096 stored units. Their physical units
+   are not established; see [STAGE_UNITS.md](STAGE_UNITS.md).
 4. The geometry query invokes `sub_80046604`, `sub_800468C0`, and
    `sub_80047884` to prepare and test candidate geometry. The latter two
    access the shared level-data pointer and derive subrecord addresses using
@@ -52,7 +54,7 @@ Do not assume this buffer is a standalone collision mesh.
    individual responsibilities need further investigation.
 5. Results, including flags and distance-like values, are written to the
    shared query structure. `ST_PlayerMoveWithCollision` uses them to choose
-   and adjust the displacement; see `PLAYER_MOVEMENT.md`.
+   and adjust the displacement; see [PLAYER_MOVEMENT.md](PLAYER_MOVEMENT.md).
 
 If the candidate search is empty, `ST_QueryLevelGeometry` writes `0x80000`
 to two query-result fields. This sentinel participates in the player's

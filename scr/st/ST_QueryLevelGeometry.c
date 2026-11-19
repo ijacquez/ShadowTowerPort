@@ -3,7 +3,7 @@
 
 void ST_QueryLevelGeometry(uint8_t* rdram, recomp_context* ctx) {
     // Select and decode nearby level records, then test shared geometry.
-    // See COLLISION_GEOMETRY.md for the loading and query data flow.
+    // See docs/COLLISION_GEOMETRY.md for the loading and query data flow.
     uint64_t hi = 0, lo = 0, result = 0;
     unsigned int rounding_mode = DEFAULT_ROUNDING_MODE;
     int c1cs = 0; 

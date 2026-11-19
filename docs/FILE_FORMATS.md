@@ -14,8 +14,8 @@ walks the specified bytes from right to left, accumulates decimal digits with
 powers of ten, recognizes `-`, ignores other characters, and advances the
 cursor past the next LF. It has no bounds checking in this recompiled code.
 The initial X/Y/Z fields are decoded decimal values shifted left by 12; Y
-also has `0x640` subtracted. Those shifts do not establish their physical
-unit or a Q12.4 movement format.
+also has `0x640` subtracted. In spatial-cell units these positions have 12
+fractional bits; their physical unit is unknown. See [STAGE_UNITS.md](STAGE_UNITS.md).
 
 ## Sector-indexed resources
 
@@ -39,7 +39,7 @@ all resulting sector counts as ISO LBAs.
 `ST_UpdateLevelStreaming` loads a level table, while
 `ST_DecodeCandidateOrigins` decodes the coordinate fields of its selected
 records. `ST_QueryLevelGeometry` and the geometry routines consume associated
-resource data. See `COLLISION_GEOMETRY.md` for the verified path and unknowns.
+resource data. See [COLLISION_GEOMETRY.md](COLLISION_GEOMETRY.md) for the verified path and unknowns.
 
 The PC-side `KFCD_FindFile` in `scr/kf_cd.cpp` already has a descriptive name;
 it reads an ISO 9660 primary volume descriptor and directory records.
