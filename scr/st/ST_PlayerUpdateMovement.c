@@ -99,160 +99,38 @@ L_800422C0:
     goto after_0;
     // addu        $a0, $v0, $a0
     ctx->r4 = ADD32(ctx->r2, ctx->r4);
-    after_0:
-    // lui         $v1, 0x801A
-    ctx->r3 = S32(0X801A << 16);
-    // addiu       $v1, $v1, -0x70D8
-    ctx->r3 = ADD32(ctx->r3, -0X70D8);
-    // sh          $v0, 0x2C8($v1)
-    MEM_H(ST_PLAYER_MOVE_MAGNITUDE, ctx->r3) = ctx->r2;
-    // sll         $v0, $v0, 16
-    ctx->r2 = S32(ctx->r2) << 16;
-    // sra         $a0, $v0, 16
-    ctx->r4 = S32(ctx->r2) >> 16;
-    // bne         $a0, $zero, L_80042324
-    if (ctx->r4 != 0) {
-        // nop
-    
-        goto L_80042324;
+after_0:
+// The GTE produced squared signed-halfword components in the
+// stack slots. SquareRoot0 supplies a signed-halfword divisor.
+ctx->r3 = player;
+MEM_H(ST_PLAYER_MOVE_MAGNITUDE, player) = ctx->r2;
+ctx->r2 = U32(ctx->r2) << 16;
+ctx->r4 = S32(ctx->r2) >> 16;
+if (ctx->r4 == 0) {
+    MEM_W(0x18, ctx->r29) = 0;
+    MEM_W(0x20, ctx->r29) = 0;
+} else {
+    uint32_t xSquared = MEM_W(0x28, ctx->r29);
+    uint32_t zSquared = MEM_W(0x30, ctx->r29);
+    if (S32(MEM_W(ST_PLAYER_LOCAL_MOVE_X, player)) < 0) {
+        xSquared = 0u - xSquared;
+        MEM_W(0x28, ctx->r29) = xSquared;
     }
-    // nop
-
-    // sw          $zero, 0x20($sp)
-    MEM_W(0X20, ctx->r29) = 0;
-    // j           L_800423D4
-    // sw          $zero, 0x18($sp)
-    MEM_W(0X18, ctx->r29) = 0;
-    goto L_800423D4;
-    // sw          $zero, 0x18($sp)
-    MEM_W(0X18, ctx->r29) = 0;
-L_80042324:
-    // lw          $v0, 0x2B8($v1)
-    ctx->r2 = MEM_W(ST_PLAYER_LOCAL_MOVE_X, ctx->r3);
-    // nop
-
-    // bgez        $v0, L_80042344
-    if (SIGNED(ctx->r2) >= 0) {
-        // nop
-    
-        goto L_80042344;
+    if (S32(MEM_W(ST_PLAYER_LOCAL_MOVE_Z, player)) < 0) {
+        zSquared = 0u - zSquared;
+        MEM_W(0x30, ctx->r29) = zSquared;
     }
-    // nop
-
-    // lw          $v0, 0x28($sp)
-    ctx->r2 = MEM_W(0X28, ctx->r29);
-    // nop
-
-    // negu        $v0, $v0
-    ctx->r2 = SUB32(0, ctx->r2);
-    // sw          $v0, 0x28($sp)
-    MEM_W(0X28, ctx->r29) = ctx->r2;
-L_80042344:
-    // lw          $v0, 0x2C0($v1)
-    ctx->r2 = MEM_W(ST_PLAYER_LOCAL_MOVE_Z, ctx->r3);
-    // nop
-
-    // bgez        $v0, L_80042364
-    if (SIGNED(ctx->r2) >= 0) {
-        // nop
-    
-        goto L_80042364;
-    }
-    // nop
-
-    // lw          $v0, 0x30($sp)
-    ctx->r2 = MEM_W(0X30, ctx->r29);
-    // nop
-
-    // negu        $v0, $v0
-    ctx->r2 = SUB32(0, ctx->r2);
-    // sw          $v0, 0x30($sp)
-    MEM_W(0X30, ctx->r29) = ctx->r2;
-L_80042364:
-    // lw          $v1, 0x28($sp)
-    ctx->r3 = MEM_W(0X28, ctx->r29);
-    // nop
-
-    // div         $zero, $v1, $a0
-    lo = S32(S64(S32(ctx->r3)) / S64(S32(ctx->r4))); hi = S32(S64(S32(ctx->r3)) % S64(S32(ctx->r4)));
-    // bne         $a0, $zero, L_8004237C
-    if (ctx->r4 != 0) {
-        // nop
-    
-        goto L_8004237C;
-    }
-    // nop
-
-    // break       7
-    do_break(2147754872);
-L_8004237C:
-    // addiu       $at, $zero, -0x1
-    ctx->r1 = ADD32(0, -0X1);
-    // bne         $a0, $at, L_80042394
-    if (ctx->r4 != ctx->r1) {
-        // lui         $at, 0x8000
-        ctx->r1 = S32(0X8000 << 16);
-        goto L_80042394;
-    }
-    // lui         $at, 0x8000
-    ctx->r1 = S32(0X8000 << 16);
-    // bne         $v1, $at, L_80042394
-    if (ctx->r3 != ctx->r1) {
-        // nop
-    
-        goto L_80042394;
-    }
-    // nop
-
-    // break       6
-    do_break(2147754896);
-L_80042394:
-    // mflo        $v1
-    ctx->r3 = lo;
-    // lw          $v0, 0x30($sp)
-    ctx->r2 = MEM_W(0X30, ctx->r29);
-    // nop
-
-    // div         $zero, $v0, $a0
-    lo = S32(S64(S32(ctx->r2)) / S64(S32(ctx->r4))); hi = S32(S64(S32(ctx->r2)) % S64(S32(ctx->r4)));
-    // bne         $a0, $zero, L_800423B0
-    if (ctx->r4 != 0) {
-        // nop
-    
-        goto L_800423B0;
-    }
-    // nop
-
-    // break       7
-    do_break(2147754924);
-L_800423B0:
-    // addiu       $at, $zero, -0x1
-    ctx->r1 = ADD32(0, -0X1);
-    // bne         $a0, $at, L_800423C8
-    if (ctx->r4 != ctx->r1) {
-        // lui         $at, 0x8000
-        ctx->r1 = S32(0X8000 << 16);
-        goto L_800423C8;
-    }
-    // lui         $at, 0x8000
-    ctx->r1 = S32(0X8000 << 16);
-    // bne         $v0, $at, L_800423C8
-    if (ctx->r2 != ctx->r1) {
-        // nop
-    
-        goto L_800423C8;
-    }
-    // nop
-
-    // break       6
-    do_break(2147754948);
-L_800423C8:
-    // mflo        $v0
-    ctx->r2 = lo;
-    // sw          $v1, 0x18($sp)
-    MEM_W(0X18, ctx->r29) = ctx->r3;
-    // sw          $v0, 0x20($sp)
-    MEM_W(0X20, ctx->r29) = ctx->r2;
+    const int32_t divisor = S32(ctx->r4);
+    ctx->r1 = 0x80000000;
+    if (divisor == -1 && xSquared == 0x80000000)
+        do_break(2147754896);
+    ctx->r3 = (uint32_t)((int64_t)S32(xSquared) / divisor);
+    if (divisor == -1 && zSquared == 0x80000000)
+        do_break(2147754948);
+    ctx->r2 = (uint32_t)((int64_t)S32(zSquared) / divisor);
+    MEM_W(0x18, ctx->r29) = ctx->r3;
+    MEM_W(0x20, ctx->r29) = ctx->r2;
+}
 L_800423D4:
     // addiu       $a0, $sp, 0x58
     ctx->r4 = ADD32(ctx->r29, 0X58);
