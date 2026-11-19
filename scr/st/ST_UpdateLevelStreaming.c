@@ -457,7 +457,7 @@ L_800458B4:
     // jal         0x80045010
     // addu        $a2, $v0, $a2
     ctx->r6 = ADD32(ctx->r2, ctx->r6);
-    sub_80045010(rdram, ctx);
+    ST_TranslatePlayerPosition(rdram, ctx);
     goto after_6;
     // addu        $a2, $v0, $a2
     ctx->r6 = ADD32(ctx->r2, ctx->r6);

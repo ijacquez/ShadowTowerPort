@@ -9,6 +9,9 @@ enum ST_PlayerStateOffset {
     ST_PLAYER_POSITION_X = 0x248,
     ST_PLAYER_POSITION_Y = 0x24C,
     ST_PLAYER_POSITION_Z = 0x250,
+    ST_PLAYER_VIEW_ROTATION_X = 0x268,
+    ST_PLAYER_VIEW_ROTATION_Y = 0x26A,
+    ST_PLAYER_VIEW_ROTATION_Z = 0x26C,
     ST_PLAYER_PITCH = 0x278,
     ST_PLAYER_YAW = 0x27A,
     ST_PLAYER_LOCAL_MOVE_X = 0x2B8,
@@ -16,6 +19,8 @@ enum ST_PlayerStateOffset {
     ST_PLAYER_MOVE_MAGNITUDE = 0x2C8,
     ST_PLAYER_TURN_RATE = 0x2CA,
     ST_PLAYER_PITCH_RATE = 0x2CC,
+    ST_PLAYER_VIEW_Y_ADJUSTMENT_A = 0x2CE,
+    ST_PLAYER_VIEW_Y_ADJUSTMENT_B = 0x2D2,
     ST_PLAYER_VERTICAL_MOVE = 0x2D4,
     ST_PLAYER_MOVE_LIMIT = 0x2E4,
     ST_PLAYER_TURN_LIMIT = 0x2E8
@@ -24,3 +29,4 @@ enum ST_PlayerStateOffset {
 // Y offset used when querying the player's collision geometry. Its exact
 // relationship to the player's full height remains unknown.
 enum { ST_PLAYER_COLLISION_Y_OFFSET = 0x640 };
+enum { ST_PLAYER_VIEW_Y_OFFSET = 0x640 };

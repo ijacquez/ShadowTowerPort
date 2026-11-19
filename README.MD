@@ -78,7 +78,7 @@ sub_80053AA4()    — more GTE math
 sub_8003BC40()    — state machine with cases
 sub_8005735C()    — calls function pointer at dword_801B592C+4 (player script?)
 ST_UpdateLevelStreaming() — level streaming state machine
-sub_8003E734()    — possibly copies player coords/rotation
+ST_BuildPlayerView() — prepares the scene-view position and rotation
 sub_80058288()    — more global data updates
 ProcessAssetLoadQueue()
 ProcessCDAudioLoad()
@@ -109,7 +109,7 @@ sub_8001535C()        — wait CD (stubbed)
 
 ### Known Issues to Investigate
 1. **Other EXE not loading**
-2. **sub_8003E734 / sub_80058288** — likely copy player position/rotation, similar to KFPlayerCopyPositionRotation in KF2. Need to identify player coordinate addresses.
+2. **sub_80058288** — behavior remains to be identified.
 
 
 ### Stubbed/HLE Functions (ST)

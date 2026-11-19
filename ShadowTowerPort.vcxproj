@@ -727,7 +727,7 @@
     <ClCompile Include="scr\st\sub_8003D788.c" />
     <ClCompile Include="scr\st\sub_8003DBE0.c" />
     <ClCompile Include="scr\st\sub_8003E718.c" />
-    <ClCompile Include="scr\st\sub_8003E734.c" />
+    <ClCompile Include="scr\st\ST_BuildPlayerView.c" />
     <ClCompile Include="scr\st\sub_8003E794.c" />
     <ClCompile Include="scr\st\sub_8003E840.c" />
     <ClCompile Include="scr\st\sub_8003E874.c" />
@@ -761,7 +761,7 @@
     <ClCompile Include="scr\st\sub_80044404.c" />
     <ClCompile Include="scr\st\sub_80044674.c" />
     <ClCompile Include="scr\st\sub_80044EE8.c" />
-    <ClCompile Include="scr\st\sub_80045010.c" />
+    <ClCompile Include="scr\st\ST_TranslatePlayerPosition.c" />
     <ClCompile Include="scr\st\sub_80045044.c" />
     <ClCompile Include="scr\st\ST_OnLevelDataChunkLoaded.c" />
     <ClCompile Include="scr\st\sub_80045594.c" />

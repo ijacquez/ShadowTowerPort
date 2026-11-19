@@ -323,6 +323,27 @@ The horizontal comparison adds 256 to the indexed record's `0x04` value.
 These are properties of this particular check; they do not establish the
 player's physical height or all checks made by the dispatcher.
 
+## Scene-view position
+
+[ST_BuildPlayerView](../scr/st/ST_BuildPlayerView.c) copies player X and Z
+from offsets `0x248` and `0x250` into the position supplied to scene
+rendering. It calculates that position's Y as player Y at `0x24C` plus the
+signed halfwords at `0x2CE` and `0x2D2`, minus 1600, with 32-bit wrapping.
+It copies player halfwords `0x268`, `0x26A`, and `0x26C` to the accompanying
+rotation. [ST_MainGameLoop](../scr/st/ST_MainGameLoop.c) passes these outputs
+to [DrawScene](../scr/st/DrawScene.c). Thus 1600 is also an offset in the
+scene-view Y calculation; this does not establish the player's full height.
+
+On a path in [ST_UpdateLevelStreaming](../scr/st/ST_UpdateLevelStreaming.c),
+the game also calls [ST_TranslatePlayerPosition](../scr/st/ST_TranslatePlayerPosition.c)
+to add offsets directly to player X, Y, and Z. When the signed byte at
+record offset `0x20` is not `0x7F`, those offsets are
+`(byte[0x20] << 12) + (byte[0x23] << 7)` for X,
+`(byte[0x22] << 12) + (byte[0x24] << 7)` for Y, and
+`(byte[0x21] << 12) + (byte[0x25] << 7)` for Z. Each byte is signed and
+each position addition wraps to 32 bits. **OPEN:** the record's full meaning
+and every condition that reaches this path have not been established.
+
 ## Vertical movement
 
 In [ST_PlayerMoveWithCollision](../scr/st/ST_PlayerMoveWithCollision.c),

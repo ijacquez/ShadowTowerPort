@@ -94,7 +94,7 @@ L_800500F8:
     // jal         0x8003E734
     // addu        $a1, $s1, $zero
     ctx->r5 = ADD32(ctx->r17, 0);
-    sub_8003E734(rdram, ctx);
+    ST_BuildPlayerView(rdram, ctx);
     goto after_4;
     // addu        $a1, $s1, $zero
     ctx->r5 = ADD32(ctx->r17, 0);

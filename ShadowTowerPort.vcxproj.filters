@@ -1236,7 +1236,7 @@
     <ClCompile Include="scr\st\sub_8003E718.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_8003E734.c">
+    <ClCompile Include="scr\st\ST_BuildPlayerView.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\sub_8003E794.c">
@@ -3021,7 +3021,7 @@
     <ClCompile Include="scr\st\sub_80044674.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_80045010.c">
+    <ClCompile Include="scr\st\ST_TranslatePlayerPosition.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\sub_80045044.c">

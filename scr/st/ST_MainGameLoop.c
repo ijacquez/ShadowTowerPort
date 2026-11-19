@@ -474,7 +474,7 @@ L_80014BD4:
     // addu        $a1, $s0, $zero
     ctx->r5 = ADD32(ctx->r16, 0);
 
-    sub_8003E734(rdram, ctx);
+    ST_BuildPlayerView(rdram, ctx);
 
     goto after_43;
     // addu        $a1, $s0, $zero
