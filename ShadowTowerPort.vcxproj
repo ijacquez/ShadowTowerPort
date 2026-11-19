@@ -762,7 +762,7 @@
     <ClCompile Include="scr\st\sub_80044674.c" />
     <ClCompile Include="scr\st\sub_80044EE8.c" />
     <ClCompile Include="scr\st\ST_TranslatePlayerPosition.c" />
-    <ClCompile Include="scr\st\sub_80045044.c" />
+    <ClCompile Include="scr\st\ST_RequestLevelStreaming.c" />
     <ClCompile Include="scr\st\ST_OnLevelDataChunkLoaded.c" />
     <ClCompile Include="scr\st\sub_80045594.c" />
     <ClCompile Include="scr\st\sub_800455AC.c" />

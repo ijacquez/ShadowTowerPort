@@ -1,7 +1,9 @@
 #include "recomp.h"
 #include "disable_warnings.h"
 
-void sub_80045044(uint8_t* rdram, recomp_context* ctx) {
+void ST_RequestLevelStreaming(uint8_t* rdram, recomp_context* ctx) {
+    // The six caller-supplied bytes copied to the streaming state at
+    // offsets 0x20..0x25 supply the optional player-position translation.
     uint64_t hi = 0, lo = 0, result = 0;
     unsigned int rounding_mode = DEFAULT_ROUNDING_MODE;
     int c1cs = 0; 

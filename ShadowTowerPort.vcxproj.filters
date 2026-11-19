@@ -3024,7 +3024,7 @@
     <ClCompile Include="scr\st\ST_TranslatePlayerPosition.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_80045044.c">
+    <ClCompile Include="scr\st\ST_RequestLevelStreaming.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\sub_80045594.c">

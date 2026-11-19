@@ -367,7 +367,7 @@ static FuncEntry section_1_text_funcs[] = {
     { .func = sub_80044674, .offset = 0x00034674 },
     { .func = sub_80044EE8, .offset = 0x00034ee8 },
     { .func = ST_TranslatePlayerPosition, .offset = 0x00035010 },
-    { .func = sub_80045044, .offset = 0x00035044 },
+    { .func = ST_RequestLevelStreaming, .offset = 0x00035044 },
     { .func = ST_OnLevelDataChunkLoaded, .offset = 0x0003557c },
     { .func = sub_80045594, .offset = 0x00035594 },
     { .func = sub_800455AC, .offset = 0x000355ac },

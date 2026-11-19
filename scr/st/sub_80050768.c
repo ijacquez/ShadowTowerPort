@@ -4890,7 +4890,7 @@ L_80052244:
     // jal         0x80045044
     // sw          $v0, 0x28($sp)
     MEM_W(0X28, ctx->r29) = ctx->r2;
-    sub_80045044(rdram, ctx);
+    ST_RequestLevelStreaming(rdram, ctx);
     goto after_68;
     // sw          $v0, 0x28($sp)
     MEM_W(0X28, ctx->r29) = ctx->r2;
@@ -5306,7 +5306,7 @@ L_800524C4:
     // jal         0x80045044
     // sw          $zero, 0x28($sp)
     MEM_W(0X28, ctx->r29) = 0;
-    sub_80045044(rdram, ctx);
+    ST_RequestLevelStreaming(rdram, ctx);
     goto after_74;
     // sw          $zero, 0x28($sp)
     MEM_W(0X28, ctx->r29) = 0;
@@ -5343,7 +5343,7 @@ L_80052540:
     // jal         0x80045044
     // sw          $zero, 0x28($sp)
     MEM_W(0X28, ctx->r29) = 0;
-    sub_80045044(rdram, ctx);
+    ST_RequestLevelStreaming(rdram, ctx);
     goto after_75;
     // sw          $zero, 0x28($sp)
     MEM_W(0X28, ctx->r29) = 0;
@@ -5650,7 +5650,7 @@ L_800526E4:
     // jal         0x80045044
     // addu        $a3, $t3, $zero
     ctx->r7 = ADD32(ctx->r11, 0);
-    sub_80045044(rdram, ctx);
+    ST_RequestLevelStreaming(rdram, ctx);
     goto after_86;
     // addu        $a3, $t3, $zero
     ctx->r7 = ADD32(ctx->r11, 0);

@@ -619,7 +619,7 @@ SRCS:= scr/st/AddPrim.c \
 	scr/st/sub_80044674.c \
 	scr/st/sub_80044EE8.c \
 	scr/st/ST_TranslatePlayerPosition.c \
-	scr/st/sub_80045044.c \
+	scr/st/ST_RequestLevelStreaming.c \
 	scr/st/ST_OnLevelDataChunkLoaded.c \
 	scr/st/sub_80045594.c \
 	scr/st/sub_800455AC.c \

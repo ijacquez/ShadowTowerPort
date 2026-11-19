@@ -105,7 +105,7 @@ L_8003C990:
     // jal         0x80045044
     // sw          $zero, 0x28($sp)
     MEM_W(0X28, ctx->r29) = 0;
-    sub_80045044(rdram, ctx);
+    ST_RequestLevelStreaming(rdram, ctx);
     goto after_3;
     // sw          $zero, 0x28($sp)
     MEM_W(0X28, ctx->r29) = 0;
@@ -244,7 +244,7 @@ L_8003CA04:
     // jal         0x80045044
     // sw          $v1, 0x5938($v0)
     MEM_W(0X5938, ctx->r2) = ctx->r3;
-    sub_80045044(rdram, ctx);
+    ST_RequestLevelStreaming(rdram, ctx);
     goto after_14;
     // sw          $v1, 0x5938($v0)
     MEM_W(0X5938, ctx->r2) = ctx->r3;

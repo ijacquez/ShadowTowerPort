@@ -356,7 +356,7 @@ void sub_80044404(uint8_t* rdram, recomp_context* ctx);
 void sub_80044674(uint8_t* rdram, recomp_context* ctx);
 void sub_80044EE8(uint8_t* rdram, recomp_context* ctx);
 void ST_TranslatePlayerPosition(uint8_t* rdram, recomp_context* ctx);
-void sub_80045044(uint8_t* rdram, recomp_context* ctx);
+void ST_RequestLevelStreaming(uint8_t* rdram, recomp_context* ctx);
 void ST_OnLevelDataChunkLoaded(uint8_t* rdram, recomp_context* ctx);
 void sub_80045594(uint8_t* rdram, recomp_context* ctx);
 void sub_800455AC(uint8_t* rdram, recomp_context* ctx);
