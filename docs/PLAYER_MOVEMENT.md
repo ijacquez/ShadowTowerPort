@@ -60,9 +60,7 @@ in its header; in the supplied file that address is `0x80011000`, and the
 payload begins at file offset `0x800`. The zero-angle word read by
 [RotMatrix](../scr/st/RotMatrix.c) at `0x80082280` is therefore at file
 offset `0x71A80`. Its bytes are `00 00 00 10`: the signed low halfword is
-zero and the high halfword is 4096. This can be checked with
-`xxd -g 2 -l 4 -s 0x71a80 Extracted/ST.EXE`; see the
-[executable loader](../scr/kf_cd.cpp).
+zero and the high halfword is 4096; see the [executable loader](../scr/kf_cd.cpp).
 
 Movement passes rotation angles `(0, -yaw, 0)` to `RotMatrix`. With the
 above zero-angle entry, its X/Z rows have zero in their Y-input column for
@@ -374,17 +372,3 @@ have not been established. With one spatial cell as one world unit, divide
 positions and movement displacements by 4096 to obtain values with 12
 fractional bits. See [STAGE_UNITS.md](STAGE_UNITS.md) for the extracted
 geometry and the relationship between model, grid, and player coordinates.
-
-## Checks
-
-`make test-player-movement` runs the movement-axis, turning, and vertical boundary cases
-in [tests/player_movement_axis_test.cpp](../tests/player_movement_axis_test.cpp)
-and [tests/player_turning_test.cpp](../tests/player_turning_test.cpp), and
-[tests/player_vertical_test.cpp](../tests/player_vertical_test.cpp). The
-vertical tests replace the collision query and other helpers with stubs; they
-do not exercise the complete geometry and collision pipeline.
-The [rotation test](../tests/player_rotation_test.cpp) also runs the actual
-`RotMatrix` and GTE operations for all 4096 yaw values, with three different
-input Y halfwords and a synthetic lookup table whose zero-angle word matches
-the executable. It checks the horizontal matrix coefficients and outputs;
-it does not identify the stack halfword's writer.

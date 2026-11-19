@@ -1,21 +1,6 @@
 # Stage 0 geometry and world-coordinate scale
 
-## Reproduce the extraction
-
-With the game files available under `Extracted/`, run from the repository
-root (the output directory must not already exist):
-
-```sh
-javac -d /tmp tools/ExtractStage.java
-java -cp /tmp ExtractStage Extracted/ST/COM/FDAT.T 0 /tmp/stage00
-```
-
-The tool writes the ten indexed stage entries that are nonempty, including
-`entry-01-placements.bin` and `entry-05-models.rtmd`, plus
-`placement-records.csv` and `geometry-vertices.csv`. The binaries are raw,
-sector-aligned archive entries: the tool does not claim to reconstruct
-individual standalone TMD files or decode primitives. The 512 placement rows
-include unused records. Do not commit extracted game assets.
+## Stage data
 
 `FDAT.T` begins with a 16-bit count followed by 16-bit sector offsets. The
 engine copies the offsets following the count and indexes a stage's resources
@@ -29,7 +14,7 @@ and 256 40-byte model records. Following the engine's address calculations,
 each record's first word is the vertex offset relative to archive offset 12,
 its second word is the vertex count, and each vertex is three signed
 16-bit coordinates plus a 16-bit padding field. Stage 0 contains 610 vertices
-across these slots. The tool also successfully parses stage 1.
+across these slots. The 512 placement records include unused records.
 
 ## Scale established by actual data and code
 

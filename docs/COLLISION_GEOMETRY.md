@@ -21,7 +21,7 @@ For stage 0 these resources are entries 1 and 5 of `ST/COM/FDAT.T`: entry 1
 contains the copied level table, while entry 5 is the shared model archive
 loaded at `0x800F2C88`. The resource also serves other level systems; the
 full model and collision formats have not yet been established. See
-[STAGE_UNITS.md](STAGE_UNITS.md) for the archive offsets and a reproducible extraction.
+[STAGE_UNITS.md](STAGE_UNITS.md) for the archive offsets and coordinate scale.
 
 ## Querying collision geometry
 

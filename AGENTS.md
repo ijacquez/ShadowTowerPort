@@ -12,6 +12,9 @@ This Project is being REVERSE ENGINEERED.
 - This supersedes any pressure to ship fast. Completeness is absolute here.
 - No documentation or source tree changes are accepted if not fully backed up by
   direct evidence.
+- Game documentation describes the source tree and verified game behavior.
+  Do not include investigation narratives, runtime observations, debugger
+  transcripts, or reproduction and test procedures in game documentation.
 - If a finding can't be resolved statically, record it as **OPEN** with the
   evidence gathered so far.
 - Unknown is acceptable. Guessing is not.
@@ -40,6 +43,28 @@ At the start of every session, before any code change:
 3. Documentation goes into `docs/` and needs to be always correct and up to date.
 4. Use `scratchpad/` for your temporary work.
 5. Tools are to always be written in Java.
+6. You are allowed to modify the source tree (or duplicate then modify) if it
+   facilitates the investigation.
 
 If any of these fail, do not proceed with the user's task — surface
 the failure first.
+
+## Skills
+
+### Run under Xvfb
+
+From the project root, build the game and link the disc image into the
+scratch directory. The game expects the image to be named `Shadow_Tower.bin`
+in its working directory.
+
+```sh
+make -j4
+mkdir -p scratchpad
+ln -sfn ../Shadow_Tower scratchpad/Shadow_Tower
+ln -sfn ../Shadow_Tower.bin scratchpad/Shadow_Tower.bin
+cd scratchpad
+ALSOFT_DRIVERS=null LIBGL_ALWAYS_SOFTWARE=1 xvfb-run -a ./Shadow_Tower
+```
+
+This uses software rendering and disables audio output. Logs and other
+runtime files are written in `scratchpad/`.
