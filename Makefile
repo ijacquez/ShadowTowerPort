@@ -564,7 +564,7 @@ SRCS:= scr/st/AddPrim.c \
 	scr/st/sub_8003BC40.c \
 	scr/st/sub_8003BD14.c \
 	scr/st/sub_8003BDB0.c \
-	scr/st/sub_8003BE10.c \
+	scr/st/ST_UpdatePlayerCollisionYFlags.c \
 	scr/st/sub_8003BEB4.c \
 	scr/st/sub_8003C054.c \
 	scr/st/sub_8003C0E0.c \
@@ -1116,6 +1116,8 @@ scr/st/ST_PlayerUpdateMovement.o scr/st/ST_PlayerUpdateTurning.o scr/st/ST_Playe
 .PHONY: test-player-movement
 test-player-movement:
 	mkdir -p scratchpad
+	$(CXX) $(CFLAGS) -std=c++17 tests/player_collision_y_flags_test.cpp scr/st/ST_UpdatePlayerCollisionYFlags.c -o scratchpad/player-collision-y-flags-test
+	scratchpad/player-collision-y-flags-test
 	$(CXX) $(CFLAGS) -std=c++17 tests/player_rotation_test.cpp scr/st/RotMatrix.c scr/gte.cpp PsyCross/src/gte/PsyX_GTE.cpp -o scratchpad/player-rotation-test
 	scratchpad/player-rotation-test
 	$(CXX) $(CFLAGS) -std=c++17 -ffunction-sections -fdata-sections tests/player_movement_axis_test.cpp -Wl,--gc-sections -o scratchpad/player-movement-axis-test

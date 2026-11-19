@@ -962,7 +962,7 @@ L_80041CD4:
     // jal         0x8003BE10
     // nop
 
-    sub_8003BE10(rdram, ctx);
+    ST_UpdatePlayerCollisionYFlags(rdram, ctx);
     goto after_15;
     // nop
 

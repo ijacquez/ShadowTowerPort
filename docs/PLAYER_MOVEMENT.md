@@ -372,3 +372,15 @@ have not been established. With one spatial cell as one world unit, divide
 positions and movement displacements by 4096 to obtain values with 12
 fractional bits. See [STAGE_UNITS.md](STAGE_UNITS.md) for the extracted
 geometry and the relationship between model, grid, and player coordinates.
+
+Near the end of `ST_PlayerMoveWithCollision`,
+[ST_UpdatePlayerCollisionYFlags](../scr/st/ST_UpdatePlayerCollisionYFlags.c)
+compares query words `0x4C` and `0x58` with the player's Y word at `0x24C`,
+using signed 32-bit comparisons. For each query word other than the sentinel
+`0x80000`, it writes 1 to the corresponding player word at `0x2EC` or
+`0x2F0` if the query value is less than player Y, or 0 otherwise. A sentinel
+leaves that flag unchanged. If byte `0x801B5924` is 10 and signed player
+halfword `0x178` is `0x147`, the function clears `0x2F0` even if the second
+query word is the sentinel. The game state machine reads `0x2F0` when
+choosing subsequent behavior. **OPEN:** the physical meanings of these flags
+and the special-case values have not been established.

@@ -1176,7 +1176,7 @@
     <ClCompile Include="scr\st\sub_8003BDB0.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_8003BE10.c">
+    <ClCompile Include="scr\st\ST_UpdatePlayerCollisionYFlags.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\sub_8003BEB4.c">

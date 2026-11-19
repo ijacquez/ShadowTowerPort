@@ -45,6 +45,7 @@ At the start of every session, before any code change:
 5. Tools are to always be written in Java.
 6. You are allowed to modify the source tree (or duplicate then modify) if it
    facilitates the investigation.
+7. Tests/tools that need to run for a considerable amount of time is allowed.
 
 If any of these fail, do not proceed with the user's task — surface
 the failure first.

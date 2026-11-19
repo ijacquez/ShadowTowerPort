@@ -14,7 +14,7 @@ void ST_RunCollisionQuery(uint8_t*, recomp_context* ctx) { ctx->r2 = 0; }
 void sub_8003BDB0(uint8_t*, recomp_context* ctx) { ctx->r2 = 0; }
 void sub_80057B48(uint8_t*, recomp_context*) { ++helperCalls; }
 void sub_80057BAC(uint8_t*, recomp_context* ctx) { ctx->r2 = 0; }
-void sub_8003BE10(uint8_t*, recomp_context* ctx) { ctx->r2 = 0; }
+void ST_UpdatePlayerCollisionYFlags(uint8_t*, recomp_context* ctx) { ctx->r2 = 0; }
 
 struct VerticalCase {
     const char* name;
