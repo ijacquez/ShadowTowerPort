@@ -54,6 +54,24 @@ int main() {
         std::fprintf(stderr, "player position translation failed\n");
         return 1;
     }
+    MEM_W(0x2E4, player) = 192;
+    MEM_W(0x2E8, player) = 40;
+    MEM_H(0x2CA, player) = 15;
+    MEM_H(0x2CC, player) = 20;
+    MEM_H(0x2C8, player) = 80;
+    MEM_W(0x2B8, player) = 123;
+    MEM_W(0x2C0, player) = 456;
+    recomp_context clear{};
+    ST_ClearPlayerMovementLimits(rdram, &clear);
+    if (MEM_W(0x2E4, player) != 0 || MEM_W(0x2E8, player) != 0 ||
+        MEM_HU(0x2CA, player) != 0 || MEM_HU(0x2CC, player) != 0 ||
+        MEM_HU(0x2C8, player) != 0 || MEM_BU(0x21E, player) != 1 ||
+        MEM_W(0x2B8, player) != 123 || MEM_W(0x2C0, player) != 456 ||
+        clear.r2 != player || clear.r3 != 1) {
+        std::fprintf(stderr, "player movement limit reset failed\n");
+        return 1;
+    }
     std::printf("%zu player view cases and position translation passed\n",
                 sizeof cases / sizeof cases[0]);
+    std::puts("player movement limit reset passed");
 }

@@ -294,7 +294,7 @@ L_80052A08:
     // jal         0x8003EAD0
     // sw          $v0, 0x24C($s0)
     MEM_W(0X24C, ctx->r16) = ctx->r2;
-    sub_8003EAD0(rdram, ctx);
+    ST_ClearPlayerMovementLimits(rdram, ctx);
     goto after_7;
     // sw          $v0, 0x24C($s0)
     MEM_W(0X24C, ctx->r16) = ctx->r2;

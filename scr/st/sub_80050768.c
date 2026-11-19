@@ -908,7 +908,7 @@ L_80050C1C:
     // jal         0x8003EAD0
     // nop
 
-    sub_8003EAD0(rdram, ctx);
+    ST_ClearPlayerMovementLimits(rdram, ctx);
     goto after_4;
     // nop
 
@@ -1060,7 +1060,7 @@ L_80050CFC:
     // jal         0x8003EAD0
     // addiu       $s0, $s0, -0x400
     ctx->r16 = ADD32(ctx->r16, -0X400);
-    sub_8003EAD0(rdram, ctx);
+    ST_ClearPlayerMovementLimits(rdram, ctx);
     goto after_5;
     // addiu       $s0, $s0, -0x400
     ctx->r16 = ADD32(ctx->r16, -0X400);
@@ -4492,7 +4492,7 @@ L_80051FF0:
     // jal         0x8003EAD0
     // sb          $t2, 0x6169($t3)
     MEM_B(0X6169, ctx->r11) = ctx->r10;
-    sub_8003EAD0(rdram, ctx);
+    ST_ClearPlayerMovementLimits(rdram, ctx);
     goto after_59;
     // sb          $t2, 0x6169($t3)
     MEM_B(0X6169, ctx->r11) = ctx->r10;
@@ -4709,7 +4709,7 @@ L_80052160:
     // jal         0x8003EAD0
     // addiu       $s3, $t3, 0x2E60
     ctx->r19 = ADD32(ctx->r11, 0X2E60);
-    sub_8003EAD0(rdram, ctx);
+    ST_ClearPlayerMovementLimits(rdram, ctx);
     goto after_66;
     // addiu       $s3, $t3, 0x2E60
     ctx->r19 = ADD32(ctx->r11, 0X2E60);
@@ -5444,7 +5444,7 @@ L_800525A4:
     // jal         0x8003EAD0
     // sw          $v0, 0x24C($s6)
     MEM_W(0X24C, ctx->r22) = ctx->r2;
-    sub_8003EAD0(rdram, ctx);
+    ST_ClearPlayerMovementLimits(rdram, ctx);
     goto after_77;
     // sw          $v0, 0x24C($s6)
     MEM_W(0X24C, ctx->r22) = ctx->r2;

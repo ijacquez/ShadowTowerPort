@@ -589,7 +589,7 @@ SRCS:= scr/st/AddPrim.c \
 	scr/st/sub_8003E840.c \
 	scr/st/sub_8003E874.c \
 	scr/st/sub_8003EA20.c \
-	scr/st/sub_8003EAD0.c \
+	scr/st/ST_ClearPlayerMovementLimits.c \
 	scr/st/sub_8003EAF8.c \
 	scr/st/sub_8003EB34.c \
 	scr/st/sub_8003EBFC.c \
@@ -1102,7 +1102,7 @@ Shadow_Tower: $(OBJS) $(PSYCROSS_OBJS) $(GLUE_OBJS)
 	$(CXX) -o $@ $^ -lSDL2 -lopenal
 
 scr/recomp.o: scr/st/recomp_overlays.inl scr/st/funcs.h
-scr/st/ST_PlayerUpdateMovement.o scr/st/ST_PlayerUpdateTurning.o scr/st/ST_PlayerMoveWithCollision.o scr/st/ST_BuildPlayerView.o scr/st/ST_TranslatePlayerPosition.o: scr/st/ST_PlayerState.h
+scr/st/ST_PlayerUpdateMovement.o scr/st/ST_PlayerUpdateTurning.o scr/st/ST_PlayerMoveWithCollision.o scr/st/ST_BuildPlayerView.o scr/st/ST_TranslatePlayerPosition.o scr/st/ST_ClearPlayerMovementLimits.o: scr/st/ST_PlayerState.h
 
 %.o: %.c
 	$(CXX) $(CFLAGS) -o $@ -c $<
@@ -1116,7 +1116,7 @@ scr/st/ST_PlayerUpdateMovement.o scr/st/ST_PlayerUpdateTurning.o scr/st/ST_Playe
 .PHONY: test-player-movement
 test-player-movement:
 	mkdir -p scratchpad
-	$(CXX) $(CFLAGS) -std=c++17 tests/player_view_test.cpp scr/st/ST_BuildPlayerView.c scr/st/ST_TranslatePlayerPosition.c -o scratchpad/player-view-test
+	$(CXX) $(CFLAGS) -std=c++17 tests/player_view_test.cpp scr/st/ST_BuildPlayerView.c scr/st/ST_TranslatePlayerPosition.c scr/st/ST_ClearPlayerMovementLimits.c -o scratchpad/player-view-test
 	scratchpad/player-view-test
 	$(CXX) $(CFLAGS) -std=c++17 tests/player_collision_y_flags_test.cpp scr/st/ST_UpdatePlayerCollisionYFlags.c -o scratchpad/player-collision-y-flags-test
 	scratchpad/player-collision-y-flags-test

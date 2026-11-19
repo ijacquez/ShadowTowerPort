@@ -310,7 +310,7 @@ L_8003C3F4:
     // jal         0x8003EAD0
     // nop
 
-    sub_8003EAD0(rdram, ctx);
+    ST_ClearPlayerMovementLimits(rdram, ctx);
     goto after_6;
     // nop
 

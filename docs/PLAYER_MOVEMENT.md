@@ -95,6 +95,12 @@ components using cosine and sine, uses `ST_PLAYER_VERTICAL_MOVE` for Y, and
 queries collisions. It can add that displacement to position before the
 state machine calls `ST_PlayerMoveWithCollision`. Its collision-result branches and retry counter are described below.
 
+[ST_ClearPlayerMovementLimits](../scr/st/ST_ClearPlayerMovementLimits.c)
+clears the movement and turn limits, turn and pitch rates, and movement
+magnitude, then sets player byte `0x21E` to 1. It does not clear the local
+X/Z input accumulators. The [game state machine](../scr/st/sub_80042D74.c)
+and other game routines call it on different paths.
+
 ## Turning and pitch input
 
 The [default bindings](../scr/st/ST_InitDefaultControlBindings.c) store

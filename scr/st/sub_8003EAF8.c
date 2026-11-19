@@ -26,7 +26,7 @@ void sub_8003EAF8(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x8003EAD0
     // sb          $zero, 0x218($v0)
     MEM_B(0X218, ctx->r2) = 0;
-    sub_8003EAD0(rdram, ctx);
+    ST_ClearPlayerMovementLimits(rdram, ctx);
     goto after_0;
     // sb          $zero, 0x218($v0)
     MEM_B(0X218, ctx->r2) = 0;

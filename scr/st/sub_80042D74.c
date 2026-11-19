@@ -497,7 +497,7 @@ L_80042FC8:
     // jal         0x8003EAD0
     // nop
 
-    sub_8003EAD0(rdram, ctx);
+    ST_ClearPlayerMovementLimits(rdram, ctx);
     goto after_18;
     // nop
 
@@ -2558,7 +2558,7 @@ L_80043AB4:
     // jal         0x8003EAD0
     // nop
 
-    sub_8003EAD0(rdram, ctx);
+    ST_ClearPlayerMovementLimits(rdram, ctx);
     goto after_85;
     // nop
 
@@ -2725,7 +2725,7 @@ L_80043C34:
     // jal         0x8003EAD0
     // nop
 
-    sub_8003EAD0(rdram, ctx);
+    ST_ClearPlayerMovementLimits(rdram, ctx);
     goto after_96;
     // nop
 

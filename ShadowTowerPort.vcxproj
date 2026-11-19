@@ -732,7 +732,7 @@
     <ClCompile Include="scr\st\sub_8003E840.c" />
     <ClCompile Include="scr\st\sub_8003E874.c" />
     <ClCompile Include="scr\st\sub_8003EA20.c" />
-    <ClCompile Include="scr\st\sub_8003EAD0.c" />
+    <ClCompile Include="scr\st\ST_ClearPlayerMovementLimits.c" />
     <ClCompile Include="scr\st\sub_8003EAF8.c" />
     <ClCompile Include="scr\st\sub_8003EB34.c" />
     <ClCompile Include="scr\st\sub_8003EBFC.c" />

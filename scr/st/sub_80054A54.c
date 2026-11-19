@@ -1351,7 +1351,7 @@ L_800551EC:
     // jal         0x8003EAD0
     // nop
 
-    sub_8003EAD0(rdram, ctx);
+    ST_ClearPlayerMovementLimits(rdram, ctx);
     goto after_15;
     // nop
 

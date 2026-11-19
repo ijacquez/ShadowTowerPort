@@ -1251,7 +1251,7 @@
     <ClCompile Include="scr\st\sub_8003EA20.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_8003EAD0.c">
+    <ClCompile Include="scr\st\ST_ClearPlayerMovementLimits.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\sub_8003EAF8.c">
