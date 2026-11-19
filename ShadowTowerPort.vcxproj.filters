@@ -1185,7 +1185,7 @@
     <ClCompile Include="scr\st\sub_8003C0E0.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_8003C17C.c">
+    <ClCompile Include="scr\st\ST_UpdateCounterAndTarget.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\sub_8003C24C.c">

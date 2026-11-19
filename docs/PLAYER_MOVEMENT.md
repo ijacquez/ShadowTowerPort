@@ -42,6 +42,20 @@ These changes precede the subsequent player-state dispatch; other paths can
 change the limits again. **OPEN:** the game meanings of player fields
 `0x19C`, `0x194`, `0x22`, and `0x24` have not been established here.
 
+[sub_8003C24C](../scr/st/sub_8003C24C.c) processes player halfwords
+`0x194`/`0x196` and `0x19C`/`0x19E` as current/target pairs through
+[ST_UpdateCounterAndTarget](../scr/st/ST_UpdateCounterAndTarget.c). When
+both signed current and target are zero, the helper returns `-1`. Otherwise,
+if current is less than target it increments current; if current is at least
+target it clears target and decrements current. The calculated current is
+stored as a halfword, so it wraps at the signed halfword boundaries. The
+helper writes its calculated values only when its fifth argument is nonzero.
+For these two pairs it returns `current * 4096 / 20`, truncated toward zero,
+when current is below 20, or 4096 otherwise. The state machine calls
+`sub_8003C24C` with the write-enable argument set to 1 before applying the
+movement-limit rules above. **OPEN:** the game meanings and all producers of
+these counters and targets have not been established.
+
 The routine processes the X/Z magnitudes and rotates the local vector by
 negative player yaw using the GTE. It also damps existing movement components
 and adds other contributions. The accumulators therefore are not directly

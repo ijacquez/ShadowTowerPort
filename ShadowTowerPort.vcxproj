@@ -711,7 +711,7 @@
     <ClCompile Include="scr\st\sub_8003BEB4.c" />
     <ClCompile Include="scr\st\sub_8003C054.c" />
     <ClCompile Include="scr\st\sub_8003C0E0.c" />
-    <ClCompile Include="scr\st\sub_8003C17C.c" />
+    <ClCompile Include="scr\st\ST_UpdateCounterAndTarget.c" />
     <ClCompile Include="scr\st\sub_8003C24C.c" />
     <ClCompile Include="scr\st\sub_8003C95C.c" />
     <ClCompile Include="scr\st\sub_8003CAE4.c" />

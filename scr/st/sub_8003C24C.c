@@ -178,7 +178,7 @@ L_8003C338:
     // jal         0x8003C17C
     // addiu       $a3, $zero, 0x1000
     ctx->r7 = ADD32(0, 0X1000);
-    sub_8003C17C(rdram, ctx);
+    ST_UpdateCounterAndTarget(rdram, ctx);
     goto after_2;
     // addiu       $a3, $zero, 0x1000
     ctx->r7 = ADD32(0, 0X1000);
@@ -249,7 +249,7 @@ L_8003C3A4:
     // jal         0x8003C17C
     // addiu       $a3, $zero, 0x1000
     ctx->r7 = ADD32(0, 0X1000);
-    sub_8003C17C(rdram, ctx);
+    ST_UpdateCounterAndTarget(rdram, ctx);
     goto after_4;
     // addiu       $a3, $zero, 0x1000
     ctx->r7 = ADD32(0, 0X1000);
@@ -387,7 +387,7 @@ L_8003C484:
     // jal         0x8003C17C
     // addiu       $a3, $zero, 0x1000
     ctx->r7 = ADD32(0, 0X1000);
-    sub_8003C17C(rdram, ctx);
+    ST_UpdateCounterAndTarget(rdram, ctx);
     goto after_7;
     // addiu       $a3, $zero, 0x1000
     ctx->r7 = ADD32(0, 0X1000);
@@ -466,7 +466,7 @@ L_8003C500:
     // jal         0x8003C17C
     // addiu       $a3, $zero, 0x1000
     ctx->r7 = ADD32(0, 0X1000);
-    sub_8003C17C(rdram, ctx);
+    ST_UpdateCounterAndTarget(rdram, ctx);
     goto after_9;
     // addiu       $a3, $zero, 0x1000
     ctx->r7 = ADD32(0, 0X1000);
@@ -545,7 +545,7 @@ L_8003C574:
     // jal         0x8003C17C
     // addiu       $a3, $zero, 0x1000
     ctx->r7 = ADD32(0, 0X1000);
-    sub_8003C17C(rdram, ctx);
+    ST_UpdateCounterAndTarget(rdram, ctx);
     goto after_11;
     // addiu       $a3, $zero, 0x1000
     ctx->r7 = ADD32(0, 0X1000);
@@ -701,7 +701,7 @@ L_8003C65C:
     // jal         0x8003C17C
     // addiu       $a3, $zero, 0x1000
     ctx->r7 = ADD32(0, 0X1000);
-    sub_8003C17C(rdram, ctx);
+    ST_UpdateCounterAndTarget(rdram, ctx);
     goto after_16;
     // addiu       $a3, $zero, 0x1000
     ctx->r7 = ADD32(0, 0X1000);
@@ -776,7 +776,7 @@ L_8003C6D0:
     // jal         0x8003C17C
     // addiu       $a3, $zero, 0x1000
     ctx->r7 = ADD32(0, 0X1000);
-    sub_8003C17C(rdram, ctx);
+    ST_UpdateCounterAndTarget(rdram, ctx);
     goto after_17;
     // addiu       $a3, $zero, 0x1000
     ctx->r7 = ADD32(0, 0X1000);
@@ -831,7 +831,7 @@ L_8003C724:
     // jal         0x8003C17C
     // addiu       $a3, $zero, 0x1000
     ctx->r7 = ADD32(0, 0X1000);
-    sub_8003C17C(rdram, ctx);
+    ST_UpdateCounterAndTarget(rdram, ctx);
     goto after_18;
     // addiu       $a3, $zero, 0x1000
     ctx->r7 = ADD32(0, 0X1000);
@@ -886,7 +886,7 @@ L_8003C778:
     // jal         0x8003C17C
     // addiu       $a3, $zero, 0x1000
     ctx->r7 = ADD32(0, 0X1000);
-    sub_8003C17C(rdram, ctx);
+    ST_UpdateCounterAndTarget(rdram, ctx);
     goto after_19;
     // addiu       $a3, $zero, 0x1000
     ctx->r7 = ADD32(0, 0X1000);
@@ -941,7 +941,7 @@ L_8003C7CC:
     // jal         0x8003C17C
     // addiu       $a3, $zero, 0x1000
     ctx->r7 = ADD32(0, 0X1000);
-    sub_8003C17C(rdram, ctx);
+    ST_UpdateCounterAndTarget(rdram, ctx);
     goto after_20;
     // addiu       $a3, $zero, 0x1000
     ctx->r7 = ADD32(0, 0X1000);
@@ -996,7 +996,7 @@ L_8003C820:
     // jal         0x8003C17C
     // addiu       $a3, $zero, 0x1000
     ctx->r7 = ADD32(0, 0X1000);
-    sub_8003C17C(rdram, ctx);
+    ST_UpdateCounterAndTarget(rdram, ctx);
     goto after_21;
     // addiu       $a3, $zero, 0x1000
     ctx->r7 = ADD32(0, 0X1000);
@@ -1069,7 +1069,7 @@ L_8003C898:
     // jal         0x8003C17C
     // addiu       $a3, $zero, 0x1000
     ctx->r7 = ADD32(0, 0X1000);
-    sub_8003C17C(rdram, ctx);
+    ST_UpdateCounterAndTarget(rdram, ctx);
     goto after_22;
     // addiu       $a3, $zero, 0x1000
     ctx->r7 = ADD32(0, 0X1000);
@@ -1124,7 +1124,7 @@ L_8003C8EC:
     // jal         0x8003C17C
     // addiu       $a3, $zero, 0x1000
     ctx->r7 = ADD32(0, 0X1000);
-    sub_8003C17C(rdram, ctx);
+    ST_UpdateCounterAndTarget(rdram, ctx);
     goto after_23;
     // addiu       $a3, $zero, 0x1000
     ctx->r7 = ADD32(0, 0X1000);

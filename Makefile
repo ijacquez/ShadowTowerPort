@@ -568,7 +568,7 @@ SRCS:= scr/st/AddPrim.c \
 	scr/st/sub_8003BEB4.c \
 	scr/st/sub_8003C054.c \
 	scr/st/sub_8003C0E0.c \
-	scr/st/sub_8003C17C.c \
+	scr/st/ST_UpdateCounterAndTarget.c \
 	scr/st/sub_8003C24C.c \
 	scr/st/sub_8003C95C.c \
 	scr/st/sub_8003CAE4.c \
@@ -1116,6 +1116,8 @@ scr/st/ST_PlayerUpdateMovement.o scr/st/ST_PlayerUpdateTurning.o scr/st/ST_Playe
 .PHONY: test-player-movement
 test-player-movement:
 	mkdir -p scratchpad
+	$(CXX) $(CFLAGS) -std=c++17 tests/player_counter_test.cpp scr/st/ST_UpdateCounterAndTarget.c -o scratchpad/player-counter-test
+	scratchpad/player-counter-test
 	$(CXX) $(CFLAGS) -std=c++17 tests/player_view_test.cpp scr/st/ST_BuildPlayerView.c scr/st/ST_TranslatePlayerPosition.c scr/st/ST_ClearPlayerMovementLimits.c -o scratchpad/player-view-test
 	scratchpad/player-view-test
 	$(CXX) $(CFLAGS) -std=c++17 tests/player_collision_y_flags_test.cpp scr/st/ST_UpdatePlayerCollisionYFlags.c -o scratchpad/player-collision-y-flags-test
