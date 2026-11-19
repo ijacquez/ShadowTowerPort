@@ -792,7 +792,7 @@ L_80041BB4:
     // nop
 
     // lhu         $a0, 0x2D0($s0)
-    ctx->r4 = MEM_HU(0X2D0, ctx->r16);
+    ctx->r4 = MEM_HU(ST_PLAYER_VIEW_OSCILLATION_PHASE, ctx->r16);
     // lhu         $v0, 0x2C8($s0)
     ctx->r2 = MEM_HU(0X2C8, ctx->r16);
     // nop
@@ -803,11 +803,11 @@ L_80041BB4:
     ctx->r4 = ctx->r4 & 0XFFF;
     // jal         0x800743F4
     // sh          $a0, 0x2D0($s0)
-    MEM_H(0X2D0, ctx->r16) = ctx->r4;
+    MEM_H(ST_PLAYER_VIEW_OSCILLATION_PHASE, ctx->r16) = ctx->r4;
     rsin(rdram, ctx);
     goto after_13;
     // sh          $a0, 0x2D0($s0)
-    MEM_H(0X2D0, ctx->r16) = ctx->r4;
+    MEM_H(ST_PLAYER_VIEW_OSCILLATION_PHASE, ctx->r16) = ctx->r4;
     after_13:
     // sra         $v1, $v0, 5
     ctx->r3 = S32(ctx->r2) >> 5;
@@ -828,13 +828,13 @@ L_80041C10:
     ctx->r2 = SUB32(ctx->r3, ctx->r2);
     // j           L_80041C20
     // sh          $v0, 0x2CE($s0)
-    MEM_H(0X2CE, ctx->r16) = ctx->r2;
+    MEM_H(ST_PLAYER_VIEW_OSCILLATION_Y, ctx->r16) = ctx->r2;
     goto L_80041C20;
     // sh          $v0, 0x2CE($s0)
-    MEM_H(0X2CE, ctx->r16) = ctx->r2;
+    MEM_H(ST_PLAYER_VIEW_OSCILLATION_Y, ctx->r16) = ctx->r2;
 L_80041C1C:
     // sh          $zero, 0x2CE($s0)
-    MEM_H(0X2CE, ctx->r16) = 0;
+    MEM_H(ST_PLAYER_VIEW_OSCILLATION_Y, ctx->r16) = 0;
 L_80041C20:
     // lui         $v0, 0x801A
     ctx->r2 = S32(0X801A << 16);

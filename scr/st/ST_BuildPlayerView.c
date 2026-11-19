@@ -9,7 +9,7 @@ void ST_BuildPlayerView(uint8_t* rdram, recomp_context* ctx) {
 
     MEM_W(0, position) = MEM_W(ST_PLAYER_POSITION_X, player);
     MEM_W(8, position) = MEM_W(ST_PLAYER_POSITION_Z, player);
-    ctx->r7 = MEM_HS(ST_PLAYER_VIEW_Y_ADJUSTMENT_A, player);
+    ctx->r7 = MEM_HS(ST_PLAYER_VIEW_OSCILLATION_Y, player);
     ctx->r2 = MEM_W(ST_PLAYER_POSITION_Y, player);
     ctx->r6 = MEM_HS(ST_PLAYER_VIEW_Y_ADJUSTMENT_B, player);
     ctx->r2 = ADD32(ctx->r2, ctx->r7);

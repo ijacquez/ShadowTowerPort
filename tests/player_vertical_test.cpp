@@ -5,11 +5,12 @@
 
 uint8_t rdram[2 * 1024 * 1024];
 static int helperCalls;
+static int32_t sineResult;
 void memset_recomp(uint8_t*, recomp_context* ctx) { std::memset(GET_PTR(ctx->r4), ctx->r5, ctx->r6); ctx->r2 = ctx->r4; }
 void SquareRoot0(uint8_t*, recomp_context* ctx) { ctx->r2 = 0; }
 void ratan2(uint8_t*, recomp_context* ctx) { ctx->r2 = 0; }
 void rcos(uint8_t*, recomp_context* ctx) { ctx->r2 = 0; }
-void rsin(uint8_t*, recomp_context* ctx) { ctx->r2 = 0; }
+void rsin(uint8_t*, recomp_context* ctx) { ctx->r2 = sineResult; }
 void ST_RunCollisionQuery(uint8_t*, recomp_context* ctx) { ctx->r2 = 0; }
 void sub_8003BDB0(uint8_t*, recomp_context* ctx) { ctx->r2 = 0; }
 void sub_80057B48(uint8_t*, recomp_context*) { ++helperCalls; }
@@ -70,6 +71,40 @@ int main() {
             return 1;
         }
     }
+    struct OscillationCase {
+        uint8_t disabled, enabled;
+        uint16_t phase, magnitude;
+        int32_t sine;
+        uint16_t expectedPhase, expectedOffset;
+    };
+    const OscillationCase oscillationCases[] = {
+        {0, 1, 4090, 10, 4096, 4, 96},
+        {0, 1, 10, 10, -4096, 20, 96},
+        {0, 1, 10, 10, -1, 20, 1},
+        {0, 0, 10, 10, 4096, 10, 0},
+        {1, 1, 10, 10, 4096, 10, 77},
+    };
+    for (const auto& test : oscillationCases) {
+        std::memset(rdram, 0, sizeof rdram);
+        MEM_H(ST_PLAYER_MOVE_MAGNITUDE, player) = test.magnitude;
+        MEM_B(0x21E, player) = 0;
+        MEM_B(0x239, player) = test.disabled;
+        MEM_B(0, 0x801CD122) = test.enabled;
+        MEM_H(ST_PLAYER_VIEW_OSCILLATION_PHASE, player) = test.phase;
+        MEM_H(ST_PLAYER_VIEW_OSCILLATION_Y, player) = 77;
+        MEM_W(0x2C, query) = 1700;
+        recomp_context ctx{};
+        ctx.r28 = 0x80080000;
+        ctx.r29 = 0x801EF000;
+        sineResult = test.sine;
+        ST_PlayerMoveWithCollision(rdram, &ctx);
+        if (MEM_HU(ST_PLAYER_VIEW_OSCILLATION_PHASE, player) != test.expectedPhase ||
+            MEM_HU(ST_PLAYER_VIEW_OSCILLATION_Y, player) != test.expectedOffset) {
+            std::fprintf(stderr, "player view oscillation case failed\n");
+            return 1;
+        }
+    }
     std::printf("%zu vertical cases passed\n", sizeof cases / sizeof cases[0]);
+    std::printf("%zu view oscillation cases passed\n", sizeof oscillationCases / sizeof oscillationCases[0]);
     return 0;
 }

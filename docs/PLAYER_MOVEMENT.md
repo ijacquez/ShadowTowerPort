@@ -334,6 +334,18 @@ rotation. [ST_MainGameLoop](../scr/st/ST_MainGameLoop.c) passes these outputs
 to [DrawScene](../scr/st/DrawScene.c). Thus 1600 is also an offset in the
 scene-view Y calculation; this does not establish the player's full height.
 
+The first adjustment, at player offset `0x2CE`, is updated by
+`ST_PlayerMoveWithCollision` when player byte `0x239` is zero. If byte
+`0x801CD122` is zero, the adjustment is cleared. Otherwise the routine adds
+the unsigned movement-magnitude halfword at `0x2C8` to the unsigned phase
+at `0x2D0`, masks the sum with `0xFFF`, and stores it as the new phase.
+It computes `t = rsin(phase) >> 5` using an arithmetic shift, then stores
+`abs(t) - (abs(t) >> 2)` as the adjustment. If player byte `0x239` is
+nonzero, this part of the routine leaves both phase and adjustment unchanged.
+[sub_8003C054](../scr/st/sub_8003C054.c) clears the phase and both Y
+adjustments. **OPEN:** the meanings of byte `0x239`, byte `0x801CD122`, and
+the second adjustment have not been established.
+
 In [ST_UpdateLevelStreaming](../scr/st/ST_UpdateLevelStreaming.c), when
 signed halfwords at `0x801B5920` and `0x801B5922` both equal 1, the game
 queues a resource, clears player word `0x174`, sets player halfword `0x178`
