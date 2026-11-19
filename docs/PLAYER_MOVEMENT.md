@@ -28,6 +28,20 @@ it decreases by 24 per update. The shifts truncate the step; for example,
 `L >> 3` is zero when `L` is between 1 and 7. The default and modified
 limits are set in [sub_80042D74.c](../scr/st/sub_80042D74.c).
 
+On the state machine path beginning at `L_8004323C`, the movement limit is
+set to 192 and the turn limit to 32. If neither binding at control offsets
+`0x22` and `0x24` is held, the turn limit becomes 40. A nonzero signed
+player halfword at `0x19C` changes the movement limit to 96. A nonzero signed
+player halfword at `0x194` then clears the movement limit; if player word
+`0x2C` also has bit `0x10` set, it clears the turn limit.
+
+Finally, if the unsigned player halfword at `0x22` exceeds the one at
+`0x24`, the code subtracts their difference divided by 5, discarding the
+remainder, from the movement limit and clamps a negative result to zero.
+These changes precede the subsequent player-state dispatch; other paths can
+change the limits again. **OPEN:** the game meanings of player fields
+`0x19C`, `0x194`, `0x22`, and `0x24` have not been established here.
+
 The routine processes the X/Z magnitudes and rotates the local vector by
 negative player yaw using the GTE. It also damps existing movement components
 and adds other contributions. The accumulators therefore are not directly
