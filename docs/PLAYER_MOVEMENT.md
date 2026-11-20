@@ -154,8 +154,9 @@ limits via `ST_ClearPlayerMovementLimits`, and clears player movement
 halfwords `ST_PLAYER_MOVE_X`, `ST_PLAYER_MOVE_Y`, and `ST_PLAYER_MOVE_Z`.
 It also clears all three halfwords in
 the vectors beginning at `ST_PLAYER_QUARTER_CONTRIBUTION_X_ADDRESS` and
-`ST_PLAYER_HALF_CONTRIBUTION_X_ADDRESS`, as well as the
-three halfwords at `0x801BA116`. If the word containing the counter and
+`ST_PLAYER_HALF_CONTRIBUTION_X_ADDRESS`, as well as
+`ST_COLLISION_QUERY_RECORD_VECTOR_SUM_X`, `ST_COLLISION_QUERY_RECORD_VECTOR_SUM_Y`,
+and `ST_COLLISION_QUERY_RECORD_VECTOR_SUM_Z`. If the word containing the counter and
 target is then zero, it clears bits `0x08` and `0x10` in player word `0x2C`.
 
 [sub_8005A3A8](../scr/st/sub_8005A3A8.c) sets `ST_PLAYER_MOVE_PENALTY_TOTAL`

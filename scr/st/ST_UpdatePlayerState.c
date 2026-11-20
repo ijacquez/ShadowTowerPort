@@ -3,6 +3,7 @@
 #include "ST_PlayerState.h"
 #include "ST_CollisionQuery.h"
 #include "ST_LevelStreaming.h"
+#include "ST_PlayerMovementContributions.h"
 
 
 void ST_UpdatePlayerState(uint8_t* rdram, recomp_context* ctx)
@@ -2738,31 +2739,31 @@ L_80043C34:
     // addiu       $v0, $v0, 0x310
     ctx->r2 = ADD32(ctx->r2, 0X310);
     // sh          $zero, 0x71A8($v0)
-    MEM_H(0X71A8, ctx->r2) = 0;
+    MEM_H(0, ST_PLAYER_QUARTER_CONTRIBUTION_Z_ADDRESS) = 0;
     // sh          $zero, 0x71A6($v0)
-    MEM_H(0X71A6, ctx->r2) = 0;
+    MEM_H(0, ST_PLAYER_QUARTER_CONTRIBUTION_Y_ADDRESS) = 0;
     // sh          $zero, 0x71A4($v0)
-    MEM_H(0X71A4, ctx->r2) = 0;
+    MEM_H(0, ST_PLAYER_QUARTER_CONTRIBUTION_X_ADDRESS) = 0;
     // lui         $v0, 0x801B
     ctx->r2 = S32(0X801B << 16);
     // addiu       $v0, $v0, 0x5948
     ctx->r2 = ADD32(ctx->r2, 0X5948);
     // sh          $zero, 0x47D2($v0)
-    MEM_H(0X47D2, ctx->r2) = 0;
+    MEM_H(ST_COLLISION_QUERY_RECORD_VECTOR_SUM_Z, ctx->r2) = 0;
     // sh          $zero, 0x47D0($v0)
-    MEM_H(0X47D0, ctx->r2) = 0;
+    MEM_H(ST_COLLISION_QUERY_RECORD_VECTOR_SUM_Y, ctx->r2) = 0;
     // sh          $zero, 0x47CE($v0)
-    MEM_H(0X47CE, ctx->r2) = 0;
+    MEM_H(ST_COLLISION_QUERY_RECORD_VECTOR_SUM_X, ctx->r2) = 0;
     // lui         $v0, 0x801C
     ctx->r2 = S32(0X801C << 16);
     // addiu       $v0, $v0, -0x5EC8
     ctx->r2 = ADD32(ctx->r2, -0X5EC8);
     // sh          $zero, 0x6164($v0)
-    MEM_H(0X6164, ctx->r2) = 0;
+    MEM_H(0, ST_PLAYER_HALF_CONTRIBUTION_Z_ADDRESS) = 0;
     // sh          $zero, 0x6162($v0)
-    MEM_H(0X6162, ctx->r2) = 0;
+    MEM_H(0, ST_PLAYER_HALF_CONTRIBUTION_Y_ADDRESS) = 0;
     // sh          $zero, 0x6160($v0)
-    MEM_H(0X6160, ctx->r2) = 0;
+    MEM_H(0, ST_PLAYER_HALF_CONTRIBUTION_X_ADDRESS) = 0;
     // lui         $v0, 0x801A
     ctx->r2 = S32(0X801A << 16);
     // addiu       $v0, $v0, -0x70D8
