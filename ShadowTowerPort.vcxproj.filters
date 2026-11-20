@@ -1170,7 +1170,7 @@
     <ClCompile Include="scr\st\sub_8003BC40.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_8003BD14.c">
+    <ClCompile Include="scr\st\ST_EnterPlayerZeroHpState.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\sub_8003BDB0.c">
@@ -1206,7 +1206,7 @@
     <ClCompile Include="scr\st\sub_8003CEDC.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_8003CF28.c">
+    <ClCompile Include="scr\st\ST_AdjustPlayerHp.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\sub_8003CF94.c">

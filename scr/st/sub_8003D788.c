@@ -604,7 +604,7 @@ L_8003DA90:
     // jal         0x8003BD14
     // addiu       $a0, $sp, 0x18
     ctx->r4 = ADD32(ctx->r29, 0X18);
-    sub_8003BD14(rdram, ctx);
+    ST_EnterPlayerZeroHpState(rdram, ctx);
     goto after_7;
     // addiu       $a0, $sp, 0x18
     ctx->r4 = ADD32(ctx->r29, 0X18);

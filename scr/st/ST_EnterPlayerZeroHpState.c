@@ -2,7 +2,7 @@
 #include "disable_warnings.h"
 #include "ST_PlayerState.h"
 
-void sub_8003BD14(uint8_t* rdram, recomp_context* ctx) {
+void ST_EnterPlayerZeroHpState(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
     unsigned int rounding_mode = DEFAULT_ROUNDING_MODE;
     int c1cs = 0; 
@@ -17,9 +17,9 @@ void sub_8003BD14(uint8_t* rdram, recomp_context* ctx) {
     // sw          $ra, 0x14($sp)
     MEM_W(0X14, ctx->r29) = ctx->r31;
     // lbu         $v0, 0x218($s0)
-    ctx->r2 = MEM_BU(0X218, ctx->r16);
+    ctx->r2 = MEM_BU(ST_PLAYER_STATE, ctx->r16);
     // addiu       $v1, $zero, 0x4
-    ctx->r3 = ADD32(0, 0X4);
+    ctx->r3 = ADD32(0, ST_PLAYER_STATE_ZERO_HP);
     // beq         $v0, $v1, L_8003BD9C
     if (ctx->r2 == ctx->r3) {
         // nop
@@ -29,14 +29,14 @@ void sub_8003BD14(uint8_t* rdram, recomp_context* ctx) {
     // nop
 
     // sb          $v1, 0x218($s0)
-    MEM_B(0X218, ctx->r16) = ctx->r3;
+    MEM_B(ST_PLAYER_STATE, ctx->r16) = ctx->r3;
     // jal         0x80057C0C
     // sh          $zero, 0x2($s0)
     MEM_H(ST_PLAYER_CURRENT_HP, ctx->r16) = 0;
     sub_80057C0C(rdram, ctx);
     goto after_0;
     // sh          $zero, 0x2($s0)
-    MEM_H(0X2, ctx->r16) = 0;
+    MEM_H(ST_PLAYER_CURRENT_HP, ctx->r16) = 0;
     after_0:
     // lui         $v1, 0x2AAA
     ctx->r3 = S32(0X2AAA << 16);

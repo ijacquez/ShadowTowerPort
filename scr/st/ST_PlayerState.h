@@ -17,7 +17,9 @@ enum ST_PlayerStateOffset {
     ST_PLAYER_MOVE_X = 0x1CC,
     ST_PLAYER_MOVE_Y = 0x1CE,
     ST_PLAYER_MOVE_Z = 0x1D0,
+    ST_PLAYER_STATE = 0x218,
     ST_PLAYER_DIRECTIONAL_MOVE_DISABLED = 0x21E,
+    ST_PLAYER_HIGH_DOWNWARD_TRIGGERED = 0x238,
     ST_PLAYER_POSITION_X = 0x248,
     // World Y increases downward.
     ST_PLAYER_POSITION_Y = 0x24C,
@@ -44,6 +46,8 @@ enum ST_PlayerStateOffset {
     ST_PLAYER_FIRST_COLLISION_Y_FLAG = 0x2EC,
     ST_PLAYER_SECOND_COLLISION_Y_FLAG = 0x2F0
 };
+
+enum { ST_PLAYER_STATE_ZERO_HP = 4 };
 
 // Y offset 0x640 (0.390625 spatial cells). Its relationship to the player's
 // full height remains unknown.

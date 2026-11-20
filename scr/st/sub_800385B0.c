@@ -7678,7 +7678,7 @@ L_8003B22C:
     // jal         0x8003BD14
     // addu        $a0, $zero, $zero
     ctx->r4 = ADD32(0, 0);
-    sub_8003BD14(rdram, ctx);
+    ST_EnterPlayerZeroHpState(rdram, ctx);
     goto after_109;
     // addu        $a0, $zero, $zero
     ctx->r4 = ADD32(0, 0);

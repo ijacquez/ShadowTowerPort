@@ -570,7 +570,7 @@ L_8004E210:
     // jal         0x8003CF28
     // subu        $a0, $v0, $a0
     ctx->r4 = SUB32(ctx->r2, ctx->r4);
-    sub_8003CF28(rdram, ctx);
+    ST_AdjustPlayerHp(rdram, ctx);
     goto after_5;
     // subu        $a0, $v0, $a0
     ctx->r4 = SUB32(ctx->r2, ctx->r4);

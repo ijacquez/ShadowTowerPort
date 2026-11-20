@@ -786,7 +786,7 @@ L_8003E014:
     // jal         0x8003CF28
     // negu        $a0, $a0
     ctx->r4 = SUB32(0, ctx->r4);
-    sub_8003CF28(rdram, ctx);
+    ST_AdjustPlayerHp(rdram, ctx);
     goto after_3;
     // negu        $a0, $a0
     ctx->r4 = SUB32(0, ctx->r4);

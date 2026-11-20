@@ -15,9 +15,9 @@ void ST_CheckHighDownwardMovement(uint8_t* rdram, recomp_context* ctx) {
         ctx->r2 = SIGNED(ctx->r2) < ST_PLAYER_COLLISION_Y_OFFSET ? 1 : 0;
         if (ctx->r2 == 0) {
             ctx->r4 = 0;
-            sub_8003BD14(rdram, ctx);
+            ST_EnterPlayerZeroHpState(rdram, ctx);
             ctx->r2 = 1;
-            MEM_B(0x238, ctx->r16) = ctx->r2;
+            MEM_B(ST_PLAYER_HIGH_DOWNWARD_TRIGGERED, ctx->r16) = ctx->r2;
         }
     }
 

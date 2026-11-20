@@ -1,7 +1,8 @@
 #include "recomp.h"
 #include "disable_warnings.h"
+#include "ST_PlayerState.h"
 
-void sub_8003CF28(uint8_t* rdram, recomp_context* ctx) {
+void ST_AdjustPlayerHp(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
     unsigned int rounding_mode = DEFAULT_ROUNDING_MODE;
     int c1cs = 0; 
@@ -16,7 +17,7 @@ void sub_8003CF28(uint8_t* rdram, recomp_context* ctx) {
     // sw          $s0, 0x10($sp)
     MEM_W(0X10, ctx->r29) = ctx->r16;
     // lhu         $v0, 0x2($v0)
-    ctx->r2 = MEM_HU(0X2, ctx->r2);
+    ctx->r2 = MEM_HU(ST_PLAYER_CURRENT_HP, ctx->r2);
     // nop
 
     // addu        $s0, $v0, $a0
@@ -34,7 +35,7 @@ void sub_8003CF28(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x8003BD14
     // addu        $a0, $s0, $zero
     ctx->r4 = ADD32(ctx->r16, 0);
-    sub_8003BD14(rdram, ctx);
+    ST_EnterPlayerZeroHpState(rdram, ctx);
     goto after_0;
     // addu        $a0, $s0, $zero
     ctx->r4 = ADD32(ctx->r16, 0);

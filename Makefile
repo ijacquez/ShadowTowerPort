@@ -562,7 +562,7 @@ SRCS:= scr/st/AddPrim.c \
 	scr/st/sub_800385B0.c \
 	scr/st/sub_8003BC10.c \
 	scr/st/sub_8003BC40.c \
-	scr/st/sub_8003BD14.c \
+	scr/st/ST_EnterPlayerZeroHpState.c \
 	scr/st/ST_CheckHighDownwardMovement.c \
 	scr/st/ST_UpdatePlayerCollisionYFlags.c \
 	scr/st/sub_8003BEB4.c \
@@ -574,7 +574,7 @@ SRCS:= scr/st/AddPrim.c \
 	scr/st/sub_8003CAE4.c \
 	scr/st/sub_8003CB88.c \
 	scr/st/sub_8003CEDC.c \
-	scr/st/sub_8003CF28.c \
+	scr/st/ST_AdjustPlayerHp.c \
 	scr/st/sub_8003CF94.c \
 	scr/st/sub_8003CFDC.c \
 	scr/st/sub_8003D030.c \
@@ -1126,6 +1126,8 @@ test-player-movement:
 	scratchpad/player-collision-y-flags-test
 	$(CXX) $(CFLAGS) -std=c++17 tests/player_active_collision_test.cpp scr/st/ST_QueryActiveCollisionRecords.c -o scratchpad/player-active-collision-test
 	scratchpad/player-active-collision-test
+	$(CXX) $(CFLAGS) -std=c++17 tests/player_high_downward_test.cpp scr/st/ST_CheckHighDownwardMovement.c scr/st/ST_EnterPlayerZeroHpState.c -o scratchpad/player-high-downward-test
+	scratchpad/player-high-downward-test
 	$(CXX) $(CFLAGS) -std=c++17 tests/player_rotation_test.cpp scr/st/RotMatrix.c scr/gte.cpp PsyCross/src/gte/PsyX_GTE.cpp -o scratchpad/player-rotation-test
 	scratchpad/player-rotation-test
 	$(CXX) $(CFLAGS) -std=c++17 -ffunction-sections -fdata-sections tests/player_movement_axis_test.cpp -Wl,--gc-sections -o scratchpad/player-movement-axis-test

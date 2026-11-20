@@ -117,7 +117,7 @@ L_80042DF0:
     // lui         $v0, 0x801A
     ctx->r2 = S32(0X801A << 16);
     // lbu         $v1, 0x218($a0)
-    ctx->r3 = MEM_BU(0X218, ctx->r4);
+    ctx->r3 = MEM_BU(ST_PLAYER_STATE, ctx->r4);
     // addiu       $a2, $zero, 0x1
     ctx->r6 = ADD32(0, 0X1);
     // beq         $v1, $a2, L_80043170
@@ -815,7 +815,7 @@ L_80043194:
     // addiu       $v0, $zero, 0x4
     ctx->r2 = ADD32(0, 0X4);
     // lbu         $v1, 0x218($s0)
-    ctx->r3 = MEM_BU(0X218, ctx->r16);
+    ctx->r3 = MEM_BU(ST_PLAYER_STATE, ctx->r16);
     // nop
 
     // beq         $v1, $v0, L_80043238
@@ -1570,7 +1570,7 @@ L_8004358C:
     // lhu         $v0, 0x38($s0)
     ctx->r2 = MEM_HU(0X38, ctx->r16);
     // sb          $zero, 0x218($s1)
-    MEM_B(0X218, ctx->r17) = 0;
+    MEM_B(ST_PLAYER_STATE, ctx->r17) = 0;
     // lhu         $v1, 0x4($s0)
     ctx->r3 = MEM_HU(0X4, ctx->r16);
     // lhu         $a0, 0x36($s0)
@@ -1635,7 +1635,7 @@ L_800435E4:
     // lhu         $a2, 0x5C($s1)
     ctx->r6 = MEM_HU(0X5C, ctx->r17);
     // sb          $zero, 0x218($s1)
-    MEM_B(0X218, ctx->r17) = 0;
+    MEM_B(ST_PLAYER_STATE, ctx->r17) = 0;
     // sw          $v0, 0x40($sp)
     MEM_W(0X40, ctx->r29) = ctx->r2;
     // sw          $v1, 0x44($sp)
@@ -3109,7 +3109,7 @@ L_80043E24:
     // jal         0x8003CF28
     // addu        $a0, $a1, $zero
     ctx->r4 = ADD32(ctx->r5, 0);
-    sub_8003CF28(rdram, ctx);
+    ST_AdjustPlayerHp(rdram, ctx);
     goto after_106;
     // addu        $a0, $a1, $zero
     ctx->r4 = ADD32(ctx->r5, 0);
@@ -3176,7 +3176,7 @@ L_80043E80:
     // jal         0x8003CF28
     // addiu       $a0, $zero, -0x1
     ctx->r4 = ADD32(0, -0X1);
-    sub_8003CF28(rdram, ctx);
+    ST_AdjustPlayerHp(rdram, ctx);
     goto after_108;
     // addiu       $a0, $zero, -0x1
     ctx->r4 = ADD32(0, -0X1);
@@ -3264,7 +3264,7 @@ L_80043EE0:
     // jal         0x8003CF28
     // subu        $a0, $v0, $a0
     ctx->r4 = SUB32(ctx->r2, ctx->r4);
-    sub_8003CF28(rdram, ctx);
+    ST_AdjustPlayerHp(rdram, ctx);
     goto after_110;
     // subu        $a0, $v0, $a0
     ctx->r4 = SUB32(ctx->r2, ctx->r4);
@@ -3373,7 +3373,7 @@ L_80043FF4:
     // jal         0x8003CF28
     // nop
 
-    sub_8003CF28(rdram, ctx);
+    ST_AdjustPlayerHp(rdram, ctx);
     goto after_111;
     // nop
 
@@ -3881,7 +3881,7 @@ L_800442C8:
     ctx->r4 = ADD32(0, 0X1);
     after_120:
     // lbu         $v1, 0x218($s0)
-    ctx->r3 = MEM_BU(0X218, ctx->r16);
+    ctx->r3 = MEM_BU(ST_PLAYER_STATE, ctx->r16);
     // addiu       $v0, $zero, 0x4
     ctx->r2 = ADD32(0, 0X4);
     // beq         $v1, $v0, L_800443B4
@@ -3953,7 +3953,7 @@ L_80044338:
     // addiu       $a0, $zero, 0x1
     ctx->r4 = ADD32(0, 0X1);
 
-    sub_8003CF28(rdram, ctx);
+    ST_AdjustPlayerHp(rdram, ctx);
 
     goto after_121;
     // addiu       $a0, $zero, 0x1

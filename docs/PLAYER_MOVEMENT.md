@@ -209,7 +209,7 @@ X/Z input accumulators. The [game state machine](../scr/st/ST_UpdatePlayerState.
 and other game routines call it on different paths.
 
 [ST_ClearPlayerMovementLimitsAndVertical](../scr/st/ST_ClearPlayerMovementLimitsAndVertical.c)
-also clears vertical movement and player bytes `0x218` and `0x239`, clears
+also clears vertical movement, `ST_PLAYER_STATE`, and player byte `0x239`, clears
 word `0x23C`, and sets byte `0x21C` to 1. It calls
 `ST_ClearPlayerMovementLimits` and likewise leaves the local X/Z input
 accumulators unchanged.
@@ -640,13 +640,18 @@ Before the vertical update, [ST_CheckHighDownwardMovement](../scr/st/ST_CheckHig
 checks the current vertical movement and signed `ST_COLLISION_QUERY_CURRENT_Y_RESULT`
 (`0x30`). If movement is at least `0x480` (0.28125 cells per update)
 and that query word is at least `0x640` (0.390625 cells), it calls
-[sub_8003BD14](../scr/st/sub_8003BD14.c) with zero and sets player byte
-`0x238` to 1. Unless player byte `0x218` is already 4, that helper sets it
-to 4, clears the current HP halfword at player offset `0x02`, and performs
-additional state updates. The [player-stat display](../scr/st/sub_80029B74.c)
+[ST_EnterPlayerZeroHpState](../scr/st/ST_EnterPlayerZeroHpState.c) with zero and sets
+`ST_PLAYER_HIGH_DOWNWARD_TRIGGERED` (`0x238`) to 1. Unless `ST_PLAYER_STATE`
+(`0x218`) is already `ST_PLAYER_STATE_ZERO_HP` (4), that helper changes the
+state to 4, clears `ST_PLAYER_CURRENT_HP`, and performs additional state
+updates. [ST_AdjustPlayerHp](../scr/st/ST_AdjustPlayerHp.c) also calls the
+helper when its signed 32-bit sum of current HP and the requested adjustment
+is nonpositive; otherwise it caps the sum to maximum HP before storing it.
+The [player-stat display](../scr/st/sub_80029B74.c)
 reads `ST_PLAYER_CURRENT_HP`, `ST_PLAYER_MAX_HP`, `ST_PLAYER_CURRENT_MP`,
-and `ST_PLAYER_MAX_MP`. **OPEN:** the game meanings of
-bytes `0x218` and `0x238` are not established.
+and `ST_PLAYER_MAX_MP`. [ST_ResetPlayerCountersAndState](../scr/st/ST_ResetPlayerCountersAndState.c)
+clears the high-downward flag. **OPEN:** the full set of meanings of player
+state values and all effects of the high-downward flag are not established.
 
 The level-rendering path establishes the Y direction. For a level,
 unrotated view, [ST_TransformLevelOriginsForView](../scr/st/ST_TransformLevelOriginsForView.c) subtracts player

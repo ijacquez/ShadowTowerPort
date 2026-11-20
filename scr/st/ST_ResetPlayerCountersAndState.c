@@ -11,7 +11,7 @@ void ST_ResetPlayerCountersAndState(uint8_t* rdram, recomp_context* ctx) {
 
     for (int offset = 0x1C2; offset >= 0x190; offset -= 2)
         MEM_H(offset, player) = 0;
-    MEM_B(0x238, player) = 0;
+    MEM_B(ST_PLAYER_HIGH_DOWNWARD_TRIGGERED, player) = 0;
     MEM_H(0x18A, player) = ctx->r3;
     MEM_H(ST_PLAYER_CURRENT_HP, player) = ctx->r3;
     MEM_H(0x18C, player) = ctx->r4;
