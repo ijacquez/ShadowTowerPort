@@ -416,6 +416,25 @@ physical meanings of the helpers and their results are **OPEN**.
 
 ### Active-record collision check for movement
 
+[ST_UpdateLevelStreaming](../scr/st/ST_UpdateLevelStreaming.c) copies the
+class table and passes the following length-prefixed section to
+[ST_LoadActiveCollisionRecords](../scr/st/ST_LoadActiveCollisionRecords.c).
+The loader examines 64 successive 24-byte entries. For an entry whose first
+byte is not `0xFF`, it copies `ST_ACTIVE_COLLISION_INPUT_CLASS_INDEX`,
+`ST_ACTIVE_COLLISION_INPUT_PLACEMENT_INDEX`, and the three
+`ST_ACTIVE_COLLISION_INPUT_LOCAL_*` halfwords into the active record. It calls
+[ST_InitializeActiveCollisionRecordClass](../scr/st/ST_InitializeActiveCollisionRecordClass.c),
+which indexes 192-byte class entries by the class index and copies the
+horizontal extent, vertical extent, and filter-flag word into the record.
+
+[ST_SetActiveCollisionRecordPositionFromPlacement](../scr/st/ST_SetActiveCollisionRecordPositionFromPlacement.c)
+indexes the 12-byte placement table using the record's placement index. For
+each axis, it shifts the unsigned placement cell byte left by 12 and adds the
+record's signed local halfword. It stores the results in
+`ST_ACTIVE_COLLISION_RECORD_POSITION_X`, `_Y`, and `_Z`. This position
+calculation does not use `ST_LEVEL_PLACEMENT_Y_SUBCELL`; the geometry origin
+calculation in `ST_DecodeCandidateOrigins` does use it.
+
 [ST_QueryActiveCollisionRecords](../scr/st/ST_QueryActiveCollisionRecords.c)
 examines up to 64 records at `0x801BA138`, each 212 bytes long. With the
 movement query's second argument of 2, a record is considered only if

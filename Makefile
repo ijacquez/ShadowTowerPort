@@ -666,9 +666,9 @@ SRCS:= scr/st/AddPrim.c \
 	scr/st/sub_8004A848.c \
 	scr/st/sub_8004A888.c \
 	scr/st/sub_8004A8E8.c \
-	scr/st/sub_8004AC38.c \
+	scr/st/ST_SetActiveCollisionRecordPositionFromPlacement.c \
 	scr/st/sub_8004AC9C.c \
-	scr/st/sub_8004ACEC.c \
+	scr/st/ST_InitializeActiveCollisionRecordClass.c \
 	scr/st/sub_8004AD70.c \
 	scr/st/sub_8004AF24.c \
 	scr/st/sub_8004AF7C.c \
@@ -697,7 +697,7 @@ SRCS:= scr/st/AddPrim.c \
 	scr/st/sub_8004E2D8.c \
 	scr/st/sub_8004E324.c \
 	scr/st/sub_8004E8EC.c \
-	scr/st/sub_8004E960.c \
+	scr/st/ST_LoadActiveCollisionRecords.c \
 	scr/st/sub_8004ED54.c \
 	scr/st/sub_8004EDA8.c \
 	scr/st/sub_8004EE00.c \
@@ -1116,6 +1116,8 @@ scr/st/ST_PlayerUpdateMovement.o scr/st/ST_PlayerUpdateTurning.o scr/st/ST_Playe
 .PHONY: test-player-movement
 test-player-movement:
 	mkdir -p scratchpad
+	$(CXX) $(CFLAGS) -std=c++17 tests/player_active_record_initialization_test.cpp scr/st/ST_InitializeActiveCollisionRecordClass.c scr/st/ST_SetActiveCollisionRecordPositionFromPlacement.c -o scratchpad/player-active-record-initialization-test
+	scratchpad/player-active-record-initialization-test
 	$(CXX) $(CFLAGS) -std=c++17 tests/player_bounds_test.cpp scr/st/ST_IsPlayerWithinGridBounds.c scr/st/ST_IsPlayerWithinWorldBounds.c -o scratchpad/player-bounds-test
 	scratchpad/player-bounds-test
 	$(CXX) $(CFLAGS) -std=c++17 -w -Wno-narrowing -ffunction-sections -fdata-sections tests/player_normalization_test.cpp scr/st/ST_PlayerUpdateMovement.c scr/st/SquareRoot0.c scr/gte.cpp PsyCross/src/gte/PsyX_GTE.cpp PsyCross/src/psx/LIBGTE.C -Wl,--gc-sections -o scratchpad/player-normalization-test

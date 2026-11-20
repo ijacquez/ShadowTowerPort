@@ -1338,10 +1338,10 @@
     <ClCompile Include="scr\st\sub_8004AC9C.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_8004AC38.c">
+    <ClCompile Include="scr\st\ST_SetActiveCollisionRecordPositionFromPlacement.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_8004ACEC.c">
+    <ClCompile Include="scr\st\ST_InitializeActiveCollisionRecordClass.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\sub_8004AD70.c">
@@ -1428,7 +1428,7 @@
     <ClCompile Include="scr\st\sub_8004E324.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_8004E960.c">
+    <ClCompile Include="scr\st\ST_LoadActiveCollisionRecords.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\sub_8004ED54.c">

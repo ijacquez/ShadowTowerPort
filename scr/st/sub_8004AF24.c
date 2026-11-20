@@ -18,7 +18,7 @@ void sub_8004AF24(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x8004AC38
     // addu        $s0, $a1, $zero
     ctx->r16 = ADD32(ctx->r5, 0);
-    sub_8004AC38(rdram, ctx);
+    ST_SetActiveCollisionRecordPositionFromPlacement(rdram, ctx);
     goto after_0;
     // addu        $s0, $a1, $zero
     ctx->r16 = ADD32(ctx->r5, 0);

@@ -1011,7 +1011,7 @@ L_80045C50:
     // addiu       $a0, $s3, 0x4
     ctx->r4 = ADD32(ctx->r19, 0X4);
 
-    sub_8004E960(rdram, ctx);
+    ST_LoadActiveCollisionRecords(rdram, ctx);
     goto after_22;
     // addiu       $a0, $s3, 0x4
     ctx->r4 = ADD32(ctx->r19, 0X4);

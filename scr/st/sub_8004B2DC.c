@@ -516,7 +516,7 @@ L_8004B588:
     // jal         0x8004AC38
     // sb          $zero, 0x5($a0)
     MEM_B(0X5, ctx->r4) = 0;
-    sub_8004AC38(rdram, ctx);
+    ST_SetActiveCollisionRecordPositionFromPlacement(rdram, ctx);
     goto after_3;
     // sb          $zero, 0x5($a0)
     MEM_B(0X5, ctx->r4) = 0;

@@ -126,7 +126,7 @@ L_8004AED4:
     // jal         0x8004AC38
     // sw          $v0, 0x6128($v1)
     MEM_W(0X6128, ctx->r3) = ctx->r2;
-    sub_8004AC38(rdram, ctx);
+    ST_SetActiveCollisionRecordPositionFromPlacement(rdram, ctx);
     goto after_0;
     // sw          $v0, 0x6128($v1)
     MEM_W(0X6128, ctx->r3) = ctx->r2;

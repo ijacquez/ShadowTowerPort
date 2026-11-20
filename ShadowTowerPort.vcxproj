@@ -809,9 +809,9 @@
     <ClCompile Include="scr\st\sub_8004A848.c" />
     <ClCompile Include="scr\st\sub_8004A888.c" />
     <ClCompile Include="scr\st\sub_8004A8E8.c" />
-    <ClCompile Include="scr\st\sub_8004AC38.c" />
+    <ClCompile Include="scr\st\ST_SetActiveCollisionRecordPositionFromPlacement.c" />
     <ClCompile Include="scr\st\sub_8004AC9C.c" />
-    <ClCompile Include="scr\st\sub_8004ACEC.c" />
+    <ClCompile Include="scr\st\ST_InitializeActiveCollisionRecordClass.c" />
     <ClCompile Include="scr\st\sub_8004AD70.c" />
     <ClCompile Include="scr\st\sub_8004AF24.c" />
     <ClCompile Include="scr\st\sub_8004AF7C.c" />
@@ -840,7 +840,7 @@
     <ClCompile Include="scr\st\sub_8004E2D8.c" />
     <ClCompile Include="scr\st\sub_8004E324.c" />
     <ClCompile Include="scr\st\sub_8004E8EC.c" />
-    <ClCompile Include="scr\st\sub_8004E960.c" />
+    <ClCompile Include="scr\st\ST_LoadActiveCollisionRecords.c" />
     <ClCompile Include="scr\st\sub_8004ED54.c" />
     <ClCompile Include="scr\st\sub_8004EDA8.c" />
     <ClCompile Include="scr\st\sub_8004EE00.c" />

@@ -1,7 +1,9 @@
 #include "recomp.h"
 #include "disable_warnings.h"
+#include "ST_ActiveCollisionInput.h"
+#include "ST_ActiveCollisionRecord.h"
 
-void sub_8004E960(uint8_t* rdram, recomp_context* ctx) {
+void ST_LoadActiveCollisionRecords(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
     unsigned int rounding_mode = DEFAULT_ROUNDING_MODE;
     int c1cs = 0; 
@@ -74,9 +76,9 @@ void sub_8004E960(uint8_t* rdram, recomp_context* ctx) {
     // ori         $fp, $zero, 0xFFFF
     ctx->r30 = 0 | 0XFFFF;
     // addiu       $s0, $s3, 0x6E
-    ctx->r16 = ADD32(ctx->r19, 0X6E);
+    ctx->r16 = ADD32(ctx->r19, ST_ACTIVE_COLLISION_RECORD_LOAD_CURSOR);
     // addiu       $s1, $s4, 0xA
-    ctx->r17 = ADD32(ctx->r20, 0XA);
+    ctx->r17 = ADD32(ctx->r20, ST_ACTIVE_COLLISION_INPUT_CURSOR_OFFSET);
 L_8004E9E0:
     // lbu         $v0, 0x0($s4)
     ctx->r2 = MEM_BU(0X0, ctx->r20);
@@ -99,15 +101,15 @@ L_8004E9E0:
     // lui         $a0, 0x801C
     ctx->r4 = S32(0X801C << 16);
     // lbu         $v0, -0x9($s1)
-    ctx->r2 = MEM_BU(-0X9, ctx->r17);
+    ctx->r2 = MEM_BU(ST_ACTIVE_COLLISION_INPUT_CLASS_INDEX - ST_ACTIVE_COLLISION_INPUT_CURSOR_OFFSET, ctx->r17);
     // addiu       $a0, $a0, -0x29C8
     ctx->r4 = ADD32(ctx->r4, -0X29C8);
     // sb          $v0, -0x6C($s0)
-    MEM_B(-0X6C, ctx->r16) = ctx->r2;
+    MEM_B(ST_ACTIVE_COLLISION_RECORD_CLASS_INDEX - ST_ACTIVE_COLLISION_RECORD_LOAD_CURSOR, ctx->r16) = ctx->r2;
     // lbu         $v0, -0x6C($s0)
-    ctx->r2 = MEM_BU(-0X6C, ctx->r16);
+    ctx->r2 = MEM_BU(ST_ACTIVE_COLLISION_RECORD_CLASS_INDEX - ST_ACTIVE_COLLISION_RECORD_LOAD_CURSOR, ctx->r16);
     // lbu         $a1, -0x9($s1)
-    ctx->r5 = MEM_BU(-0X9, ctx->r17);
+    ctx->r5 = MEM_BU(ST_ACTIVE_COLLISION_INPUT_CLASS_INDEX - ST_ACTIVE_COLLISION_INPUT_CURSOR_OFFSET, ctx->r17);
     // sll         $v1, $v0, 1
     ctx->r3 = S32(ctx->r2) << 1;
     // addu        $v1, $v1, $v0
@@ -163,13 +165,13 @@ L_8004EA6C:
     MEM_B(-0X62, ctx->r16) = ctx->r2;
 L_8004EA70:
     // lhu         $v0, -0x8($s1)
-    ctx->r2 = MEM_HU(-0X8, ctx->r17);
+    ctx->r2 = MEM_HU(ST_ACTIVE_COLLISION_INPUT_PLACEMENT_INDEX - ST_ACTIVE_COLLISION_INPUT_CURSOR_OFFSET, ctx->r17);
     // lui         $t0, 0x8018
     ctx->r8 = S32(0X8018 << 16);
     // sh          $v0, -0x46($s0)
-    MEM_H(-0X46, ctx->r16) = ctx->r2;
+    MEM_H(ST_ACTIVE_COLLISION_RECORD_PLACEMENT_INDEX - ST_ACTIVE_COLLISION_RECORD_LOAD_CURSOR, ctx->r16) = ctx->r2;
     // lhu         $v1, -0x46($s0)
-    ctx->r3 = MEM_HU(-0X46, ctx->r16);
+    ctx->r3 = MEM_HU(ST_ACTIVE_COLLISION_RECORD_PLACEMENT_INDEX - ST_ACTIVE_COLLISION_RECORD_LOAD_CURSOR, ctx->r16);
     // addiu       $t0, $t0, -0x4130
     ctx->r8 = ADD32(ctx->r8, -0X4130);
     // sll         $v0, $v1, 1
@@ -203,7 +205,7 @@ L_8004EA70:
     // sb          $v0, -0x67($s0)
     MEM_B(-0X67, ctx->r16) = ctx->r2;
     // lbu         $v0, -0x6C($s0)
-    ctx->r2 = MEM_BU(-0X6C, ctx->r16);
+    ctx->r2 = MEM_BU(ST_ACTIVE_COLLISION_RECORD_CLASS_INDEX - ST_ACTIVE_COLLISION_RECORD_LOAD_CURSOR, ctx->r16);
     // lbu         $v1, 0x4($s2)
     ctx->r3 = MEM_BU(0X4, ctx->r18);
     // sb          $zero, -0x6B($s0)
@@ -263,28 +265,28 @@ L_8004EA70:
     // sh          $v0, -0x6($s0)
     MEM_H(-0X6, ctx->r16) = ctx->r2;
     // lhu         $v0, 0x8($s1)
-    ctx->r2 = MEM_HU(0X8, ctx->r17);
+    ctx->r2 = MEM_HU(ST_ACTIVE_COLLISION_INPUT_LOCAL_X - ST_ACTIVE_COLLISION_INPUT_CURSOR_OFFSET, ctx->r17);
     // nop
 
     // sh          $v0, -0x4($s0)
-    MEM_H(-0X4, ctx->r16) = ctx->r2;
+    MEM_H(ST_ACTIVE_COLLISION_RECORD_LOCAL_X - ST_ACTIVE_COLLISION_RECORD_LOAD_CURSOR, ctx->r16) = ctx->r2;
     // lhu         $v0, 0xA($s1)
-    ctx->r2 = MEM_HU(0XA, ctx->r17);
+    ctx->r2 = MEM_HU(ST_ACTIVE_COLLISION_INPUT_LOCAL_Y - ST_ACTIVE_COLLISION_INPUT_CURSOR_OFFSET, ctx->r17);
     // nop
 
     // sh          $v0, -0x2($s0)
-    MEM_H(-0X2, ctx->r16) = ctx->r2;
+    MEM_H(ST_ACTIVE_COLLISION_RECORD_LOCAL_Y - ST_ACTIVE_COLLISION_RECORD_LOAD_CURSOR, ctx->r16) = ctx->r2;
     // lhu         $v0, 0xC($s1)
-    ctx->r2 = MEM_HU(0XC, ctx->r17);
+    ctx->r2 = MEM_HU(ST_ACTIVE_COLLISION_INPUT_LOCAL_Z - ST_ACTIVE_COLLISION_INPUT_CURSOR_OFFSET, ctx->r17);
     // addu        $a0, $s3, $zero
     ctx->r4 = ADD32(ctx->r19, 0);
     // jal         0x8004ACEC
     // sh          $v0, 0x0($s0)
-    MEM_H(0X0, ctx->r16) = ctx->r2;
-    sub_8004ACEC(rdram, ctx);
+    MEM_H(ST_ACTIVE_COLLISION_RECORD_LOCAL_Z - ST_ACTIVE_COLLISION_RECORD_LOAD_CURSOR, ctx->r16) = ctx->r2;
+    ST_InitializeActiveCollisionRecordClass(rdram, ctx);
     goto after_2;
     // sh          $v0, 0x0($s0)
-    MEM_H(0X0, ctx->r16) = ctx->r2;
+    MEM_H(ST_ACTIVE_COLLISION_RECORD_LOCAL_Z - ST_ACTIVE_COLLISION_RECORD_LOAD_CURSOR, ctx->r16) = ctx->r2;
     after_2:
     // sb          $zero, -0x66($s0)
     MEM_B(-0X66, ctx->r16) = 0;
@@ -377,7 +379,7 @@ L_8004EBF8:
     // jal         0x8004AC38
     // sb          $zero, -0xA($s0)
     MEM_B(-0XA, ctx->r16) = 0;
-    sub_8004AC38(rdram, ctx);
+    ST_SetActiveCollisionRecordPositionFromPlacement(rdram, ctx);
     goto after_3;
     // sb          $zero, -0xA($s0)
     MEM_B(-0XA, ctx->r16) = 0;
@@ -487,7 +489,7 @@ L_8004EC78:
     // addiu       $v0, $zero, 0x1
     ctx->r2 = ADD32(0, 0X1);
     // lh          $v0, -0x2($s0)
-    ctx->r2 = MEM_HS(-0X2, ctx->r16);
+    ctx->r2 = MEM_HS(ST_ACTIVE_COLLISION_RECORD_LOCAL_Y - ST_ACTIVE_COLLISION_RECORD_LOAD_CURSOR, ctx->r16);
     // addiu       $v1, $zero, -0x1
     ctx->r3 = ADD32(0, -0X1);
     // bne         $v0, $v1, L_8004ECC8
@@ -503,10 +505,10 @@ L_8004EC78:
     // nop
 
     // sh          $v0, -0x2($s0)
-    MEM_H(-0X2, ctx->r16) = ctx->r2;
+    MEM_H(ST_ACTIVE_COLLISION_RECORD_LOCAL_Y - ST_ACTIVE_COLLISION_RECORD_LOAD_CURSOR, ctx->r16) = ctx->r2;
 L_8004ECC8:
     // lh          $v0, 0x0($s0)
-    ctx->r2 = MEM_HS(0X0, ctx->r16);
+    ctx->r2 = MEM_HS(ST_ACTIVE_COLLISION_RECORD_LOCAL_Z - ST_ACTIVE_COLLISION_RECORD_LOAD_CURSOR, ctx->r16);
     // nop
 
     // bne         $v0, $v1, L_8004ECEC
@@ -521,15 +523,15 @@ L_8004ECC8:
     ctx->r2 = MEM_BU(0X8, ctx->r18);
     // j           L_8004ECEC
     // sh          $v0, 0x0($s0)
-    MEM_H(0X0, ctx->r16) = ctx->r2;
+    MEM_H(ST_ACTIVE_COLLISION_RECORD_LOCAL_Z - ST_ACTIVE_COLLISION_RECORD_LOAD_CURSOR, ctx->r16) = ctx->r2;
     goto L_8004ECEC;
     // sh          $v0, 0x0($s0)
-    MEM_H(0X0, ctx->r16) = ctx->r2;
+    MEM_H(ST_ACTIVE_COLLISION_RECORD_LOCAL_Z - ST_ACTIVE_COLLISION_RECORD_LOAD_CURSOR, ctx->r16) = ctx->r2;
 L_8004ECE4:
     // sb          $v0, 0x0($s2)
     MEM_B(0X0, ctx->r18) = ctx->r2;
     // sh          $zero, 0x0($s0)
-    MEM_H(0X0, ctx->r16) = 0;
+    MEM_H(ST_ACTIVE_COLLISION_RECORD_LOCAL_Z - ST_ACTIVE_COLLISION_RECORD_LOAD_CURSOR, ctx->r16) = 0;
 L_8004ECEC:
     // addiu       $s1, $s1, 0x18
     ctx->r17 = ADD32(ctx->r17, 0X18);
