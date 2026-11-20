@@ -577,8 +577,9 @@ the following input bits in order:
 | `ST_COLLISION_QUERY_CHECK_PLAYER` (`0x80`) | Calls [ST_QueryPlayerCollision](../scr/st/ST_QueryPlayerCollision.c). If input bit `0x800` is also set, first adds `0x200` (0.125 cells) to `ST_COLLISION_QUERY_HORIZONTAL_PARAMETER`. | ORs `ST_COLLISION_RESULT_PLAYER_HIT` (`0x80`) if the helper returns anything other than `-1`. |
 
 The three helpers for input bits `0x10`, `0x40`, and `0x20` have their
-return values stored at `0x801B59A4`, `0x801B59A8`, and `0x801B59AC`,
-respectively; if the corresponding input bit is clear, the dispatcher stores
+return values stored in `ST_COLLISION_QUERY_ACTIVE_RECORD_INDEX`,
+`ST_COLLISION_QUERY_SECOND_ACTIVE_RECORD_INDEX`, and
+`ST_COLLISION_QUERY_INDEXED_RECORD_INDEX`, respectively; if the corresponding input bit is clear, the dispatcher stores
 `-1` at that address. After the geometry helper, the dispatcher adds the
 unsigned `ST_COLLISION_QUERY_VERTICAL_PARAMETER` to `ST_COLLISION_QUERY_POSITION_Y` for the
 remaining checks. Before returning it subtracts the then-current unsigned
@@ -591,6 +592,15 @@ horizontal comparison. The candidate records begin at `0x801BA138`, have a
 stride of 212 bytes, and the scan examines at most 64 records. These
 operations identify the result bits' producers; the
 physical meanings of the helpers and their results are **OPEN**.
+
+When `ST_SetCollisionReference` is called after the query, result bit
+`ST_COLLISION_RESULT_PLAYER_HIT` selects the player position. Otherwise, a
+a `ST_COLLISION_QUERY_ACTIVE_RECORD_INDEX` value other than `-1` selects
+an active-record position; if that index is `-1`, an
+`ST_COLLISION_QUERY_INDEXED_RECORD_INDEX` other than `-1` selects a level-record
+position. If neither index is available, the routine leaves the previous
+reference position in place. It does not use
+`ST_COLLISION_QUERY_SECOND_ACTIVE_RECORD_INDEX` to select the reference.
 
 `ST_QueryPlayerCollision` subtracts the query X/Z position from the player
 X/Z position, rejecting a difference outside `[-0x2800, 0x2800]` (-2.5 to

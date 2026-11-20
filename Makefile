@@ -1116,6 +1116,8 @@ scr/st/ST_PlayerUpdateMovement.o scr/st/ST_PlayerUpdateTurning.o scr/st/ST_Playe
 .PHONY: test-player-movement
 test-player-movement:
 	mkdir -p scratchpad
+	$(CXX) $(CFLAGS) -std=c++17 tests/collision_reference_test.cpp scr/st/ST_SetCollisionReference.c -o scratchpad/collision-reference-test
+	scratchpad/collision-reference-test
 	$(CXX) $(CFLAGS) -std=c++17 tests/active_record_player_response_test.cpp scr/st/ST_ResolveActiveCollisionRecordDisplacement.c -o scratchpad/active-record-player-response-test
 	scratchpad/active-record-player-response-test
 	$(CXX) $(CFLAGS) -std=c++17 tests/player_collision_query_test.cpp scr/st/ST_QueryPlayerCollision.c -o scratchpad/player-collision-query-test

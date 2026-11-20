@@ -102,7 +102,7 @@ void ST_SetCollisionReference(uint8_t* rdram, recomp_context* ctx) {
     MEM_H(0X44C2, ctx->r18) = ctx->r2;
 L_80049398:
     // lw          $a1, 0x5C($s2)
-    ctx->r5 = MEM_W(0X5C, ctx->r18);
+    ctx->r5 = MEM_W(ST_COLLISION_QUERY_ACTIVE_RECORD_INDEX, ctx->r18);
     // addiu       $v0, $zero, -0x1
     ctx->r2 = ADD32(0, -0X1);
     // beq         $a1, $v0, L_80049440
@@ -197,7 +197,7 @@ L_80049398:
     MEM_H(0X44C2, ctx->r18) = ctx->r2;
 L_80049440:
     // lw          $v1, 0x64($s2)
-    ctx->r3 = MEM_W(0X64, ctx->r18);
+    ctx->r3 = MEM_W(ST_COLLISION_QUERY_INDEXED_RECORD_INDEX, ctx->r18);
     // nop
 
     // beq         $v1, $a1, L_80049528

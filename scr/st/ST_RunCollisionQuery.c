@@ -76,7 +76,7 @@ L_80049578:
     // lui         $v1, 0x801B
     ctx->r3 = S32(0X801B << 16);
     // sw          $v0, 0x59A4($v1)
-    MEM_W(0X59A4, ctx->r3) = ctx->r2;
+    MEM_W(ST_COLLISION_QUERY_ACTIVE_RECORD_INDEX, ST_COLLISION_QUERY_BASE_ADDRESS) = ctx->r2;
     // addiu       $v1, $zero, -0x1
     ctx->r3 = ADD32(0, -0X1);
     // beq         $v0, $v1, L_800495D0
@@ -99,7 +99,7 @@ L_800495C4:
     // addiu       $v0, $zero, -0x1
     ctx->r2 = ADD32(0, -0X1);
     // sw          $v0, 0x59A4($v1)
-    MEM_W(0X59A4, ctx->r3) = ctx->r2;
+    MEM_W(ST_COLLISION_QUERY_ACTIVE_RECORD_INDEX, ST_COLLISION_QUERY_BASE_ADDRESS) = ctx->r2;
 L_800495D0:
     // lw          $v0, 0x0($s1)
     ctx->r2 = MEM_W(ST_COLLISION_QUERY_INPUT_FLAGS, ctx->r17);
@@ -126,7 +126,7 @@ L_800495D0:
     // lui         $v1, 0x801B
     ctx->r3 = S32(0X801B << 16);
     // sw          $v0, 0x59A8($v1)
-    MEM_W(0X59A8, ctx->r3) = ctx->r2;
+    MEM_W(ST_COLLISION_QUERY_SECOND_ACTIVE_RECORD_INDEX, ST_COLLISION_QUERY_BASE_ADDRESS) = ctx->r2;
     // addiu       $v1, $zero, -0x1
     ctx->r3 = ADD32(0, -0X1);
     // beq         $v0, $v1, L_80049610
@@ -147,7 +147,7 @@ L_80049608:
     // addiu       $v0, $zero, -0x1
     ctx->r2 = ADD32(0, -0X1);
     // sw          $v0, 0x59A8($v1)
-    MEM_W(0X59A8, ctx->r3) = ctx->r2;
+    MEM_W(ST_COLLISION_QUERY_SECOND_ACTIVE_RECORD_INDEX, ST_COLLISION_QUERY_BASE_ADDRESS) = ctx->r2;
 L_80049610:
     // lw          $v0, 0x0($s1)
     ctx->r2 = MEM_W(ST_COLLISION_QUERY_INPUT_FLAGS, ctx->r17);
@@ -174,7 +174,7 @@ L_80049610:
     // lui         $v1, 0x801B
     ctx->r3 = S32(0X801B << 16);
     // sw          $v0, 0x59AC($v1)
-    MEM_W(0X59AC, ctx->r3) = ctx->r2;
+    MEM_W(ST_COLLISION_QUERY_INDEXED_RECORD_INDEX, ST_COLLISION_QUERY_BASE_ADDRESS) = ctx->r2;
     // addiu       $v1, $zero, -0x1
     ctx->r3 = ADD32(0, -0X1);
     // beq         $v0, $v1, L_80049650
@@ -195,7 +195,7 @@ L_80049648:
     // addiu       $v0, $zero, -0x1
     ctx->r2 = ADD32(0, -0X1);
     // sw          $v0, 0x59AC($v1)
-    MEM_W(0X59AC, ctx->r3) = ctx->r2;
+    MEM_W(ST_COLLISION_QUERY_INDEXED_RECORD_INDEX, ST_COLLISION_QUERY_BASE_ADDRESS) = ctx->r2;
 L_80049650:
     // lw          $v1, 0x0($s1)
     ctx->r3 = MEM_W(ST_COLLISION_QUERY_INPUT_FLAGS, ctx->r17);
