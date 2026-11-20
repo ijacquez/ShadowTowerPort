@@ -137,7 +137,11 @@ All three movement calls in the state machine follow a call to
 `0x80088044` to its stack offset `0x14`. The caller's `0x20`-byte frame
 and that helper's `0x48`-byte frame place this word at the movement caller's
 stack pointer minus `0x54`, the same address as the rotation Y halfword.
-Subsequent calls may also write there; the final writer is not established.
+On a path where `sub_80042900` calls
+[sub_8003F910](../scr/st/sub_8003F910.c), that function's `0x80`-byte frame
+places its stack offset `0x4C` at the same address. One path stores the low
+halfword of a GTE result there. Subsequent calls may also write there; the
+final writer is not established.
 
 Its effect on the horizontal result can be resolved for the table in the
 supplied executable. The loader copies the `ST.EXE` payload to the address
