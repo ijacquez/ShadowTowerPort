@@ -235,6 +235,22 @@ right by four bits and adds 50. This attribute is therefore between 50 and
 112 for values produced by the described calculation. **OPEN:** the
 in-game meaning of this attribute and its underlying base and record values.
 
+For that attribute range, the limits calculated by
+`ST_ApplyPlayerDamageAndEffects` can be expressed with integer division:
+
+```text
+base = ST_EFFECT_CAP_BASE_PERCENT
+     + ST_EFFECT_CAP_BASE_PERCENT * (ST_EFFECT_CAP_REFERENCE_ATTRIBUTE
+       - ST_PLAYER_EFFECT_CAP_ATTRIBUTE) / 59
+suppression limit = (base * 75 / 100) * ST_PLAYER_EFFECT_CAP_PERCENT / 100
+reduction limit   = (base * 300 / 100) * ST_PLAYER_EFFECT_CAP_PERCENT / 100
+```
+
+Each division discards its remainder before the next multiplication. For
+example, attribute 80 and percent 100 give base 77, suppression limit 57,
+and reduction limit 231. The suppression and reduction targets are capped
+separately by these limits.
+
 [ST_RecalculatePlayerRecordModifiers](../scr/st/ST_RecalculatePlayerRecordModifiers.c)
 calculates `ST_PLAYER_EFFECT_CAP_PERCENT` from the same indexed 44-byte
 records and player slots described above. For each selected record, it reads

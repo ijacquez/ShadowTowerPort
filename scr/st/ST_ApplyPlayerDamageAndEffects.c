@@ -2,6 +2,11 @@
 #include "disable_warnings.h"
 #include "ST_PlayerState.h"
 
+enum {
+    ST_EFFECT_CAP_REFERENCE_ATTRIBUTE = 112,
+    ST_EFFECT_CAP_BASE_PERCENT = 50
+};
+
 void ST_ApplyPlayerDamageAndEffects(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
     unsigned int rounding_mode = DEFAULT_ROUNDING_MODE;
@@ -1071,7 +1076,7 @@ L_8003E1B0:
     // lhu         $v0, 0x20($t2)
     ctx->r2 = MEM_HU(ST_PLAYER_EFFECT_CAP_ATTRIBUTE, ctx->r10);
     // addiu       $v1, $zero, 0x70
-    ctx->r3 = ADD32(0, 0X70);
+    ctx->r3 = ADD32(0, ST_EFFECT_CAP_REFERENCE_ATTRIBUTE);
     // subu        $v1, $v1, $v0
     ctx->r3 = SUB32(ctx->r3, ctx->r2);
     // sll         $v0, $v1, 1
@@ -1097,7 +1102,7 @@ L_8003E1B0:
     // subu        $v1, $v1, $v0
     ctx->r3 = SUB32(ctx->r3, ctx->r2);
     // addiu       $v1, $v1, 0x32
-    ctx->r3 = ADD32(ctx->r3, 0X32);
+    ctx->r3 = ADD32(ctx->r3, ST_EFFECT_CAP_BASE_PERCENT);
     // mult        $v1, $a2
     result = S64(S32(ctx->r3)) * S64(S32(ctx->r6)); lo = S32(result >> 0); hi = S32(result >> 32);
     // mflo        $a0

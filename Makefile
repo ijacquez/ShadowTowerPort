@@ -1123,6 +1123,8 @@ test-player-movement:
 	scratchpad/scratchpad-memory-test
 	$(CXX) $(CFLAGS) -O2 tests/player_attribute_scratch_test.cpp scr/st/ST_RecalculatePlayerAttributeScratch.c scr/st/ST_RecalculatePlayerDerivedAttributes.c -o scratchpad/player-attribute-scratch-test
 	scratchpad/player-attribute-scratch-test
+	$(CXX) $(CFLAGS) -O2 tests/player_effect_caps_test.cpp scr/st/ST_ApplyPlayerDamageAndEffects.c -o scratchpad/player-effect-caps-test
+	scratchpad/player-effect-caps-test
 	$(CXX) $(CFLAGS) -std=c++17 tests/player_record_modifiers_test.cpp scr/st/ST_RecalculatePlayerRecordModifiers.c -o scratchpad/player-record-modifiers-test
 	scratchpad/player-record-modifiers-test
 	$(CXX) $(CFLAGS) -std=c++17 tests/resource_vector_sample_test.cpp scr/st/ST_SampleResourceVector.c scr/st/ST_SelectResourceSequenceInterval.c -o scratchpad/resource-vector-sample-test
