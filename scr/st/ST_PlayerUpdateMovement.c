@@ -24,7 +24,15 @@ static uint32_t ST_UpdateMovementAxis(uint32_t value, int32_t limit, int directi
     return value;
 }
 
+// Dampen one stored component by one quarter, rounding toward zero.
+static uint16_t ST_DampenMovementComponent(uint16_t raw) {
+    const int32_t value = (int16_t)raw;
+    const int16_t damped = (int16_t)(raw - value / 4);
+    return damped >= -3 && damped <= 3 ? 0 : (uint16_t)damped;
+}
+
 void ST_PlayerUpdateMovement(uint8_t* rdram, recomp_context* ctx) {
+
     // Local X/Z accumulators approach +/-move limit by limit >> 2 while
     // pressed, and approach zero by limit >> 3 when released. They are
     // processed and rotated by yaw before collision-tested movement; they
@@ -258,227 +266,39 @@ L_800423D4:
     goto after_3;
     // addu        $a0, $v0, $a0
     ctx->r4 = ADD32(ctx->r2, ctx->r4);
-    after_3:
-    // lh          $v1, 0x1CC($s1)
-    ctx->r3 = MEM_HS(ST_PLAYER_MOVE_X, ctx->r17);
-    // lhu         $a1, 0x1CC($s1)
-    ctx->r5 = MEM_HU(ST_PLAYER_MOVE_X, ctx->r17);
-    // addu        $a3, $v0, $zero
-    ctx->r7 = ADD32(ctx->r2, 0);
-    // bgez        $v1, L_800424CC
-    if (SIGNED(ctx->r3) >= 0) {
-        // sh          $a3, 0x2C8($s1)
-        MEM_H(ST_PLAYER_MOVE_MAGNITUDE, ctx->r17) = ctx->r7;
-        goto L_800424CC;
-    }
-    // sh          $a3, 0x2C8($s1)
-    MEM_H(ST_PLAYER_MOVE_MAGNITUDE, ctx->r17) = ctx->r7;
-    // addiu       $v1, $v1, 0x3
-    ctx->r3 = ADD32(ctx->r3, 0X3);
-L_800424CC:
-    // sra         $v0, $v1, 2
-    ctx->r2 = S32(ctx->r3) >> 2;
-    // subu        $a2, $a1, $v0
-    ctx->r6 = SUB32(ctx->r5, ctx->r2);
-    // lh          $a0, 0x1CE($s1)
-    ctx->r4 = MEM_HS(ST_PLAYER_MOVE_Y, ctx->r17);
-    // lhu         $a1, 0x1CE($s1)
-    ctx->r5 = MEM_HU(ST_PLAYER_MOVE_Y, ctx->r17);
-    // bgez        $a0, L_800424E8
-    if (SIGNED(ctx->r4) >= 0) {
-        // sh          $a2, 0x1CC($s1)
-        MEM_H(ST_PLAYER_MOVE_X, ctx->r17) = ctx->r6;
-        goto L_800424E8;
-    }
-    // sh          $a2, 0x1CC($s1)
-    MEM_H(ST_PLAYER_MOVE_X, ctx->r17) = ctx->r6;
-    // addiu       $a0, $a0, 0x3
-    ctx->r4 = ADD32(ctx->r4, 0X3);
-L_800424E8:
-    // sra         $v0, $a0, 2
-    ctx->r2 = S32(ctx->r4) >> 2;
-    // lh          $v1, 0x1D0($s1)
-    ctx->r3 = MEM_HS(ST_PLAYER_MOVE_Z, ctx->r17);
-    // lhu         $a0, 0x1D0($s1)
-    ctx->r4 = MEM_HU(ST_PLAYER_MOVE_Z, ctx->r17);
-    // subu        $a1, $a1, $v0
-    ctx->r5 = SUB32(ctx->r5, ctx->r2);
-    // bgez        $v1, L_80042504
-    if (SIGNED(ctx->r3) >= 0) {
-        // sh          $a1, 0x1CE($s1)
-        MEM_H(ST_PLAYER_MOVE_Y, ctx->r17) = ctx->r5;
-        goto L_80042504;
-    }
-    // sh          $a1, 0x1CE($s1)
-    MEM_H(ST_PLAYER_MOVE_Y, ctx->r17) = ctx->r5;
-    // addiu       $v1, $v1, 0x3
-    ctx->r3 = ADD32(ctx->r3, 0X3);
-L_80042504:
-    // sra         $v0, $v1, 2
-    ctx->r2 = S32(ctx->r3) >> 2;
-    // subu        $v1, $a0, $v0
-    ctx->r3 = SUB32(ctx->r4, ctx->r2);
-    // addiu       $v0, $a2, 0x3
-    ctx->r2 = ADD32(ctx->r6, 0X3);
-    // andi        $v0, $v0, 0xFFFF
-    ctx->r2 = ctx->r2 & 0XFFFF;
-    // sltiu       $v0, $v0, 0x7
-    ctx->r2 = ctx->r2 < 0X7 ? 1 : 0;
-    // beq         $v0, $zero, L_80042524
-    if (ctx->r2 == 0) {
-        // sh          $v1, 0x1D0($s1)
-        MEM_H(ST_PLAYER_MOVE_Z, ctx->r17) = ctx->r3;
-        goto L_80042524;
-    }
-    // sh          $v1, 0x1D0($s1)
-    MEM_H(ST_PLAYER_MOVE_Z, ctx->r17) = ctx->r3;
-    // sh          $zero, 0x1CC($s1)
-    MEM_H(ST_PLAYER_MOVE_X, ctx->r17) = 0;
-L_80042524:
-    // addiu       $v0, $a1, 0x3
-    ctx->r2 = ADD32(ctx->r5, 0X3);
-    // andi        $v0, $v0, 0xFFFF
-    ctx->r2 = ctx->r2 & 0XFFFF;
-    // sltiu       $v0, $v0, 0x7
-    ctx->r2 = ctx->r2 < 0X7 ? 1 : 0;
-    // beq         $v0, $zero, L_8004253C
-    if (ctx->r2 == 0) {
-        // addiu       $v0, $v1, 0x3
-        ctx->r2 = ADD32(ctx->r3, 0X3);
-        goto L_8004253C;
-    }
-    // addiu       $v0, $v1, 0x3
-    ctx->r2 = ADD32(ctx->r3, 0X3);
-    // sh          $zero, 0x1CE($s1)
-    MEM_H(ST_PLAYER_MOVE_Y, ctx->r17) = 0;
-L_8004253C:
-    // andi        $v0, $v0, 0xFFFF
-    ctx->r2 = ctx->r2 & 0XFFFF;
-    // sltiu       $v0, $v0, 0x7
-    ctx->r2 = ctx->r2 < 0X7 ? 1 : 0;
-    // beq         $v0, $zero, L_80042550
-    if (ctx->r2 == 0) {
-        // lui         $v0, 0x801C
-        ctx->r2 = S32(0X801C << 16);
-        goto L_80042550;
-    }
-    // lui         $v0, 0x801C
-    ctx->r2 = S32(0X801C << 16);
-    // sh          $zero, 0x1D0($s1)
-    MEM_H(ST_PLAYER_MOVE_Z, ctx->r17) = 0;
-L_80042550:
-    // addiu       $v1, $v0, 0x310
-    ctx->r3 = ADD32(ctx->r2, 0X310);
-    // lh          $v0, 0x71A4($v1)
-    ctx->r2 = MEM_HS(0X71A4, ctx->r3);
-    // nop
+after_3:
+    // The rotated X/Z magnitude and existing three-axis movement are
+    // stored separately from the local input accumulators.
+    ctx->r7 = ctx->r2;
+    MEM_H(ST_PLAYER_MOVE_MAGNITUDE, player) = ctx->r7;
+    MEM_H(ST_PLAYER_MOVE_X, player) = ST_DampenMovementComponent(MEM_HU(ST_PLAYER_MOVE_X, player));
+    MEM_H(ST_PLAYER_MOVE_Y, player) = ST_DampenMovementComponent(MEM_HU(ST_PLAYER_MOVE_Y, player));
+    MEM_H(ST_PLAYER_MOVE_Z, player) = ST_DampenMovementComponent(MEM_HU(ST_PLAYER_MOVE_Z, player));
 
-    // bgez        $v0, L_80042568
-    if (SIGNED(ctx->r2) >= 0) {
-        // nop
-    
-        goto L_80042568;
-    }
-    // nop
-
-    // addiu       $v0, $v0, 0x3
-    ctx->r2 = ADD32(ctx->r2, 0X3);
-L_80042568:
-    // lh          $a0, 0x71A8($v1)
-    ctx->r4 = MEM_HS(0X71A8, ctx->r3);
-    // lhu         $v1, 0x1CC($s1)
-    ctx->r3 = MEM_HU(ST_PLAYER_MOVE_X, ctx->r17);
-    // sra         $v0, $v0, 2
-    ctx->r2 = S32(ctx->r2) >> 2;
-    // addu        $a2, $v1, $v0
-    ctx->r6 = ADD32(ctx->r3, ctx->r2);
-    // bgez        $a0, L_80042584
-    if (SIGNED(ctx->r4) >= 0) {
-        // sh          $a2, 0x1CC($s1)
-        MEM_H(ST_PLAYER_MOVE_X, ctx->r17) = ctx->r6;
-        goto L_80042584;
-    }
-    // sh          $a2, 0x1CC($s1)
-    MEM_H(ST_PLAYER_MOVE_X, ctx->r17) = ctx->r6;
-    // addiu       $a0, $a0, 0x3
-    ctx->r4 = ADD32(ctx->r4, 0X3);
-L_80042584:
-    // sra         $v0, $a0, 2
-    ctx->r2 = S32(ctx->r4) >> 2;
-    // lui         $a0, 0x801C
-    ctx->r4 = S32(0X801C << 16);
-    // addiu       $a0, $a0, -0x5EC8
-    ctx->r4 = ADD32(ctx->r4, -0X5EC8);
-    // lhu         $a1, 0x1D0($s1)
-    ctx->r5 = MEM_HU(ST_PLAYER_MOVE_Z, ctx->r17);
-    // lhu         $v1, 0x6160($a0)
-    ctx->r3 = MEM_HU(0X6160, ctx->r4);
-    // addu        $a1, $a1, $v0
-    ctx->r5 = ADD32(ctx->r5, ctx->r2);
-    // sll         $v1, $v1, 16
-    ctx->r3 = S32(ctx->r3) << 16;
-    // sra         $v0, $v1, 16
-    ctx->r2 = S32(ctx->r3) >> 16;
-    // srl         $v1, $v1, 31
-    ctx->r3 = S32(U32(ctx->r3) >> 31);
-    // addu        $v0, $v0, $v1
-    ctx->r2 = ADD32(ctx->r2, ctx->r3);
-    // sra         $v0, $v0, 1
-    ctx->r2 = S32(ctx->r2) >> 1;
-    // sh          $a1, 0x1D0($s1)
-    MEM_H(ST_PLAYER_MOVE_Z, ctx->r17) = ctx->r5;
-    // lhu         $v1, 0x6164($a0)
-    ctx->r3 = MEM_HU(0X6164, ctx->r4);
-    // addu        $v0, $a2, $v0
-    ctx->r2 = ADD32(ctx->r6, ctx->r2);
-    // sh          $v0, 0x1CC($s1)
-    MEM_H(ST_PLAYER_MOVE_X, ctx->r17) = ctx->r2;
-    // sll         $v1, $v1, 16
-    ctx->r3 = S32(ctx->r3) << 16;
-    // sra         $v0, $v1, 16
-    ctx->r2 = S32(ctx->r3) >> 16;
-    // srl         $v1, $v1, 31
-    ctx->r3 = S32(U32(ctx->r3) >> 31);
-    // addu        $v0, $v0, $v1
-    ctx->r2 = ADD32(ctx->r2, ctx->r3);
-    // sra         $v0, $v0, 1
-    ctx->r2 = S32(ctx->r2) >> 1;
-    // addu        $a1, $a1, $v0
-    ctx->r5 = ADD32(ctx->r5, ctx->r2);
-    // sll         $v0, $a3, 16
-    ctx->r2 = S32(ctx->r7) << 16;
-    // sh          $a1, 0x1D0($s1)
-    MEM_H(ST_PLAYER_MOVE_Z, ctx->r17) = ctx->r5;
-    // sra         $a1, $v0, 16
+    // Add the two independent X/Z contributions with their original
+    // signed division, halfword stores, and emulated-register values.
+    ctx->r6 = MEM_HU(ST_PLAYER_MOVE_X, player) +
+              (uint32_t)(MEM_HS(0, 0x801C74B4) / 4);
+    MEM_H(ST_PLAYER_MOVE_X, player) = ctx->r6;
+    ctx->r5 = MEM_HU(ST_PLAYER_MOVE_Z, player) +
+              (uint32_t)(MEM_HS(0, 0x801C74B8) / 4);
+    MEM_H(ST_PLAYER_MOVE_Z, player) = ctx->r5;
+    MEM_H(ST_PLAYER_MOVE_X, player) = ctx->r6 +
+                                     (uint32_t)(MEM_HS(0, 0x801C0298) / 2);
+    const int32_t externalZ = MEM_HS(0, 0x801C029C);
+    ctx->r5 += (uint32_t)(externalZ / 2);
+    MEM_H(ST_PLAYER_MOVE_Z, player) = ctx->r5;
+    ctx->r3 = externalZ < 0 ? 1 : 0;
+    ctx->r4 = 0x801BA138;
+    ctx->r2 = U32(ctx->r7) << 16;
     ctx->r5 = S32(ctx->r2) >> 16;
-    // beq         $a1, $zero, L_80042604
-    if (ctx->r5 == 0) {
-        // nop
-    
-        goto L_80042604;
+    if (ctx->r5 != 0) {
+        ctx->r2 = MEM_BU(ST_PLAYER_DIRECTIONAL_MOVE_DISABLED, player);
+        if (ctx->r2 == 0) {
+            ctx->r4 = ctx->r18;
+            ST_ApplyDirectionalMovementWithCollision(rdram, ctx);
+        }
     }
-    // nop
-
-    // lbu         $v0, 0x21E($s1)
-    ctx->r2 = MEM_BU(0X21E, ctx->r17);
-    // nop
-
-    // bne         $v0, $zero, L_80042604
-    if (ctx->r2 != 0) {
-        // nop
-    
-        goto L_80042604;
-    }
-    // nop
-
-    // jal         0x80041150
-    // addu        $a0, $s2, $zero
-    ctx->r4 = ADD32(ctx->r18, 0);
-    ST_ApplyDirectionalMovementWithCollision(rdram, ctx);
-    goto after_4;
-    // addu        $a0, $s2, $zero
-    ctx->r4 = ADD32(ctx->r18, 0);
-    after_4:
 L_80042604:
     // lw          $ra, 0x6C($sp)
     ctx->r31 = MEM_W(0X6C, ctx->r29);
