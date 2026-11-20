@@ -319,7 +319,7 @@ L_80014B7C:
     // jal         0x80044EE8
     // nop
     
-    sub_80044EE8(rdram, ctx);
+    ST_StartLevelStreamingAndWait(rdram, ctx);
     goto after_28;
     // nop
 
@@ -406,7 +406,7 @@ L_80014BD4:
     // jal         0x80042D74
     // nop
 
-    sub_80042D74(rdram, ctx);
+    ST_UpdatePlayerState(rdram, ctx);
 
 
     goto after_36;

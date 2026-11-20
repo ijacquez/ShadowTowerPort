@@ -3,7 +3,7 @@
 #include "ST_PlayerState.h"
 
 
-void sub_80042D74(uint8_t* rdram, recomp_context* ctx) 
+void ST_UpdatePlayerState(uint8_t* rdram, recomp_context* ctx)
 {
 
     uint64_t hi = 0, lo = 0, result = 0;

@@ -1,6 +1,6 @@
 # Player movement
 
-The [game state machine](../scr/st/sub_80042D74.c) calls
+The [game state machine](../scr/st/ST_UpdatePlayerState.c) calls
 `ST_PlayerUpdateTurning`, `ST_PlayerUpdateMovement`, and
 `ST_PlayerMoveWithCollision` in that order in several states. The code is
 recompiled MIPS: `ctx` registers and `MEM_*`
@@ -35,7 +35,7 @@ Z is 48 (`0x30`, or 0.01171875 cells), 96 (`0x60`, 0.0234375),
 updates. On release from 192, it decreases by 24 (`0x18`, 0.005859375) per
 update. The shifts truncate the step; for example,
 `L >> 3` is zero when `L` is between 1 and 7. The default and modified
-limits are set in [sub_80042D74.c](../scr/st/sub_80042D74.c).
+limits are set in [ST_UpdatePlayerState.c](../scr/st/ST_UpdatePlayerState.c).
 
 On the state machine path beginning at `L_8004323C`, `ST_PLAYER_MOVE_LIMIT` is
 set to `0xC0` (0.046875 cells) and `ST_PLAYER_TURN_LIMIT` to 32. If neither
@@ -181,7 +181,7 @@ state machine calls `ST_PlayerMoveWithCollision`. Its collision-result branches 
 [ST_ClearPlayerMovementLimits](../scr/st/ST_ClearPlayerMovementLimits.c)
 clears the movement and turn limits, turn and pitch rates, and movement
 magnitude, then sets `ST_PLAYER_DIRECTIONAL_MOVE_DISABLED` to 1. It does not clear the local
-X/Z input accumulators. The [game state machine](../scr/st/sub_80042D74.c)
+X/Z input accumulators. The [game state machine](../scr/st/ST_UpdatePlayerState.c)
 and other game routines call it on different paths.
 
 [ST_ClearPlayerMovementLimitsAndVertical](../scr/st/ST_ClearPlayerMovementLimitsAndVertical.c)
@@ -204,7 +204,7 @@ the negative limit, and neither moves it toward zero by the same step. The
 rate is stored as a halfword before the signed clamp.
 
 The routine adds that rate to `ST_PLAYER_YAW` (`0x27A`) and masks
-the result with `0xFFF`. The [state machine](../scr/st/sub_80042D74.c) sets
+the result with `0xFFF`. The [state machine](../scr/st/ST_UpdatePlayerState.c) sets
 the turn limit to `0x20`, or `0x28` when neither binding at control offsets
 `0x22` and `0x24` is held. Other state conditions can modify this value.
 For limit 40 and no halfword overflow, holding the first turn binding from
@@ -404,20 +404,21 @@ record if the index is `0xFFFF`, if the record address equals the word at
 `0x801C74C0`, or if halfword `0x04` of the indexed 24-byte record at
 `0x801C0310` is zero.
 
-The routine subtracts query X and Z (words `0x04` and `0x0C`) from record X
+The routine subtracts `ST_COLLISION_QUERY_POSITION_X` (`0x04`) and
+`ST_COLLISION_QUERY_POSITION_Z` (`0x0C`) from record X
 and Z (words `0x24` and `0x2C`) using 32-bit arithmetic. It skips the
 record unless both differences lie in `[-0x2800, 0x2800]`. It calculates a
 distance with `SquareRoot0` from the 32-bit wrapped sum of their squares,
 and an angle with `ratan2` from those differences. It interprets the low
 halfword of that angle as signed. From the distance it subtracts the low
-32-bit product of query signed halfword `0x22` and
+32-bit product of signed `ST_COLLISION_QUERY_HORIZONTAL_MAGNITUDE` (`0x22`) and
 `rcos(ST_COLLISION_QUERY_DIRECTION - angle)`, divided by 4096
 with rounding toward zero. It skips the record unless this result is less
 than the sum of unsigned `ST_COLLISION_QUERY_HORIZONTAL_PARAMETER` and the indexed record's
 unsigned halfword `0x04`.
 
 After a record passes that horizontal test, the function compares its Y
-word at `0x28` to query Y at `0x08`. If record Y is numerically less, it returns `-1`
+word at `0x28` to `ST_COLLISION_QUERY_POSITION_Y` (`0x08`). If record Y is numerically less, it returns `-1`
 immediately when record Y is less than query Y minus unsigned query
 `ST_COLLISION_QUERY_VERTICAL_PARAMETER`. Otherwise, it returns `-1` immediately when query Y is
 less than record Y minus the record's unsigned halfword `0x12`. If neither
@@ -485,7 +486,7 @@ On its request path, [ST_RequestLevelStreaming](../scr/st/ST_RequestLevelStreami
 sets the streaming status to 1, the phase to 0, and copies six bytes from
 the caller's stack arguments at offsets `0x14` through `0x28` in four-byte
 steps to streaming-state offsets `0x20` through `0x25`. A separate path in
-[sub_80044EE8](../scr/st/sub_80044EE8.c) sets status to 1 and phase to 0,
+[ST_StartLevelStreamingAndWait](../scr/st/ST_StartLevelStreamingAndWait.c) sets status to 1 and phase to 0,
 and writes `0x7F` to offsets `0x20`, `0x21`, and `0x22`; the first of those
 bytes causes the later translation to be skipped.
 
@@ -603,7 +604,7 @@ not establish which collision record wins or the player's full height. See
 
 For `d < 0`:
 
-- If vertical movement is positive, call `sub_80057B48`, then arithmetic-shift
+- If vertical movement is positive, call `ST_HandleDownwardCollisionFeedback`, then arithmetic-shift
   the resulting signed value right by 2.
 - If it is zero and `-31 <= d < 0`, set it to `-d`; if `d <= -32`, set it
   to -16. In the latter case clear the movement limit when `d >= -1024`.
@@ -615,6 +616,15 @@ For `d < 0`:
 
 For example, with d fixed at -100, starting at zero gives -16, -64, -100
 on successive updates. Actual query results may change as the player moves.
+
+For the positive-vertical branch, [ST_HandleDownwardCollisionFeedback](../scr/st/ST_HandleDownwardCollisionFeedback.c)
+does not call either helper when its signed input is below `0x100` (0.0625 cells per update).
+Otherwise it subtracts `0x100`, limits the result to `0x200` (0.125 cells per
+update), and calls `sub_800582F0` with ID `0x14` and parameter
+`0x40 + (limited_result >> 3)`. The latter can reach `SsUtKeyOn` through
+`sub_80058318`. It also calls `sub_80057A68` with `limited_result >> 2`.
+**OPEN:** the complete in-game meaning of the latter helper's state changes is
+not established.
 
 For `d > 0`:
 

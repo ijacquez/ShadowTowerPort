@@ -1,7 +1,7 @@
 #include "recomp.h"
 #include "disable_warnings.h"
 
-void sub_80015D54(uint8_t* rdram, recomp_context* ctx) {
+void ST_QueueIndexedResourceRead(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
     unsigned int rounding_mode = DEFAULT_ROUNDING_MODE;
     int c1cs = 0; 
@@ -42,7 +42,7 @@ void sub_80015D54(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x80015BCC
     // addu        $a3, $s1, $zero
     ctx->r7 = ADD32(ctx->r17, 0);
-    sub_80015BCC(rdram, ctx);
+    ST_QueueDiscRead(rdram, ctx);
     goto after_1;
     // addu        $a3, $s1, $zero
     ctx->r7 = ADD32(ctx->r17, 0);

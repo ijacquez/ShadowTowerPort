@@ -1,5 +1,6 @@
 #include "recomp.h"
 #include "disable_warnings.h"
+#include "ST_CollisionQuery.h"
 
 // Scan the indexed 88-byte records for a collision-query match. The horizontal
 // and vertical tests, including the early -1 return, are documented in
@@ -88,7 +89,7 @@ L_8004F57C:
     // lw          $v1, 0x12($s2)
     ctx->r3 = MEM_W(0X12, ctx->r18);
     // lw          $v0, 0x4($s5)
-    ctx->r2 = MEM_W(0X4, ctx->r21);
+    ctx->r2 = MEM_W(ST_COLLISION_QUERY_POSITION_X, ctx->r21);
     // nop
 
     // subu        $s1, $v1, $v0
@@ -108,7 +109,7 @@ L_8004F57C:
     // lw          $v1, 0x1A($s2)
     ctx->r3 = MEM_W(0X1A, ctx->r18);
     // lw          $v0, 0xC($s5)
-    ctx->r2 = MEM_W(0XC, ctx->r21);
+    ctx->r2 = MEM_W(ST_COLLISION_QUERY_POSITION_Z, ctx->r21);
     // nop
 
     // subu        $s0, $v1, $v0
@@ -158,7 +159,7 @@ L_8004F57C:
     // sll         $v0, $v0, 16
     ctx->r2 = S32(ctx->r2) << 16;
     // lh          $a0, 0x20($s5)
-    ctx->r4 = MEM_HS(0X20, ctx->r21);
+    ctx->r4 = MEM_HS(ST_COLLISION_QUERY_DIRECTION, ctx->r21);
     // sra         $v0, $v0, 16
     ctx->r2 = S32(ctx->r2) >> 16;
     // jal         0x800744C4
@@ -170,7 +171,7 @@ L_8004F57C:
     ctx->r4 = SUB32(ctx->r4, ctx->r2);
     after_2:
     // lh          $v1, 0x22($s5)
-    ctx->r3 = MEM_HS(0X22, ctx->r21);
+    ctx->r3 = MEM_HS(ST_COLLISION_QUERY_HORIZONTAL_MAGNITUDE, ctx->r21);
     // nop
 
     // mult        $v1, $v0
@@ -193,7 +194,7 @@ L_8004F658:
     // lhu         $v1, 0x4($s6)
     ctx->r3 = MEM_HU(0X4, ctx->r22);
     // lhu         $a0, 0x1C($s5)
-    ctx->r4 = MEM_HU(0X1C, ctx->r21);
+    ctx->r4 = MEM_HU(ST_COLLISION_QUERY_HORIZONTAL_PARAMETER, ctx->r21);
     // subu        $v0, $s0, $v0
     ctx->r2 = SUB32(ctx->r16, ctx->r2);
     // addu        $v1, $v1, $a0
@@ -211,7 +212,7 @@ L_8004F658:
     // lw          $a1, 0x16($s2)
     ctx->r5 = MEM_W(0X16, ctx->r18);
     // lw          $a0, 0x8($s5)
-    ctx->r4 = MEM_W(0X8, ctx->r21);
+    ctx->r4 = MEM_W(ST_COLLISION_QUERY_POSITION_Y, ctx->r21);
     // nop
 
     // slt         $v0, $a1, $a0
@@ -225,7 +226,7 @@ L_8004F658:
     // nop
 
     // lhu         $v0, 0x1E($s5)
-    ctx->r2 = MEM_HU(0X1E, ctx->r21);
+    ctx->r2 = MEM_HU(ST_COLLISION_QUERY_VERTICAL_PARAMETER, ctx->r21);
     // nop
 
     // subu        $v0, $a0, $v0

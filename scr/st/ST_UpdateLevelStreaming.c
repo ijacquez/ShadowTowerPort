@@ -338,7 +338,7 @@ L_8004586C:
     ctx->r5 = ctx->r5 | 0X1;
 
 
-    sub_80015D54(rdram, ctx);
+    ST_QueueIndexedResourceRead(rdram, ctx);
 
     goto after_3;
     // ori         $a1, $a1, 0x1
@@ -386,7 +386,7 @@ L_800458B4:
     // addiu       $a1, $a1, 0x2
     ctx->r5 = ADD32(ctx->r5, 0X2);
 
-    sub_80015D54(rdram, ctx);
+    ST_QueueIndexedResourceRead(rdram, ctx);
     goto after_4;
     // addiu       $a1, $a1, 0x2
     ctx->r5 = ADD32(ctx->r5, 0X2);
@@ -495,7 +495,7 @@ L_80045974:
     // jal         0x80015D54
     // addiu       $a1, $a1, 0x3
     ctx->r5 = ADD32(ctx->r5, 0X3);
-    sub_80015D54(rdram, ctx);
+    ST_QueueIndexedResourceRead(rdram, ctx);
     goto after_7;
     // addiu       $a1, $a1, 0x3
     ctx->r5 = ADD32(ctx->r5, 0X3);
@@ -660,8 +660,8 @@ L_800459B0:
     // addiu       $a1, $a1, 0x4
     ctx->r5 = ADD32(ctx->r5, 0X4);
 
-    printf("[6F8] before sub_80015D54\n");
-    sub_80015D54(rdram, ctx);
+    printf("[6F8] before ST_QueueIndexedResourceRead\n");
+    ST_QueueIndexedResourceRead(rdram, ctx);
     goto after_10;
     // addiu       $a1, $a1, 0x4
     ctx->r5 = ADD32(ctx->r5, 0X4);
@@ -1316,7 +1316,7 @@ L_80045E14:
     ctx->r5 = ADD32(ctx->r5, 0X5);
 
 
-    sub_80015D54(rdram, ctx);
+    ST_QueueIndexedResourceRead(rdram, ctx);
     goto after_32;
     // addiu       $a1, $a1, 0x5
     ctx->r5 = ADD32(ctx->r5, 0X5);

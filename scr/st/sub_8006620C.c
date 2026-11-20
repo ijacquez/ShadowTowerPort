@@ -22,7 +22,7 @@ void sub_8006620C(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x80015D54
     // addiu       $a3, $a3, 0x61C8
     ctx->r7 = ADD32(ctx->r7, 0X61C8);
-    sub_80015D54(rdram, ctx);
+    ST_QueueIndexedResourceRead(rdram, ctx);
     goto after_0;
     // addiu       $a3, $a3, 0x61C8
     ctx->r7 = ADD32(ctx->r7, 0X61C8);

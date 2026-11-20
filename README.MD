@@ -71,7 +71,7 @@ case 0x15: case 0x16:
 ```
 sub_800164B4()    — returns timestamp
 sub_80016508()    — resets flags
-sub_80042D74()    — large update function with CD loading
+ST_UpdatePlayerState()    — large update function with CD loading
 sub_80050768()    — math/physics (SquareRoot0, GTE)
 sub_8004E324()    — more math
 sub_80053AA4()    — more GTE math

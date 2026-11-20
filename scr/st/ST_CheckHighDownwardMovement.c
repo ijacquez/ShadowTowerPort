@@ -1,5 +1,6 @@
 #include "recomp.h"
 #include "ST_PlayerState.h"
+#include "ST_CollisionQuery.h"
 
 void ST_CheckHighDownwardMovement(uint8_t* rdram, recomp_context* ctx) {
     ctx->r29 = ADD32(ctx->r29, -0x18);
@@ -10,7 +11,7 @@ void ST_CheckHighDownwardMovement(uint8_t* rdram, recomp_context* ctx) {
     const int32_t vertical = MEM_HS(ST_PLAYER_VERTICAL_MOVE, ctx->r16);
     ctx->r2 = 0x801B0000;
     if (vertical >= ST_PLAYER_HIGH_DOWNWARD_SPEED) {
-        ctx->r2 = MEM_W(0x5978, ctx->r2);
+        ctx->r2 = MEM_W(0x5948 + ST_COLLISION_QUERY_CURRENT_Y_RESULT, ctx->r2);
         ctx->r2 = SIGNED(ctx->r2) < ST_PLAYER_COLLISION_Y_OFFSET ? 1 : 0;
         if (ctx->r2 == 0) {
             ctx->r4 = 0;

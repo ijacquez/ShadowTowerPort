@@ -104,11 +104,11 @@ L_800411CC:
     // lw          $t0, 0x254($a0)
     ctx->r8 = MEM_W(0X254, ctx->r4);
     // sw          $v0, 0x4($v1)
-    MEM_W(0X4, ctx->r3) = ctx->r2;
+    MEM_W(ST_COLLISION_QUERY_POSITION_X, ctx->r3) = ctx->r2;
     // sw          $a2, 0x8($v1)
-    MEM_W(0X8, ctx->r3) = ctx->r6;
+    MEM_W(ST_COLLISION_QUERY_POSITION_Y, ctx->r3) = ctx->r6;
     // sw          $a3, 0xC($v1)
-    MEM_W(0XC, ctx->r3) = ctx->r7;
+    MEM_W(ST_COLLISION_QUERY_POSITION_Z, ctx->r3) = ctx->r7;
     // sw          $t0, 0x10($v1)
     MEM_W(0X10, ctx->r3) = ctx->r8;
     // sra         $v0, $t1, 12
@@ -221,7 +221,7 @@ L_80041224:
     // addu        $a0, $s2, $zero
     ctx->r4 = ADD32(ctx->r18, 0);
     // sh          $v0, 0x22($s2)
-    MEM_H(0X22, ctx->r18) = ctx->r2;
+    MEM_H(ST_COLLISION_QUERY_HORIZONTAL_MAGNITUDE, ctx->r18) = ctx->r2;
     // sh          $zero, 0x47CE($s2)
     MEM_H(0X47CE, ctx->r18) = 0;
     // sh          $zero, 0x47D0($s2)

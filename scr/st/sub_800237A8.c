@@ -151,7 +151,7 @@ L_8002381C:
     // jal         0x80015D54
     // addiu       $a3, $a3, 0x3388
     ctx->r7 = ADD32(ctx->r7, 0X3388);
-    sub_80015D54(rdram, ctx);
+    ST_QueueIndexedResourceRead(rdram, ctx);
     goto after_6;
     // addiu       $a3, $a3, 0x3388
     ctx->r7 = ADD32(ctx->r7, 0X3388);
@@ -168,7 +168,7 @@ L_80023880:
     // jal         0x80015D54
     // addiu       $a3, $a3, 0x3288
     ctx->r7 = ADD32(ctx->r7, 0X3288);
-    sub_80015D54(rdram, ctx);
+    ST_QueueIndexedResourceRead(rdram, ctx);
     goto after_7;
     // addiu       $a3, $a3, 0x3288
     ctx->r7 = ADD32(ctx->r7, 0X3288);

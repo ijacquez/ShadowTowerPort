@@ -8,7 +8,7 @@ at `stage * 10 + slot`. For stage 0, slot 1 occupies sectors 18..49
 (65,536 bytes); slot 5 occupies sectors 93..103 (22,528 bytes). The level
 streaming stages in `ST_UpdateLevelStreaming` load slot 1 into the staging
 buffer and copy the first `0xF800` bytes into the level-record region, then
-load slot 5 at `0x800F2C88`; `sub_80044EE8` sets the shared geometry pointer
+load slot 5 at `0x800F2C88`; `ST_StartLevelStreamingAndWait` sets the shared geometry pointer
 to that address. The stage 0 model archive starts with ID `0x41`, flags 0,
 and 256 40-byte model records. Following the engine's address calculations,
 each record's first word is the vertex offset relative to archive offset 12,

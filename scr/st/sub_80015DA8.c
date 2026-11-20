@@ -42,7 +42,7 @@ void sub_80015DA8(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x80015BCC
     // addu        $a3, $s1, $zero
     ctx->r7 = ADD32(ctx->r17, 0);
-    sub_80015BCC(rdram, ctx);
+    ST_QueueDiscRead(rdram, ctx);
     goto after_1;
     // addu        $a3, $s1, $zero
     ctx->r7 = ADD32(ctx->r17, 0);

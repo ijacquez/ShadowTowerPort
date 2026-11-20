@@ -51,7 +51,7 @@ void ST_LoadInitialGameState(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x8001618C
     // addiu       $a2, $zero, 0x4000
     ctx->r6 = ADD32(0, 0X4000);
-    sub_8001618C(rdram, ctx);
+    ST_ReadDiscFile(rdram, ctx);
     goto after_1;
     // addiu       $a2, $zero, 0x4000
     ctx->r6 = ADD32(0, 0X4000);

@@ -1860,13 +1860,13 @@
     <ClCompile Include="scr\st\VerifyChecksum.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_80015BCC.c">
+    <ClCompile Include="scr\st\ST_QueueDiscRead.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\ST_GetIndexedResourceLocation.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_80015D54.c">
+    <ClCompile Include="scr\st\ST_QueueIndexedResourceRead.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\sub_80015DA8.c">
@@ -2067,10 +2067,10 @@
     <ClCompile Include="scr\st\sub_80042CFC.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_80042D74.c">
+    <ClCompile Include="scr\st\ST_UpdatePlayerState.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_80044EE8.c">
+    <ClCompile Include="scr\st\ST_StartLevelStreamingAndWait.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\sub_80045F90.c">
@@ -2163,7 +2163,7 @@
     <ClCompile Include="scr\st\sub_80057B10.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_80057B48.c">
+    <ClCompile Include="scr\st\ST_HandleDownwardCollisionFeedback.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\sub_80057BAC.c">
@@ -2661,7 +2661,7 @@
     <ClCompile Include="scr\st\sub_8001561C.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_8001618C.c">
+    <ClCompile Include="scr\st\ST_ReadDiscFile.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\sub_8001624C.c">

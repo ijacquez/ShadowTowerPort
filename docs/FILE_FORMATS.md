@@ -7,7 +7,7 @@ of the game-specific resources have not been established.
 
 ## Initial-state text
 
-`ST_LoadInitialGameState` allocates a buffer and calls `sub_8001618C` to
+`ST_LoadInitialGameState` allocates a buffer and calls `ST_ReadDiscFile` to
 read a disc file into it. It then calls `ST_ReadFixedWidthDecimalLine` for
 successive fields. The reader takes a pointer to a cursor and a field width,
 walks the specified bytes from right to left, accumulates decimal digits with
@@ -26,6 +26,12 @@ bytes. If requested, it uses `ST_AddSectorsToCdPosition` to add the first
 offset to the group's base CD position. `ST_GetIndexedResourceSize` reads
 the same pair when only the byte count is needed. The routines assume the
 indices and data are valid; no bounds checks are visible.
+
+`ST_QueueIndexedResourceRead` resolves an indexed resource's CD position and
+byte count with `ST_GetIndexedResourceLocation`. If the byte count is nonzero,
+it passes the position, size, destination, and callback to `ST_QueueDiscRead`
+with request type 2. The queue routine rounds the byte count up to 2048-byte
+sectors and stores the request in a circular queue.
 
 The associated CD position helpers decode or encode packed-BCD
 minute/second/frame values: `ST_BcdToBinary`, `ST_BinaryToBcd`,

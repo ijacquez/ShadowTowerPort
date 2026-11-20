@@ -99,7 +99,7 @@ void ST_QueryLevelGeometry(uint8_t* rdram, recomp_context* ctx) {
     // sw          $v0, 0x104($s4)
     MEM_W(0X104, ctx->r20) = ctx->r2;
     // lhu         $v1, 0x1E($s6)
-    ctx->r3 = MEM_HU(0X1E, ctx->r22);
+    ctx->r3 = MEM_HU(ST_COLLISION_QUERY_VERTICAL_PARAMETER, ctx->r22);
     // lw          $v0, 0x8($s6)
     ctx->r2 = MEM_W(0X8, ctx->r22);
     // addu        $a2, $zero, $zero
@@ -184,7 +184,7 @@ L_80048BD8:
     MEM_W(0X1C, ctx->r20) = ctx->r2;
     after_2:
     // lh          $a0, 0x20($s6)
-    ctx->r4 = MEM_HS(0X20, ctx->r22);
+    ctx->r4 = MEM_HS(ST_COLLISION_QUERY_DIRECTION, ctx->r22);
     // addiu       $v0, $zero, 0x270F
     ctx->r2 = ADD32(0, 0X270F);
     // bne         $a0, $v0, L_80048CC4
@@ -224,7 +224,7 @@ L_80048BD8:
     // lhu         $v0, 0x16($s6)
     ctx->r2 = MEM_HU(0X16, ctx->r22);
     // lhu         $v1, 0x1E($s6)
-    ctx->r3 = MEM_HU(0X1E, ctx->r22);
+    ctx->r3 = MEM_HU(ST_COLLISION_QUERY_VERTICAL_PARAMETER, ctx->r22);
     // sh          $zero, 0x14C($s4)
     MEM_H(0X14C, ctx->r20) = 0;
     // addu        $v0, $v0, $v1
@@ -257,7 +257,7 @@ L_80048C54:
     ctx->r4 = ADD32(ctx->r2, 0);
     after_4:
     // lhu         $v1, 0x1C($s6)
-    ctx->r3 = MEM_HU(0X1C, ctx->r22);
+    ctx->r3 = MEM_HU(ST_COLLISION_QUERY_HORIZONTAL_PARAMETER, ctx->r22);
     // nop
 
     // mult        $v0, $v1
@@ -286,7 +286,7 @@ L_80048C88:
     // lhu         $v0, 0x16($s6)
     ctx->r2 = MEM_HU(0X16, ctx->r22);
     // lhu         $v1, 0x1E($s6)
-    ctx->r3 = MEM_HU(0X1E, ctx->r22);
+    ctx->r3 = MEM_HU(ST_COLLISION_QUERY_VERTICAL_PARAMETER, ctx->r22);
     // nop
 
     // addu        $v0, $v0, $v1
@@ -321,7 +321,7 @@ L_80048CC4:
 
     after_6:
     // lhu         $v1, 0x1C($s6)
-    ctx->r3 = MEM_HU(0X1C, ctx->r22);
+    ctx->r3 = MEM_HU(ST_COLLISION_QUERY_HORIZONTAL_PARAMETER, ctx->r22);
     // nop
 
     // mult        $v0, $v1
@@ -354,7 +354,7 @@ L_80048CE8:
     // sh          $v0, 0x14A($s4)
     MEM_H(0X14A, ctx->r20) = ctx->r2;
     // lh          $a0, 0x20($s6)
-    ctx->r4 = MEM_HS(0X20, ctx->r22);
+    ctx->r4 = MEM_HS(ST_COLLISION_QUERY_DIRECTION, ctx->r22);
 L_80048D08:
     // jal         0x800743F4
     // nop
@@ -365,7 +365,7 @@ L_80048D08:
 
     after_7:
     // lhu         $v1, 0x1C($s6)
-    ctx->r3 = MEM_HU(0X1C, ctx->r22);
+    ctx->r3 = MEM_HU(ST_COLLISION_QUERY_HORIZONTAL_PARAMETER, ctx->r22);
     // nop
 
     // mult        $v0, $v1
@@ -938,7 +938,7 @@ L_80049088:
     // sra         $v0, $v0, 12
     ctx->r2 = S32(ctx->r2) >> 12;
     // lhu         $v1, 0x1E($s6)
-    ctx->r3 = MEM_HU(0X1E, ctx->r22);
+    ctx->r3 = MEM_HU(ST_COLLISION_QUERY_VERTICAL_PARAMETER, ctx->r22);
     // lw          $a0, 0x114($s4)
     ctx->r4 = MEM_W(0X114, ctx->r20);
     // subu        $v1, $v1, $v0
@@ -1008,7 +1008,7 @@ L_800490A8:
     ctx->r3 = S32(ctx->r2) >> 12;
 L_80049104:
     // lhu         $a0, 0x1C($s6)
-    ctx->r4 = MEM_HU(0X1C, ctx->r22);
+    ctx->r4 = MEM_HU(ST_COLLISION_QUERY_HORIZONTAL_PARAMETER, ctx->r22);
     // lw          $v0, 0x128($s4)
     ctx->r2 = MEM_W(0X128, ctx->r20);
     // subu        $v1, $a0, $v1

@@ -304,16 +304,16 @@ SRCS:= scr/st/AddPrim.c \
 	scr/st/sub_8004AE38.c \
 	scr/st/sub_8004CEE8.c \
 	scr/st/VerifyChecksum.c \
-	scr/st/sub_80015BCC.c \
+	scr/st/ST_QueueDiscRead.c \
 	scr/st/ST_GetIndexedResourceLocation.c \
-	scr/st/sub_80015D54.c \
+	scr/st/ST_QueueIndexedResourceRead.c \
 	scr/st/sub_80015DA8.c \
 	scr/st/sub_80015DFC.c \
 	scr/st/ST_GetIndexedResourceSize.c \
 	scr/st/KF_CDReadSectorsInternal.c \
 	scr/st/sub_80015FF4.c \
 	scr/st/sub_80016030.c \
-	scr/st/sub_8001618C.c \
+	scr/st/ST_ReadDiscFile.c \
 	scr/st/sub_8001624C.c \
 	scr/st/sub_80016294.c \
 	scr/st/sub_80016374.c \
@@ -613,11 +613,11 @@ SRCS:= scr/st/AddPrim.c \
 	scr/st/sub_80042C10.c \
 	scr/st/sub_80042C44.c \
 	scr/st/sub_80042CFC.c \
-	scr/st/sub_80042D74.c \
+	scr/st/ST_UpdatePlayerState.c \
 	scr/st/sub_800443F4.c \
 	scr/st/sub_80044404.c \
 	scr/st/sub_80044674.c \
-	scr/st/sub_80044EE8.c \
+	scr/st/ST_StartLevelStreamingAndWait.c \
 	scr/st/ST_TranslatePlayerPosition.c \
 	scr/st/ST_RequestLevelStreaming.c \
 	scr/st/ST_OnLevelDataChunkLoaded.c \
@@ -762,7 +762,7 @@ SRCS:= scr/st/AddPrim.c \
 	scr/st/sub_80057A3C.c \
 	scr/st/sub_80057A68.c \
 	scr/st/sub_80057B10.c \
-	scr/st/sub_80057B48.c \
+	scr/st/ST_HandleDownwardCollisionFeedback.c \
 	scr/st/sub_80057BAC.c \
 	scr/st/sub_80057C0C.c \
 	scr/st/sub_80057C54.c \
@@ -1102,7 +1102,7 @@ Shadow_Tower: $(OBJS) $(PSYCROSS_OBJS) $(GLUE_OBJS)
 	$(CXX) -o $@ $^ -lSDL2 -lopenal
 
 scr/recomp.o: scr/st/recomp_overlays.inl scr/st/funcs.h
-scr/st/ST_PlayerUpdateMovement.o scr/st/ST_PlayerUpdateTurning.o scr/st/ST_PlayerMoveWithCollision.o scr/st/ST_BuildPlayerView.o scr/st/ST_TranslatePlayerPosition.o scr/st/ST_ClearPlayerMovementLimits.o scr/st/sub_80042D74.o scr/st/sub_8005A3A8.o: scr/st/ST_PlayerState.h
+scr/st/ST_PlayerUpdateMovement.o scr/st/ST_PlayerUpdateTurning.o scr/st/ST_PlayerMoveWithCollision.o scr/st/ST_BuildPlayerView.o scr/st/ST_TranslatePlayerPosition.o scr/st/ST_ClearPlayerMovementLimits.o scr/st/ST_UpdatePlayerState.o scr/st/sub_8005A3A8.o: scr/st/ST_PlayerState.h
 
 %.o: %.c
 	$(CXX) $(CFLAGS) -o $@ -c $<

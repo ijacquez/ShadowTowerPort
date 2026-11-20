@@ -104,7 +104,7 @@ L_80015E9C:
     // jal         0x80015BCC
     // sw          $s4, 0x10($sp)
     MEM_W(0X10, ctx->r29) = ctx->r20;
-    sub_80015BCC(rdram, ctx);
+    ST_QueueDiscRead(rdram, ctx);
     goto after_2;
     // sw          $s4, 0x10($sp)
     MEM_W(0X10, ctx->r29) = ctx->r20;

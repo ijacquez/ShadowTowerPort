@@ -94,11 +94,11 @@ L_8004168C:
     // lw          $t1, 0x254($t2)
     ctx->r9 = MEM_W(0X254, ctx->r10);
     // sw          $v0, 0x4($v1)
-    MEM_W(0X4, ctx->r3) = ctx->r2;
+    MEM_W(ST_COLLISION_QUERY_POSITION_X, ctx->r3) = ctx->r2;
     // sw          $a3, 0x8($v1)
-    MEM_W(0X8, ctx->r3) = ctx->r7;
+    MEM_W(ST_COLLISION_QUERY_POSITION_Y, ctx->r3) = ctx->r7;
     // sw          $t0, 0xC($v1)
-    MEM_W(0XC, ctx->r3) = ctx->r8;
+    MEM_W(ST_COLLISION_QUERY_POSITION_Z, ctx->r3) = ctx->r8;
     // sw          $t1, 0x10($v1)
     MEM_W(0X10, ctx->r3) = ctx->r9;
     // addiu       $v0, $zero, 0x100
@@ -195,7 +195,7 @@ L_80041714:
     // addu        $a0, $s2, $zero
     ctx->r4 = ADD32(ctx->r18, 0);
     // sh          $v0, 0x22($s2)
-    MEM_H(0X22, ctx->r18) = ctx->r2;
+    MEM_H(ST_COLLISION_QUERY_HORIZONTAL_MAGNITUDE, ctx->r18) = ctx->r2;
     // sh          $zero, 0x47CE($s2)
     MEM_H(0X47CE, ctx->r18) = 0;
     // sh          $zero, 0x47D0($s2)
@@ -643,7 +643,7 @@ L_800419E4:
     // movement pass. The query result and player state share stored units.
     const uint32_t verticalPlayer = 0x80198F28;
     const uint32_t verticalQuery = 0x801B5948;
-    const uint32_t queryValue = MEM_W(0x2C, verticalQuery);
+    const uint32_t queryValue = MEM_W(ST_COLLISION_QUERY_PROPOSED_Y_RESULT, verticalQuery);
     const int32_t difference = S32(queryValue - ST_PLAYER_COLLISION_Y_OFFSET);
     const uint16_t rawVertical = MEM_HU(ST_PLAYER_VERTICAL_MOVE, verticalPlayer);
     const int16_t vertical = (int16_t)rawVertical;
@@ -659,7 +659,7 @@ L_800419E4:
         ctx->r4 = (uint32_t)(int32_t)vertical;
         ctx->r3 = rawVertical;
         if (vertical > 0) {
-            sub_80057B48(rdram, ctx);
+            ST_HandleDownwardCollisionFeedback(rdram, ctx);
             const int16_t current = (int16_t)MEM_HU(ST_PLAYER_VERTICAL_MOVE, verticalPlayer);
             MEM_H(ST_PLAYER_VERTICAL_MOVE, verticalPlayer) = (uint16_t)(current >> 2);
         } else if (vertical < 0) {

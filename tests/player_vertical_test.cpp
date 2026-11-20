@@ -13,7 +13,7 @@ void rcos(uint8_t*, recomp_context* ctx) { ctx->r2 = 0; }
 void rsin(uint8_t*, recomp_context* ctx) { ctx->r2 = sineResult; }
 void ST_RunCollisionQuery(uint8_t*, recomp_context* ctx) { ctx->r2 = 0; }
 void ST_CheckHighDownwardMovement(uint8_t*, recomp_context* ctx) { ctx->r2 = 0; }
-void sub_80057B48(uint8_t*, recomp_context*) { ++helperCalls; }
+void ST_HandleDownwardCollisionFeedback(uint8_t*, recomp_context*) { ++helperCalls; }
 void sub_80057BAC(uint8_t*, recomp_context* ctx) { ctx->r2 = 0; }
 void ST_UpdatePlayerCollisionYFlags(uint8_t*, recomp_context* ctx) { ctx->r2 = 0; }
 

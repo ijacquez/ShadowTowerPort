@@ -97,7 +97,7 @@ void sub_80023BC4(uint8_t* rdram, recomp_context* ctx) {
     // addiu       $a3, $a3, 0x3788
     ctx->r7 = ADD32(ctx->r7, 0X3788);
 
-    sub_80015D54(rdram, ctx);
+    ST_QueueIndexedResourceRead(rdram, ctx);
     goto after_4;
     // addiu       $a3, $a3, 0x3788
     ctx->r7 = ADD32(ctx->r7, 0X3788);

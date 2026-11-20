@@ -9,7 +9,7 @@ recompiled code from the still-undecoded asset format.
 `ST_UpdateLevelStreaming` is a multi-stage level streaming state machine,
 called from the main loop and other level-transition paths. In its initial
 resource stage it requests a resource indexed from the current level into the
-staging buffer at `0x80088C88` through `sub_80015D54` (which uses `ST_GetIndexedResourceLocation`). The asynchronous
+staging buffer at `0x80088C88` through `ST_QueueIndexedResourceRead` (which uses `ST_GetIndexedResourceLocation`). The asynchronous
 callback `ST_OnLevelDataChunkLoaded` advances the streaming stage. At the
 next stage the state machine starts another resource request and uses
 `ST_CopyWords` to copy `0x3E00` 32-bit words from that staging buffer to
