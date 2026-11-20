@@ -327,7 +327,7 @@ L_800248A8:
     // jal         0x8004FC94
     // sra         $a1, $a1, 12
     ctx->r5 = S32(ctx->r5) >> 12;
-    sub_8004FC94(rdram, ctx);
+    ST_IsPlayerWithinGridBounds(rdram, ctx);
     goto after_2;
     // sra         $a1, $a1, 12
     ctx->r5 = S32(ctx->r5) >> 12;
@@ -751,7 +751,7 @@ L_80024B18:
     ctx->r7 = S32(ctx->r7) << 8;
 
 
-    sub_8004FD28(rdram, ctx);
+    ST_IsPlayerWithinWorldBounds(rdram, ctx);
     goto after_6;
     // sll         $a3, $a3, 8
     ctx->r7 = S32(ctx->r7) << 8;

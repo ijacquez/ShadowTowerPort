@@ -1461,10 +1461,10 @@
     <ClCompile Include="scr\st\sub_8004FC54.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_8004FC94.c">
+    <ClCompile Include="scr\st\ST_IsPlayerWithinGridBounds.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_8004FD28.c">
+    <ClCompile Include="scr\st\ST_IsPlayerWithinWorldBounds.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\sub_8004FDE4.c">

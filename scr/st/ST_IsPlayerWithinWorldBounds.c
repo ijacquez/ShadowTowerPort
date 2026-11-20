@@ -1,7 +1,8 @@
 #include "recomp.h"
 #include "disable_warnings.h"
+#include "ST_PlayerState.h"
 
-void sub_8004FD28(uint8_t* rdram, recomp_context* ctx) {
+void ST_IsPlayerWithinWorldBounds(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
     unsigned int rounding_mode = DEFAULT_ROUNDING_MODE;
     int c1cs = 0; 
@@ -16,7 +17,7 @@ void sub_8004FD28(uint8_t* rdram, recomp_context* ctx) {
     // sra         $v0, $v0, 1
     ctx->r2 = S32(ctx->r2) >> 1;
     // lw          $v1, 0x248($t2)
-    ctx->r3 = MEM_W(0X248, ctx->r10);
+    ctx->r3 = MEM_W(ST_PLAYER_POSITION_X, ctx->r10);
     // lw          $t1, 0x10($sp)
     ctx->r9 = MEM_W(0X10, ctx->r29);
     // addu        $t0, $v1, $v0
@@ -26,7 +27,7 @@ void sub_8004FD28(uint8_t* rdram, recomp_context* ctx) {
     // addu        $v0, $a3, $v0
     ctx->r2 = ADD32(ctx->r7, ctx->r2);
     // lw          $v1, 0x250($t2)
-    ctx->r3 = MEM_W(0X250, ctx->r10);
+    ctx->r3 = MEM_W(ST_PLAYER_POSITION_Z, ctx->r10);
     // sra         $v0, $v0, 1
     ctx->r2 = S32(ctx->r2) >> 1;
     // addu        $v1, $v1, $v0
@@ -82,7 +83,7 @@ void sub_8004FD28(uint8_t* rdram, recomp_context* ctx) {
     // addiu       $v0, $zero, 0x1
     ctx->r2 = ADD32(0, 0X1);
     // lw          $v1, 0x24C($t2)
-    ctx->r3 = MEM_W(0X24C, ctx->r10);
+    ctx->r3 = MEM_W(ST_PLAYER_POSITION_Y, ctx->r10);
     // nop
 
     // slt         $v0, $t1, $v1

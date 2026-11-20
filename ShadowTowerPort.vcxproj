@@ -851,8 +851,8 @@
     <ClCompile Include="scr\st\sub_8004F994.c" />
     <ClCompile Include="scr\st\sub_8004FB88.c" />
     <ClCompile Include="scr\st\sub_8004FC54.c" />
-    <ClCompile Include="scr\st\sub_8004FC94.c" />
-    <ClCompile Include="scr\st\sub_8004FD28.c" />
+    <ClCompile Include="scr\st\ST_IsPlayerWithinGridBounds.c" />
+    <ClCompile Include="scr\st\ST_IsPlayerWithinWorldBounds.c" />
     <ClCompile Include="scr\st\sub_8004FDE4.c" />
     <ClCompile Include="scr\st\sub_8004FED4.c" />
     <ClCompile Include="scr\st\sub_8004FF88.c" />

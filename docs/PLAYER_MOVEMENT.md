@@ -53,7 +53,7 @@ the movement limits, all three movement components, and the three contribution
 sets before the shared post-dispatch work. **OPEN:** the in-game meanings of
 the remaining state values are not established.
 
-The update gate is also used by the type `0xE0` record path in
+The update gate is also used by the `ST_LEVEL_RECORD_TYPE` `0xE0` path in
 [sub_80050768](../scr/st/sub_80050768.c). On a qualifying path with the gate
 at zero, the routine sets it to 1 and clears the movement limits. With the
 gate at 1, it synchronizes pending loads, sets
@@ -72,6 +72,25 @@ stored direction values, sets the gate to 4, and requests level streaming.
 [sub_8004567C](../scr/st/sub_8004567C.c) clears the gate. **OPEN:** the
 in-game meanings of these record types, slots, and gate states remain
 unestablished.
+
+The `ST_LEVEL_RECORD_TYPE` `0xE0` path first calls
+[ST_IsPlayerWithinGridBounds](../scr/st/ST_IsPlayerWithinGridBounds.c) with
+`ST_LEVEL_RECORD_POSITION_X` and `ST_LEVEL_RECORD_POSITION_Z` shifted right
+by 12, widths of one cell, and `ST_LEVEL_RECORD_POSITION_Y`. The helper
+rounds each player X/Z position by adding `0x800`
+(0.5 cells) and shifting right by 12, then checks that each result is at
+least the supplied lower bound and strictly less than lower bound plus width.
+It also checks that player Y is between the supplied Y minus `0x1000`
+(1.0 cell) and the supplied Y, inclusive, unless the supplied Y equals the
+sentinel `0x8000`. Additions and subtractions use 32-bit wrapping and
+comparisons are signed. A nonzero result passes this first gate; a zero result
+also proceeds when `ST_LEVEL_STREAMING_STATUS_ADDRESS` is nonzero.
+
+[ST_IsPlayerWithinWorldBounds](../scr/st/ST_IsPlayerWithinWorldBounds.c)
+uses the same vertical check and sentinel, but compares each player X/Z
+position plus half its supplied width against world-coordinate bounds. The
+half-width division rounds toward zero. `ST_LEVEL_RECORD_TYPE` values `0xED` and `0xEF` call
+it with X and Z widths of `0xC00` (0.75 cells).
 
 ## View rotation
 

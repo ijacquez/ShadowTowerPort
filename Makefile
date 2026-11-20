@@ -708,8 +708,8 @@ SRCS:= scr/st/AddPrim.c \
 	scr/st/sub_8004F994.c \
 	scr/st/sub_8004FB88.c \
 	scr/st/sub_8004FC54.c \
-	scr/st/sub_8004FC94.c \
-	scr/st/sub_8004FD28.c \
+	scr/st/ST_IsPlayerWithinGridBounds.c \
+	scr/st/ST_IsPlayerWithinWorldBounds.c \
 	scr/st/sub_8004FDE4.c \
 	scr/st/sub_8004FED4.c \
 	scr/st/sub_8004FF88.c \
@@ -1116,6 +1116,8 @@ scr/st/ST_PlayerUpdateMovement.o scr/st/ST_PlayerUpdateTurning.o scr/st/ST_Playe
 .PHONY: test-player-movement
 test-player-movement:
 	mkdir -p scratchpad
+	$(CXX) $(CFLAGS) -std=c++17 tests/player_bounds_test.cpp scr/st/ST_IsPlayerWithinGridBounds.c scr/st/ST_IsPlayerWithinWorldBounds.c -o scratchpad/player-bounds-test
+	scratchpad/player-bounds-test
 	$(CXX) $(CFLAGS) -std=c++17 -w -Wno-narrowing -ffunction-sections -fdata-sections tests/player_normalization_test.cpp scr/st/ST_PlayerUpdateMovement.c scr/st/SquareRoot0.c scr/gte.cpp PsyCross/src/gte/PsyX_GTE.cpp PsyCross/src/psx/LIBGTE.C -Wl,--gc-sections -o scratchpad/player-normalization-test
 	scratchpad/player-normalization-test
 	$(CXX) $(CFLAGS) -std=c++17 tests/player_counter_test.cpp scr/st/ST_UpdateCounterAndTarget.c -o scratchpad/player-counter-test

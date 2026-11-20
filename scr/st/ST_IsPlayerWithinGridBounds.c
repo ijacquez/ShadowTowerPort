@@ -1,7 +1,8 @@
 #include "recomp.h"
 #include "disable_warnings.h"
+#include "ST_PlayerState.h"
 
-void sub_8004FC94(uint8_t* rdram, recomp_context* ctx) {
+void ST_IsPlayerWithinGridBounds(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
     unsigned int rounding_mode = DEFAULT_ROUNDING_MODE;
     int c1cs = 0; 
@@ -10,9 +11,9 @@ void sub_8004FC94(uint8_t* rdram, recomp_context* ctx) {
     // addiu       $t2, $v0, -0x70D8
     ctx->r10 = ADD32(ctx->r2, -0X70D8);
     // lw          $v0, 0x248($t2)
-    ctx->r2 = MEM_W(0X248, ctx->r10);
+    ctx->r2 = MEM_W(ST_PLAYER_POSITION_X, ctx->r10);
     // lw          $v1, 0x250($t2)
-    ctx->r3 = MEM_W(0X250, ctx->r10);
+    ctx->r3 = MEM_W(ST_PLAYER_POSITION_Z, ctx->r10);
     // lw          $t1, 0x10($sp)
     ctx->r9 = MEM_W(0X10, ctx->r29);
     // addiu       $v0, $v0, 0x800
@@ -72,7 +73,7 @@ void sub_8004FC94(uint8_t* rdram, recomp_context* ctx) {
     // addiu       $v0, $zero, 0x1
     ctx->r2 = ADD32(0, 0X1);
     // lw          $v1, 0x24C($t2)
-    ctx->r3 = MEM_W(0X24C, ctx->r10);
+    ctx->r3 = MEM_W(ST_PLAYER_POSITION_Y, ctx->r10);
     // nop
 
     // slt         $v0, $t1, $v1

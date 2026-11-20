@@ -1,6 +1,7 @@
 #include "recomp.h"
 #include "disable_warnings.h"
 #include "ST_LevelStreaming.h"
+#include "ST_LevelRecord.h"
 #include "ST_PlayerMovementContributions.h"
 #include "ST_PlayerState.h"
 
@@ -27,7 +28,7 @@ void sub_80050768(uint8_t* rdram, recomp_context* ctx) {
     // sw          $s1, 0x7C($sp)
     MEM_W(0X7C, ctx->r29) = ctx->r17;
     // addiu       $s1, $s5, 0x50
-    ctx->r17 = ADD32(ctx->r21, 0X50);
+    ctx->r17 = ADD32(ctx->r21, ST_LEVEL_RECORD_CURSOR_OFFSET);
     // addiu       $t3, $s5, 0x24
     ctx->r11 = ADD32(ctx->r21, 0X24);
     // sw          $ra, 0x9C($sp)
@@ -242,7 +243,7 @@ L_800508A4:
     MEM_H(-0X2E, ctx->r17) = ctx->r2;
 L_800508E4:
     // lbu         $v0, -0x4B($s1)
-    ctx->r2 = MEM_BU(-0X4B, ctx->r17);
+    ctx->r2 = MEM_BU(ST_LEVEL_RECORD_TYPE - ST_LEVEL_RECORD_CURSOR_OFFSET, ctx->r17);
     // addiu       $t2, $zero, 0xFF
     ctx->r10 = ADD32(0, 0XFF);
     // beq         $v0, $t2, L_8005279C
@@ -4392,11 +4393,11 @@ L_80051FB0:
     // addu        $a3, $a2, $zero
     ctx->r7 = ADD32(ctx->r6, 0);
     // lw          $a0, -0x2C($s1)
-    ctx->r4 = MEM_W(-0X2C, ctx->r17);
+    ctx->r4 = MEM_W(ST_LEVEL_RECORD_POSITION_X - ST_LEVEL_RECORD_CURSOR_OFFSET, ctx->r17);
     // lw          $a1, -0x24($s1)
-    ctx->r5 = MEM_W(-0X24, ctx->r17);
+    ctx->r5 = MEM_W(ST_LEVEL_RECORD_POSITION_Z - ST_LEVEL_RECORD_CURSOR_OFFSET, ctx->r17);
     // lw          $v0, -0x28($s1)
-    ctx->r2 = MEM_W(-0X28, ctx->r17);
+    ctx->r2 = MEM_W(ST_LEVEL_RECORD_POSITION_Y - ST_LEVEL_RECORD_CURSOR_OFFSET, ctx->r17);
     // sra         $a0, $a0, 12
     ctx->r4 = S32(ctx->r4) >> 12;
     // sra         $a1, $a1, 12
@@ -4404,7 +4405,7 @@ L_80051FB0:
     // jal         0x8004FC94
     // sw          $v0, 0x10($sp)
     MEM_W(0X10, ctx->r29) = ctx->r2;
-    sub_8004FC94(rdram, ctx);
+    ST_IsPlayerWithinGridBounds(rdram, ctx);
     goto after_58;
     // sw          $v0, 0x10($sp)
     MEM_W(0X10, ctx->r29) = ctx->r2;
@@ -4997,7 +4998,7 @@ L_80052338:
     // jal         0x8004FD28
     // addu        $a3, $a2, $zero
     ctx->r7 = ADD32(ctx->r6, 0);
-    sub_8004FD28(rdram, ctx);
+    ST_IsPlayerWithinWorldBounds(rdram, ctx);
     goto after_69;
     // addu        $a3, $a2, $zero
     ctx->r7 = ADD32(ctx->r6, 0);
