@@ -24,21 +24,24 @@ This Project is being REVERSE ENGINEERED.
   is found and two accumulators are used to compute the position".
 - Broken tooling is never acceptable.
   Fix it when identified.
+- Always adhere to the "Reverse Engineering Rules" section.
 
-## Reverse engineering rules
+## Reverse Engineering Rules
 
-- Symbol (read: functions, variables, etc.) and file rename are to be human readable
+- Functions, variables, constants, etc. and file rename are to be human readable
+  both in the source tree _and_ in the documentation.
+- If the fixed point is known, represent both as hex and floating point.
+  For example, value 0x800 for Q.12 is 0.5.
 - Comments in the source tree is welcomed.
   All must be up to date, concise, and to the point. They are to be markers to
   help you the agent pick up where you left off.
 - Source code for tools must always be clean; readable and documented in a terse
   and concise manner.
-- Game documentation describes the source tree and verified game behavior.
-  Do not include investigation narratives, runtime observations, debugger
-  transcripts, or reproduction and test procedures in game documentation.
+- Game documentation describes the source tree and verified game behavior. Do
+  not include investigation narratives, runtime observations, debugger
+  transcripts, or reproduction and test procedures in game documentation. 
 
-
-## Session start checklist
+## Session Start Checklist
 
 At the start of every session, before any code change:
 
@@ -50,6 +53,7 @@ At the start of every session, before any code change:
 6. You are allowed to modify the source tree (or duplicate then modify) if it
    facilitates the investigation.
 7. Tests/tools that need to run for a considerable amount of time is allowed.
+8. Read the "Reverse Engineering Rules" section.
 
 If any of these fail, do not proceed with the user's task — surface
 the failure first.
