@@ -86,6 +86,36 @@ int main() {
                      screenY[0], screenY[1]);
         return 1;
     }
+    uint32_t vertexOutputs[2][7];
+    for (int i = 0; i < 2; ++i) {
+        recomp_context gte{};
+        for (int j = 0; j < 5; ++j) gte.cp2c[j] = MEM_W(j * 4, matrix);
+        gte.cp2c[5] = 1200;
+        gte.cp2c[6] = -350;
+        gte.cp2c[7] = 700;
+        gte.cp2d[0] = (uint16_t)1234 | ((uint32_t)(uint16_t)-2222 << 16);
+        gte.cp2d[1] = 3333;
+        gte.cp2d[10] = i ? 0xFFFF8000 : 0;
+        gte.cp2d[26] = i ? 0x40000000 : 0;
+        gte.cp2c[31] = i ? 0xFFFFFFFF : 0;
+        gte_command(&gte, 0x4A480012);
+        for (int j = 0; j < 3; ++j) {
+            vertexOutputs[i][j] = gte.cp2d[9 + j] & 0xFFFF;
+            vertexOutputs[i][3 + j] = gte.cp2d[25 + j];
+        }
+        vertexOutputs[i][6] = gte.cp2c[31];
+        if ((gte.cp2d[10] >> 16) != (i ? 0xFFFFu : 0u)) {
+            std::fputs("candidate vertex transform changed IR2 upper bits\n", stderr);
+            return 1;
+        }
+    }
+    if (std::memcmp(vertexOutputs[0], vertexOutputs[1], sizeof(vertexOutputs[0])) != 0) {
+        for (int j = 0; j < 7; ++j)
+            std::fprintf(stderr, "candidate vertex output %d: %08x %08x\n", j,
+                         vertexOutputs[0][j], vertexOutputs[1][j]);
+        return 1;
+    }
     std::puts("4096 yaw values preserve horizontal output across stack Y cases");
+    std::puts("candidate vertex transform replaces MAC, flags and low IR halves");
     return 0;
 }

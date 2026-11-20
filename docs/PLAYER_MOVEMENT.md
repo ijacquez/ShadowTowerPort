@@ -329,8 +329,18 @@ Y row is `(0, 0x1000, 0)` (0.0, 1.0, 0.0), so the rotated Y is the signed
 input halfword. The routine writes that result as a word to stack offset
 `0x1C`, then squares it with the GTE and writes the square to stack offset
 `0x2C`. The GTE's Y result and flags can therefore depend on the input even
-though the horizontal results do not. **OPEN:** the final prior writer on other paths and
-any later uses of this GTE state have not been established.
+though the horizontal results do not. The directional collision query calls
+`ST_QueryLevelGeometry`. When that query reaches a vertex transformation,
+[ST_TransformCandidateVertices](../scr/st/ST_TransformCandidateVertices.c)
+loads its own rotation matrix, translation and vertex before issuing MVMVA.
+For that command, the GTE implementation clears the previous flags and
+computes new MAC words and IR low halfwords from those loaded values. The
+function stores the MAC words as the transformed vertex, so the prior Y
+result and flags do not contribute to it. In the port's GTE implementation,
+the command leaves the upper half of each IR register unchanged; those bits
+are still present after the transformation. **OPEN:**
+the final prior writer on other paths and later uses of this GTE state on
+paths without a vertex transformation have not been established.
 
 The rotation uses `-yaw` and writes GTE results back to the stack before
 computing another angle and magnitude. The later code updates each signed
