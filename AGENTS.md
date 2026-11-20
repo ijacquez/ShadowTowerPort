@@ -12,15 +12,11 @@ This Project is being REVERSE ENGINEERED.
 - This supersedes any pressure to ship fast. Completeness is absolute here.
 - No documentation or source tree changes are accepted if not fully backed up by
   direct evidence.
-- Game documentation describes the source tree and verified game behavior.
-  Do not include investigation narratives, runtime observations, debugger
-  transcripts, or reproduction and test procedures in game documentation.
 - If a finding can't be resolved statically, record it as **OPEN** with the
   evidence gathered so far.
 - Unknown is acceptable. Guessing is not.
   If something is unknown, STOP and document the unknown. No theories to fill in
   gaps.
-- Symbol (read: functions, variables, etc.) and file rename are to be human readable
 - Partial milestones are not accepted.
   Phase completion requires the user-visible end state, not "I think it should
   work now". Phase X is "player movement is fully documented and source tree is
@@ -28,11 +24,19 @@ This Project is being REVERSE ENGINEERED.
   is found and two accumulators are used to compute the position".
 - Broken tooling is never acceptable.
   Fix it when identified.
-- Source code for tools must always be clean; readable and documented in a terse
-  and concise manner.
+
+## Reverse engineering rules
+
+- Symbol (read: functions, variables, etc.) and file rename are to be human readable
 - Comments in the source tree is welcomed.
   All must be up to date, concise, and to the point. They are to be markers to
   help you the agent pick up where you left off.
+- Source code for tools must always be clean; readable and documented in a terse
+  and concise manner.
+- Game documentation describes the source tree and verified game behavior.
+  Do not include investigation narratives, runtime observations, debugger
+  transcripts, or reproduction and test procedures in game documentation.
+
 
 ## Session start checklist
 
