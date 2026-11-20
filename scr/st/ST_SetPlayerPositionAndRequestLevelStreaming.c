@@ -134,13 +134,13 @@ L_80052928:
     // addiu       $s1, $v0, -0x70D8
     ctx->r17 = ADD32(ctx->r2, -0X70D8);
     // lhu         $v1, 0xA($s2)
-    ctx->r3 = MEM_HU(0XA, ctx->r18);
+    ctx->r3 = MEM_HU(ST_PLAYER_POSITION_REQUEST_YAW, ctx->r18);
     // lui         $v0, 0x801B
     ctx->r2 = S32(0X801B << 16);
     // sh          $zero, 0x278($s1)
-    MEM_H(0X278, ctx->r17) = 0;
+    MEM_H(ST_PLAYER_PITCH, ctx->r17) = 0;
     // sh          $v1, 0x27A($s1)
-    MEM_H(0X27A, ctx->r17) = ctx->r3;
+    MEM_H(ST_PLAYER_YAW, ctx->r17) = ctx->r3;
     // lbu         $v0, 0x5924($v0)
     ctx->r2 = MEM_BU(0X5924, ctx->r2);
     // andi        $a2, $s6, 0xFF

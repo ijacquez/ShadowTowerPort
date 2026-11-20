@@ -1152,7 +1152,9 @@ still change those coarse values.
 directly. For each axis it takes an unsigned grid byte and a signed fine
 halfword from its request, and stores `(grid << 12) + fine` in the corresponding
 `ST_PLAYER_POSITION_*` word. The request offsets are named in
-[ST_PlayerPositionRequest.h](../scr/st/ST_PlayerPositionRequest.h). It clears
+[ST_PlayerPositionRequest.h](../scr/st/ST_PlayerPositionRequest.h). It also
+copies `ST_PLAYER_POSITION_REQUEST_YAW` to `ST_PLAYER_YAW` and clears
+`ST_PLAYER_PITCH`. It clears
 the transient view rotations, movement limits and movement components, both
 contribution vectors, and the collision-record vector sums. **OPEN:** the
 complete format and in-game meaning of this request are not established.
