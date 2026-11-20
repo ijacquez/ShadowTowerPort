@@ -9,6 +9,10 @@ accesses represent emulated state, and comments retain original instructions.
 `0x80198F28`; it does not define a native C struct.
 [ST_PlayerControls.h](../scr/st/ST_PlayerControls.h) names the verified
 movement and view binding offsets in the control state at `0x801CD180`.
+The counter names describe their demonstrated effects on movement limits;
+their in-game meanings remain **OPEN**. Some collision fields and recompiled
+functions still have offsets or generated names because their complete roles
+are not established.
 
 ## Horizontal input
 
@@ -33,22 +37,25 @@ update. The shifts truncate the step; for example,
 `L >> 3` is zero when `L` is between 1 and 7. The default and modified
 limits are set in [sub_80042D74.c](../scr/st/sub_80042D74.c).
 
-On the state machine path beginning at `L_8004323C`, the movement limit is
-set to 192 and the turn limit to 32. If neither binding at control offsets
-`0x22` and `0x24` is held, the turn limit becomes 40. A nonzero signed
-player halfword at `0x19C` changes the movement limit to 96. A nonzero signed
-player halfword at `0x194` then clears the movement limit; if player word
+On the state machine path beginning at `L_8004323C`, `ST_PLAYER_MOVE_LIMIT` is
+set to `0xC0` (0.046875 cells) and `ST_PLAYER_TURN_LIMIT` to 32. If neither
+`ST_CONTROL_MOVE_Z_POSITIVE` nor `ST_CONTROL_MOVE_Z_NEGATIVE` is held, the turn
+limit becomes 40. A nonzero signed `ST_PLAYER_MOVE_REDUCTION_COUNTER` (`0x19C`)
+changes the movement limit to `0x60` (0.0234375 cells). A nonzero signed
+`ST_PLAYER_MOVE_SUPPRESSION_COUNTER` (`0x194`) then clears the movement limit; if player word
 `0x2C` also has bit `0x10` set, it clears the turn limit.
 
-Finally, if the unsigned player halfword at `0x22` exceeds the one at
-`0x24`, the code subtracts their difference divided by 5, discarding the
+Finally, if the unsigned `ST_PLAYER_MOVE_PENALTY_TOTAL` (`0x22`) exceeds
+`ST_PLAYER_MOVE_PENALTY_THRESHOLD` (`0x24`), the code subtracts their difference divided by 5, discarding the
 remainder, from the movement limit and clamps a negative result to zero.
 These changes precede the subsequent player-state dispatch; other paths can
-change the limits again. **OPEN:** the game meanings of player fields
-`0x19C`, `0x194`, `0x22`, and `0x24` have not been established here.
+change the limits again. **OPEN:** the in-game meanings of these counters and
+the penalty inputs have not been established.
 
-[ST_UpdatePlayerCountersAndEffects](../scr/st/ST_UpdatePlayerCountersAndEffects.c) processes player halfwords
-`0x194`/`0x196` and `0x19C`/`0x19E` as current/target pairs through
+[ST_UpdatePlayerCountersAndEffects](../scr/st/ST_UpdatePlayerCountersAndEffects.c) processes
+`ST_PLAYER_MOVE_SUPPRESSION_COUNTER`/`ST_PLAYER_MOVE_SUPPRESSION_TARGET`
+(`0x194`/`0x196`) and `ST_PLAYER_MOVE_REDUCTION_COUNTER`/`ST_PLAYER_MOVE_REDUCTION_TARGET`
+(`0x19C`/`0x19E`) as current/target pairs through
 [ST_UpdateCounterAndTarget](../scr/st/ST_UpdateCounterAndTarget.c). When
 both signed current and target are zero, the helper returns `-1`. Otherwise,
 if current is less than target it increments current; if current is at least
@@ -67,25 +74,25 @@ movement-related counter pairs, and clears player word `0x2C`. It then calls
 [ST_ResetPlayerViewAndVerticalMovement](../scr/st/ST_ResetPlayerViewAndVerticalMovement.c),
 which clears vertical movement and the view adjustments described below.
 
-When the helper's signed halfword result for the `0x194`/`0x196` pair is
+When the helper's signed halfword result for the suppression pair is
 not `-1`, `ST_UpdatePlayerCountersAndEffects` clears the movement and turn
 limits via `ST_ClearPlayerMovementLimits`, and clears player movement
-halfwords `0x1CC` through `0x1D0`. It also clears all three halfwords in
+halfwords `ST_PLAYER_MOVE_X`, `ST_PLAYER_MOVE_Y`, and `ST_PLAYER_MOVE_Z`.
+It also clears all three halfwords in
 each contribution set at `0x801C74B4` and `0x801C0298`, as well as the
 three halfwords at `0x801BA116`. If the word containing the counter and
 target is then zero, it clears bits `0x08` and `0x10` in player word `0x2C`.
 
-[sub_8005A3A8](../scr/st/sub_8005A3A8.c) sets the penalty total at player
-offset `0x22` from a halfword calculated by
+[sub_8005A3A8](../scr/st/sub_8005A3A8.c) sets `ST_PLAYER_MOVE_PENALTY_TOTAL`
+from a halfword calculated by
 [sub_80059DC0](../scr/st/sub_80059DC0.c). The latter starts the halfword at
 zero and iterates player halfword slots beginning at `0x38`. For slot indices
 0 through 16, excluding 4, 5, 6, 11, 12, and 15, a slot other than `0xFFFF`
 indexes a 44-byte record at `0x801C7810`; the unsigned record halfword at
 `0x24` is added to the total with halfword wrapping. `sub_8005A3A8` sets the
-penalty threshold at player offset `0x24` to `120 + player[0] / 12`, using
-an unsigned halfword for `player[0]` and integer division. **OPEN:** the
-in-game names of the slot records, their summed field, and the base player
-halfword have not been established.
+`ST_PLAYER_MOVE_PENALTY_THRESHOLD` to `120 + ST_PLAYER_MAX_HP / 12`, using
+unsigned HP and integer division. **OPEN:** the in-game names of the slot
+records and their summed field have not been established.
 
 [sub_80044674](../scr/st/sub_80044674.c) loads entry `0x1E0` from archive
 index 1 and copies its eighth length-prefixed section to `0x801C7810`. The
@@ -97,10 +104,10 @@ the in-game meaning of its halfword at `0x24` remain unestablished.
 
 On paths in [sub_8003DBE0](../scr/st/sub_8003DBE0.c) that reach its
 third-argument dispatch, values `0x08`, `0x10`, and `0x18` select the
-`0x194`/`0x196` pair. The code sets the target at `0x196` to 75. Depending
+suppression pair. The code sets `ST_PLAYER_MOVE_SUPPRESSION_TARGET` to 75. Depending
 on bits `0x08` and `0x10` of player word `0x2C`, it either clears the
 current counter and sets one of those bits, or sets the current counter to
-20. Dispatch value `0x80` selects the `0x19C`/`0x19E` pair and sets its
+20. Dispatch value `0x80` selects the reduction pair and sets its
 target to 300. If bit `0x80` of player word `0x2C` is clear, the code clears
 the current counter and sets the bit; otherwise, it sets the current counter
 to 20. These are particular producers, not an exhaustive list.
@@ -113,8 +120,8 @@ world-position increments.
 More precisely, the first GTE command loads the accumulator words into IR1
 and IR3, squares their signed low halfwords, and writes the results to the
 GTE MAC registers. The routine passes the 32-bit sum of those two results to
-`SquareRoot0` and stores the low halfword of its result at player offset
-`0x2C8`. If that halfword interpreted as signed is zero, it sets the two
+`SquareRoot0` and stores the low halfword of its result in
+`ST_PLAYER_MOVE_MAGNITUDE` (`0x2C8`). If that halfword interpreted as signed is zero, it sets the two
 horizontal vector components to zero. Otherwise, it gives each square the
 sign of its original 32-bit accumulator and divides by that signed halfword.
 See [ST_PlayerUpdateMovement.c](../scr/st/ST_PlayerUpdateMovement.c), the
@@ -122,34 +129,11 @@ See [ST_PlayerUpdateMovement.c](../scr/st/ST_PlayerUpdateMovement.c), the
 [IR register definitions](../PsyCross/include/psx/gtereg.h). The integer
 divisions discard any fractional remainder.
 
-The rotation input's Y halfword is loaded from stack offset `0x1C`; this
-function does not write that offset before loading it. **OPEN:** its source
-and role have not been established. At the read, it is at the caller's
-incoming stack pointer minus `0x54`: the movement routine
-allocates `0x70` bytes and reads offset `0x1C`. Neither the called
-[SquareRoot0 wrapper](../scr/st/SquareRoot0.c) nor
-[RotMatrix](../scr/st/RotMatrix.c) writes that stack location. Its value
-therefore depends on the prior contents of emulated memory at that address.
-All three movement calls in the state machine follow a call to
-[sub_80042900](../scr/st/sub_80042900.c) and then
-`ST_PlayerUpdateTurning`. On paths where `sub_80042900` calls
-[sub_80042620](../scr/st/sub_80042620.c), the latter copies the word at
-`0x80088044` to its stack offset `0x14`. The caller's `0x20`-byte frame
-and that helper's `0x48`-byte frame place this word at the movement caller's
-stack pointer minus `0x54`, the same address as the rotation Y halfword.
-On a path where `sub_80042900` calls
-[sub_8003F910](../scr/st/sub_8003F910.c), that function's `0x80`-byte frame
-places its stack offset `0x4C` at the same address. One path stores the low
-halfword of a GTE result there. Subsequent calls may also write there; the
-final writer is not established.
-
-Its effect on the horizontal result can be resolved for the table in the
-supplied executable. The loader copies the `ST.EXE` payload to the address
-in its header; in the supplied file that address is `0x80011000`, and the
-payload begins at file offset `0x800`. The zero-angle word read by
-[RotMatrix](../scr/st/RotMatrix.c) at `0x80082280` is therefore at file
-offset `0x71A80`. Its bytes are `00 00 00 10`: the signed low halfword is
-zero and the high halfword is 4096; see the [executable loader](../scr/kf_cd.cpp).
+The rotation input's Y halfword is loaded from stack offset `0x1C`, which
+the movement function does not write before loading it. **OPEN:** its source
+and role are not established. In the supplied executable, the zero-angle
+table entry read by [RotMatrix](../scr/st/RotMatrix.c) has a signed low
+halfword of zero and a high halfword of `0x1000` (1.0).
 
 Movement passes rotation angles `(0, -yaw, 0)` to `RotMatrix`. With the
 above zero-angle entry, its X/Z rows have zero in their Y-input column for
@@ -167,8 +151,8 @@ any later uses of this GTE state have not been established.
 
 The rotation uses `-yaw` and writes GTE results back to the stack before
 computing another angle and magnitude. The later code updates each signed
-player halfword at `0x1CC`, `0x1CE`, and
-`0x1D0` by subtracting one quarter of its value, rounded toward zero. It
+movement halfword `ST_PLAYER_MOVE_X`, `ST_PLAYER_MOVE_Y`, and
+`ST_PLAYER_MOVE_Z` by subtracting one quarter of its value, rounded toward zero. It
 then clears a resulting halfword in the range -3 through 3. It adds one
 quarter of the signed halfword at `0x801C74B4` to X and one quarter of the
 signed halfword at `0x801C74B8` to Z, rounding toward zero. It also adds half
@@ -187,7 +171,7 @@ complete set of writers and the meanings of these values have not been
 established.
 
 After this processing, if the signed 16-bit movement magnitude is nonzero and
-player byte `0x21E` is zero, `ST_PlayerUpdateMovement` calls
+`ST_PLAYER_DIRECTIONAL_MOVE_DISABLED` (`0x21E`) is zero, `ST_PlayerUpdateMovement` calls
 [ST_ApplyDirectionalMovementWithCollision](../scr/st/ST_ApplyDirectionalMovementWithCollision.c)
 with the computed angle and magnitude. That function calculates X and Z
 components using cosine and sine, uses `ST_PLAYER_VERTICAL_MOVE` for Y, and
@@ -196,7 +180,7 @@ state machine calls `ST_PlayerMoveWithCollision`. Its collision-result branches 
 
 [ST_ClearPlayerMovementLimits](../scr/st/ST_ClearPlayerMovementLimits.c)
 clears the movement and turn limits, turn and pitch rates, and movement
-magnitude, then sets player byte `0x21E` to 1. It does not clear the local
+magnitude, then sets `ST_PLAYER_DIRECTIONAL_MOVE_DISABLED` to 1. It does not clear the local
 X/Z input accumulators. The [game state machine](../scr/st/sub_80042D74.c)
 and other game routines call it on different paths.
 
@@ -212,14 +196,14 @@ The [default bindings](../scr/st/ST_InitDefaultControlBindings.c) store
 `0x80` and `0x20` at control offsets `0x26` and `0x28`; the held button mask
 is at `0x801CD182`. [ST_PlayerUpdateTurning](../scr/st/ST_PlayerUpdateTurning.c)
 tests the first binding before the second, so the first takes precedence if
-both are held. The corresponding signed 16-bit turn rate is at player offset
-`0x2CA`. It changes by the signed 32-bit turn limit at `0x2E8` shifted right
+both are held. The corresponding signed 16-bit `ST_PLAYER_TURN_RATE` (`0x2CA`)
+changes by the signed 32-bit `ST_PLAYER_TURN_LIMIT` (`0x2E8`) shifted right
 by two bits. For a positive limit and values that do not wrap in 16 bits, the
 first binding increases the rate up to the limit, the second decreases it to
 the negative limit, and neither moves it toward zero by the same step. The
 rate is stored as a halfword before the signed clamp.
 
-The routine adds that rate to the halfword at player offset `0x27A` and masks
+The routine adds that rate to `ST_PLAYER_YAW` (`0x27A`) and masks
 the result with `0xFFF`. The [state machine](../scr/st/sub_80042D74.c) sets
 the turn limit to `0x20`, or `0x28` when neither binding at control offsets
 `0x22` and `0x24` is held. Other state conditions can modify this value.
@@ -229,11 +213,11 @@ produces 30, 20, 10 and 0.
 
 The same turning function reads bindings at control offsets `0x2E` and
 `0x30`, with default masks `0x100` and `0x200`. With exactly one held, it
-changes the signed halfword at player offset `0x2CC` by -3 or +3 and limits
+changes the signed `ST_PLAYER_PITCH_RATE` (`0x2CC`) by -3 or +3 and limits
 it to -32 or +32 respectively, after storing the arithmetic result as a
 halfword. With neither held, it moves that value toward zero by 3, with the
 same halfword conversion. With both held, let `p` be the signed halfword at
-player offset `0x278` and `r` the halfword at `0x2CC`:
+`ST_PLAYER_PITCH` (`0x278`) and `r` the `ST_PLAYER_PITCH_RATE`:
 
 - If `p > 0x800`, compute `target = (0x1080 - p) >> 2`, add 8 to `r` and
   truncate to a signed halfword. If `r > target`, replace it with `target`,
@@ -256,21 +240,23 @@ The port also writes the halfwords at `0x801991A0` and `0x801991A2` directly
 when relative mouse input is enabled, using a sensitivity of 1.5 and clamping
 its mouse pitch accumulator to -800..800. F1 toggles mouse capture; see
 [PsyX_pad.cpp](../PsyCross/src/pad/PsyX_pad.cpp). These addresses correspond
-to player offsets `0x278` and `0x27A`.
+to `ST_PLAYER_PITCH` and `ST_PLAYER_YAW`.
 
 ## Collision query and response
 
 When the query path is entered, `ST_PlayerMoveWithCollision` builds a shared query at `0x801B5948` from the
-player position and proposed X/Y/Z displacement. It supplies `0x100` and
-`0x640` as query dimensions or offsets and enables checks with flags `0x432`.
-If movement magnitude at `0x2C8` is nonzero and player byte `0x21E` is zero,
+player position and proposed X/Y/Z displacement. It supplies `0x100` (0.0625
+cells) as `ST_COLLISION_QUERY_HORIZONTAL_PARAMETER` (`0x1C`) and `0x640`
+(0.390625 cells) as `ST_COLLISION_QUERY_VERTICAL_PARAMETER` (`0x1E`), and
+enables checks with `ST_COLLISION_QUERY_INPUT_FLAGS` (`0x00`) set to `0x432`.
+If `ST_PLAYER_MOVE_MAGNITUDE` is nonzero and `ST_PLAYER_DIRECTIONAL_MOVE_DISABLED` is zero,
 the routine skips this query path and continues at the later vertical update.
 **OPEN:** the exact collision shape and the meaning of both dimensions have
 not been established. [ST_RunCollisionQuery](../scr/st/ST_RunCollisionQuery.c) dispatches the enabled checks; among
 them, [ST_QueryLevelGeometry](../scr/st/ST_QueryLevelGeometry.c) searches level geometry. The query returns a bitmask and
 stores additional collision data in the shared query structure.
 
-For queries made by `ST_PlayerMoveWithCollision`, query halfword `0x20` is
+For queries made by `ST_PlayerMoveWithCollision`, `ST_COLLISION_QUERY_DIRECTION` (`0x20`) is
 set to `9999`.
 `ST_QueryLevelGeometry` uses that value to build a signed-halfword vector
 from the candidate displacement. When X and Z are both zero, the vector's
@@ -281,7 +267,7 @@ with the divisions rounded toward zero. Its Y is the candidate Y plus
 how the two query values affect this vector; their complete geometric
 interpretation remains **OPEN**.
 `ST_ApplyDirectionalMovementWithCollision` instead stores the result of
-`ratan2` on its combined Z and X movement halfwords in query offset `0x20`.
+`ratan2` on its combined Z and X movement halfwords in `ST_COLLISION_QUERY_DIRECTION`.
 When that halfword is not `9999`, the geometry routine uses it for the
 cosine and sine terms and uses the query's Y displacement without adding
 `0x640` to that vector component.
@@ -289,7 +275,7 @@ cosine and sine terms and uses the query's Y displacement without adding
 ### Query dispatcher input and output flags
 
 [ST_RunCollisionQuery](../scr/st/ST_RunCollisionQuery.c) reads a 32-bit
-input mask at query offset `0`. It initializes the result to zero and handles
+input mask `ST_COLLISION_QUERY_INPUT_FLAGS`. It initializes the result to zero and handles
 the following input bits in order:
 
 | Input bit | Operation | Result contribution |
@@ -298,19 +284,19 @@ the following input bits in order:
 | `0x10` | Calls [sub_8004BB88](../scr/st/sub_8004BB88.c), passing `2` as its second argument if input bit `0x400` is set, otherwise `0`. | ORs `0x10` if the helper returns anything other than `-1`. |
 | `0x40` | Calls [sub_8004BE80](../scr/st/sub_8004BE80.c). | ORs `0x10` if the helper returns anything other than `-1`. |
 | `0x20` | Calls [ST_QueryIndexedCollisionRecords](../scr/st/ST_QueryIndexedCollisionRecords.c). | ORs `0x40` if the helper returns anything other than `-1`. |
-| `0x80` | Calls [sub_8003BEB4](../scr/st/sub_8003BEB4.c). If input bit `0x800` is also set, first adds `0x200` to the query halfword at `0x1C`. | ORs `0x80` if the helper returns anything other than `-1`. |
+| `0x80` | Calls [sub_8003BEB4](../scr/st/sub_8003BEB4.c). If input bit `0x800` is also set, first adds `0x200` (0.125 cells) to `ST_COLLISION_QUERY_HORIZONTAL_PARAMETER`. | ORs `0x80` if the helper returns anything other than `-1`. |
 
 The three helpers for input bits `0x10`, `0x40`, and `0x20` have their
 return values stored at `0x801B59A4`, `0x801B59A8`, and `0x801B59AC`,
 respectively; if the corresponding input bit is clear, the dispatcher stores
 `-1` at that address. After the geometry helper, the dispatcher adds the
-unsigned query halfword at `0x1E` to its position word at `0x08` for the
+unsigned `ST_COLLISION_QUERY_VERTICAL_PARAMETER` to `ST_COLLISION_QUERY_POSITION_Y` for the
 remaining checks. Before returning it subtracts the then-current unsigned
-halfword at `0x1E`, stores the final mask at `0x801B59BC`, and returns it.
+`ST_COLLISION_QUERY_VERTICAL_PARAMETER`, stores the final mask at `0x801B59BC`, and returns it.
 For the movement routines' `0x432` input mask, the enabled checks are
 `0x2`, `0x10`, and `0x20`, and `0x400` selects second argument `2` for
-`sub_8004BB88`. With that second argument, the latter adds `0x200` to the
-sum of query halfword `0x1C` and a candidate's halfword `0x2E` before its
+`sub_8004BB88`. With that second argument, the latter adds `0x200` (0.125 cells) to the
+sum of `ST_COLLISION_QUERY_HORIZONTAL_PARAMETER` and a candidate's halfword `0x2E` before its
 horizontal comparison. The candidate records begin at `0x801BA138`, have a
 stride of 212 bytes, and the scan examines at most 64 records. These
 operations identify the result bits' producers; the
@@ -336,7 +322,7 @@ product and rounding the signed division toward zero. It copies the signed
 vertical-movement halfword into `y`. It initializes the query at
 `0x801B5948` from the player position, with flags `0x432` and halfwords
 `0x100` and `0x640`. Before each query, it writes the low halfwords of
-`x + player[0x1CC]`, `y`, and `z + player[0x1D0]` into the query vector.
+`x + ST_PLAYER_MOVE_X`, `y`, and `z + ST_PLAYER_MOVE_Z` into the query vector.
 It also writes an angle from `ratan2` of the first and third vector components
 and the low halfword of `SquareRoot0(x*x + z*z)`. Products and additions here
 use their low 32 bits.
@@ -369,9 +355,10 @@ The query result controls the next step, in this order:
 On the first occurrence of any of the three correction cases, the function
 also calculates an angle, uses `rcos`/`rsin` to add another X/Z component,
 and queries again. On exit it adds one quarter of signed query halfwords
-`0x47CE` and `0x47D2` to player movement halfwords `0x1CC` and `0x1D0`,
+`0x47CE` and `0x47D2` to `ST_PLAYER_MOVE_X` and `ST_PLAYER_MOVE_Z`,
 respectively, rounding toward zero, and stores the final X/Y/Z displacement
-as halfwords at player offsets `0x260`, `0x262`, and `0x264`. The query fields
+as `ST_PLAYER_COLLISION_DISPLACEMENT_X`, `ST_PLAYER_COLLISION_DISPLACEMENT_Y`,
+and `ST_PLAYER_COLLISION_DISPLACEMENT_Z` (`0x260`, `0x262`, `0x264`). The query fields
 and result bits are identified by their offsets and masks. **OPEN:**
 their complete geometric meanings have not been established.
 
@@ -424,15 +411,15 @@ distance with `SquareRoot0` from the 32-bit wrapped sum of their squares,
 and an angle with `ratan2` from those differences. It interprets the low
 halfword of that angle as signed. From the distance it subtracts the low
 32-bit product of query signed halfword `0x22` and
-`rcos(query[0x20] - angle)`, divided by 4096
+`rcos(ST_COLLISION_QUERY_DIRECTION - angle)`, divided by 4096
 with rounding toward zero. It skips the record unless this result is less
-than the sum of unsigned query halfword `0x1C` and the indexed record's
+than the sum of unsigned `ST_COLLISION_QUERY_HORIZONTAL_PARAMETER` and the indexed record's
 unsigned halfword `0x04`.
 
 After a record passes that horizontal test, the function compares its Y
 word at `0x28` to query Y at `0x08`. If record Y is numerically less, it returns `-1`
 immediately when record Y is less than query Y minus unsigned query
-halfword `0x1E`. Otherwise, it returns `-1` immediately when query Y is
+`ST_COLLISION_QUERY_VERTICAL_PARAMETER`. Otherwise, it returns `-1` immediately when query Y is
 less than record Y minus the record's unsigned halfword `0x12`. If neither
 rejection applies, it returns the current record index. If no record passes
 the earlier checks, it returns `-1`. The comparisons are signed 32-bit
@@ -440,8 +427,9 @@ comparisons after the indicated 32-bit subtraction. The early `-1` returns
 do not continue scanning later records. **OPEN:** the record types and the
 physical interpretation of their dimensions have not been established.
 
-For this check in the player movement paths, query halfwords `0x1C` and
-`0x1E` are 256 and 1600. The dispatcher adds 1600 to query Y before calling
+For this check in the player movement paths, `ST_COLLISION_QUERY_HORIZONTAL_PARAMETER`
+is `0x100` (0.0625 cells) and `ST_COLLISION_QUERY_VERTICAL_PARAMETER` is
+`0x640` (0.390625 cells). The dispatcher adds 1600 to query Y before calling
 the check. If the initial query Y is the player Y and the additions and
 subtractions do not wrap, the vertical comparisons accept a record Y in the
 inclusive interval from player Y to `player Y + 1600 + record[0x12]`.
@@ -451,20 +439,22 @@ player's physical height or all checks made by the dispatcher.
 
 ## Scene-view position
 
-[ST_BuildPlayerView](../scr/st/ST_BuildPlayerView.c) copies player X and Z
-from offsets `0x248` and `0x250` into the position supplied to scene
-rendering. It calculates that position's Y as player Y at `0x24C` plus the
-signed halfwords at `0x2CE` and `0x2D2`, minus 1600, with 32-bit wrapping.
-It copies player halfwords `0x268`, `0x26A`, and `0x26C` to the accompanying
+[ST_BuildPlayerView](../scr/st/ST_BuildPlayerView.c) copies
+`ST_PLAYER_POSITION_X` and `ST_PLAYER_POSITION_Z` into the position supplied to scene
+rendering. It calculates that position's Y as `ST_PLAYER_POSITION_Y` plus
+`ST_PLAYER_VIEW_OSCILLATION_Y` and `ST_PLAYER_VIEW_Y_ADJUSTMENT_B`, minus
+`ST_PLAYER_VIEW_Y_OFFSET` (`0x640`, 0.390625 cells), with 32-bit wrapping.
+It copies `ST_PLAYER_VIEW_ROTATION_X`, `ST_PLAYER_VIEW_ROTATION_Y`, and
+`ST_PLAYER_VIEW_ROTATION_Z` to the accompanying
 rotation. [ST_MainGameLoop](../scr/st/ST_MainGameLoop.c) passes these outputs
 to [DrawScene](../scr/st/DrawScene.c). Thus 1600 is also an offset in the
 scene-view Y calculation; this does not establish the player's full height.
 
-The first adjustment, at player offset `0x2CE`, is updated by
-`ST_PlayerMoveWithCollision` when player byte `0x239` is zero. If byte
-`0x801CD122` is zero, the adjustment is cleared. Otherwise the routine adds
-the unsigned movement-magnitude halfword at `0x2C8` to the unsigned phase
-at `0x2D0`, masks the sum with `0xFFF`, and stores it as the new phase.
+`ST_PLAYER_VIEW_OSCILLATION_Y` (`0x2CE`) is updated by
+`ST_PlayerMoveWithCollision` when player byte `0x239` is zero. If
+the byte at `ST_ADJUST_WALK_SETTING_ADDRESS` (`0x801CD122`) is zero, the adjustment is cleared. Otherwise the routine adds
+the unsigned `ST_PLAYER_MOVE_MAGNITUDE` to the unsigned
+`ST_PLAYER_VIEW_OSCILLATION_PHASE` (`0x2D0`), masks the sum with `0xFFF`, and stores it as the new phase.
 It computes `t = rsin(phase) >> 5` using an arithmetic shift, then stores
 `abs(t) - (abs(t) >> 2)` as the adjustment. If player byte `0x239` is
 nonzero, this part of the routine leaves both phase and adjustment unchanged.
@@ -472,7 +462,7 @@ nonzero, this part of the routine leaves both phase and adjustment unchanged.
 adjustments. **OPEN:** the meanings of byte `0x239` and the second
 adjustment have not been established.
 
-[sub_8002B2E8](../scr/st/sub_8002B2E8.c) also reads `0x801CD122` as
+[sub_8002B2E8](../scr/st/sub_8002B2E8.c) also reads `ST_ADJUST_WALK_SETTING_ADDRESS` as
 the first of four consecutive bytes. For each byte it renders a pair of
 text entries with their two styles exchanged when the byte equals 1. On the
 supplied disc, the first setting is labeled **ADJUST WALK**, with ON and OFF
@@ -516,8 +506,9 @@ Y coordinate when that displacement is applied. **Positive world Y is down;
 negative world Y is up.** A positive vertical movement value therefore moves
 the player down, and a negative value moves the player up. On the path that applies the
 candidate, the current value is used before the later vertical update. After the
-collision query, let `q` be its word at `0x801B5974` and `d = q - 0x640`
-(1600). When the geometry search finds no candidates, `ST_QueryLevelGeometry` sets q
+collision query, let `q` be `ST_COLLISION_QUERY_PROPOSED_Y_RESULT` (`0x2C`,
+address `0x801B5974`) and `d = q - ST_PLAYER_COLLISION_Y_OFFSET`
+(`0x640`, 0.390625 cells). When the geometry search finds no candidates, `ST_QueryLevelGeometry` sets q
 to `0x80000`. With a zero vertical value and this positive difference, the
 update writes 16; with a positive value and the relevant query flags clear,
 it adds 48. These are downward changes. The initial
@@ -545,15 +536,15 @@ fractional bits:
 | `0x1000` (4096) | 1.0 |
 
 Before the vertical update, [ST_CheckHighDownwardMovement](../scr/st/ST_CheckHighDownwardMovement.c)
-checks the current vertical movement and the signed collision-query word at
-offset `0x30`. If movement is at least `0x480` (0.28125 cells per update)
+checks the current vertical movement and signed `ST_COLLISION_QUERY_CURRENT_Y_RESULT`
+(`0x30`). If movement is at least `0x480` (0.28125 cells per update)
 and that query word is at least `0x640` (0.390625 cells), it calls
 [sub_8003BD14](../scr/st/sub_8003BD14.c) with zero and sets player byte
 `0x238` to 1. Unless player byte `0x218` is already 4, that helper sets it
 to 4, clears the current HP halfword at player offset `0x02`, and performs
 additional state updates. The [player-stat display](../scr/st/sub_80029B74.c)
-reads current and maximum HP from offsets `0x02` and `0x00`, and current and
-maximum MP from offsets `0x06` and `0x04`. **OPEN:** the game meanings of
+reads `ST_PLAYER_CURRENT_HP`, `ST_PLAYER_MAX_HP`, `ST_PLAYER_CURRENT_MP`,
+and `ST_PLAYER_MAX_MP`. **OPEN:** the game meanings of
 bytes `0x218` and `0x238` are not established.
 
 The level-rendering path establishes the Y direction. For a level,
@@ -643,12 +634,12 @@ geometry and the relationship between model, grid, and player coordinates.
 
 Near the end of `ST_PlayerMoveWithCollision`,
 [ST_UpdatePlayerCollisionYFlags](../scr/st/ST_UpdatePlayerCollisionYFlags.c)
-compares query words `0x4C` and `0x58` with the player's Y word at `0x24C`,
+compares query words `0x4C` and `0x58` with `ST_PLAYER_POSITION_Y`,
 using signed 32-bit comparisons. For each query word other than the sentinel
-`0x80000`, it writes 1 to the corresponding player word at `0x2EC` or
-`0x2F0` if the query value is less than player Y, or 0 otherwise. A sentinel
+`0x80000`, it writes 1 to `ST_PLAYER_FIRST_COLLISION_Y_FLAG` (`0x2EC`) or
+`ST_PLAYER_SECOND_COLLISION_Y_FLAG` (`0x2F0`), respectively, if the query value is less than player Y, or 0 otherwise. A sentinel
 leaves that flag unchanged. If byte `0x801B5924` is 10 and signed player
-halfword `0x178` is `0x147`, the function clears `0x2F0` even if the second
-query word is the sentinel. The game state machine reads `0x2F0` when
+halfword `0x178` is `0x147`, the function clears `ST_PLAYER_SECOND_COLLISION_Y_FLAG` even if the second
+query word is the sentinel. The game state machine reads this flag when
 choosing subsequent behavior. **OPEN:** the physical meanings of these flags
 and the special-case values have not been established.

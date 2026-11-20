@@ -1,5 +1,6 @@
 #include "recomp.h"
 #include "disable_warnings.h"
+#include "ST_CollisionQuery.h"
 
 void ST_RunCollisionQuery(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
@@ -16,7 +17,7 @@ void ST_RunCollisionQuery(uint8_t* rdram, recomp_context* ctx) {
     // sw          $s0, 0x10($sp)
     MEM_W(0X10, ctx->r29) = ctx->r16;
     // lw          $v0, 0x0($s1)
-    ctx->r2 = MEM_W(0X0, ctx->r17);
+    ctx->r2 = MEM_W(ST_COLLISION_QUERY_INPUT_FLAGS, ctx->r17);
     // nop
 
     // andi        $v0, $v0, 0x2
@@ -41,11 +42,11 @@ void ST_RunCollisionQuery(uint8_t* rdram, recomp_context* ctx) {
     ctx->r16 = ADD32(ctx->r2, 0);
 L_80049578:
     // lhu         $v0, 0x1E($s1)
-    ctx->r2 = MEM_HU(0X1E, ctx->r17);
+    ctx->r2 = MEM_HU(ST_COLLISION_QUERY_VERTICAL_PARAMETER, ctx->r17);
     // lw          $v1, 0x8($s1)
-    ctx->r3 = MEM_W(0X8, ctx->r17);
+    ctx->r3 = MEM_W(ST_COLLISION_QUERY_POSITION_Y, ctx->r17);
     // lw          $a1, 0x0($s1)
-    ctx->r5 = MEM_W(0X0, ctx->r17);
+    ctx->r5 = MEM_W(ST_COLLISION_QUERY_INPUT_FLAGS, ctx->r17);
     // addu        $v1, $v1, $v0
     ctx->r3 = ADD32(ctx->r3, ctx->r2);
     // andi        $v0, $a1, 0x10
@@ -53,11 +54,11 @@ L_80049578:
     // beq         $v0, $zero, L_800495C4
     if (ctx->r2 == 0) {
         // sw          $v1, 0x8($s1)
-        MEM_W(0X8, ctx->r17) = ctx->r3;
+        MEM_W(ST_COLLISION_QUERY_POSITION_Y, ctx->r17) = ctx->r3;
         goto L_800495C4;
     }
     // sw          $v1, 0x8($s1)
-    MEM_W(0X8, ctx->r17) = ctx->r3;
+    MEM_W(ST_COLLISION_QUERY_POSITION_Y, ctx->r17) = ctx->r3;
     // addu        $a0, $s1, $zero
     ctx->r4 = ADD32(ctx->r17, 0);
     // andi        $a1, $a1, 0x400
@@ -101,7 +102,7 @@ L_800495C4:
     MEM_W(0X59A4, ctx->r3) = ctx->r2;
 L_800495D0:
     // lw          $v0, 0x0($s1)
-    ctx->r2 = MEM_W(0X0, ctx->r17);
+    ctx->r2 = MEM_W(ST_COLLISION_QUERY_INPUT_FLAGS, ctx->r17);
     // nop
 
     // andi        $v0, $v0, 0x40
@@ -149,7 +150,7 @@ L_80049608:
     MEM_W(0X59A8, ctx->r3) = ctx->r2;
 L_80049610:
     // lw          $v0, 0x0($s1)
-    ctx->r2 = MEM_W(0X0, ctx->r17);
+    ctx->r2 = MEM_W(ST_COLLISION_QUERY_INPUT_FLAGS, ctx->r17);
     // nop
 
     // andi        $v0, $v0, 0x20
@@ -197,7 +198,7 @@ L_80049648:
     MEM_W(0X59AC, ctx->r3) = ctx->r2;
 L_80049650:
     // lw          $v1, 0x0($s1)
-    ctx->r3 = MEM_W(0X0, ctx->r17);
+    ctx->r3 = MEM_W(ST_COLLISION_QUERY_INPUT_FLAGS, ctx->r17);
     // nop
 
     // andi        $v0, $v1, 0x80
@@ -219,13 +220,13 @@ L_80049650:
     // addu        $a0, $s1, $zero
     ctx->r4 = ADD32(ctx->r17, 0);
     // lhu         $v0, 0x1C($s1)
-    ctx->r2 = MEM_HU(0X1C, ctx->r17);
+    ctx->r2 = MEM_HU(ST_COLLISION_QUERY_HORIZONTAL_PARAMETER, ctx->r17);
     // nop
 
     // addiu       $v0, $v0, 0x200
     ctx->r2 = ADD32(ctx->r2, 0X200);
     // sh          $v0, 0x1C($s1)
-    MEM_H(0X1C, ctx->r17) = ctx->r2;
+    MEM_H(ST_COLLISION_QUERY_HORIZONTAL_PARAMETER, ctx->r17) = ctx->r2;
 L_8004967C:
     // jal         0x8003BEB4
     // nop
@@ -249,9 +250,9 @@ L_8004967C:
     ctx->r16 = ctx->r16 | 0X80;
 L_80049694:
     // lhu         $v1, 0x1E($s1)
-    ctx->r3 = MEM_HU(0X1E, ctx->r17);
+    ctx->r3 = MEM_HU(ST_COLLISION_QUERY_VERTICAL_PARAMETER, ctx->r17);
     // lw          $a0, 0x8($s1)
-    ctx->r4 = MEM_W(0X8, ctx->r17);
+    ctx->r4 = MEM_W(ST_COLLISION_QUERY_POSITION_Y, ctx->r17);
     // addu        $v0, $s0, $zero
     ctx->r2 = ADD32(ctx->r16, 0);
     // subu        $a0, $a0, $v1
@@ -259,7 +260,7 @@ L_80049694:
     // lui         $v1, 0x801B
     ctx->r3 = S32(0X801B << 16);
     // sw          $a0, 0x8($s1)
-    MEM_W(0X8, ctx->r17) = ctx->r4;
+    MEM_W(ST_COLLISION_QUERY_POSITION_Y, ctx->r17) = ctx->r4;
     // sw          $v0, 0x59BC($v1)
     MEM_W(0X59BC, ctx->r3) = ctx->r2;
     // lw          $ra, 0x18($sp)

@@ -354,7 +354,7 @@ L_8005CA3C:
     // jal         0x80014CFC
     // addiu       $a2, $zero, 0x1500
     ctx->r6 = ADD32(0, 0X1500);
-    sub_80014CFC(rdram, ctx);
+    ST_CopyWords(rdram, ctx);
     goto after_5;
     // addiu       $a2, $zero, 0x1500
     ctx->r6 = ADD32(0, 0X1500);
@@ -400,7 +400,7 @@ L_8005CA3C:
     // jal         0x80014CFC
     // addiu       $a2, $zero, 0x1500
     ctx->r6 = ADD32(0, 0X1500);
-    sub_80014CFC(rdram, ctx);
+    ST_CopyWords(rdram, ctx);
     goto after_8;
     // addiu       $a2, $zero, 0x1500
     ctx->r6 = ADD32(0, 0X1500);
@@ -514,7 +514,7 @@ L_8005CA3C:
     // jal         0x80014CFC
     // addiu       $a2, $zero, 0x67D
     ctx->r6 = ADD32(0, 0X67D);
-    sub_80014CFC(rdram, ctx);
+    ST_CopyWords(rdram, ctx);
     goto after_17;
     // addiu       $a2, $zero, 0x67D
     ctx->r6 = ADD32(0, 0X67D);

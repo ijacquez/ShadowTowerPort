@@ -38,7 +38,7 @@ L_80068618:
     // jal         0x80014CFC
     // addiu       $a2, $zero, 0x2
     ctx->r6 = ADD32(0, 0X2);
-    sub_80014CFC(rdram, ctx);
+    ST_CopyWords(rdram, ctx);
     goto after_0;
     // addiu       $a2, $zero, 0x2
     ctx->r6 = ADD32(0, 0X2);

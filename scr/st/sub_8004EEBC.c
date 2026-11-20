@@ -235,7 +235,7 @@ L_8004F014:
     // jal         0x80014CFC
     // sw          $v0, 0x27($s0)
     MEM_W(0X27, ctx->r16) = ctx->r2;
-    sub_80014CFC(rdram, ctx);
+    ST_CopyWords(rdram, ctx);
     goto after_0;
     // sw          $v0, 0x27($s0)
     MEM_W(0X27, ctx->r16) = ctx->r2;

@@ -1144,7 +1144,7 @@ void sub_80044674(uint8_t* rdram, recomp_context* ctx)
     // srl         $a2, $a2, 2
     ctx->r6 = S32(U32(ctx->r6) >> 2);
     
-    sub_80014CFC(rdram, ctx);
+    ST_CopyWords(rdram, ctx);
     goto after_52;
     // srl         $a2, $a2, 2
     ctx->r6 = S32(U32(ctx->r6) >> 2);
@@ -1167,7 +1167,7 @@ void sub_80044674(uint8_t* rdram, recomp_context* ctx)
     // srl         $a2, $a2, 2
     ctx->r6 = S32(U32(ctx->r6) >> 2);
     
-    sub_80014CFC(rdram, ctx);
+    ST_CopyWords(rdram, ctx);
     goto after_53;
     // srl         $a2, $a2, 2
     ctx->r6 = S32(U32(ctx->r6) >> 2);
@@ -1190,7 +1190,7 @@ void sub_80044674(uint8_t* rdram, recomp_context* ctx)
     // srl         $a2, $a2, 2
     ctx->r6 = S32(U32(ctx->r6) >> 2);
     
-    sub_80014CFC(rdram, ctx);
+    ST_CopyWords(rdram, ctx);
     goto after_54;
     // srl         $a2, $a2, 2
     ctx->r6 = S32(U32(ctx->r6) >> 2);
@@ -1213,7 +1213,7 @@ void sub_80044674(uint8_t* rdram, recomp_context* ctx)
     // srl         $a2, $a2, 2
     ctx->r6 = S32(U32(ctx->r6) >> 2);
     
-    sub_80014CFC(rdram, ctx);
+    ST_CopyWords(rdram, ctx);
     goto after_55;
     // srl         $a2, $a2, 2
     ctx->r6 = S32(U32(ctx->r6) >> 2);
@@ -1236,7 +1236,7 @@ void sub_80044674(uint8_t* rdram, recomp_context* ctx)
     // srl         $a2, $a2, 2
     ctx->r6 = S32(U32(ctx->r6) >> 2);
     
-    sub_80014CFC(rdram, ctx);
+    ST_CopyWords(rdram, ctx);
     goto after_56;
     // srl         $a2, $a2, 2
     ctx->r6 = S32(U32(ctx->r6) >> 2);
@@ -1259,7 +1259,7 @@ void sub_80044674(uint8_t* rdram, recomp_context* ctx)
     // srl         $a2, $a2, 2
     ctx->r6 = S32(U32(ctx->r6) >> 2);
     
-    sub_80014CFC(rdram, ctx);
+    ST_CopyWords(rdram, ctx);
     goto after_57;
     // srl         $a2, $a2, 2
     ctx->r6 = S32(U32(ctx->r6) >> 2);
@@ -1282,7 +1282,7 @@ void sub_80044674(uint8_t* rdram, recomp_context* ctx)
     // srl         $a2, $a2, 2
     ctx->r6 = S32(U32(ctx->r6) >> 2);
     
-    sub_80014CFC(rdram, ctx);
+    ST_CopyWords(rdram, ctx);
     goto after_58;
     // srl         $a2, $a2, 2
     ctx->r6 = S32(U32(ctx->r6) >> 2);
@@ -1305,7 +1305,7 @@ void sub_80044674(uint8_t* rdram, recomp_context* ctx)
     // srl         $a2, $a2, 2
     ctx->r6 = S32(U32(ctx->r6) >> 2);
     
-    sub_80014CFC(rdram, ctx);
+    ST_CopyWords(rdram, ctx);
     goto after_59;
     // srl         $a2, $a2, 2
     ctx->r6 = S32(U32(ctx->r6) >> 2);
@@ -1336,7 +1336,7 @@ void sub_80044674(uint8_t* rdram, recomp_context* ctx)
     // srl         $a2, $a2, 2
     ctx->r6 = S32(U32(ctx->r6) >> 2);
     
-    sub_80014CFC(rdram, ctx);
+    ST_CopyWords(rdram, ctx);
     goto after_60;
     // srl         $a2, $a2, 2
     ctx->r6 = S32(U32(ctx->r6) >> 2);

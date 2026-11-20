@@ -148,7 +148,7 @@ void sub_8005AD00(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x80014CFC
     // addiu       $a2, $zero, 0x1500
     ctx->r6 = ADD32(0, 0X1500);
-    sub_80014CFC(rdram, ctx);
+    ST_CopyWords(rdram, ctx);
     goto after_7;
     // addiu       $a2, $zero, 0x1500
     ctx->r6 = ADD32(0, 0X1500);
@@ -192,7 +192,7 @@ void sub_8005AD00(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x80014CFC
     // addiu       $a1, $s4, 0x4
     ctx->r5 = ADD32(ctx->r20, 0X4);
-    sub_80014CFC(rdram, ctx);
+    ST_CopyWords(rdram, ctx);
     goto after_9;
     // addiu       $a1, $s4, 0x4
     ctx->r5 = ADD32(ctx->r20, 0X4);
@@ -218,7 +218,7 @@ void sub_8005AD00(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x80014CFC
     // addiu       $a2, $zero, 0x1500
     ctx->r6 = ADD32(0, 0X1500);
-    sub_80014CFC(rdram, ctx);
+    ST_CopyWords(rdram, ctx);
     goto after_11;
     // addiu       $a2, $zero, 0x1500
     ctx->r6 = ADD32(0, 0X1500);

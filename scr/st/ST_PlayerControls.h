@@ -12,3 +12,6 @@ enum ST_PlayerControlOffset {
     ST_CONTROL_PITCH_NEGATIVE = 0x2E,
     ST_CONTROL_PITCH_POSITIVE = 0x30
 };
+
+// Option labeled ADJUST WALK in the game's settings.
+enum { ST_ADJUST_WALK_SETTING_ADDRESS = 0x801CD122 };

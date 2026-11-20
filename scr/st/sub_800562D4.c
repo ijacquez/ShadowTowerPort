@@ -68,7 +68,7 @@ L_8005632C:
     // jal         0x80014CFC
     // addiu       $a2, $zero, 0x60
     ctx->r6 = ADD32(0, 0X60);
-    sub_80014CFC(rdram, ctx);
+    ST_CopyWords(rdram, ctx);
     goto after_0;
     // addiu       $a2, $zero, 0x60
     ctx->r6 = ADD32(0, 0X60);
@@ -80,7 +80,7 @@ L_8005632C:
     // jal         0x80014CFC
     // addiu       $a2, $zero, 0x30
     ctx->r6 = ADD32(0, 0X30);
-    sub_80014CFC(rdram, ctx);
+    ST_CopyWords(rdram, ctx);
     goto after_1;
     // addiu       $a2, $zero, 0x30
     ctx->r6 = ADD32(0, 0X30);
@@ -92,7 +92,7 @@ L_8005632C:
     // jal         0x80014CFC
     // addiu       $a2, $zero, 0x180
     ctx->r6 = ADD32(0, 0X180);
-    sub_80014CFC(rdram, ctx);
+    ST_CopyWords(rdram, ctx);
     goto after_2;
     // addiu       $a2, $zero, 0x180
     ctx->r6 = ADD32(0, 0X180);
@@ -104,7 +104,7 @@ L_8005632C:
     // jal         0x80014CFC
     // addiu       $a2, $zero, 0x180
     ctx->r6 = ADD32(0, 0X180);
-    sub_80014CFC(rdram, ctx);
+    ST_CopyWords(rdram, ctx);
     goto after_3;
     // addiu       $a2, $zero, 0x180
     ctx->r6 = ADD32(0, 0X180);
@@ -116,7 +116,7 @@ L_8005632C:
     // jal         0x80014CFC
     // addiu       $a2, $zero, 0x180
     ctx->r6 = ADD32(0, 0X180);
-    sub_80014CFC(rdram, ctx);
+    ST_CopyWords(rdram, ctx);
     goto after_4;
     // addiu       $a2, $zero, 0x180
     ctx->r6 = ADD32(0, 0X180);
@@ -128,7 +128,7 @@ L_8005632C:
     // jal         0x80014CFC
     // addiu       $a2, $zero, 0x2
     ctx->r6 = ADD32(0, 0X2);
-    sub_80014CFC(rdram, ctx);
+    ST_CopyWords(rdram, ctx);
     goto after_5;
     // addiu       $a2, $zero, 0x2
     ctx->r6 = ADD32(0, 0X2);
@@ -140,7 +140,7 @@ L_8005632C:
     // jal         0x80014CFC
     // addiu       $a2, $zero, 0xC
     ctx->r6 = ADD32(0, 0XC);
-    sub_80014CFC(rdram, ctx);
+    ST_CopyWords(rdram, ctx);
     goto after_6;
     // addiu       $a2, $zero, 0xC
     ctx->r6 = ADD32(0, 0XC);
@@ -152,7 +152,7 @@ L_8005632C:
     // jal         0x80014CFC
     // addiu       $a2, $zero, 0xC
     ctx->r6 = ADD32(0, 0XC);
-    sub_80014CFC(rdram, ctx);
+    ST_CopyWords(rdram, ctx);
     goto after_7;
     // addiu       $a2, $zero, 0xC
     ctx->r6 = ADD32(0, 0XC);
@@ -164,7 +164,7 @@ L_8005632C:
     // jal         0x80014CFC
     // addiu       $a2, $zero, 0x5
     ctx->r6 = ADD32(0, 0X5);
-    sub_80014CFC(rdram, ctx);
+    ST_CopyWords(rdram, ctx);
     goto after_8;
     // addiu       $a2, $zero, 0x5
     ctx->r6 = ADD32(0, 0X5);
@@ -198,7 +198,7 @@ L_8005632C:
     // jal         0x80014CFC
     // sb          $v0, 0x14CB($s1)
     MEM_B(0X14CB, ctx->r17) = ctx->r2;
-    sub_80014CFC(rdram, ctx);
+    ST_CopyWords(rdram, ctx);
     goto after_9;
     // sb          $v0, 0x14CB($s1)
     MEM_B(0X14CB, ctx->r17) = ctx->r2;
@@ -508,7 +508,7 @@ L_80056558:
     // jal         0x80014CFC
     // addiu       $a2, $zero, 0x3
     ctx->r6 = ADD32(0, 0X3);
-    sub_80014CFC(rdram, ctx);
+    ST_CopyWords(rdram, ctx);
     goto after_13;
     // addiu       $a2, $zero, 0x3
     ctx->r6 = ADD32(0, 0X3);
@@ -839,7 +839,7 @@ L_80056874:
     // jal         0x80014CFC
     // sw          $v0, 0x0($s1)
     MEM_W(0X0, ctx->r17) = ctx->r2;
-    sub_80014CFC(rdram, ctx);
+    ST_CopyWords(rdram, ctx);
     goto after_16;
     // sw          $v0, 0x0($s1)
     MEM_W(0X0, ctx->r17) = ctx->r2;
@@ -851,7 +851,7 @@ L_80056874:
     // jal         0x80014CFC
     // addiu       $a2, $zero, 0x4F
     ctx->r6 = ADD32(0, 0X4F);
-    sub_80014CFC(rdram, ctx);
+    ST_CopyWords(rdram, ctx);
     goto after_17;
     // addiu       $a2, $zero, 0x4F
     ctx->r6 = ADD32(0, 0X4F);
@@ -865,7 +865,7 @@ L_80056874:
     // jal         0x80014CFC
     // addiu       $a2, $zero, 0x4F
     ctx->r6 = ADD32(0, 0X4F);
-    sub_80014CFC(rdram, ctx);
+    ST_CopyWords(rdram, ctx);
     goto after_18;
     // addiu       $a2, $zero, 0x4F
     ctx->r6 = ADD32(0, 0X4F);
@@ -881,7 +881,7 @@ L_80056874:
     // jal         0x80014CFC
     // addiu       $a2, $zero, 0xA
     ctx->r6 = ADD32(0, 0XA);
-    sub_80014CFC(rdram, ctx);
+    ST_CopyWords(rdram, ctx);
     goto after_19;
     // addiu       $a2, $zero, 0xA
     ctx->r6 = ADD32(0, 0XA);
@@ -1064,7 +1064,7 @@ L_800569EC:
     // jal         0x80014CFC
     // addiu       $a2, $zero, 0x18
     ctx->r6 = ADD32(0, 0X18);
-    sub_80014CFC(rdram, ctx);
+    ST_CopyWords(rdram, ctx);
     goto after_20;
     // addiu       $a2, $zero, 0x18
     ctx->r6 = ADD32(0, 0X18);

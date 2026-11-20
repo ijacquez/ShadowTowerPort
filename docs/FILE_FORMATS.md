@@ -14,7 +14,7 @@ walks the specified bytes from right to left, accumulates decimal digits with
 powers of ten, recognizes `-`, ignores other characters, and advances the
 cursor past the next LF. It has no bounds checking in this recompiled code.
 The initial X/Y/Z fields are decoded decimal values shifted left by 12; Y
-also has `0x640` subtracted. In spatial-cell units these positions have 12
+also has `0x640` (0.390625 spatial cells) subtracted. In spatial-cell units these positions have 12
 fractional bits; their physical unit is unknown. See [STAGE_UNITS.md](STAGE_UNITS.md).
 
 ## Sector-indexed resources

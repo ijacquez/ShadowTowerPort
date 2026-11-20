@@ -410,8 +410,8 @@ L_800458B4:
     // jal         0x80014CFC
     // sh          $v1, 0x178($v0)
     MEM_H(0X178, ctx->r2) = ctx->r3;
-    printf("[6F8] -> before sub_80014CFC \n");
-    sub_80014CFC(rdram, ctx);
+    printf("[6F8] -> before ST_CopyWords \n");
+    ST_CopyWords(rdram, ctx);
     goto after_5;
     // sh          $v1, 0x178($v0)
     MEM_H(0X178, ctx->r2) = ctx->r3;
@@ -986,7 +986,7 @@ L_80045C50:
     // jal         0x80014CFC
     // addiu       $a2, $zero, 0xB00
     ctx->r6 = ADD32(0, 0XB00);
-    sub_80014CFC(rdram, ctx);
+    ST_CopyWords(rdram, ctx);
     goto after_20;
     // addiu       $a2, $zero, 0xB00
     ctx->r6 = ADD32(0, 0XB00);
@@ -1032,7 +1032,7 @@ L_80045C50:
     // addiu       $a1, $s3, 0x4
     ctx->r5 = ADD32(ctx->r19, 0X4);
 
-    sub_80014CFC(rdram, ctx);
+    ST_CopyWords(rdram, ctx);
     goto after_23;
     // addiu       $a1, $s3, 0x4
     ctx->r5 = ADD32(ctx->r19, 0X4);

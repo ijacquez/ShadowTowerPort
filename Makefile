@@ -269,7 +269,7 @@ SRCS:= scr/st/AddPrim.c \
 	scr/st/ST_ReadFixedWidthDecimalLine.c \
 	scr/st/ST_LoadInitialGameState.c \
 	scr/st/ST_MainGameLoop.c \
-	scr/st/sub_80014CFC.c \
+	scr/st/ST_CopyWords.c \
 	scr/st/sub_80014D2C.c \
 	scr/st/sub_80014D5C.c \
 	scr/st/sub_80014DA4.c \

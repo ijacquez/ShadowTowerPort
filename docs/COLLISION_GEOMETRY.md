@@ -12,7 +12,7 @@ resource stage it requests a resource indexed from the current level into the
 staging buffer at `0x80088C88` through `sub_80015D54` (which uses `ST_GetIndexedResourceLocation`). The asynchronous
 callback `ST_OnLevelDataChunkLoaded` advances the streaming stage. At the
 next stage the state machine starts another resource request and uses
-`sub_80014CFC` to copy `0x3E00` 32-bit words from that staging buffer to
+`ST_CopyWords` to copy `0x3E00` 32-bit words from that staging buffer to
 `0x8017BED0` (a byte count of `0xF800`). The copied region includes the
 12-byte records at `0x8017BED0` and the coordinate-indexed tables beginning
 at `0x801856D0` used by collision candidate selection.
@@ -45,7 +45,7 @@ full model and collision formats have not yet been established. See
 
    The bytes are read unsigned; the subtraction above centers byte 11.
    These are stored coordinate units; model vertices and player positions use
-   the same scale. A spatial cell is 4096 stored units. Their physical units
+   the same scale. A spatial cell is `0x1000` stored units (1.0 cell). Their physical units
    are not established; see [STAGE_UNITS.md](STAGE_UNITS.md).
 4. `ST_TransformCandidateVertices` uses each selected record's byte 0 to
    select a 40-byte entry at `level_data + 12`. The entry's word at offset 0
@@ -55,7 +55,7 @@ full model and collision formats have not yet been established. See
    origin as the GTE translation. For every vertex it writes the transformed
    coordinates, then writes three more vectors by subtracting the query's
    current position, proposed position, and position with Y adjusted by
-   `query[0x1E] - 0x403`, respectively. The outputs use 16 bytes per vector.
+   `ST_COLLISION_QUERY_VERTICAL_PARAMETER - 0x403`, respectively. The outputs use 16 bytes per vector.
    The routine exits if the 32-bit calculated end of the first output is
    greater than its buffer limit in an unsigned comparison.
 5. The geometry query invokes `ST_TestThreeVertexCollisionRecords` and `ST_TestFourVertexCollisionRecords` to test

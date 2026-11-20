@@ -1827,7 +1827,7 @@
     <ClCompile Include="scr\st\ST_MainGameLoop.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_80014CFC.c">
+    <ClCompile Include="scr\st\ST_CopyWords.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\sub_80014D2C.c">

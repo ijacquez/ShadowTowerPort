@@ -209,7 +209,7 @@ L_8005ECF4:
     // jal         0x80014CFC
     // addiu       $s3, $zero, 0x10C
     ctx->r19 = ADD32(0, 0X10C);
-    sub_80014CFC(rdram, ctx);
+    ST_CopyWords(rdram, ctx);
     goto after_3;
     // addiu       $s3, $zero, 0x10C
     ctx->r19 = ADD32(0, 0X10C);

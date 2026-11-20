@@ -20,36 +20,40 @@ across these slots. The 512 placement records include unused records.
 
 - `Extracted/ST/FN` begins with floor 0 and player appearance coordinates
   X=0, Y=2, Z=-1. `ST_LoadInitialGameState` adds 64 to each value, shifts
-  left 12, and subtracts 1600 from Y. The resulting stored player position is
+  left 12, and subtracts `0x640` (0.390625 cells) from Y. The resulting stored player position is
   `(262144, 268736, 258048)`, or `(0x40000, 0x419C0, 0x3F000)`
   (64.0, 65.609375, 63.0) in spatial-cell units.
-- Stage 0 placement record 3 decodes to `(262144, 270336, 258048)` and
+- Stage 0 placement record 3 decodes to `(0x40000, 0x42000, 0x3F000)`
+  (64.0, 66.0, 63.0 cells) and
   references model 2. Thus its origin matches the initial player X/Z exactly,
-  and its stored Y is exactly 1600 greater than the player Y. This establishes
+  and its stored Y is exactly `0x640` (0.390625 cells) greater than the player Y. This establishes
   a shared scale and reference offset; it does not by itself identify a floor
   surface or the player's full height.
 - `ST_DecodeCandidateOrigins` converts each record's coordinate byte with a
   left shift of 12. `ST_SelectSpatialCandidates` indexes its spatial tables
   by coordinate divided by 4096. One spatial cell is therefore **4096 stored
   position units** along each axis. The additional vertical placement byte
-  uses steps of 128 stored units.
-- Stage 0 model 2 contains vertices at `(-1024,-512,-2048)` and
-  `(1024,-512,-2048)`, a horizontal separation of 2048 model units: half a
-  cell. In `ST_TransformCandidateVertices`, those signed vertex coordinates are fed into the
+  uses steps of `0x80` (0.03125 cells).
+- Stage 0 model 2 contains vertices at `(-0x400, -0x200, -0x800)` and
+  `(0x400, -0x200, -0x800)` ((-0.25, -0.125, -0.5) and
+  (0.25, -0.125, -0.5) cells), a horizontal separation of `0x800` (0.5
+  cells). In `ST_TransformCandidateVertices`, those signed vertex coordinates are fed into the
   GTE with a rotation matrix and the decoded placement origin as translation.
   The transformed result is compared directly to the player position. The
-  matrix uses 4096 for one and the GTE shifts the product by 12, so **one
+  matrix uses `0x1000` (1.0) for one and the GTE shifts the product by 12, so **one
   model-coordinate unit equals one stored world-position unit**, apart from
   rotation and integer rounding. It is not multiplied by 16 during placement.
 - Model 2's four-vertex collision record at stage resource offset `0x29DC`
   has flag halfword `0x0001` and references vector `(0, -0x1000, 0)`
   (0.0, -1.0, 0.0) in the GTE's 12-fractional-bit scale. Its
-  four vertices are `(-1024, -1024, -2048)`, `(-1024, -1024, 2048)`,
-  `(1024, -1024, -2048)`, and `(1024, -1024, 2048)`. Placement record 3
+  four vertices are `(-0x400, -0x400, -0x800)`, `(-0x400, -0x400, 0x800)`,
+  `(0x400, -0x400, -0x800)`, and `(0x400, -0x400, 0x800)` (X ±0.25,
+  Y -0.25, Z ±0.5 cells). Placement record 3
   selects rotation 1, which leaves Y unchanged. Its transformed plane is
-  therefore at stored Y `270336 - 1024 = 269312`, with its horizontal
+  therefore at stored Y `0x42000 - 0x400 = 0x41C00` (65.75 cells), with its horizontal
   extent containing the initial player X/Z. Since positive world Y is down,
-  that plane is 576 stored units below the initial player Y of 268736.
+  that plane is `0x240` (0.140625 cells) below the initial player Y of
+  `0x419C0` (65.609375 cells).
   The record format and transformation are described in
   [COLLISION_GEOMETRY.md](COLLISION_GEOMETRY.md).
 

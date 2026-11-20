@@ -7,7 +7,7 @@ void sub_80014410(uint8_t* rdram, recomp_context* ctx);
 void ST_ReadFixedWidthDecimalLine(uint8_t* rdram, recomp_context* ctx);
 void ST_LoadInitialGameState(uint8_t* rdram, recomp_context* ctx);
 void ST_MainGameLoop(uint8_t* rdram, recomp_context* ctx);
-void sub_80014CFC(uint8_t* rdram, recomp_context* ctx);
+void ST_CopyWords(uint8_t* rdram, recomp_context* ctx);
 void sub_80014D2C(uint8_t* rdram, recomp_context* ctx);
 void sub_80014D5C(uint8_t* rdram, recomp_context* ctx);
 void sub_80014DA4(uint8_t* rdram, recomp_context* ctx);

@@ -959,7 +959,7 @@ L_8004323C:
     MEM_W(0X2E8, ctx->r5) = ctx->r2;
 L_80043278:
     // lh          $v0, 0x19C($a1)
-    ctx->r2 = MEM_HS(0X19C, ctx->r5);
+    ctx->r2 = MEM_HS(ST_PLAYER_MOVE_REDUCTION_COUNTER, ctx->r5);
     // nop
 
     // beq         $v0, $zero, L_8004328C
@@ -974,7 +974,7 @@ L_80043278:
     MEM_W(0X2E4, ctx->r5) = ctx->r2;
 L_8004328C:
     // lhu         $v0, 0x194($a1)
-    ctx->r2 = MEM_HU(0X194, ctx->r5);
+    ctx->r2 = MEM_HU(ST_PLAYER_MOVE_SUPPRESSION_COUNTER, ctx->r5);
     // nop
 
     // sll         $a2, $v0, 16

@@ -412,7 +412,7 @@
     <ClCompile Include="scr\st\ST_ReadFixedWidthDecimalLine.c" />
     <ClCompile Include="scr\st\ST_LoadInitialGameState.c" />
     <ClCompile Include="scr\st\ST_MainGameLoop.c" />
-    <ClCompile Include="scr\st\sub_80014CFC.c" />
+    <ClCompile Include="scr\st\ST_CopyWords.c" />
     <ClCompile Include="scr\st\sub_80014D2C.c" />
     <ClCompile Include="scr\st\sub_80014D5C.c" />
     <ClCompile Include="scr\st\sub_80014DA4.c" />

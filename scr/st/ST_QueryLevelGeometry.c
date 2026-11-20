@@ -1,5 +1,6 @@
 #include "recomp.h"
 #include "disable_warnings.h"
+#include "ST_CollisionQuery.h"
 
 void ST_QueryLevelGeometry(uint8_t* rdram, recomp_context* ctx) {
     // Select and decode nearby level records, then test shared geometry.
@@ -142,13 +143,13 @@ void ST_QueryLevelGeometry(uint8_t* rdram, recomp_context* ctx) {
     // lui         $v1, 0x8
     ctx->r3 = S32(0X8 << 16);
     // sw          $v1, 0x2C($s0)
-    MEM_W(0X2C, ctx->r16) = ctx->r3;
+    MEM_W(ST_COLLISION_QUERY_PROPOSED_Y_RESULT, ctx->r16) = ctx->r3;
     // j           L_800492C4
     // sw          $v1, 0x30($s0)
-    MEM_W(0X30, ctx->r16) = ctx->r3;
+    MEM_W(ST_COLLISION_QUERY_CURRENT_Y_RESULT, ctx->r16) = ctx->r3;
     goto L_800492C4;
     // sw          $v1, 0x30($s0)
-    MEM_W(0X30, ctx->r16) = ctx->r3;
+    MEM_W(ST_COLLISION_QUERY_CURRENT_Y_RESULT, ctx->r16) = ctx->r3;
 L_80048BD8:
     // jal         0x8004656C
     // addiu       $a0, $sp, 0x10
@@ -1120,9 +1121,9 @@ L_80049190:
     // sw          $v0, 0x34($v1)
     MEM_W(0X34, ctx->r3) = ctx->r2;
     // sw          $a0, 0x30($v1)
-    MEM_W(0X30, ctx->r3) = ctx->r4;
+    MEM_W(ST_COLLISION_QUERY_CURRENT_Y_RESULT, ctx->r3) = ctx->r4;
     // sw          $a1, 0x2C($v1)
-    MEM_W(0X2C, ctx->r3) = ctx->r5;
+    MEM_W(ST_COLLISION_QUERY_PROPOSED_Y_RESULT, ctx->r3) = ctx->r5;
     // sw          $a2, 0x3C($v1)
     MEM_W(0X3C, ctx->r3) = ctx->r6;
     // sw          $a3, 0x40($v1)

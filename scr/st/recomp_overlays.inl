@@ -16,7 +16,7 @@ static FuncEntry section_1_text_funcs[] = {
     { .func = ST_ReadFixedWidthDecimalLine, .offset = 0x00004450 },
     { .func = ST_LoadInitialGameState, .offset = 0x00004544 },
     { .func = ST_MainGameLoop, .offset = 0x00004a30 },
-    { .func = sub_80014CFC, .offset = 0x00004cfc },
+    { .func = ST_CopyWords, .offset = 0x00004cfc },
     { .func = sub_80014D2C, .offset = 0x00004d2c },
     { .func = sub_80014D5C, .offset = 0x00004d5c },
     { .func = sub_80014DA4, .offset = 0x00004da4 },

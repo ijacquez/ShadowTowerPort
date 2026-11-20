@@ -1,0 +1,13 @@
+#pragma once
+
+// Offsets in the shared collision query at 0x801B5948.
+// The geometric interpretation of the two parameters and results is OPEN.
+enum ST_CollisionQueryOffset {
+    ST_COLLISION_QUERY_INPUT_FLAGS = 0x00,
+    ST_COLLISION_QUERY_POSITION_Y = 0x08,
+    ST_COLLISION_QUERY_HORIZONTAL_PARAMETER = 0x1C,
+    ST_COLLISION_QUERY_VERTICAL_PARAMETER = 0x1E,
+    ST_COLLISION_QUERY_DIRECTION = 0x20,
+    ST_COLLISION_QUERY_PROPOSED_Y_RESULT = 0x2C,
+    ST_COLLISION_QUERY_CURRENT_Y_RESULT = 0x30
+};
