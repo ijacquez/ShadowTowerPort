@@ -896,6 +896,15 @@ only if the result is less than `ST_COLLISION_QUERY_HORIZONTAL_PARAMETER`
 plus `ST_ACTIVE_COLLISION_RECORD_HORIZONTAL_EXTENT` plus `0x200` (0.125
 cells).
 
+For example, with zero query magnitude, horizontal parameter `0x100`
+(0.0625 cells), and record extent `0x20` (0.0078125 cells), the strict
+threshold is `0x320` (0.1953125 cells). For a record differing only in X,
+the supplied square-root table returns `0x31F` (0.195068359375 cells) for
+both `0x320` and `0x321` (0.1953125 and 0.195556640625 cells) of separation,
+so both pass the horizontal comparison. At separation `0x322`
+(0.19580078125 cells), it returns `0x321` (0.195556640625 cells), which
+fails the comparison. Eligibility and vertical checks still apply.
+
 After a horizontal match, the check compares the signed record Y with the
 query Y already adjusted by the dispatcher. If record Y is less, it rejects
 the record when it is below query Y minus

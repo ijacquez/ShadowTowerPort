@@ -1191,7 +1191,7 @@ test-player-movement:
 	scratchpad/player-view-test
 	$(CXX) $(CFLAGS) -std=c++17 tests/player_collision_y_flags_test.cpp scr/st/ST_UpdatePlayerCollisionYFlags.c -o scratchpad/player-collision-y-flags-test
 	scratchpad/player-collision-y-flags-test
-	$(CXX) $(CFLAGS) -std=c++17 tests/player_active_collision_test.cpp scr/st/ST_QueryActiveCollisionRecords.c -o scratchpad/player-active-collision-test
+	$(CXX) $(CFLAGS) -std=c++17 -w -Wno-narrowing -ffunction-sections -fdata-sections tests/player_active_collision_test.cpp scr/st/ST_QueryActiveCollisionRecords.c scr/st/SquareRoot0.c scr/gte.cpp PsyCross/src/gte/PsyX_GTE.cpp PsyCross/src/psx/LIBGTE.C -Wl,--gc-sections -o scratchpad/player-active-collision-test
 	scratchpad/player-active-collision-test
 	$(CXX) $(CFLAGS) -std=c++17 tests/player_high_downward_test.cpp scr/st/ST_CheckHighDownwardMovement.c scr/st/ST_EnterPlayerZeroHpState.c -o scratchpad/player-high-downward-test
 	scratchpad/player-high-downward-test

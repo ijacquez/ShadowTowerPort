@@ -1,15 +1,13 @@
 #include "recomp.h"
 #include "st/ST_ActiveCollisionRecord.h"
 #include "st/ST_CollisionQuery.h"
-#include <cmath>
+#include "st/ST_VectorNormalization.h"
 #include <cstdio>
 #include <cstring>
 
 uint8_t rdram[2 * 1024 * 1024];
 
-void SquareRoot0(uint8_t*, recomp_context* ctx) {
-    ctx->r2 = static_cast<uint32_t>(std::sqrt(static_cast<uint32_t>(ctx->r4)));
-}
+extern short SQRT[];
 void ratan2(uint8_t*, recomp_context* ctx) { ctx->r2 = 0; }
 void rcos(uint8_t*, recomp_context* ctx) { ctx->r2 = 0x1000; }
 void sub_8004A1B4(uint8_t*, recomp_context* ctx) { ctx->r2 = 0; }
@@ -42,6 +40,8 @@ static int32_t runQuery() {
 
 static void reset() {
     std::memset(rdram, 0, sizeof rdram);
+    for (int i = 0; i < 192; ++i)
+        MEM_H(i * 2, ST_SQUARE_ROOT_TABLE_ADDRESS) = (uint16_t)SQRT[i];
     MEM_W(ST_COLLISION_QUERY_POSITION_Y, query) = 1600;
     MEM_H(ST_COLLISION_QUERY_HORIZONTAL_PARAMETER, query) = 256;
     MEM_H(ST_COLLISION_QUERY_VERTICAL_PARAMETER, query) = 1600;
@@ -67,5 +67,12 @@ int main() {
     if (runQuery() != 0) return 6;
     MEM_W(ST_ACTIVE_COLLISION_RECORD_POSITION_Y, records) = 1729;
     if (runQuery() != -1) return 7;
-    std::puts("7 active collision cases passed");
+    reset();
+    addRecord(0, 800, 0, 0);
+    if (runQuery() != 0) return 8;
+    MEM_W(ST_ACTIVE_COLLISION_RECORD_POSITION_X, records) = 801;
+    if (runQuery() != 0) return 9;
+    MEM_W(ST_ACTIVE_COLLISION_RECORD_POSITION_X, records) = 802;
+    if (runQuery() != -1) return 10;
+    std::puts("10 active collision cases passed");
 }
