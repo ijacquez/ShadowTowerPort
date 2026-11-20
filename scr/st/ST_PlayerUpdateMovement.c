@@ -4,6 +4,8 @@
 #include "ST_PlayerControls.h"
 #include "ST_PlayerMovementContributions.h"
 
+enum { ST_PLAYER_ROTATION_INPUT_Y_STACK_OFFSET = 0x1C };
+
 // Update one signed 32-bit input accumulator, preserving the game's
 // 32-bit wrapping and arithmetic-shift behavior.
 static uint32_t ST_UpdateMovementAxis(uint32_t value, int32_t limit, int direction) {
@@ -150,7 +152,7 @@ L_800423D4:
     // The final prior writer is unknown. With the game's zero-angle table
     // entry this contributes only to rotated Y, which is subsequently squared.
     // lhu         $v1, 0x1C($sp)
-    ctx->r3 = MEM_HU(0X1C, ctx->r29);
+    ctx->r3 = MEM_HU(ST_PLAYER_ROTATION_INPUT_Y_STACK_OFFSET, ctx->r29);
     // lhu         $a0, 0x20($sp)
     ctx->r4 = MEM_HU(0X20, ctx->r29);
     // sh          $v0, 0x10($sp)

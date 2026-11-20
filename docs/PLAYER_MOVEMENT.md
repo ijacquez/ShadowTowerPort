@@ -243,9 +243,17 @@ See [ST_PlayerUpdateMovement.c](../scr/st/ST_PlayerUpdateMovement.c), the
 [IR register definitions](../PsyCross/include/psx/gtereg.h). The integer
 divisions discard any fractional remainder.
 
-The rotation input's Y halfword is loaded from stack offset `0x1C`, which
-the movement function does not write before loading it. **OPEN:** its source
-and role are not established. In the supplied executable, the zero-angle
+The rotation input's Y halfword is loaded from
+`ST_PLAYER_ROTATION_INPUT_Y_STACK_OFFSET` in the movement function's stack
+frame. The function allocates `0x70` bytes and does not write that halfword
+before loading it; its preceding calls to `SquareRoot0` and `RotMatrix` do
+not write it either. The address is `0x54` bytes below the stack pointer at
+the call to `ST_PlayerUpdateMovement`. Each call in
+[ST_UpdatePlayerState](../scr/st/ST_UpdatePlayerState.c) is immediately
+preceded by [ST_PlayerUpdateTurning](../scr/st/ST_PlayerUpdateTurning.c),
+whose stack writes and angle-comparison helper do not write that address.
+**OPEN:** the final prior writer and the halfword's intended role are not
+established. In the supplied executable, the zero-angle
 table entry read by [RotMatrix](../scr/st/RotMatrix.c) has a signed low
 halfword of zero and a high halfword of `0x1000` (1.0).
 
