@@ -26,6 +26,12 @@ when more than one millisecond remains. Other work and other calls to `VSync`
 can affect the elapsed time between movement updates. The target is not a
 guaranteed update rate, and the original game's update rate is **OPEN**.
 
+Within each main-loop iteration, `ST_UpdatePlayerState` runs before
+[sub_80050768](../scr/st/sub_80050768.c) and
+[sub_8004E324](../scr/st/sub_8004E324.c), in that order. The latter two
+therefore update their contribution vectors after that iteration's player
+movement update. Other code can also write those vectors.
+
 ## State dispatch and movement gating
 
 On reaching its state dispatch, [ST_UpdatePlayerState](../scr/st/ST_UpdatePlayerState.c)
@@ -59,7 +65,8 @@ divided by 256 toward zero, in
 `ST_LEVEL_RECORD_DIRECTION_Z_GP_OFFSET`. Each qualifying slot replaces the
 previous slot's values. If at least one slot qualifies, the gate becomes 2.
 At gate 2 the routine clears the movement limits and copies the two stored
-values to the X and Z quarter-contribution halfwords. A subsequent condition
+values to the X and Z quarter-contribution halfwords; its end-of-loop
+damping, described below, then applies to the copied values. A subsequent condition
 in the same slot loop can set the gate to 3. At gate 3 the routine clears the
 stored direction values, sets the gate to 4, and requests level streaming.
 [sub_8004567C](../scr/st/sub_8004567C.c) clears the gate. **OPEN:** the
