@@ -14,7 +14,7 @@ void rand_recomp(uint8_t*, recomp_context* ctx) { ctx->r2 = 0; }
 void ST_AdjustPlayerHp(uint8_t*, recomp_context*) {}
 void ST_RequestSoundEffect(uint8_t*, recomp_context*) {}
 void ST_RecalculatePlayerDerivedAttributes(uint8_t*, recomp_context*) {}
-void sub_8003D788(uint8_t*, recomp_context*) {}
+void ST_ApplyPlayerDamageAndViewResponse(uint8_t*, recomp_context*) {}
 void do_break(uint32_t) { std::abort(); }
 
 int main() {

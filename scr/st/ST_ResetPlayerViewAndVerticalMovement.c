@@ -28,5 +28,5 @@ void ST_ResetPlayerViewAndVerticalMovement(uint8_t* rdram, recomp_context* ctx) 
     MEM_W(ST_PLAYER_FIRST_COLLISION_Y_FLAG, player) = 0;
     MEM_W(ST_COLLISION_QUERY_RECORD_FLAGS, ST_COLLISION_QUERY_BASE_ADDRESS) = 0;
     ctx->r3 = 0xFFFFFFFF;
-    MEM_W(0x2F4, player) = ctx->r3;
+    MEM_W(ST_PLAYER_RANDOM_VIEW_TIMER, player) = ctx->r3;
 }

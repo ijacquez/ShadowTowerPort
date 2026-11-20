@@ -580,8 +580,8 @@ SRCS:= scr/st/AddPrim.c \
 	scr/st/ST_RecalculatePlayerLowRecordValueFlag.c \
 	scr/st/sub_8003D104.c \
 	scr/st/sub_8003D288.c \
-	scr/st/sub_8003D594.c \
-	scr/st/sub_8003D788.c \
+	scr/st/ST_UpdateRandomPlayerViewRotation.c \
+	scr/st/ST_ApplyPlayerDamageAndViewResponse.c \
 	scr/st/ST_ApplyPlayerDamageAndEffects.c \
 	scr/st/sub_8003E718.c \
 	scr/st/ST_BuildPlayerView.c \
@@ -1117,6 +1117,7 @@ scr/st/ST_ResolveActiveCollisionRecordDisplacement.o: scr/st/ST_CollisionQuery.h
 scr/st/ST_RunCollisionQuery.o scr/st/ST_QueryLevelGeometry.o scr/st/ST_TestThreeVertexCollisionRecords.o scr/st/ST_TestFourVertexCollisionRecords.o: scr/st/ST_CollisionQuery.h
 scr/st/ST_UpdatePlayerCollisionYFlags.o: scr/st/ST_CollisionQuery.h scr/st/ST_LevelStreaming.h scr/st/ST_PlayerState.h
 scr/st/ST_ResetPlayerViewAndVerticalMovement.o: scr/st/ST_CollisionQuery.h scr/st/ST_PlayerState.h
+scr/st/ST_UpdateRandomPlayerViewRotation.o scr/st/ST_ApplyPlayerDamageAndViewResponse.o: scr/st/ST_PlayerState.h
 scr/st/ST_SelectSpatialCandidates.o scr/st/ST_DecodeCandidateOrigins.o scr/st/ST_TransformCandidateVertices.o: scr/st/ST_CollisionQuery.h
 scr/st/ST_SelectSpatialCandidates.o: scr/st/ST_SpatialCandidate.h scr/st/ST_LevelPlacement.h scr/st/ST_LevelStreaming.h
 scr/st/ST_NormalizeVectorRegisters.o scr/st/InvSquareRoot.o: scr/st/ST_VectorNormalization.h
@@ -1195,5 +1196,7 @@ test-player-movement:
 	scratchpad/player-movement-axis-test
 	$(CXX) $(CFLAGS) -std=c++17 tests/player_turning_test.cpp scr/st/ST_PlayerUpdateTurning.c scr/st/ST_IsShiftedAngleGreater.c -o scratchpad/player-turning-test
 	scratchpad/player-turning-test
+	$(CXX) $(CFLAGS) -std=c++17 tests/player_random_view_rotation_test.cpp scr/st/ST_UpdateRandomPlayerViewRotation.c -o scratchpad/player-random-view-rotation-test
+	scratchpad/player-random-view-rotation-test
 	$(CXX) $(CFLAGS) -std=c++17 tests/player_vertical_test.cpp scr/st/ST_PlayerMoveWithCollision.c -o scratchpad/player-vertical-test
 	scratchpad/player-vertical-test

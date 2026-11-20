@@ -1,7 +1,8 @@
 #include "recomp.h"
 #include "disable_warnings.h"
+#include "ST_PlayerState.h"
 
-void sub_8003D594(uint8_t* rdram, recomp_context* ctx) {
+void ST_UpdateRandomPlayerViewRotation(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
     unsigned int rounding_mode = DEFAULT_ROUNDING_MODE;
     int c1cs = 0; 
@@ -20,7 +21,7 @@ void sub_8003D594(uint8_t* rdram, recomp_context* ctx) {
     // sw          $s0, 0x10($sp)
     MEM_W(0X10, ctx->r29) = ctx->r16;
     // lw          $a0, 0x2F4($s2)
-    ctx->r4 = MEM_W(0X2F4, ctx->r18);
+    ctx->r4 = MEM_W(ST_PLAYER_RANDOM_VIEW_TIMER, ctx->r18);
     // nop
 
     // bltz        $a0, L_8003D76C
@@ -64,7 +65,7 @@ void sub_8003D594(uint8_t* rdram, recomp_context* ctx) {
     // ori         $s1, $s1, 0x6667
     ctx->r17 = ctx->r17 | 0X6667;
     // lw          $a0, 0x2F4($s2)
-    ctx->r4 = MEM_W(0X2F4, ctx->r18);
+    ctx->r4 = MEM_W(ST_PLAYER_RANDOM_VIEW_TIMER, ctx->r18);
     // addiu       $s0, $zero, 0x1E
     ctx->r16 = ADD32(0, 0X1E);
     // subu        $a0, $s0, $a0
@@ -86,7 +87,7 @@ void sub_8003D594(uint8_t* rdram, recomp_context* ctx) {
     // srav        $v0, $v0, $v1
     ctx->r2 = S32(ctx->r2) >> (ctx->r3 & 31);
     // sh          $v0, 0x310($gp)
-    MEM_H(0X310, ctx->r28) = ctx->r2;
+    MEM_H(ST_PLAYER_RANDOM_VIEW_X_GP_OFFSET, ctx->r28) = ctx->r2;
     // jal         0x80078AC4
     // nop
 
@@ -96,7 +97,7 @@ void sub_8003D594(uint8_t* rdram, recomp_context* ctx) {
 
     after_1:
     // lw          $v1, 0x2F4($s2)
-    ctx->r3 = MEM_W(0X2F4, ctx->r18);
+    ctx->r3 = MEM_W(ST_PLAYER_RANDOM_VIEW_TIMER, ctx->r18);
     // nop
 
     // subu        $s0, $s0, $v1
@@ -118,7 +119,7 @@ void sub_8003D594(uint8_t* rdram, recomp_context* ctx) {
     // srav        $v0, $v0, $v1
     ctx->r2 = S32(ctx->r2) >> (ctx->r3 & 31);
     // sh          $v0, 0x312($gp)
-    MEM_H(0X312, ctx->r28) = ctx->r2;
+    MEM_H(ST_PLAYER_RANDOM_VIEW_Z_GP_OFFSET, ctx->r28) = ctx->r2;
     // j           L_8003D680
     // nop
 
@@ -127,9 +128,9 @@ void sub_8003D594(uint8_t* rdram, recomp_context* ctx) {
 
 L_8003D660:
     // lhu         $v0, 0x310($gp)
-    ctx->r2 = MEM_HU(0X310, ctx->r28);
+    ctx->r2 = MEM_HU(ST_PLAYER_RANDOM_VIEW_X_GP_OFFSET, ctx->r28);
     // lhu         $v1, 0x312($gp)
-    ctx->r3 = MEM_HU(0X312, ctx->r28);
+    ctx->r3 = MEM_HU(ST_PLAYER_RANDOM_VIEW_Z_GP_OFFSET, ctx->r28);
     // sll         $v0, $v0, 16
     ctx->r2 = S32(ctx->r2) << 16;
     // sra         $v0, $v0, 17
@@ -139,12 +140,12 @@ L_8003D660:
     // sra         $v1, $v1, 17
     ctx->r3 = S32(ctx->r3) >> 17;
     // sh          $v0, 0x310($gp)
-    MEM_H(0X310, ctx->r28) = ctx->r2;
+    MEM_H(ST_PLAYER_RANDOM_VIEW_X_GP_OFFSET, ctx->r28) = ctx->r2;
     // sh          $v1, 0x312($gp)
-    MEM_H(0X312, ctx->r28) = ctx->r3;
+    MEM_H(ST_PLAYER_RANDOM_VIEW_Z_GP_OFFSET, ctx->r28) = ctx->r3;
 L_8003D680:
     // lhu         $a0, 0x310($gp)
-    ctx->r4 = MEM_HU(0X310, ctx->r28);
+    ctx->r4 = MEM_HU(ST_PLAYER_RANDOM_VIEW_X_GP_OFFSET, ctx->r28);
     // nop
 
     // addiu       $v0, $a0, 0x2
@@ -164,16 +165,16 @@ L_8003D680:
     // addiu       $v1, $v1, -0x70D8
     ctx->r3 = ADD32(ctx->r3, -0X70D8);
     // lhu         $v0, 0x288($v1)
-    ctx->r2 = MEM_HU(0X288, ctx->r3);
+    ctx->r2 = MEM_HU(ST_PLAYER_VIEW_TRANSIENT_ROTATION_X, ctx->r3);
     // nop
 
     // addu        $v0, $v0, $a0
     ctx->r2 = ADD32(ctx->r2, ctx->r4);
     // sh          $v0, 0x288($v1)
-    MEM_H(0X288, ctx->r3) = ctx->r2;
+    MEM_H(ST_PLAYER_VIEW_TRANSIENT_ROTATION_X, ctx->r3) = ctx->r2;
 L_8003D6B0:
     // lhu         $a0, 0x312($gp)
-    ctx->r4 = MEM_HU(0X312, ctx->r28);
+    ctx->r4 = MEM_HU(ST_PLAYER_RANDOM_VIEW_Z_GP_OFFSET, ctx->r28);
     // nop
 
     // addiu       $v0, $a0, 0x2
@@ -195,20 +196,20 @@ L_8003D6B0:
     // addiu       $v1, $v1, -0x70D8
     ctx->r3 = ADD32(ctx->r3, -0X70D8);
     // lhu         $v0, 0x28C($v1)
-    ctx->r2 = MEM_HU(0X28C, ctx->r3);
+    ctx->r2 = MEM_HU(ST_PLAYER_VIEW_TRANSIENT_ROTATION_Z, ctx->r3);
     // nop
 
     // addu        $v0, $v0, $a0
     ctx->r2 = ADD32(ctx->r2, ctx->r4);
     // sh          $v0, 0x28C($v1)
-    MEM_H(0X28C, ctx->r3) = ctx->r2;
+    MEM_H(ST_PLAYER_VIEW_TRANSIENT_ROTATION_Z, ctx->r3) = ctx->r2;
     // lui         $v0, 0x801A
     ctx->r2 = S32(0X801A << 16);
 L_8003D6E8:
     // addiu       $v1, $v0, -0x70D8
     ctx->r3 = ADD32(ctx->r2, -0X70D8);
     // lhu         $v0, 0x288($v1)
-    ctx->r2 = MEM_HU(0X288, ctx->r3);
+    ctx->r2 = MEM_HU(ST_PLAYER_VIEW_TRANSIENT_ROTATION_X, ctx->r3);
     // nop
 
     // addiu       $v0, $v0, -0x801
@@ -224,10 +225,10 @@ L_8003D6E8:
     // addiu       $v0, $zero, 0xFC0
     ctx->r2 = ADD32(0, 0XFC0);
     // sh          $v0, 0x288($v1)
-    MEM_H(0X288, ctx->r3) = ctx->r2;
+    MEM_H(ST_PLAYER_VIEW_TRANSIENT_ROTATION_X, ctx->r3) = ctx->r2;
 L_8003D708:
     // lhu         $v0, 0x288($v1)
-    ctx->r2 = MEM_HU(0X288, ctx->r3);
+    ctx->r2 = MEM_HU(ST_PLAYER_VIEW_TRANSIENT_ROTATION_X, ctx->r3);
     // nop
 
     // addiu       $v0, $v0, -0x41
@@ -243,10 +244,10 @@ L_8003D708:
     // addiu       $v0, $zero, 0x40
     ctx->r2 = ADD32(0, 0X40);
     // sh          $v0, 0x288($v1)
-    MEM_H(0X288, ctx->r3) = ctx->r2;
+    MEM_H(ST_PLAYER_VIEW_TRANSIENT_ROTATION_X, ctx->r3) = ctx->r2;
 L_8003D724:
     // lhu         $v0, 0x28C($v1)
-    ctx->r2 = MEM_HU(0X28C, ctx->r3);
+    ctx->r2 = MEM_HU(ST_PLAYER_VIEW_TRANSIENT_ROTATION_Z, ctx->r3);
     // nop
 
     // addiu       $v0, $v0, -0x801
@@ -262,10 +263,10 @@ L_8003D724:
     // addiu       $v0, $zero, 0xFC0
     ctx->r2 = ADD32(0, 0XFC0);
     // sh          $v0, 0x28C($v1)
-    MEM_H(0X28C, ctx->r3) = ctx->r2;
+    MEM_H(ST_PLAYER_VIEW_TRANSIENT_ROTATION_Z, ctx->r3) = ctx->r2;
 L_8003D740:
     // lhu         $v0, 0x28C($v1)
-    ctx->r2 = MEM_HU(0X28C, ctx->r3);
+    ctx->r2 = MEM_HU(ST_PLAYER_VIEW_TRANSIENT_ROTATION_Z, ctx->r3);
     // nop
 
     // addiu       $v0, $v0, -0x41
@@ -281,16 +282,16 @@ L_8003D740:
     // addiu       $v0, $zero, 0x40
     ctx->r2 = ADD32(0, 0X40);
     // sh          $v0, 0x28C($v1)
-    MEM_H(0X28C, ctx->r3) = ctx->r2;
+    MEM_H(ST_PLAYER_VIEW_TRANSIENT_ROTATION_Z, ctx->r3) = ctx->r2;
 L_8003D75C:
     // lw          $v0, 0x2F4($v1)
-    ctx->r2 = MEM_W(0X2F4, ctx->r3);
+    ctx->r2 = MEM_W(ST_PLAYER_RANDOM_VIEW_TIMER, ctx->r3);
     // nop
 
     // addiu       $v0, $v0, -0x1
     ctx->r2 = ADD32(ctx->r2, -0X1);
     // sw          $v0, 0x2F4($v1)
-    MEM_W(0X2F4, ctx->r3) = ctx->r2;
+    MEM_W(ST_PLAYER_RANDOM_VIEW_TIMER, ctx->r3) = ctx->r2;
 L_8003D76C:
     // lw          $ra, 0x1C($sp)
     ctx->r31 = MEM_W(0X1C, ctx->r29);

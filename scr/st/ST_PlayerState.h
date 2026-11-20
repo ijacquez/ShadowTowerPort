@@ -68,7 +68,8 @@ enum ST_PlayerStateOffset {
     ST_PLAYER_MOVE_LIMIT = 0x2E4,
     ST_PLAYER_TURN_LIMIT = 0x2E8,
     ST_PLAYER_FIRST_COLLISION_Y_FLAG = 0x2EC,
-    ST_PLAYER_SECOND_COLLISION_Y_FLAG = 0x2F0
+    ST_PLAYER_SECOND_COLLISION_Y_FLAG = 0x2F0,
+    ST_PLAYER_RANDOM_VIEW_TIMER = 0x2F4
 };
 
 enum { ST_PLAYER_STATE_ZERO_HP = 4 };
@@ -87,6 +88,10 @@ enum { ST_PLAYER_VIEW_Y_OFFSET = 0x640 };
 
 // Signed halfword relative to the emulated global pointer.
 enum { ST_PLAYER_VERTICAL_VIEW_PITCH_GP_OFFSET = 0x17C };
+enum {
+    ST_PLAYER_RANDOM_VIEW_X_GP_OFFSET = 0x310,
+    ST_PLAYER_RANDOM_VIEW_Z_GP_OFFSET = 0x312
+};
 
 // Vertical movement values use 12 fractional bits in spatial-cell units.
 enum {

@@ -130,6 +130,24 @@ the previous halfword. Each division rounds toward zero. It copies the
 result to `ST_PLAYER_VIEW_ADDITIONAL_ROTATION_X`, including when
 `ST_PLAYER_VIEW_AND_SOUND_UPDATE_DISABLED` is nonzero.
 
+Before forming the view rotation, `ST_UpdatePlayerState` calls
+[ST_UpdateRandomPlayerViewRotation](../scr/st/ST_UpdateRandomPlayerViewRotation.c).
+If signed `ST_PLAYER_RANDOM_VIEW_TIMER` is negative, that helper returns
+without changing the transient rotations. Otherwise, when the timer is
+divisible by three, it calls `rand_recomp` twice. For each result it subtracts
+`0x4000` with 32-bit wrapping, then arithmetic-shifts right by
+`(5 + (30 - timer) / 5) & 31`, where the division truncates toward zero.
+The low halfwords become `ST_PLAYER_RANDOM_VIEW_X_GP_OFFSET` and
+`ST_PLAYER_RANDOM_VIEW_Z_GP_OFFSET`. On other timer values, each existing
+signed halfword is arithmetic-shifted right by one. Each resulting halfword
+outside -2 through 2 is added to the matching X or Z transient rotation with
+halfword wrapping. The helper then clamps raw transient values `0x801` through
+`0xFBF` to `0xFC0`, and `0x41` through `0x7FF` to `0x40`, for both axes;
+it decrements the timer with 32-bit wrapping. The reset routine sets the
+timer to -1; [ST_ApplyPlayerDamageAndViewResponse](../scr/st/ST_ApplyPlayerDamageAndViewResponse.c)
+can also set it, then clamps the result to -1 through 30. The complete set
+of writers is **OPEN**.
+
 ## Horizontal input
 
 `ST_PLAYER_LOCAL_MOVE_X` (`0x2B8`) and `ST_PLAYER_LOCAL_MOVE_Z` (`0x2C0`)

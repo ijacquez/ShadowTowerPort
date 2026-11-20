@@ -1,7 +1,8 @@
 #include "recomp.h"
 #include "disable_warnings.h"
+#include "ST_PlayerState.h"
 
-void sub_8003D788(uint8_t* rdram, recomp_context* ctx) {
+void ST_ApplyPlayerDamageAndViewResponse(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
     unsigned int rounding_mode = DEFAULT_ROUNDING_MODE;
     int c1cs = 0; 
@@ -408,22 +409,22 @@ L_8003D9B8:
     ctx->r2 = lo;
     // j           L_8003D9CC
     // sw          $v0, 0x2F4($a0)
-    MEM_W(0X2F4, ctx->r4) = ctx->r2;
+    MEM_W(ST_PLAYER_RANDOM_VIEW_TIMER, ctx->r4) = ctx->r2;
     goto L_8003D9CC;
     // sw          $v0, 0x2F4($a0)
-    MEM_W(0X2F4, ctx->r4) = ctx->r2;
+    MEM_W(ST_PLAYER_RANDOM_VIEW_TIMER, ctx->r4) = ctx->r2;
 L_8003D9C4:
     // addiu       $v0, $zero, 0x1E
     ctx->r2 = ADD32(0, 0X1E);
     // sw          $v0, 0x2F4($a0)
-    MEM_W(0X2F4, ctx->r4) = ctx->r2;
+    MEM_W(ST_PLAYER_RANDOM_VIEW_TIMER, ctx->r4) = ctx->r2;
 L_8003D9CC:
     // lui         $s3, 0x801A
     ctx->r19 = S32(0X801A << 16);
     // addiu       $s1, $s3, -0x70D8
     ctx->r17 = ADD32(ctx->r19, -0X70D8);
     // lw          $v0, 0x2F4($s1)
-    ctx->r2 = MEM_W(0X2F4, ctx->r17);
+    ctx->r2 = MEM_W(ST_PLAYER_RANDOM_VIEW_TIMER, ctx->r17);
     // nop
 
     // bgez        $v0, L_8003D9F8
@@ -437,9 +438,9 @@ L_8003D9CC:
     // addiu       $v0, $zero, -0x1
     ctx->r2 = ADD32(0, -0X1);
     // sw          $v0, 0x2F4($s1)
-    MEM_W(0X2F4, ctx->r17) = ctx->r2;
+    MEM_W(ST_PLAYER_RANDOM_VIEW_TIMER, ctx->r17) = ctx->r2;
     // lw          $v0, 0x2F4($s1)
-    ctx->r2 = MEM_W(0X2F4, ctx->r17);
+    ctx->r2 = MEM_W(ST_PLAYER_RANDOM_VIEW_TIMER, ctx->r17);
     // nop
 
     // slti        $v0, $v0, 0x1F
@@ -456,7 +457,7 @@ L_8003D9F8:
     // addiu       $v0, $zero, 0x1E
     ctx->r2 = ADD32(0, 0X1E);
     // sw          $v0, 0x2F4($s1)
-    MEM_W(0X2F4, ctx->r17) = ctx->r2;
+    MEM_W(ST_PLAYER_RANDOM_VIEW_TIMER, ctx->r17) = ctx->r2;
 L_8003DA08:
     // lhu         $a0, -0x70D8($s3)
     ctx->r4 = MEM_HU(-0X70D8, ctx->r19);

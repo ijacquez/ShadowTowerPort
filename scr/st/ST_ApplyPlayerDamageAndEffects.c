@@ -1714,7 +1714,7 @@ L_8003E57C:
     // jal         0x8003D788
     // sra         $a0, $t5, 12
     ctx->r4 = S32(ctx->r13) >> 12;
-    sub_8003D788(rdram, ctx);
+    ST_ApplyPlayerDamageAndViewResponse(rdram, ctx);
     goto after_7;
     // sra         $a0, $t5, 12
     ctx->r4 = S32(ctx->r13) >> 12;

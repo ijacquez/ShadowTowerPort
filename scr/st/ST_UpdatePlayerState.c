@@ -3659,7 +3659,7 @@ L_8004418C:
     // lui         $s1, 0x801A
     ctx->r17 = S32(0X801A << 16);
 
-    sub_8003D594(rdram, ctx);
+    ST_UpdateRandomPlayerViewRotation(rdram, ctx);
 
     goto after_115;
     // lui         $s1, 0x801A
