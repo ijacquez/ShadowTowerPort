@@ -351,6 +351,14 @@ See [ST_PlayerUpdateMovement.c](../scr/st/ST_PlayerUpdateMovement.c), the
 [IR register definitions](../PsyCross/include/psx/gtereg.h). The integer
 divisions discard any fractional remainder.
 
+The port's [SquareRoot0](../scr/st/SquareRoot0.c) wrapper uses the PsyCross
+lookup for nonnegative inputs. For a negative signed input it executes the
+recompiled game routine, which uses the GTE leading-sign-bit count and reads
+a signed halfword relative to `ST_SQUARE_ROOT_TABLE_ADDRESS`; a negative index
+there addresses earlier emulated memory. The all-ones input takes the
+routine's zero-result branch. Thus a wrapped negative squared sum does not
+establish a nonnegative geometric distance.
+
 The rotation input's Y halfword is loaded from
 `ST_PLAYER_ROTATION_INPUT_Y_STACK_OFFSET` in the movement function's stack
 frame. The function allocates `0x70` bytes and does not write that halfword

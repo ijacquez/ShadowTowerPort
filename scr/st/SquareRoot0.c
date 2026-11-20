@@ -1,6 +1,7 @@
 ﻿#include "recomp.h"
 #include "disable_warnings.h"
 #include "psx/libgte.h"
+#include "ST_VectorNormalization.h"
 
 void ST_SquareRoot0(uint8_t* rdram, recomp_context* ctx) 
 {
@@ -71,7 +72,7 @@ L_80074718:
     // addu        $t5, $t5, $t4
     ctx->r13 = ADD32(ctx->r13, ctx->r12);
     // lh          $t5, 0x1F60($t5)
-    ctx->r13 = MEM_HS(0X1F60, ctx->r13);
+    ctx->r13 = MEM_HS(ST_SQUARE_ROOT_TABLE_ADDRESS & 0xFFFF, ctx->r13);
     // nop
 
     // sllv        $t5, $t5, $t1
@@ -96,6 +97,12 @@ L_80074740:
 
 void SquareRoot0(uint8_t* rdram, recomp_context* ctx)
 {
+    // Negative wrapped sums address memory before the game's lookup table.
+    if (S32(ctx->r4) < 0) {
+        ST_SquareRoot0(rdram, ctx);
+        return;
+    }
+
     //ctx_to_gte(ctx);
 
     //// Теперь вызываем оригинальный рекомпилированный код

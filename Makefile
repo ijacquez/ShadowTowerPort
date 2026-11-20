@@ -1118,6 +1118,7 @@ scr/st/ST_RunCollisionQuery.o scr/st/ST_QueryLevelGeometry.o scr/st/ST_TestThree
 scr/st/ST_TransformCandidateVertices.o scr/st/ST_TestThreeVertexCollisionRecords.o scr/st/ST_TestFourVertexCollisionRecords.o: scr/st/ST_LevelGeometry.h
 scr/st/sub_80055F9C.o: scr/st/ST_CollisionQuery.h
 scr/st/ST_UpdatePlayerCollisionYFlags.o: scr/st/ST_CollisionQuery.h scr/st/ST_LevelStreaming.h scr/st/ST_PlayerState.h
+scr/st/SquareRoot0.o: scr/st/ST_VectorNormalization.h
 scr/st/ST_ResetPlayerViewAndVerticalMovement.o: scr/st/ST_CollisionQuery.h scr/st/ST_PlayerState.h
 scr/st/ST_UpdateRandomPlayerViewRotation.o scr/st/ST_ApplyPlayerDamageAndViewResponse.o: scr/st/ST_PlayerState.h
 scr/st/ST_SelectSpatialCandidates.o scr/st/ST_DecodeCandidateOrigins.o scr/st/ST_TransformCandidateVertices.o: scr/st/ST_CollisionQuery.h
@@ -1160,6 +1161,8 @@ test-player-movement:
 	scratchpad/player-directional-collision-test
 	$(CXX) $(CFLAGS) -O2 tests/gte_normalization_test.cpp scr/st/VectorNormalS.c scr/st/ST_NormalizeVectorRegisters.c scr/gte.cpp PsyCross/src/gte/PsyX_GTE.cpp -o scratchpad/gte-normalization-test
 	scratchpad/gte-normalization-test
+	$(CXX) $(CFLAGS) -O2 -w -Wno-narrowing -ffunction-sections -fdata-sections tests/player_square_root_wrapped_test.cpp scr/st/SquareRoot0.c scr/gte.cpp PsyCross/src/gte/PsyX_GTE.cpp PsyCross/src/psx/LIBGTE.C -Wl,--gc-sections -o scratchpad/player-square-root-wrapped-test
+	scratchpad/player-square-root-wrapped-test
 	$(CXX) $(CFLAGS) -std=c++17 tests/player_record_modifiers_test.cpp scr/st/ST_RecalculatePlayerRecordModifiers.c -o scratchpad/player-record-modifiers-test
 	scratchpad/player-record-modifiers-test
 	$(CXX) $(CFLAGS) -std=c++17 tests/resource_vector_sample_test.cpp scr/st/ST_SampleResourceVector.c scr/st/ST_SelectResourceSequenceInterval.c -o scratchpad/resource-vector-sample-test
