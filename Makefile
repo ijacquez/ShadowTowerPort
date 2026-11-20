@@ -634,7 +634,7 @@ SRCS:= scr/st/AddPrim.c \
 	scr/st/ProcessAssetLoadQueue.c \
 	scr/st/ST_SelectSpatialCandidates.c \
 	scr/st/ST_DecodeCandidateOrigins.c \
-	scr/st/sub_80046604.c \
+	scr/st/ST_TransformCandidateVertices.c \
 	scr/st/sub_800468C0.c \
 	scr/st/sub_80047884.c \
 	scr/st/ST_QueryLevelGeometry.c \

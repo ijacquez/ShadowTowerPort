@@ -34,7 +34,7 @@ across these slots. The 512 placement records include unused records.
   uses steps of 128 stored units.
 - Stage 0 model 2 contains vertices at `(-1024,-512,-2048)` and
   `(1024,-512,-2048)`, a horizontal separation of 2048 model units: half a
-  cell. In `sub_80046604`, those signed vertex coordinates are fed into the
+  cell. In `ST_TransformCandidateVertices`, those signed vertex coordinates are fed into the
   GTE with a rotation matrix and the decoded placement origin as translation.
   The transformed result is compared directly to the player position. The
   matrix uses 4096 for one and the GTE shifts the product by 12, so **one

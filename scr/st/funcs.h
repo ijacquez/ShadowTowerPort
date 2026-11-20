@@ -371,7 +371,7 @@ void sub_80045FB8(uint8_t* rdram, recomp_context* ctx);
 void ProcessAssetLoadQueue(uint8_t* rdram, recomp_context* ctx);
 void ST_SelectSpatialCandidates(uint8_t* rdram, recomp_context* ctx);
 void ST_DecodeCandidateOrigins(uint8_t* rdram, recomp_context* ctx);
-void sub_80046604(uint8_t* rdram, recomp_context* ctx);
+void ST_TransformCandidateVertices(uint8_t* rdram, recomp_context* ctx);
 void sub_800468C0(uint8_t* rdram, recomp_context* ctx);
 void sub_80047884(uint8_t* rdram, recomp_context* ctx);
 void ST_QueryLevelGeometry(uint8_t* rdram, recomp_context* ctx);

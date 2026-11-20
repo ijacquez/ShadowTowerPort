@@ -47,12 +47,23 @@ full model and collision formats have not yet been established. See
    These are stored coordinate units; model vertices and player positions use
    the same scale. A spatial cell is 4096 stored units. Their physical units
    are not established; see [STAGE_UNITS.md](STAGE_UNITS.md).
-4. The geometry query invokes `sub_80046604`, `sub_800468C0`, and
-   `sub_80047884` to prepare and test candidate geometry. The latter two
+4. `ST_TransformCandidateVertices` uses each selected record's byte 0 to
+   select a 40-byte entry at `level_data + 12`. The entry's word at offset 0
+   locates an eight-byte-stride vertex array at `level_data + offset + 12`,
+   and its word at offset 4 gives the vertex count. The routine selects a
+   matrix using the low two bits of record byte 3, and uses the decoded
+   origin as the GTE translation. For every vertex it writes the transformed
+   coordinates, then writes three more vectors by subtracting the query's
+   current position, proposed position, and position with Y adjusted by
+   `query[0x1E] - 0x403`, respectively. The outputs use 16 bytes per vector.
+   The routine exits if the 32-bit calculated end of the first output is
+   greater than its buffer limit in an unsigned comparison.
+5. The geometry query invokes `sub_800468C0` and `sub_80047884` to test
+   candidate geometry. Both
    access the shared level-data pointer and derive subrecord addresses using
    fields from the selected 12-byte records. **OPEN:** their full formats
    and exact individual responsibilities are not established.
-5. Results, including flags and distance-like values, are written to the
+6. Results, including flags and distance-like values, are written to the
    shared query structure. `ST_PlayerMoveWithCollision` uses them to choose
    and adjust the displacement; see [PLAYER_MOVEMENT.md](PLAYER_MOVEMENT.md).
 

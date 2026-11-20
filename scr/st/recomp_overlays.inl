@@ -382,7 +382,7 @@ static FuncEntry section_1_text_funcs[] = {
     { .func = ProcessAssetLoadQueue, .offset = 0x00035ffc },
     { .func = ST_SelectSpatialCandidates, .offset = 0x00036270 },
     { .func = ST_DecodeCandidateOrigins, .offset = 0x0003656c },
-    { .func = sub_80046604, .offset = 0x00036604 },
+    { .func = ST_TransformCandidateVertices, .offset = 0x00036604 },
     { .func = sub_800468C0, .offset = 0x000368c0 },
     { .func = sub_80047884, .offset = 0x00037884 },
     { .func = ST_QueryLevelGeometry, .offset = 0x00038ad0 },

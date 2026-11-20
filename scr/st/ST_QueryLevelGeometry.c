@@ -177,7 +177,7 @@ L_80048BD8:
     // jal         0x80046604
     // sw          $v0, 0x1C($s4)
     MEM_W(0X1C, ctx->r20) = ctx->r2;
-    sub_80046604(rdram, ctx);
+    ST_TransformCandidateVertices(rdram, ctx);
     goto after_2;
     // sw          $v0, 0x1C($s4)
     MEM_W(0X1C, ctx->r20) = ctx->r2;
