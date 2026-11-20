@@ -663,17 +663,17 @@ L_800419E4:
             const int16_t current = (int16_t)MEM_HU(ST_PLAYER_VERTICAL_MOVE, verticalPlayer);
             MEM_H(ST_PLAYER_VERTICAL_MOVE, verticalPlayer) = (uint16_t)(current >> 2);
         } else if (vertical < 0) {
-            if (difference >= -0x400) MEM_W(ST_PLAYER_MOVE_LIMIT, verticalPlayer) = 0;
-            const int16_t updated = (int16_t)(uint16_t)(rawVertical - 0x30u);
+            if (difference >= -ST_PLAYER_VERTICAL_LIMIT_DISTANCE) MEM_W(ST_PLAYER_MOVE_LIMIT, verticalPlayer) = 0;
+            const int16_t updated = (int16_t)(uint16_t)(rawVertical - ST_PLAYER_VERTICAL_ACCELERATION);
             MEM_H(ST_PLAYER_VERTICAL_MOVE, verticalPlayer) = (uint16_t)updated;
-            if (S32(queryValue - (uint32_t)(int32_t)updated) >= 0x641)
+            if (S32(queryValue - (uint32_t)(int32_t)updated) >= ST_PLAYER_COLLISION_Y_OFFSET + 1)
                 MEM_H(ST_PLAYER_VERTICAL_MOVE, verticalPlayer) =
                     (uint16_t)(queryValue - ST_PLAYER_COLLISION_Y_OFFSET);
-        } else if (difference >= -0x1F) {
+        } else if (difference > -ST_PLAYER_VERTICAL_SNAP_DISTANCE) {
             MEM_H(ST_PLAYER_VERTICAL_MOVE, verticalPlayer) = (uint16_t)(0u - (uint32_t)difference);
         } else {
-            if (difference >= -0x400) MEM_W(ST_PLAYER_MOVE_LIMIT, verticalPlayer) = 0;
-            MEM_H(ST_PLAYER_VERTICAL_MOVE, verticalPlayer) = (uint16_t)(rawVertical - 0x10u);
+            if (difference >= -ST_PLAYER_VERTICAL_LIMIT_DISTANCE) MEM_W(ST_PLAYER_MOVE_LIMIT, verticalPlayer) = 0;
+            MEM_H(ST_PLAYER_VERTICAL_MOVE, verticalPlayer) = (uint16_t)(rawVertical - ST_PLAYER_VERTICAL_START_SPEED);
         }
     } else {
         ctx->r6 = verticalPlayer;
@@ -682,19 +682,19 @@ L_800419E4:
             MEM_H(ST_PLAYER_VERTICAL_MOVE, verticalPlayer) = 0;
         } else if (vertical > 0) {
             ctx->r4 = rawVertical;
-            if (difference <= 0x400) MEM_W(ST_PLAYER_MOVE_LIMIT, verticalPlayer) = 0;
+            if (difference <= ST_PLAYER_VERTICAL_LIMIT_DISTANCE) MEM_W(ST_PLAYER_MOVE_LIMIT, verticalPlayer) = 0;
             if ((MEM_W(0x74, verticalQuery) & 0xFFFFFFF0u) == 0)
-                MEM_H(ST_PLAYER_VERTICAL_MOVE, verticalPlayer) = (uint16_t)(rawVertical + 0x30u);
+                MEM_H(ST_PLAYER_VERTICAL_MOVE, verticalPlayer) = (uint16_t)(rawVertical + ST_PLAYER_VERTICAL_ACCELERATION);
         } else if (vertical < 0) {
             ctx->r4 = rawVertical;
             MEM_H(ST_PLAYER_VERTICAL_MOVE, verticalPlayer) = (uint16_t)(vertical / 2);
-        } else if (difference < 0x20) {
+        } else if (difference < ST_PLAYER_VERTICAL_SNAP_DISTANCE) {
             ctx->r4 = rawVertical;
             MEM_H(ST_PLAYER_VERTICAL_MOVE, verticalPlayer) = (uint16_t)(rawVertical + (uint32_t)difference);
         } else {
             ctx->r4 = rawVertical;
-            if (difference <= 0x400) MEM_W(ST_PLAYER_MOVE_LIMIT, verticalPlayer) = 0;
-            MEM_H(ST_PLAYER_VERTICAL_MOVE, verticalPlayer) = (uint16_t)(rawVertical + 0x10u);
+            if (difference <= ST_PLAYER_VERTICAL_LIMIT_DISTANCE) MEM_W(ST_PLAYER_MOVE_LIMIT, verticalPlayer) = 0;
+            MEM_H(ST_PLAYER_VERTICAL_MOVE, verticalPlayer) = (uint16_t)(rawVertical + ST_PLAYER_VERTICAL_START_SPEED);
         }
     }
     ctx->r2 = 0x801A0000;

@@ -35,3 +35,11 @@ enum ST_PlayerStateOffset {
 // full height remains unknown.
 enum { ST_PLAYER_COLLISION_Y_OFFSET = 0x640 };
 enum { ST_PLAYER_VIEW_Y_OFFSET = 0x640 };
+
+// Vertical movement values use 12 fractional bits in spatial-cell units.
+enum {
+    ST_PLAYER_VERTICAL_START_SPEED = 0x10,       // 0.00390625
+    ST_PLAYER_VERTICAL_SNAP_DISTANCE = 0x20,     // 0.0078125
+    ST_PLAYER_VERTICAL_ACCELERATION = 0x30,      // 0.01171875
+    ST_PLAYER_VERTICAL_LIMIT_DISTANCE = 0x400    // 0.25
+};
