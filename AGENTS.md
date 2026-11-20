@@ -32,9 +32,9 @@ This Project is being REVERSE ENGINEERED.
   both in the source tree _and_ in the documentation.
 - If the fixed point is known, represent both as hex and floating point.
   For example, value 0x800 for Q.12 is 0.5.
-- Comments in the source tree is welcomed.
-  All must be up to date, concise, and to the point. They are to be markers to
-  help you the agent pick up where you left off.
+- Comments in the source tree is encouraged.
+  All must be up to date, concise, and to the point. Comments are to be markers
+  to help humans and you the agent pick up where you left off.
 - Source code for tools must always be clean; readable and documented in a terse
   and concise manner.
 - Game documentation describes the source tree and verified game behavior. Do
@@ -77,3 +77,17 @@ ALSOFT_DRIVERS=null LIBGL_ALWAYS_SOFTWARE=1 xvfb-run -a ./Shadow_Tower
 
 This uses software rendering and disables audio output. Logs and other
 runtime files are written in `scratchpad/`.
+
+### Run GDB under Xvfb
+
+From the project root, build the game and link `scratchpad/script.gdb` to
+the GDB script to run:
+
+```sh
+make -j4
+ln -sfn commands.gdb scratchpad/script.gdb
+xvfb-run -a sh -c 'java tools/RunGameUnderGdb.java --inside-xvfb < scratchpad/script.gdb'
+```
+
+The launcher links the game and disc image into `scratchpad/`, then runs GDB
+there with software rendering and audio output disabled.
