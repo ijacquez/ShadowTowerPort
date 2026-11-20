@@ -193,6 +193,35 @@ int main() {
             return 1;
         }
     }
+    struct BoundaryCase { int z, recordFlags, flags, firstResult; };
+    const BoundaryCase boundaryCases[] = {
+        {0x3F2FF, 0xA, 0, ST_COLLISION_GEOMETRY_NO_RESULT},
+        {0x3F300, 0xA, ST_COLLISION_RESULT_FIRST_NORMAL_THRESHOLD, -256},
+        {0x3F300, 0xB, 0, ST_COLLISION_GEOMETRY_NO_RESULT},
+        {0x3F300, 0xE, 0, ST_COLLISION_GEOMETRY_NO_RESULT}
+    };
+    for (int vertexCount = 3; vertexCount <= 4; ++vertexCount) {
+        for (const auto& test : boundaryCases) {
+            std::memcpy(rdram, wallInitial, sizeof rdram);
+            std::memset(g_psxScratchpad, 0, sizeof g_psxScratchpad);
+            MEM_H(ST_GEOMETRY_MODEL_THREE_VERTEX_COUNT, model) = vertexCount == 3;
+            MEM_H(ST_GEOMETRY_MODEL_FOUR_VERTEX_COUNT, model) = vertexCount == 4;
+            MEM_H(ST_GEOMETRY_RECORD_FLAGS, record) = test.recordFlags;
+            MEM_W(ST_COLLISION_QUERY_POSITION_Y, query) = 0x41C00;
+            MEM_W(ST_COLLISION_QUERY_POSITION_Z, query) = test.z;
+            MEM_H(ST_COLLISION_QUERY_DISPLACEMENT_Z, query) = -48;
+            recomp_context boundaryCtx{};
+            boundaryCtx.r4 = query;
+            boundaryCtx.r29 = 0x801EF000;
+            ST_QueryLevelGeometry(rdram, &boundaryCtx);
+            if (boundaryCtx.r2 != test.flags ||
+                MEM_HU(ST_COLLISION_QUERY_CANDIDATE_COUNT, query) != 1 ||
+                S32(MEM_W(ST_COLLISION_QUERY_FIRST_NORMAL_RESULT, query)) != test.firstResult) {
+                std::fprintf(stderr, "%d-vertex distance boundary failed at Z 0x%x\n", vertexCount, test.z);
+                return 1;
+            }
+        }
+    }
     struct DirectionalCase { int y, z, displacement; };
     const DirectionalCase directionalCases[] = {
         {0x416C0, 0x3F4D0, -48},

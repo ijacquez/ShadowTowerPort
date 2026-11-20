@@ -492,7 +492,7 @@ L_80046C3C:
     // sra         $s4, $v0, 12
     ctx->r20 = S32(ctx->r2) >> 12;
     // slti        $v0, $s0, -0x100
-    ctx->r2 = SIGNED(ctx->r16) < -0X100 ? 1 : 0;
+    ctx->r2 = SIGNED(ctx->r16) < ST_COLLISION_GEOMETRY_MIN_PLANE_DISTANCE ? 1 : 0;
     // bne         $v0, $zero, L_800477C0
     if (ctx->r2 != 0) {
         // nop
@@ -846,11 +846,11 @@ L_80046C3C:
     // bltz        $v0, L_80046F54
     if (SIGNED(ctx->r2) < 0) {
         // slti        $v0, $s1, -0x100
-        ctx->r2 = SIGNED(ctx->r17) < -0X100 ? 1 : 0;
+        ctx->r2 = SIGNED(ctx->r17) < ST_COLLISION_GEOMETRY_MIN_PLANE_DISTANCE ? 1 : 0;
         goto L_80046F54;
     }
     // slti        $v0, $s1, -0x100
-    ctx->r2 = SIGNED(ctx->r17) < -0X100 ? 1 : 0;
+    ctx->r2 = SIGNED(ctx->r17) < ST_COLLISION_GEOMETRY_MIN_PLANE_DISTANCE ? 1 : 0;
     // lw          $v0, 0x38($t3)
     ctx->r2 = MEM_W(0X38, ctx->r11);
     // nop
@@ -862,11 +862,11 @@ L_80046C3C:
     // bltz        $v0, L_80046F54
     if (SIGNED(ctx->r2) < 0) {
         // slti        $v0, $s1, -0x100
-        ctx->r2 = SIGNED(ctx->r17) < -0X100 ? 1 : 0;
+        ctx->r2 = SIGNED(ctx->r17) < ST_COLLISION_GEOMETRY_MIN_PLANE_DISTANCE ? 1 : 0;
         goto L_80046F54;
     }
     // slti        $v0, $s1, -0x100
-    ctx->r2 = SIGNED(ctx->r17) < -0X100 ? 1 : 0;
+    ctx->r2 = SIGNED(ctx->r17) < ST_COLLISION_GEOMETRY_MIN_PLANE_DISTANCE ? 1 : 0;
     // lw          $v0, 0x48($t3)
     ctx->r2 = MEM_W(0X48, ctx->r11);
     // nop
@@ -878,11 +878,11 @@ L_80046C3C:
     // bltz        $v0, L_80046F54
     if (SIGNED(ctx->r2) < 0) {
         // slti        $v0, $s1, -0x100
-        ctx->r2 = SIGNED(ctx->r17) < -0X100 ? 1 : 0;
+        ctx->r2 = SIGNED(ctx->r17) < ST_COLLISION_GEOMETRY_MIN_PLANE_DISTANCE ? 1 : 0;
         goto L_80046F54;
     }
     // slti        $v0, $s1, -0x100
-    ctx->r2 = SIGNED(ctx->r17) < -0X100 ? 1 : 0;
+    ctx->r2 = SIGNED(ctx->r17) < ST_COLLISION_GEOMETRY_MIN_PLANE_DISTANCE ? 1 : 0;
     // lw          $v0, 0x120($t3)
     ctx->r2 = MEM_W(0X120, ctx->r11);
     // nop
@@ -892,11 +892,11 @@ L_80046C3C:
     // beq         $v0, $zero, L_80046F54
     if (ctx->r2 == 0) {
         // slti        $v0, $s1, -0x100
-        ctx->r2 = SIGNED(ctx->r17) < -0X100 ? 1 : 0;
+        ctx->r2 = SIGNED(ctx->r17) < ST_COLLISION_GEOMETRY_MIN_PLANE_DISTANCE ? 1 : 0;
         goto L_80046F54;
     }
     // slti        $v0, $s1, -0x100
-    ctx->r2 = SIGNED(ctx->r17) < -0X100 ? 1 : 0;
+    ctx->r2 = SIGNED(ctx->r17) < ST_COLLISION_GEOMETRY_MIN_PLANE_DISTANCE ? 1 : 0;
     // sw          $s0, 0x120($t3)
     MEM_W(0X120, ctx->r11) = ctx->r16;
     // lw          $v0, 0x0($t9)
@@ -908,7 +908,7 @@ L_80046C3C:
     // sw          $v1, 0x154($t3)
     MEM_W(0X154, ctx->r11) = ctx->r3;
     // slti        $v0, $s1, -0x100
-    ctx->r2 = SIGNED(ctx->r17) < -0X100 ? 1 : 0;
+    ctx->r2 = SIGNED(ctx->r17) < ST_COLLISION_GEOMETRY_MIN_PLANE_DISTANCE ? 1 : 0;
 L_80046F54:
     // bne         $v0, $zero, L_800477C0
     if (ctx->r2 != 0) {
@@ -1006,11 +1006,11 @@ L_80046FBC:
     // bltz        $v0, L_80047298
     if (SIGNED(ctx->r2) < 0) {
         // slti        $v0, $s1, -0x100
-        ctx->r2 = SIGNED(ctx->r17) < -0X100 ? 1 : 0;
+        ctx->r2 = SIGNED(ctx->r17) < ST_COLLISION_GEOMETRY_MIN_PLANE_DISTANCE ? 1 : 0;
         goto L_80047298;
     }
     // slti        $v0, $s1, -0x100
-    ctx->r2 = SIGNED(ctx->r17) < -0X100 ? 1 : 0;
+    ctx->r2 = SIGNED(ctx->r17) < ST_COLLISION_GEOMETRY_MIN_PLANE_DISTANCE ? 1 : 0;
     // lw          $v0, 0x38($t3)
     ctx->r2 = MEM_W(0X38, ctx->r11);
     // nop
@@ -1020,11 +1020,11 @@ L_80046FBC:
     // bltz        $v0, L_80047298
     if (SIGNED(ctx->r2) < 0) {
         // slti        $v0, $s1, -0x100
-        ctx->r2 = SIGNED(ctx->r17) < -0X100 ? 1 : 0;
+        ctx->r2 = SIGNED(ctx->r17) < ST_COLLISION_GEOMETRY_MIN_PLANE_DISTANCE ? 1 : 0;
         goto L_80047298;
     }
     // slti        $v0, $s1, -0x100
-    ctx->r2 = SIGNED(ctx->r17) < -0X100 ? 1 : 0;
+    ctx->r2 = SIGNED(ctx->r17) < ST_COLLISION_GEOMETRY_MIN_PLANE_DISTANCE ? 1 : 0;
     // lw          $v0, 0x48($t3)
     ctx->r2 = MEM_W(0X48, ctx->r11);
     // nop
@@ -1034,11 +1034,11 @@ L_80046FBC:
     // bltz        $v0, L_80047298
     if (SIGNED(ctx->r2) < 0) {
         // slti        $v0, $s1, -0x100
-        ctx->r2 = SIGNED(ctx->r17) < -0X100 ? 1 : 0;
+        ctx->r2 = SIGNED(ctx->r17) < ST_COLLISION_GEOMETRY_MIN_PLANE_DISTANCE ? 1 : 0;
         goto L_80047298;
     }
     // slti        $v0, $s1, -0x100
-    ctx->r2 = SIGNED(ctx->r17) < -0X100 ? 1 : 0;
+    ctx->r2 = SIGNED(ctx->r17) < ST_COLLISION_GEOMETRY_MIN_PLANE_DISTANCE ? 1 : 0;
     // lw          $v0, 0x114($t3)
     ctx->r2 = MEM_W(0X114, ctx->r11);
     // nop
@@ -1436,7 +1436,7 @@ L_800471B0:
     MEM_H(ST_COLLISION_QUERY_RECORD_VECTOR_SUM_Z, ctx->r19) = ctx->r3;
 L_80047294:
     // slti        $v0, $s1, -0x100
-    ctx->r2 = SIGNED(ctx->r17) < -0X100 ? 1 : 0;
+    ctx->r2 = SIGNED(ctx->r17) < ST_COLLISION_GEOMETRY_MIN_PLANE_DISTANCE ? 1 : 0;
 L_80047298:
     // bne         $v0, $zero, L_800477C0
     if (ctx->r2 != 0) {
@@ -1699,11 +1699,11 @@ L_800473FC:
     // bltz        $v0, L_80047538
     if (SIGNED(ctx->r2) < 0) {
         // slti        $v0, $s1, -0x100
-        ctx->r2 = SIGNED(ctx->r17) < -0X100 ? 1 : 0;
+        ctx->r2 = SIGNED(ctx->r17) < ST_COLLISION_GEOMETRY_MIN_PLANE_DISTANCE ? 1 : 0;
         goto L_80047538;
     }
     // slti        $v0, $s1, -0x100
-    ctx->r2 = SIGNED(ctx->r17) < -0X100 ? 1 : 0;
+    ctx->r2 = SIGNED(ctx->r17) < ST_COLLISION_GEOMETRY_MIN_PLANE_DISTANCE ? 1 : 0;
     // lw          $v0, 0x34($t3)
     ctx->r2 = MEM_W(0X34, ctx->r11);
     // nop
@@ -1735,11 +1735,11 @@ L_800473FC:
     // bltz        $v0, L_80047538
     if (SIGNED(ctx->r2) < 0) {
         // slti        $v0, $s1, -0x100
-        ctx->r2 = SIGNED(ctx->r17) < -0X100 ? 1 : 0;
+        ctx->r2 = SIGNED(ctx->r17) < ST_COLLISION_GEOMETRY_MIN_PLANE_DISTANCE ? 1 : 0;
         goto L_80047538;
     }
     // slti        $v0, $s1, -0x100
-    ctx->r2 = SIGNED(ctx->r17) < -0X100 ? 1 : 0;
+    ctx->r2 = SIGNED(ctx->r17) < ST_COLLISION_GEOMETRY_MIN_PLANE_DISTANCE ? 1 : 0;
     // lw          $v0, 0x44($t3)
     ctx->r2 = MEM_W(0X44, ctx->r11);
     // nop
@@ -1771,11 +1771,11 @@ L_800473FC:
     // bltz        $v0, L_80047538
     if (SIGNED(ctx->r2) < 0) {
         // slti        $v0, $s1, -0x100
-        ctx->r2 = SIGNED(ctx->r17) < -0X100 ? 1 : 0;
+        ctx->r2 = SIGNED(ctx->r17) < ST_COLLISION_GEOMETRY_MIN_PLANE_DISTANCE ? 1 : 0;
         goto L_80047538;
     }
     // slti        $v0, $s1, -0x100
-    ctx->r2 = SIGNED(ctx->r17) < -0X100 ? 1 : 0;
+    ctx->r2 = SIGNED(ctx->r17) < ST_COLLISION_GEOMETRY_MIN_PLANE_DISTANCE ? 1 : 0;
     // lw          $v0, 0x12C($t3)
     ctx->r2 = MEM_W(ST_COLLISION_GEOMETRY_SCRATCH_FIRST_NORMAL_FALLBACK_DISTANCE, ctx->r11);
     // nop
@@ -1785,11 +1785,11 @@ L_800473FC:
     // beq         $v0, $zero, L_80047538
     if (ctx->r2 == 0) {
         // slti        $v0, $s1, -0x100
-        ctx->r2 = SIGNED(ctx->r17) < -0X100 ? 1 : 0;
+        ctx->r2 = SIGNED(ctx->r17) < ST_COLLISION_GEOMETRY_MIN_PLANE_DISTANCE ? 1 : 0;
         goto L_80047538;
     }
     // slti        $v0, $s1, -0x100
-    ctx->r2 = SIGNED(ctx->r17) < -0X100 ? 1 : 0;
+    ctx->r2 = SIGNED(ctx->r17) < ST_COLLISION_GEOMETRY_MIN_PLANE_DISTANCE ? 1 : 0;
     // sw          $s0, 0x12C($t3)
     MEM_W(ST_COLLISION_GEOMETRY_SCRATCH_FIRST_NORMAL_FALLBACK_DISTANCE, ctx->r11) = ctx->r16;
     // lw          $v0, 0x0($t9)
@@ -1814,11 +1814,11 @@ L_80047504:
     // beq         $v0, $zero, L_80047538
     if (ctx->r2 == 0) {
         // slti        $v0, $s1, -0x100
-        ctx->r2 = SIGNED(ctx->r17) < -0X100 ? 1 : 0;
+        ctx->r2 = SIGNED(ctx->r17) < ST_COLLISION_GEOMETRY_MIN_PLANE_DISTANCE ? 1 : 0;
         goto L_80047538;
     }
     // slti        $v0, $s1, -0x100
-    ctx->r2 = SIGNED(ctx->r17) < -0X100 ? 1 : 0;
+    ctx->r2 = SIGNED(ctx->r17) < ST_COLLISION_GEOMETRY_MIN_PLANE_DISTANCE ? 1 : 0;
     // lhu         $v0, 0x44CE($s6)
     ctx->r2 = MEM_HU(ST_COLLISION_QUERY_CANDIDATE_INDICES, ctx->r22);
     // sw          $s0, 0x128($t3)
@@ -1835,7 +1835,7 @@ L_80047504:
     MEM_W(0X174, ctx->r11) = ctx->r3;
 L_80047534:
     // slti        $v0, $s1, -0x100
-    ctx->r2 = SIGNED(ctx->r17) < -0X100 ? 1 : 0;
+    ctx->r2 = SIGNED(ctx->r17) < ST_COLLISION_GEOMETRY_MIN_PLANE_DISTANCE ? 1 : 0;
 L_80047538:
     // bne         $v0, $zero, L_800477C0
     if (ctx->r2 != 0) {
@@ -1854,11 +1854,11 @@ L_80047538:
     // bltz        $v0, L_800475B0
     if (SIGNED(ctx->r2) < 0) {
         // slti        $v0, $s4, -0x100
-        ctx->r2 = SIGNED(ctx->r20) < -0X100 ? 1 : 0;
+        ctx->r2 = SIGNED(ctx->r20) < ST_COLLISION_GEOMETRY_MIN_PLANE_DISTANCE ? 1 : 0;
         goto L_800475B0;
     }
     // slti        $v0, $s4, -0x100
-    ctx->r2 = SIGNED(ctx->r20) < -0X100 ? 1 : 0;
+    ctx->r2 = SIGNED(ctx->r20) < ST_COLLISION_GEOMETRY_MIN_PLANE_DISTANCE ? 1 : 0;
     // lw          $v0, 0x78($t3)
     ctx->r2 = MEM_W(0X78, ctx->r11);
     // nop
@@ -1868,11 +1868,11 @@ L_80047538:
     // bltz        $v0, L_800475B0
     if (SIGNED(ctx->r2) < 0) {
         // slti        $v0, $s4, -0x100
-        ctx->r2 = SIGNED(ctx->r20) < -0X100 ? 1 : 0;
+        ctx->r2 = SIGNED(ctx->r20) < ST_COLLISION_GEOMETRY_MIN_PLANE_DISTANCE ? 1 : 0;
         goto L_800475B0;
     }
     // slti        $v0, $s4, -0x100
-    ctx->r2 = SIGNED(ctx->r20) < -0X100 ? 1 : 0;
+    ctx->r2 = SIGNED(ctx->r20) < ST_COLLISION_GEOMETRY_MIN_PLANE_DISTANCE ? 1 : 0;
     // lw          $v0, 0x88($t3)
     ctx->r2 = MEM_W(0X88, ctx->r11);
     // nop
@@ -1882,11 +1882,11 @@ L_80047538:
     // bltz        $v0, L_800475B0
     if (SIGNED(ctx->r2) < 0) {
         // slti        $v0, $s4, -0x100
-        ctx->r2 = SIGNED(ctx->r20) < -0X100 ? 1 : 0;
+        ctx->r2 = SIGNED(ctx->r20) < ST_COLLISION_GEOMETRY_MIN_PLANE_DISTANCE ? 1 : 0;
         goto L_800475B0;
     }
     // slti        $v0, $s4, -0x100
-    ctx->r2 = SIGNED(ctx->r20) < -0X100 ? 1 : 0;
+    ctx->r2 = SIGNED(ctx->r20) < ST_COLLISION_GEOMETRY_MIN_PLANE_DISTANCE ? 1 : 0;
     // lw          $v0, 0x11C($t3)
     ctx->r2 = MEM_W(0X11C, ctx->r11);
     // nop
@@ -1896,11 +1896,11 @@ L_80047538:
     // beq         $v0, $zero, L_800475B0
     if (ctx->r2 == 0) {
         // slti        $v0, $s4, -0x100
-        ctx->r2 = SIGNED(ctx->r20) < -0X100 ? 1 : 0;
+        ctx->r2 = SIGNED(ctx->r20) < ST_COLLISION_GEOMETRY_MIN_PLANE_DISTANCE ? 1 : 0;
         goto L_800475B0;
     }
     // slti        $v0, $s4, -0x100
-    ctx->r2 = SIGNED(ctx->r20) < -0X100 ? 1 : 0;
+    ctx->r2 = SIGNED(ctx->r20) < ST_COLLISION_GEOMETRY_MIN_PLANE_DISTANCE ? 1 : 0;
     // lhu         $v0, 0x44CE($s6)
     ctx->r2 = MEM_HU(ST_COLLISION_QUERY_CANDIDATE_INDICES, ctx->r22);
     // sw          $s1, 0x11C($t3)
@@ -1916,7 +1916,7 @@ L_80047538:
     // sw          $v1, 0x16C($t3)
     MEM_W(0X16C, ctx->r11) = ctx->r3;
     // slti        $v0, $s4, -0x100
-    ctx->r2 = SIGNED(ctx->r20) < -0X100 ? 1 : 0;
+    ctx->r2 = SIGNED(ctx->r20) < ST_COLLISION_GEOMETRY_MIN_PLANE_DISTANCE ? 1 : 0;
 L_800475B0:
     // bne         $v0, $zero, L_800477C0
     if (ctx->r2 != 0) {

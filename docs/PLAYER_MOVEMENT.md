@@ -1102,6 +1102,18 @@ the horizontal extension and Y is the displacement Y without the vertical
 parameter added. Passing this test does not by itself select a record: distance
 and edge tests follow.
 
+Both helpers calculate a signed value for each of the current position, proposed
+position, and reference point. For a point `P`, transformed record vector `N`,
+and first transformed vertex `V`, the value is `(N dot P - N dot V) / 0x1000`,
+with 32-bit wrapped products and sums and signed division toward zero. If the
+current-position value is less than `ST_COLLISION_GEOMETRY_MIN_PLANE_DISTANCE`
+(`-0x100`, -0.0625 cells), the helper skips the record. A record with bit
+`0x1` or `0x4` in `ST_GEOMETRY_RECORD_FLAGS` also skips horizontal selection
+when its proposed-position value is below that limit. Without either flag, the
+first horizontal selection can proceed even when the proposed-position value
+is below it. The second horizontal selection requires both the proposed and
+reference values to meet the limit.
+
 For a three- or four-vertex record that reaches horizontal selection with bit
 `0x2` set in `ST_GEOMETRY_RECORD_FLAGS`, the helper tests two points: the query's current
 position, and a reference point with the same X/Z and Y equal to query Y plus
@@ -1157,6 +1169,15 @@ and zero movement magnitude replaces the Z displacement with `0x1`
 result is the no-result sentinel, so the subsequent vertical update sets
 `ST_PLAYER_VERTICAL_MOVE` to `0x10` (0.00390625 cells per call). This example
 does not establish which records are selected when other geometry is present.
+
+At Y `0x41C00` (65.75 cells) with the same X and displacement, query Z
+`0x3F300` (63.1875 cells) gives a current value of `-0x100` (-0.0625 cells)
+and a proposed value of `-0x130` (-0.07421875 cells). The `0xA` record can
+still supply `ST_COLLISION_RESULT_FIRST_NORMAL_THRESHOLD`. At Z `0x3F2FF`
+(63.187255859375 cells), the current value is `-0x101` (-0.062744140625
+cells) and the record is skipped. At Z `0x3F300`, setting either bit `0x1` or
+bit `0x4` in the record flags instead causes the below-limit proposed value to
+stop the record before horizontal selection.
 
 For the same isolated record, X and Z, and with the player's stored movement
 components zero, `ST_ApplyDirectionalMovementWithCollision` called with angle
