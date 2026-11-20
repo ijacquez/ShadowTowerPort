@@ -458,6 +458,11 @@ nonzero, this part of the routine leaves both phase and adjustment unchanged.
 adjustments. **OPEN:** the meanings of byte `0x239`, byte `0x801CD122`, and
 the second adjustment have not been established.
 
+[sub_8002B2E8](../scr/st/sub_8002B2E8.c) also reads `0x801CD122` as
+the first of four consecutive bytes. For each byte it renders a pair of
+text entries with their two styles exchanged when the byte equals 1. The
+in-game label of the first entry remains **OPEN**.
+
 In [ST_UpdateLevelStreaming](../scr/st/ST_UpdateLevelStreaming.c), when
 signed halfwords at `0x801B5920` and `0x801B5922` both equal 1, the game
 queues a resource, clears player word `0x174`, sets player halfword `0x178`
