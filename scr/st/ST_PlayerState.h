@@ -85,6 +85,9 @@ enum {
 enum { ST_PLAYER_COLLISION_Y_OFFSET = 0x640 };
 enum { ST_PLAYER_VIEW_Y_OFFSET = 0x640 };
 
+// Signed halfword relative to the emulated global pointer.
+enum { ST_PLAYER_VERTICAL_VIEW_PITCH_GP_OFFSET = 0x17C };
+
 // Vertical movement values use 12 fractional bits in spatial-cell units.
 enum {
     ST_PLAYER_VERTICAL_START_SPEED = 0x10,       // 0.00390625

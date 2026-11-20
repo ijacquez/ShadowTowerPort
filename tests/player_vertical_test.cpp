@@ -77,6 +77,36 @@ int main() {
             return 1;
         }
     }
+    struct ViewPitchCase {
+        int16_t initialVertical, previousPitch, expectedPitch;
+        int32_t difference;
+    };
+    const ViewPitchCase pitchCases[] = {
+        {128, -3, -1, 1025},
+        {129, -3, 0, 1025},
+        {131, -3, 1, 1025},
+        {-80, 3, 1, -4096},
+        {-81, 3, 0, -4096},
+        {-83, 3, -1, -4096},
+    };
+    for (const auto& test : pitchCases) {
+        std::memset(rdram, 0, sizeof rdram);
+        MEM_H(ST_PLAYER_MOVE_MAGNITUDE, player) = 1;
+        MEM_B(ST_PLAYER_VIEW_AND_SOUND_UPDATE_DISABLED, player) = 1;
+        MEM_H(ST_PLAYER_VERTICAL_MOVE, player) = (uint16_t)test.initialVertical;
+        MEM_W(0x2C, query) = (uint32_t)(1600 + test.difference);
+        MEM_W(0x74, query) = 0x10;
+        recomp_context ctx{};
+        ctx.r28 = 0x80080000;
+        ctx.r29 = 0x801EF000;
+        MEM_H(ST_PLAYER_VERTICAL_VIEW_PITCH_GP_OFFSET, ctx.r28) = (uint16_t)test.previousPitch;
+        ST_PlayerMoveWithCollision(rdram, &ctx);
+        if (MEM_HS(ST_PLAYER_VERTICAL_VIEW_PITCH_GP_OFFSET, ctx.r28) != test.expectedPitch ||
+            MEM_HS(ST_PLAYER_VIEW_ADDITIONAL_ROTATION_X, player) != test.expectedPitch) {
+            std::fprintf(stderr, "vertical view pitch case failed for %d\n", test.initialVertical);
+            return 1;
+        }
+    }
     struct OscillationCase {
         uint8_t disabled, enabled;
         uint16_t phase, magnitude;
@@ -146,6 +176,7 @@ int main() {
         }
     }
     std::printf("%zu vertical cases passed\n", sizeof cases / sizeof cases[0]);
+    std::printf("%zu vertical view pitch cases passed\n", sizeof pitchCases / sizeof pitchCases[0]);
     std::printf("%zu view oscillation cases passed\n", sizeof oscillationCases / sizeof oscillationCases[0]);
     std::printf("%zu movement sound countdown cases passed\n", sizeof soundCases / sizeof soundCases[0]);
     return 0;

@@ -1115,6 +1115,7 @@ scr/st/ST_SetCollisionReference.o: scr/st/ST_LevelRecord.h scr/st/ST_ActiveColli
 scr/st/ST_ApplyDirectionalMovementWithCollision.o: scr/st/ST_CollisionQuery.h
 scr/st/ST_ResolveActiveCollisionRecordDisplacement.o: scr/st/ST_CollisionQuery.h scr/st/ST_ActiveCollisionRecord.h scr/st/ST_LevelPlacement.h
 scr/st/ST_RunCollisionQuery.o scr/st/ST_QueryLevelGeometry.o scr/st/ST_TestThreeVertexCollisionRecords.o scr/st/ST_TestFourVertexCollisionRecords.o: scr/st/ST_CollisionQuery.h
+scr/st/ST_UpdatePlayerCollisionYFlags.o: scr/st/ST_CollisionQuery.h scr/st/ST_LevelStreaming.h scr/st/ST_PlayerState.h
 scr/st/ST_SelectSpatialCandidates.o scr/st/ST_DecodeCandidateOrigins.o scr/st/ST_TransformCandidateVertices.o: scr/st/ST_CollisionQuery.h
 scr/st/ST_SelectSpatialCandidates.o: scr/st/ST_SpatialCandidate.h scr/st/ST_LevelPlacement.h scr/st/ST_LevelStreaming.h
 scr/st/ST_NormalizeVectorRegisters.o scr/st/InvSquareRoot.o: scr/st/ST_VectorNormalization.h

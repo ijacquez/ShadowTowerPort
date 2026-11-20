@@ -1133,13 +1133,13 @@ L_80049190:
     // sw          $t1, 0x48($v1)
     MEM_W(0X48, ctx->r3) = ctx->r9;
     // sw          $t2, 0x4C($v1)
-    MEM_W(0X4C, ctx->r3) = ctx->r10;
+    MEM_W(ST_COLLISION_QUERY_FIRST_PLAYER_Y_COMPARISON, ctx->r3) = ctx->r10;
     // sw          $t3, 0x50($v1)
     MEM_W(0X50, ctx->r3) = ctx->r11;
     // sw          $t4, 0x54($v1)
     MEM_W(0X54, ctx->r3) = ctx->r12;
     // sw          $t5, 0x58($v1)
-    MEM_W(0X58, ctx->r3) = ctx->r13;
+    MEM_W(ST_COLLISION_QUERY_SECOND_PLAYER_Y_COMPARISON, ctx->r3) = ctx->r13;
     // lwl         $v0, 0x153($s4)
     ctx->r2 = do_lwl(rdram, ctx->r2, 0X153, ctx->r20);
     // lwr         $v0, 0x150($s4)

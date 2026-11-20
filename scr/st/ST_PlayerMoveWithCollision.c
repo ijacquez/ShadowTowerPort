@@ -683,7 +683,7 @@ L_800419E4:
         } else if (vertical > 0) {
             ctx->r4 = rawVertical;
             if (difference <= ST_PLAYER_VERTICAL_LIMIT_DISTANCE) MEM_W(ST_PLAYER_MOVE_LIMIT, verticalPlayer) = 0;
-            if ((MEM_W(0x74, verticalQuery) & 0xFFFFFFF0u) == 0)
+            if ((MEM_W(ST_COLLISION_QUERY_RESULT_FLAGS, verticalQuery) & 0xFFFFFFF0u) == 0)
                 MEM_H(ST_PLAYER_VERTICAL_MOVE, verticalPlayer) = (uint16_t)(rawVertical + ST_PLAYER_VERTICAL_ACCELERATION);
         } else if (vertical < 0) {
             ctx->r4 = rawVertical;
@@ -700,7 +700,7 @@ L_800419E4:
     ctx->r2 = 0x801A0000;
 L_80041B54:
     // lh          $v1, -0x6E04($v0)
-    ctx->r3 = MEM_HS(-0X6E04, ctx->r2);
+    ctx->r3 = MEM_HS(ST_PLAYER_VERTICAL_MOVE, 0x80198F28);
     // nop
 
     // slti        $v0, $v1, 0x81
@@ -736,7 +736,7 @@ L_80041B78:
     // sra         $v0, $v0, 1
     ctx->r2 = S32(ctx->r2) >> 1;
     // sh          $v0, 0x17C($gp)
-    MEM_H(0X17C, ctx->r28) = ctx->r2;
+    MEM_H(ST_PLAYER_VERTICAL_VIEW_PITCH_GP_OFFSET, ctx->r28) = ctx->r2;
     // j           L_80041BB4
     // lui         $v0, 0x801A
     ctx->r2 = S32(0X801A << 16);
@@ -745,7 +745,7 @@ L_80041B78:
     ctx->r2 = S32(0X801A << 16);
 L_80041B90:
     // lhu         $v0, 0x17C($gp)
-    ctx->r2 = MEM_HU(0X17C, ctx->r28);
+    ctx->r2 = MEM_HU(ST_PLAYER_VERTICAL_VIEW_PITCH_GP_OFFSET, ctx->r28);
     // nop
 
     // sll         $v0, $v0, 16
@@ -759,14 +759,14 @@ L_80041B90:
     // sra         $v1, $v1, 1
     ctx->r3 = S32(ctx->r3) >> 1;
     // sh          $v1, 0x17C($gp)
-    MEM_H(0X17C, ctx->r28) = ctx->r3;
+    MEM_H(ST_PLAYER_VERTICAL_VIEW_PITCH_GP_OFFSET, ctx->r28) = ctx->r3;
     // lui         $v0, 0x801A
     ctx->r2 = S32(0X801A << 16);
 L_80041BB4:
     // addiu       $s0, $v0, -0x70D8
     ctx->r16 = ADD32(ctx->r2, -0X70D8);
     // lhu         $v0, 0x17C($gp)
-    ctx->r2 = MEM_HU(0X17C, ctx->r28);
+    ctx->r2 = MEM_HU(ST_PLAYER_VERTICAL_VIEW_PITCH_GP_OFFSET, ctx->r28);
     // lbu         $v1, 0x239($s0)
     ctx->r3 = MEM_BU(ST_PLAYER_VIEW_AND_SOUND_UPDATE_DISABLED, ctx->r16);
     // nop
@@ -774,11 +774,11 @@ L_80041BB4:
     // bne         $v1, $zero, L_80041CD4
     if (ctx->r3 != 0) {
         // sh          $v0, 0x290($s0)
-        MEM_H(0X290, ctx->r16) = ctx->r2;
+        MEM_H(ST_PLAYER_VIEW_ADDITIONAL_ROTATION_X, ctx->r16) = ctx->r2;
         goto L_80041CD4;
     }
     // sh          $v0, 0x290($s0)
-    MEM_H(0X290, ctx->r16) = ctx->r2;
+    MEM_H(ST_PLAYER_VIEW_ADDITIONAL_ROTATION_X, ctx->r16) = ctx->r2;
     // This setting enables the view oscillation update.
     ctx->r2 = MEM_BU(0, ST_ADJUST_WALK_SETTING_ADDRESS);
     // nop

@@ -121,6 +121,15 @@ to [RotMatrixZYX](../scr/st/RotMatrixZYX.c), with the output at
 `ST_PLAYER_VIEW_ROTATION_MATRIX`. **OPEN:** the full set of writers and in-game meanings of the state,
 transient, and additional rotation components.
 
+After updating vertical movement, `ST_PlayerMoveWithCollision` updates the
+signed halfword `ST_PLAYER_VERTICAL_VIEW_PITCH_GP_OFFSET` relative to the
+emulated global pointer. For vertical movement `v` greater than `0x80`
+(0.03125 cells per update), it stores `(v - 0x80) / 2`; for `v` below
+`-0x80` (-0.03125), it stores `(v + 0x80) / 2`. Otherwise it stores half
+the previous halfword. Each division rounds toward zero. It copies the
+result to `ST_PLAYER_VIEW_ADDITIONAL_ROTATION_X`, including when
+`ST_PLAYER_VIEW_AND_SOUND_UPDATE_DISABLED` is nonzero.
+
 ## Horizontal input
 
 `ST_PLAYER_LOCAL_MOVE_X` (`0x2B8`) and `ST_PLAYER_LOCAL_MOVE_Z` (`0x2C0`)
@@ -1330,12 +1339,13 @@ geometry and the relationship between model, grid, and player coordinates.
 
 Near the end of `ST_PlayerMoveWithCollision`,
 [ST_UpdatePlayerCollisionYFlags](../scr/st/ST_UpdatePlayerCollisionYFlags.c)
-compares query words `0x4C` and `0x58` with `ST_PLAYER_POSITION_Y`,
+compares `ST_COLLISION_QUERY_FIRST_PLAYER_Y_COMPARISON` (`0x4C`) and
+`ST_COLLISION_QUERY_SECOND_PLAYER_Y_COMPARISON` (`0x58`) with `ST_PLAYER_POSITION_Y`,
 using signed 32-bit comparisons. For each query word other than the sentinel
 `0x80000`, it writes 1 to `ST_PLAYER_FIRST_COLLISION_Y_FLAG` (`0x2EC`) or
 `ST_PLAYER_SECOND_COLLISION_Y_FLAG` (`0x2F0`), respectively, if the query value is less than player Y, or 0 otherwise. A sentinel
-leaves that flag unchanged. If byte `0x801B5924` is 10 and signed player
-halfword `0x178` is `0x147`, the function clears `ST_PLAYER_SECOND_COLLISION_Y_FLAG` even if the second
+leaves that flag unchanged. If `ST_LEVEL_STREAMING_APPLIED_ID_FIRST` is 10 and signed
+`ST_PLAYER_STREAMING_RESET_HALFWORD` is `0x147`, the function clears `ST_PLAYER_SECOND_COLLISION_Y_FLAG` even if the second
 query word is the sentinel. The game state machine reads this flag when
 choosing subsequent behavior. **OPEN:** the physical meanings of these flags
 and the special-case values have not been established.
