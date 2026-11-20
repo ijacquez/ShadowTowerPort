@@ -1,5 +1,7 @@
 #include "recomp.h"
 #include "disable_warnings.h"
+#include "ST_LevelStreaming.h"
+#include "ST_PlayerState.h"
 
 void ST_UpdateLevelStreaming(uint8_t* rdram, recomp_context* ctx) 
 {
@@ -57,7 +59,7 @@ void ST_UpdateLevelStreaming(uint8_t* rdram, recomp_context* ctx)
     // nop
 
     // lhu         $v0, 0x2($s1)
-    ctx->r2 = MEM_HU(0X2, ctx->r17);
+    ctx->r2 = MEM_HU(ST_LEVEL_STREAMING_PHASE, ctx->r17);
     // nop
 
     // sll         $v0, $v0, 16
@@ -406,20 +408,20 @@ L_800458B4:
     // addiu       $v1, $zero, -0x1
     ctx->r3 = ADD32(0, -0X1);
     // sw          $zero, 0x174($v0)
-    MEM_W(0X174, ctx->r2) = 0;
+    MEM_W(ST_PLAYER_STREAMING_CLEAR_WORD, ctx->r2) = 0;
     // jal         0x80014CFC
     // sh          $v1, 0x178($v0)
-    MEM_H(0X178, ctx->r2) = ctx->r3;
+    MEM_H(ST_PLAYER_STREAMING_RESET_HALFWORD, ctx->r2) = ctx->r3;
     printf("[6F8] -> before ST_CopyWords \n");
     ST_CopyWords(rdram, ctx);
     goto after_5;
     // sh          $v1, 0x178($v0)
-    MEM_H(0X178, ctx->r2) = ctx->r3;
+    MEM_H(ST_PLAYER_STREAMING_RESET_HALFWORD, ctx->r2) = ctx->r3;
     after_5:
     // lb          $v1, 0x20($s1)
-    ctx->r3 = MEM_BS(0X20, ctx->r17);
+    ctx->r3 = MEM_BS(ST_LEVEL_STREAMING_TRANSLATION_COARSE_X, ctx->r17);
     // addiu       $v0, $zero, 0x7F
-    ctx->r2 = ADD32(0, 0X7F);
+    ctx->r2 = ADD32(0, ST_LEVEL_STREAMING_NO_TRANSLATION);
     // beq         $v1, $v0, L_80045968
     if (ctx->r3 == ctx->r2) {
         // sll         $v0, $v1, 12
@@ -429,19 +431,19 @@ L_800458B4:
     // sll         $v0, $v1, 12
     ctx->r2 = S32(ctx->r3) << 12;
     // lb          $a0, 0x23($s1)
-    ctx->r4 = MEM_BS(0X23, ctx->r17);
+    ctx->r4 = MEM_BS(ST_LEVEL_STREAMING_TRANSLATION_FINE_X, ctx->r17);
     // lb          $a1, 0x24($s1)
-    ctx->r5 = MEM_BS(0X24, ctx->r17);
+    ctx->r5 = MEM_BS(ST_LEVEL_STREAMING_TRANSLATION_FINE_Y, ctx->r17);
     // lb          $a2, 0x25($s1)
-    ctx->r6 = MEM_BS(0X25, ctx->r17);
+    ctx->r6 = MEM_BS(ST_LEVEL_STREAMING_TRANSLATION_FINE_Z, ctx->r17);
     // sb          $s0, 0x1C($s1)
-    MEM_B(0X1C, ctx->r17) = ctx->r16;
+    MEM_B(ST_LEVEL_STREAMING_TRANSLATION_APPLIED, ctx->r17) = ctx->r16;
     // sll         $a0, $a0, 7
     ctx->r4 = S32(ctx->r4) << 7;
     // addu        $a0, $v0, $a0
     ctx->r4 = ADD32(ctx->r2, ctx->r4);
     // lb          $v0, 0x22($s1)
-    ctx->r2 = MEM_BS(0X22, ctx->r17);
+    ctx->r2 = MEM_BS(ST_LEVEL_STREAMING_TRANSLATION_COARSE_Y, ctx->r17);
     // sll         $a1, $a1, 7
     ctx->r5 = S32(ctx->r5) << 7;
     // sll         $v0, $v0, 12
@@ -449,7 +451,7 @@ L_800458B4:
     // addu        $a1, $v0, $a1
     ctx->r5 = ADD32(ctx->r2, ctx->r5);
     // lb          $v0, 0x21($s1)
-    ctx->r2 = MEM_BS(0X21, ctx->r17);
+    ctx->r2 = MEM_BS(ST_LEVEL_STREAMING_TRANSLATION_COARSE_Z, ctx->r17);
     // sll         $a2, $a2, 7
     ctx->r6 = S32(ctx->r6) << 7;
     // sll         $v0, $v0, 12

@@ -1046,31 +1046,36 @@ the flag word from its collision-record scratch flags. **OPEN:** the names
 of these sounds and the complete meaning and lifetime of the flags.
 
 In [ST_UpdateLevelStreaming](../scr/st/ST_UpdateLevelStreaming.c), when
-signed halfwords at `0x801B5920` and `0x801B5922` both equal 1, the game
-queues a resource, clears player word `0x174`, sets player halfword `0x178`
+the signed status halfword at `ST_LEVEL_STREAMING_STATUS_ADDRESS` and
+`ST_LEVEL_STREAMING_PHASE` both equal 1, the game queues a resource, clears
+`ST_PLAYER_STREAMING_CLEAR_WORD`, sets `ST_PLAYER_STREAMING_RESET_HALFWORD`
 to `-1`, and copies the level table. It then calls
-[ST_TranslatePlayerPosition](../scr/st/ST_TranslatePlayerPosition.c) if the
-signed byte at `0x801B5940` is not `0x7F`. This adds offsets directly to
-player X, Y, and Z. Relative to `0x801B5920`, those offsets are
-`(byte[0x20] << 12) + (byte[0x23] << 7)` for X,
-`(byte[0x22] << 12) + (byte[0x24] << 7)` for Y, and
-`(byte[0x21] << 12) + (byte[0x25] << 7)` for Z. Each byte is signed and
+[ST_TranslatePlayerPosition](../scr/st/ST_TranslatePlayerPosition.c) if
+`ST_LEVEL_STREAMING_TRANSLATION_COARSE_X` is not
+`ST_LEVEL_STREAMING_NO_TRANSLATION`. This adds offsets directly to player X,
+Y, and Z. For each axis, the offset is `(coarse << 12) + (fine << 7)`, using
+the matching `ST_LEVEL_STREAMING_TRANSLATION_COARSE_X`, `_Y`, or `_Z` and
+`ST_LEVEL_STREAMING_TRANSLATION_FINE_X`, `_Y`, or `_Z`. Each byte is signed and
 each position addition wraps to 32 bits. **OPEN:** the record's full meaning
 and all callers that request these offsets have not been established.
 
 On its request path, [ST_RequestLevelStreaming](../scr/st/ST_RequestLevelStreaming.c)
-sets the streaming status to 1, the phase to 0, and copies six bytes from
-the caller's stack arguments at offsets `0x14` through `0x28` in four-byte
-steps to streaming-state offsets `0x20` through `0x25`. A separate path in
+sets the streaming status to 1, the phase to 0, and stores six bytes from
+the caller's stack arguments in the streaming translation fields. If an
+existing stream is active, `ST_LEVEL_STREAMING_TRANSLATION_APPLIED` is
+nonzero, the requested primary ID is neither `0xFF` nor the previous
+`ST_LEVEL_STREAMING_REQUEST_PRIMARY_ID`, and the supplied coarse X is
+`ST_LEVEL_STREAMING_NO_TRANSLATION`, it instead negates each previous
+coarse translation byte modulo 256. The fine bytes remain from the caller.
+A separate path in
 [ST_StartLevelStreamingAndWait](../scr/st/ST_StartLevelStreamingAndWait.c) sets status to 1 and phase to 0,
-and writes `0x7F` to offsets `0x20`, `0x21`, and `0x22`; the first of those
-bytes causes the later translation to be skipped.
+and writes `ST_LEVEL_STREAMING_NO_TRANSLATION` to the three coarse fields;
+the X byte causes the later translation to be skipped.
 
 On one path through [ST_UpdateLevelRecords](../scr/st/ST_UpdateLevelRecords.c), the six
-arguments come from the current 88-byte record in the array beginning at
-`0x801C2230`: record bytes `0x50`, `0x52`, and `0x51` provide the coarse
-X, Z, and Y components, and bytes `0x4B`, `0x4C`, and `0x4F` provide the
-corresponding fine components. The resulting translation uses steps of 4096
+arguments come from `ST_LEVEL_RECORD_TRANSLATION_COARSE_X`, `_Y`, and `_Z`
+and `ST_LEVEL_RECORD_TRANSLATION_FINE_X`, `_Y`, and `_Z` in the current
+level record. The resulting translation uses steps of 4096
 and 128 stored position units, respectively. These are the same 88-byte
 records scanned by `ST_QueryIndexedCollisionRecords`.
 

@@ -4859,37 +4859,37 @@ L_80052244:
     // sw          $a0, 0x10($sp)
     MEM_W(0X10, ctx->r29) = ctx->r4;
     // lb          $v0, 0x0($s1)
-    ctx->r2 = MEM_BS(0X0, ctx->r17);
+    ctx->r2 = MEM_BS(ST_LEVEL_RECORD_TRANSLATION_COARSE_X - ST_LEVEL_RECORD_CURSOR_OFFSET, ctx->r17);
     // nop
 
     // sw          $v0, 0x14($sp)
     MEM_W(0X14, ctx->r29) = ctx->r2;
     // lb          $v0, 0x2($s1)
-    ctx->r2 = MEM_BS(0X2, ctx->r17);
+    ctx->r2 = MEM_BS(ST_LEVEL_RECORD_TRANSLATION_COARSE_Z - ST_LEVEL_RECORD_CURSOR_OFFSET, ctx->r17);
     // nop
 
     // sw          $v0, 0x18($sp)
     MEM_W(0X18, ctx->r29) = ctx->r2;
     // lb          $v0, 0x1($s1)
-    ctx->r2 = MEM_BS(0X1, ctx->r17);
+    ctx->r2 = MEM_BS(ST_LEVEL_RECORD_TRANSLATION_COARSE_Y - ST_LEVEL_RECORD_CURSOR_OFFSET, ctx->r17);
     // nop
 
     // sw          $v0, 0x1C($sp)
     MEM_W(0X1C, ctx->r29) = ctx->r2;
     // lb          $v0, -0x5($s1)
-    ctx->r2 = MEM_BS(-0X5, ctx->r17);
+    ctx->r2 = MEM_BS(ST_LEVEL_RECORD_TRANSLATION_FINE_X - ST_LEVEL_RECORD_CURSOR_OFFSET, ctx->r17);
     // addu        $a1, $a0, $zero
     ctx->r5 = ADD32(ctx->r4, 0);
     // sw          $v0, 0x20($sp)
     MEM_W(0X20, ctx->r29) = ctx->r2;
     // lb          $v0, -0x1($s1)
-    ctx->r2 = MEM_BS(-0X1, ctx->r17);
+    ctx->r2 = MEM_BS(ST_LEVEL_RECORD_TRANSLATION_FINE_Y - ST_LEVEL_RECORD_CURSOR_OFFSET, ctx->r17);
     // addu        $a2, $a0, $zero
     ctx->r6 = ADD32(ctx->r4, 0);
     // sw          $v0, 0x24($sp)
     MEM_W(0X24, ctx->r29) = ctx->r2;
     // lb          $v0, -0x4($s1)
-    ctx->r2 = MEM_BS(-0X4, ctx->r17);
+    ctx->r2 = MEM_BS(ST_LEVEL_RECORD_TRANSLATION_FINE_Z - ST_LEVEL_RECORD_CURSOR_OFFSET, ctx->r17);
     // addu        $a3, $a0, $zero
     ctx->r7 = ADD32(ctx->r4, 0);
     // jal         0x80045044

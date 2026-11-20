@@ -1,9 +1,9 @@
 #include "recomp.h"
 #include "disable_warnings.h"
+#include "ST_LevelStreaming.h"
 
 void ST_RequestLevelStreaming(uint8_t* rdram, recomp_context* ctx) {
-    // The six caller-supplied bytes copied to the streaming state at
-    // offsets 0x20..0x25 supply the optional player-position translation.
+    // The caller supplies six bytes for the optional player translation.
     uint64_t hi = 0, lo = 0, result = 0;
     unsigned int rounding_mode = DEFAULT_ROUNDING_MODE;
     int c1cs = 0; 
@@ -349,45 +349,45 @@ L_80045228:
     // sb          $s3, 0x14($v1)
     MEM_B(0X14, ctx->r3) = ctx->r19;
     // sb          $fp, 0x20($v1)
-    MEM_B(0X20, ctx->r3) = ctx->r30;
+    MEM_B(ST_LEVEL_STREAMING_TRANSLATION_COARSE_X, ctx->r3) = ctx->r30;
     // lbu         $t6, 0x10($sp)
     ctx->r14 = MEM_BU(0X10, ctx->r29);
     // nop
 
     // sb          $t6, 0x21($v1)
-    MEM_B(0X21, ctx->r3) = ctx->r14;
+    MEM_B(ST_LEVEL_STREAMING_TRANSLATION_COARSE_Z, ctx->r3) = ctx->r14;
     // lbu         $t6, 0x18($sp)
     ctx->r14 = MEM_BU(0X18, ctx->r29);
     // nop
 
     // sb          $t6, 0x22($v1)
-    MEM_B(0X22, ctx->r3) = ctx->r14;
+    MEM_B(ST_LEVEL_STREAMING_TRANSLATION_COARSE_Y, ctx->r3) = ctx->r14;
     // lbu         $t6, 0x20($sp)
     ctx->r14 = MEM_BU(0X20, ctx->r29);
     // nop
 
     // sb          $t6, 0x23($v1)
-    MEM_B(0X23, ctx->r3) = ctx->r14;
+    MEM_B(ST_LEVEL_STREAMING_TRANSLATION_FINE_X, ctx->r3) = ctx->r14;
     // lbu         $t6, 0x21($sp)
     ctx->r14 = MEM_BU(0X21, ctx->r29);
     // andi        $v0, $s6, 0xFF
     ctx->r2 = ctx->r22 & 0XFF;
     // sb          $t6, 0x24($v1)
-    MEM_B(0X24, ctx->r3) = ctx->r14;
+    MEM_B(ST_LEVEL_STREAMING_TRANSLATION_FINE_Y, ctx->r3) = ctx->r14;
     // lbu         $t6, 0x22($sp)
     ctx->r14 = MEM_BU(0X22, ctx->r29);
     // sltiu       $v0, $v0, 0x2C
     ctx->r2 = ctx->r2 < 0X2C ? 1 : 0;
     // sb          $t6, 0x25($v1)
-    MEM_B(0X25, ctx->r3) = ctx->r14;
+    MEM_B(ST_LEVEL_STREAMING_TRANSLATION_FINE_Z, ctx->r3) = ctx->r14;
     // beq         $v0, $zero, L_800452A8
     if (ctx->r2 == 0) {
         // sb          $zero, 0x1C($v1)
-        MEM_B(0X1C, ctx->r3) = 0;
+        MEM_B(ST_LEVEL_STREAMING_TRANSLATION_APPLIED, ctx->r3) = 0;
         goto L_800452A8;
     }
     // sb          $zero, 0x1C($v1)
-    MEM_B(0X1C, ctx->r3) = 0;
+    MEM_B(ST_LEVEL_STREAMING_TRANSLATION_APPLIED, ctx->r3) = 0;
     // lui         $v0, 0x8009
     ctx->r2 = S32(0X8009 << 16);
     // lw          $v0, -0x7DFC($v0)
@@ -848,7 +848,7 @@ L_800454C4:
     // addiu       $a0, $v0, 0x5920
     ctx->r4 = ADD32(ctx->r2, 0X5920);
     // lbu         $v0, 0x1C($a0)
-    ctx->r2 = MEM_BU(0X1C, ctx->r4);
+    ctx->r2 = MEM_BU(ST_LEVEL_STREAMING_TRANSLATION_APPLIED, ctx->r4);
     // nop
 
     // beq         $v0, $zero, L_80045200
@@ -872,7 +872,7 @@ L_800454C4:
     // sra         $v0, $v0, 24
     ctx->r2 = S32(ctx->r2) >> 24;
     // addiu       $v1, $zero, 0x7F
-    ctx->r3 = ADD32(0, 0X7F);
+    ctx->r3 = ADD32(0, ST_LEVEL_STREAMING_NO_TRANSLATION);
     // bne         $v0, $v1, L_80045204
     if (ctx->r2 != ctx->r3) {
         // lui         $v0, 0x801B
@@ -882,7 +882,7 @@ L_800454C4:
     // lui         $v0, 0x801B
     ctx->r2 = S32(0X801B << 16);
     // lbu         $v0, 0x10($a0)
-    ctx->r2 = MEM_BU(0X10, ctx->r4);
+    ctx->r2 = MEM_BU(ST_LEVEL_STREAMING_REQUEST_PRIMARY_ID, ctx->r4);
     // nop
 
     // beq         $v0, $a1, L_80045204
@@ -894,13 +894,13 @@ L_800454C4:
     // lui         $v0, 0x801B
     ctx->r2 = S32(0X801B << 16);
     // lbu         $v0, 0x20($a0)
-    ctx->r2 = MEM_BU(0X20, ctx->r4);
+    ctx->r2 = MEM_BU(ST_LEVEL_STREAMING_TRANSLATION_COARSE_X, ctx->r4);
     // lbu         $v1, 0x21($a0)
-    ctx->r3 = MEM_BU(0X21, ctx->r4);
+    ctx->r3 = MEM_BU(ST_LEVEL_STREAMING_TRANSLATION_COARSE_Z, ctx->r4);
     // negu        $fp, $v0
     ctx->r30 = SUB32(0, ctx->r2);
     // lbu         $v0, 0x22($a0)
-    ctx->r2 = MEM_BU(0X22, ctx->r4);
+    ctx->r2 = MEM_BU(ST_LEVEL_STREAMING_TRANSLATION_COARSE_Y, ctx->r4);
     // negu        $v1, $v1
     ctx->r3 = SUB32(0, ctx->r3);
     // sb          $v1, 0x10($sp)

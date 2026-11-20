@@ -53,15 +53,15 @@ void ST_StartLevelStreamingAndWait(uint8_t* rdram, recomp_context* ctx) {
     // sb          $v0, 0x8($s0)
     MEM_B(0X8, ctx->r16) = ctx->r2;
     // addiu       $v0, $zero, 0x7F
-    ctx->r2 = ADD32(0, 0X7F);
+    ctx->r2 = ADD32(0, ST_LEVEL_STREAMING_NO_TRANSLATION);
     // sh          $zero, 0x2($s0)
     MEM_H(0X2, ctx->r16) = 0;
     // sb          $v0, 0x20($s0)
-    MEM_B(0X20, ctx->r16) = ctx->r2;
+    MEM_B(ST_LEVEL_STREAMING_TRANSLATION_COARSE_X, ctx->r16) = ctx->r2;
     // sb          $v0, 0x21($s0)
-    MEM_B(0X21, ctx->r16) = ctx->r2;
+    MEM_B(ST_LEVEL_STREAMING_TRANSLATION_COARSE_Z, ctx->r16) = ctx->r2;
     // sb          $v0, 0x22($s0)
-    MEM_B(0X22, ctx->r16) = ctx->r2;
+    MEM_B(ST_LEVEL_STREAMING_TRANSLATION_COARSE_Y, ctx->r16) = ctx->r2;
     // sb          $zero, 0x1F($s0)
     MEM_B(0X1F, ctx->r16) = 0;
     // sb          $v1, 0x10($s0)
