@@ -214,17 +214,21 @@ computing another angle and magnitude. The later code updates each signed
 movement halfword `ST_PLAYER_MOVE_X`, `ST_PLAYER_MOVE_Y`, and
 `ST_PLAYER_MOVE_Z` by subtracting one quarter of its value, rounded toward zero. It
 then clears a resulting halfword in the range -3 through 3. It adds one
-quarter of the signed halfword at `0x801C74B4` to X and one quarter of the
-signed halfword at `0x801C74B8` to Z, rounding toward zero. It also adds half
-the signed halfwords at `0x801C0298` and `0x801C029C` to X and Z,
-respectively, again rounding toward zero. Each result is stored as a
+quarter of `ST_PLAYER_QUARTER_CONTRIBUTION_X_ADDRESS` to X and one quarter of
+`ST_PLAYER_QUARTER_CONTRIBUTION_Z_ADDRESS` to Z, rounding toward zero. It also adds half
+`ST_PLAYER_HALF_CONTRIBUTION_X_ADDRESS` and `ST_PLAYER_HALF_CONTRIBUTION_Z_ADDRESS`
+to X and Z, respectively, again rounding toward zero. These names identify
+the addresses of signed halfwords; each result is stored as a
 halfword. [sub_80050768](../scr/st/sub_80050768.c) adds cosine and sine
 results divided by 32 to the first pair on one path. At the end of its
-240-record loop, it halves the signed halfwords at `0x801C74B4`,
-`0x801C74B6`, and `0x801C74B8`, rounding toward zero, and clears each
+240-record loop, it halves the signed halfwords at
+`ST_PLAYER_QUARTER_CONTRIBUTION_X_ADDRESS`,
+`ST_PLAYER_QUARTER_CONTRIBUTION_Y_ADDRESS`, and
+`ST_PLAYER_QUARTER_CONTRIBUTION_Z_ADDRESS`, rounding toward zero, and clears each
 result in the range -3 through 3. On a path following its 64-record loop,
 [sub_8004E324](../scr/st/sub_8004E324.c) halves the signed halfwords at
-`0x801C0298`, `0x801C029A`, and `0x801C029C` with an arithmetic right
+`ST_PLAYER_HALF_CONTRIBUTION_X_ADDRESS`, `ST_PLAYER_HALF_CONTRIBUTION_Y_ADDRESS`,
+and `ST_PLAYER_HALF_CONTRIBUTION_Z_ADDRESS` with an arithmetic right
 shift, then clears each result in the range -3 through 3. Thus negative odd
 values round down in the second set, unlike the first set. **OPEN:** the
 complete set of writers and the meanings of these values have not been

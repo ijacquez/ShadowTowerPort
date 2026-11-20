@@ -1,0 +1,12 @@
+#pragma once
+
+// Signed halfword vectors. Movement adds the indicated fractions of their
+// X and Z components; the sources of the vectors remain unknown.
+enum {
+    ST_PLAYER_QUARTER_CONTRIBUTION_X_ADDRESS = 0x801C74B4,
+    ST_PLAYER_QUARTER_CONTRIBUTION_Y_ADDRESS = 0x801C74B6,
+    ST_PLAYER_QUARTER_CONTRIBUTION_Z_ADDRESS = 0x801C74B8,
+    ST_PLAYER_HALF_CONTRIBUTION_X_ADDRESS = 0x801C0298,
+    ST_PLAYER_HALF_CONTRIBUTION_Y_ADDRESS = 0x801C029A,
+    ST_PLAYER_HALF_CONTRIBUTION_Z_ADDRESS = 0x801C029C
+};

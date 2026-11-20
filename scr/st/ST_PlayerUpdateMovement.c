@@ -2,6 +2,7 @@
 #include "disable_warnings.h"
 #include "ST_PlayerState.h"
 #include "ST_PlayerControls.h"
+#include "ST_PlayerMovementContributions.h"
 
 // Update one signed 32-bit input accumulator, preserving the game's
 // 32-bit wrapping and arithmetic-shift behavior.
@@ -255,14 +256,14 @@ after_3:
     // Add the two independent X/Z contributions with their original
     // signed division, halfword stores, and emulated-register values.
     ctx->r6 = MEM_HU(ST_PLAYER_MOVE_X, player) +
-              (uint32_t)(MEM_HS(0, 0x801C74B4) / 4);
+              (uint32_t)(MEM_HS(0, ST_PLAYER_QUARTER_CONTRIBUTION_X_ADDRESS) / 4);
     MEM_H(ST_PLAYER_MOVE_X, player) = ctx->r6;
     ctx->r5 = MEM_HU(ST_PLAYER_MOVE_Z, player) +
-              (uint32_t)(MEM_HS(0, 0x801C74B8) / 4);
+              (uint32_t)(MEM_HS(0, ST_PLAYER_QUARTER_CONTRIBUTION_Z_ADDRESS) / 4);
     MEM_H(ST_PLAYER_MOVE_Z, player) = ctx->r5;
     MEM_H(ST_PLAYER_MOVE_X, player) = ctx->r6 +
-                                     (uint32_t)(MEM_HS(0, 0x801C0298) / 2);
-    const int32_t externalZ = MEM_HS(0, 0x801C029C);
+                                     (uint32_t)(MEM_HS(0, ST_PLAYER_HALF_CONTRIBUTION_X_ADDRESS) / 2);
+    const int32_t externalZ = MEM_HS(0, ST_PLAYER_HALF_CONTRIBUTION_Z_ADDRESS);
     ctx->r5 += (uint32_t)(externalZ / 2);
     MEM_H(ST_PLAYER_MOVE_Z, player) = ctx->r5;
     ctx->r3 = externalZ < 0 ? 1 : 0;
