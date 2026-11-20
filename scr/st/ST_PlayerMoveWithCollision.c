@@ -2,7 +2,7 @@
 #include "disable_warnings.h"
 #include "ST_PlayerState.h"
 
-enum { ST_VIEW_OSCILLATION_SETTING_ADDRESS = 0x801CD122 };
+enum { ST_ADJUST_WALK_SETTING_ADDRESS = 0x801CD122 };
 
 void ST_PlayerMoveWithCollision(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
@@ -780,7 +780,7 @@ L_80041BB4:
     // sh          $v0, 0x290($s0)
     MEM_H(0X290, ctx->r16) = ctx->r2;
     // This setting enables the view oscillation update.
-    ctx->r2 = MEM_BU(0, ST_VIEW_OSCILLATION_SETTING_ADDRESS);
+    ctx->r2 = MEM_BU(0, ST_ADJUST_WALK_SETTING_ADDRESS);
     // nop
 
     // beq         $v0, $zero, L_80041C1C

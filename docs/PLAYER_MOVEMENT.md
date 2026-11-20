@@ -458,13 +458,14 @@ It computes `t = rsin(phase) >> 5` using an arithmetic shift, then stores
 `abs(t) - (abs(t) >> 2)` as the adjustment. If player byte `0x239` is
 nonzero, this part of the routine leaves both phase and adjustment unchanged.
 [ST_ResetPlayerViewAndVerticalMovement](../scr/st/ST_ResetPlayerViewAndVerticalMovement.c) clears the phase and both Y
-adjustments. **OPEN:** the meanings of byte `0x239`, byte `0x801CD122`, and
-the second adjustment have not been established.
+adjustments. **OPEN:** the meanings of byte `0x239` and the second
+adjustment have not been established.
 
 [sub_8002B2E8](../scr/st/sub_8002B2E8.c) also reads `0x801CD122` as
 the first of four consecutive bytes. For each byte it renders a pair of
-text entries with their two styles exchanged when the byte equals 1. The
-in-game label of the first entry remains **OPEN**.
+text entries with their two styles exchanged when the byte equals 1. On the
+supplied disc, the first setting is labeled **ADJUST WALK**, with ON and OFF
+choices. Its movement effect is the view oscillation described above.
 
 In [ST_UpdateLevelStreaming](../scr/st/ST_UpdateLevelStreaming.c), when
 signed halfwords at `0x801B5920` and `0x801B5922` both equal 1, the game
