@@ -1153,6 +1153,8 @@ test-player-movement:
 	scratchpad/streaming-translation-request-test
 	$(CXX) $(CFLAGS) -O2 tests/spatial_candidates_test.cpp scr/st/ST_SelectSpatialCandidates.c -o scratchpad/spatial-candidates-test
 	scratchpad/spatial-candidates-test
+	$(CXX) $(CFLAGS) -O2 -ffunction-sections -fdata-sections tests/empty_geometry_query_test.cpp scr/st/ST_QueryLevelGeometry.c scr/recomp.cpp -Wl,--gc-sections -o scratchpad/empty-geometry-query-test
+	scratchpad/empty-geometry-query-test
 	$(CXX) $(CFLAGS) -O2 tests/player_directional_collision_test.cpp scr/st/ST_ApplyDirectionalMovementWithCollision.c -o scratchpad/player-directional-collision-test
 	scratchpad/player-directional-collision-test
 	$(CXX) $(CFLAGS) -O2 tests/gte_normalization_test.cpp scr/st/VectorNormalS.c scr/st/ST_NormalizeVectorRegisters.c scr/gte.cpp PsyCross/src/gte/PsyX_GTE.cpp -o scratchpad/gte-normalization-test
