@@ -5725,6 +5725,7 @@ L_800527A4:
     }
     // sw          $t2, 0x60($sp)
     MEM_W(0X60, ctx->r29) = ctx->r10;
+    // Halve the three movement contributions toward zero; clear -3 through 3.
     // lui         $v0, 0x801C
     ctx->r2 = S32(0X801C << 16);
     // addiu       $a2, $v0, 0x310

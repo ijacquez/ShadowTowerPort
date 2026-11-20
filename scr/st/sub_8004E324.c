@@ -865,6 +865,8 @@ L_8004E7C0:
     ctx->r2 = MEM_W(0X6150, ctx->r6);
     // sh          $v1, 0x615C($a2)
     MEM_H(0X615C, ctx->r6) = ctx->r3;
+    // Halve the three movement contributions with arithmetic shifts, then
+    // clear each result in the range -3 through 3.
     // lhu         $v1, 0x6160($a2)
     ctx->r3 = MEM_HU(0X6160, ctx->r6);
     // sh          $a0, 0x615A($a2)
