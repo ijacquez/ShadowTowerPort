@@ -1060,7 +1060,7 @@ L_80046FBC:
     // nop
 
     // lw          $v0, 0x47E0($s3)
-    ctx->r2 = MEM_W(0X47E0, ctx->r19);
+    ctx->r2 = MEM_W(ST_COLLISION_QUERY_RECORD_FLAG_DISABLE_MASK, ctx->r19);
     // nop
 
     // andi        $v0, $v0, 0x1
@@ -1074,7 +1074,7 @@ L_80046FBC:
     // addiu       $v1, $zero, -0x11
     ctx->r3 = ADD32(0, -0X11);
     // lw          $v0, 0x198($t3)
-    ctx->r2 = MEM_W(0X198, ctx->r11);
+    ctx->r2 = MEM_W(ST_COLLISION_GEOMETRY_SCRATCH_RECORD_FLAGS, ctx->r11);
     // nop
 
     // and         $v0, $v0, $v1
@@ -1088,7 +1088,7 @@ L_80046FBC:
     // and         $v0, $v0, $v1
     ctx->r2 = ctx->r2 & ctx->r3;
     // sw          $v0, 0x198($t3)
-    MEM_W(0X198, ctx->r11) = ctx->r2;
+    MEM_W(ST_COLLISION_GEOMETRY_SCRATCH_RECORD_FLAGS, ctx->r11) = ctx->r2;
 L_8004705C:
     // lhu         $v0, 0x0($t7)
     ctx->r2 = MEM_HU(0X0, ctx->r15);
@@ -1105,7 +1105,7 @@ L_8004705C:
     // nop
 
     // lw          $v0, 0x47E0($s3)
-    ctx->r2 = MEM_W(0X47E0, ctx->r19);
+    ctx->r2 = MEM_W(ST_COLLISION_QUERY_RECORD_FLAG_DISABLE_MASK, ctx->r19);
     // nop
 
     // andi        $v0, $v0, 0x1
@@ -1119,7 +1119,7 @@ L_8004705C:
     // addiu       $v0, $zero, 0x1
     ctx->r2 = ADD32(0, 0X1);
     // sw          $v0, 0x198($t3)
-    MEM_W(0X198, ctx->r11) = ctx->r2;
+    MEM_W(ST_COLLISION_GEOMETRY_SCRATCH_RECORD_FLAGS, ctx->r11) = ctx->r2;
 L_80047088:
     // lhu         $v0, 0x0($t7)
     ctx->r2 = MEM_HU(0X0, ctx->r15);
@@ -1136,7 +1136,7 @@ L_80047088:
     // nop
 
     // lw          $v0, 0x47E0($s3)
-    ctx->r2 = MEM_W(0X47E0, ctx->r19);
+    ctx->r2 = MEM_W(ST_COLLISION_QUERY_RECORD_FLAG_DISABLE_MASK, ctx->r19);
     // nop
 
     // srl         $v0, $v0, 1
@@ -1152,7 +1152,7 @@ L_80047088:
     // addiu       $v0, $zero, 0x2
     ctx->r2 = ADD32(0, 0X2);
     // sw          $v0, 0x198($t3)
-    MEM_W(0X198, ctx->r11) = ctx->r2;
+    MEM_W(ST_COLLISION_GEOMETRY_SCRATCH_RECORD_FLAGS, ctx->r11) = ctx->r2;
 L_800470B8:
     // lhu         $v0, 0x0($t7)
     ctx->r2 = MEM_HU(0X0, ctx->r15);
@@ -1169,7 +1169,7 @@ L_800470B8:
     // nop
 
     // lw          $v0, 0x47E0($s3)
-    ctx->r2 = MEM_W(0X47E0, ctx->r19);
+    ctx->r2 = MEM_W(ST_COLLISION_QUERY_RECORD_FLAG_DISABLE_MASK, ctx->r19);
     // nop
 
     // srl         $v0, $v0, 2
@@ -1185,13 +1185,13 @@ L_800470B8:
     // nop
 
     // lw          $v0, 0x198($t3)
-    ctx->r2 = MEM_W(0X198, ctx->r11);
+    ctx->r2 = MEM_W(ST_COLLISION_GEOMETRY_SCRATCH_RECORD_FLAGS, ctx->r11);
     // lw          $v1, 0xE8($t3)
     ctx->r3 = MEM_W(0XE8, ctx->r11);
     // ori         $v0, $v0, 0x4
     ctx->r2 = ctx->r2 | 0X4;
     // sw          $v0, 0x198($t3)
-    MEM_W(0X198, ctx->r11) = ctx->r2;
+    MEM_W(ST_COLLISION_GEOMETRY_SCRATCH_RECORD_FLAGS, ctx->r11) = ctx->r2;
     // lw          $v0, 0x4($s2)
     ctx->r2 = MEM_W(0X4, ctx->r18);
     // nop
@@ -1216,7 +1216,7 @@ L_80047104:
     // nop
 
     // lw          $v0, 0x47E0($s3)
-    ctx->r2 = MEM_W(0X47E0, ctx->r19);
+    ctx->r2 = MEM_W(ST_COLLISION_QUERY_RECORD_FLAG_DISABLE_MASK, ctx->r19);
     // nop
 
     // srl         $v0, $v0, 3
@@ -1232,7 +1232,7 @@ L_80047104:
     // addiu       $v0, $zero, 0x8
     ctx->r2 = ADD32(0, 0X8);
     // sw          $v0, 0x198($t3)
-    MEM_W(0X198, ctx->r11) = ctx->r2;
+    MEM_W(ST_COLLISION_GEOMETRY_SCRATCH_RECORD_FLAGS, ctx->r11) = ctx->r2;
 L_80047134:
     // lhu         $v0, 0x0($t7)
     ctx->r2 = MEM_HU(0X0, ctx->r15);
@@ -1249,7 +1249,7 @@ L_80047134:
     // nop
 
     // lw          $v0, 0x47E0($s3)
-    ctx->r2 = MEM_W(0X47E0, ctx->r19);
+    ctx->r2 = MEM_W(ST_COLLISION_QUERY_RECORD_FLAG_DISABLE_MASK, ctx->r19);
     // nop
 
     // srl         $v0, $v0, 4
@@ -1265,7 +1265,7 @@ L_80047134:
     // addiu       $v0, $zero, 0x10
     ctx->r2 = ADD32(0, 0X10);
     // sw          $v0, 0x198($t3)
-    MEM_W(0X198, ctx->r11) = ctx->r2;
+    MEM_W(ST_COLLISION_GEOMETRY_SCRATCH_RECORD_FLAGS, ctx->r11) = ctx->r2;
 L_80047164:
     // lhu         $v0, 0x0($t7)
     ctx->r2 = MEM_HU(0X0, ctx->r15);
@@ -1282,7 +1282,7 @@ L_80047164:
     // nop
 
     // lw          $v0, 0x47E0($s3)
-    ctx->r2 = MEM_W(0X47E0, ctx->r19);
+    ctx->r2 = MEM_W(ST_COLLISION_QUERY_RECORD_FLAG_DISABLE_MASK, ctx->r19);
     // nop
 
     // srl         $v0, $v0, 5
@@ -1298,13 +1298,13 @@ L_80047164:
     // nop
 
     // lw          $v0, 0x198($t3)
-    ctx->r2 = MEM_W(0X198, ctx->r11);
+    ctx->r2 = MEM_W(ST_COLLISION_GEOMETRY_SCRATCH_RECORD_FLAGS, ctx->r11);
     // lw          $v1, 0xE8($t3)
     ctx->r3 = MEM_W(0XE8, ctx->r11);
     // ori         $v0, $v0, 0x20
     ctx->r2 = ctx->r2 | 0X20;
     // sw          $v0, 0x198($t3)
-    MEM_W(0X198, ctx->r11) = ctx->r2;
+    MEM_W(ST_COLLISION_GEOMETRY_SCRATCH_RECORD_FLAGS, ctx->r11) = ctx->r2;
     // lw          $v0, 0x4($s2)
     ctx->r2 = MEM_W(0X4, ctx->r18);
     // nop

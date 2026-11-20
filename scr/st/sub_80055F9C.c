@@ -1,5 +1,6 @@
 #include "recomp.h"
 #include "disable_warnings.h"
+#include "ST_CollisionQuery.h"
 
 void sub_80055F9C(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
@@ -505,7 +506,7 @@ L_8005627C:
     // addiu       $a0, $a0, 0x5948
     ctx->r4 = ADD32(ctx->r4, 0X5948);
     // lw          $v0, 0x47E0($a0)
-    ctx->r2 = MEM_W(0X47E0, ctx->r4);
+    ctx->r2 = MEM_W(ST_COLLISION_QUERY_RECORD_FLAG_DISABLE_MASK, ctx->r4);
     // addiu       $v1, $zero, -0x21
     ctx->r3 = ADD32(0, -0X21);
     // and         $v0, $v0, $v1
@@ -532,8 +533,8 @@ L_8005627C:
     ctx->r2 = ctx->r2 & ctx->r3;
     // jr          $ra
     // sw          $v0, 0x47E0($a0)
-    MEM_W(0X47E0, ctx->r4) = ctx->r2;
+    MEM_W(ST_COLLISION_QUERY_RECORD_FLAG_DISABLE_MASK, ctx->r4) = ctx->r2;
     return;
     // sw          $v0, 0x47E0($a0)
-    MEM_W(0X47E0, ctx->r4) = ctx->r2;
+    MEM_W(ST_COLLISION_QUERY_RECORD_FLAG_DISABLE_MASK, ctx->r4) = ctx->r2;
 ;}

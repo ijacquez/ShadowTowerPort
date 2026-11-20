@@ -1165,6 +1165,20 @@ shift. [ST_QueryLevelGeometry](../scr/st/ST_QueryLevelGeometry.c) writes
 the flag word from its collision-record scratch flags. **OPEN:** the names
 of these sounds and the complete meaning and lifetime of the flags.
 
+When candidates exist, `ST_QueryLevelGeometry` first clears
+`ST_COLLISION_GEOMETRY_SCRATCH_RECORD_FLAGS`, lets the three- and
+four-vertex tests update it, and copies it to `ST_COLLISION_QUERY_RECORD_FLAGS`.
+When there are no candidates, the query returns before that copy, leaving the
+previous record flags in place. `ST_ResetPlayerViewAndVerticalMovement` clears
+the shared flags. On qualifying record paths, both geometry tests inspect the
+record's flag halfword and `ST_COLLISION_QUERY_RECORD_FLAG_DISABLE_MASK`:
+record bit `0x80` replaces the scratch flags with `0x8` when disable bit
+`0x8` is clear; record bit `0x100` replaces them with `0x10` when disable
+bit `0x10` is clear; record bit `0x200` ORs in `0x20` when disable bit
+`0x20` is clear. The checks run in that order. Other record bits and earlier
+tests can also change the scratch flags. The record flags' full meanings are
+**OPEN**.
+
 In [ST_UpdateLevelStreaming](../scr/st/ST_UpdateLevelStreaming.c), when
 the signed status halfword at `ST_LEVEL_STREAMING_STATUS_ADDRESS` and
 `ST_LEVEL_STREAMING_PHASE` both equal 1, the game queues a resource, clears

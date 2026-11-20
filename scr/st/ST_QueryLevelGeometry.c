@@ -431,7 +431,7 @@ L_80048D3C:
     // sw          $s5, 0x134($s4)
     MEM_W(0X134, ctx->r20) = ctx->r21;
     // sw          $zero, 0x198($s4)
-    MEM_W(0X198, ctx->r20) = 0;
+    MEM_W(ST_COLLISION_GEOMETRY_SCRATCH_RECORD_FLAGS, ctx->r20) = 0;
     // sw          $s3, 0x10($s4)
     MEM_W(0X10, ctx->r20) = ctx->r19;
     // sw          $s2, 0x14($s4)
@@ -1239,7 +1239,7 @@ L_80049190:
     // lhu         $a0, 0x22($s4)
     ctx->r4 = MEM_HU(0X22, ctx->r20);
     // lw          $a1, 0x198($s4)
-    ctx->r5 = MEM_W(0X198, ctx->r20);
+    ctx->r5 = MEM_W(ST_COLLISION_GEOMETRY_SCRATCH_RECORD_FLAGS, ctx->r20);
     // addu        $v0, $s7, $zero
     ctx->r2 = ADD32(ctx->r23, 0);
     // sh          $a0, 0x44C8($v1)
