@@ -20,7 +20,7 @@ void sub_80052C24(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x80052894
     // addu        $a1, $zero, $zero
     ctx->r5 = ADD32(0, 0);
-    sub_80052894(rdram, ctx);
+    ST_SetPlayerPositionAndRequestLevelStreaming(rdram, ctx);
     goto after_0;
     // addu        $a1, $zero, $zero
     ctx->r5 = ADD32(0, 0);

@@ -1,7 +1,11 @@
 #include "recomp.h"
 #include "disable_warnings.h"
+#include "ST_CollisionQuery.h"
+#include "ST_PlayerMovementContributions.h"
+#include "ST_PlayerPositionRequest.h"
+#include "ST_PlayerState.h"
 
-void sub_80052894(uint8_t* rdram, recomp_context* ctx) 
+void ST_SetPlayerPositionAndRequestLevelStreaming(uint8_t* rdram, recomp_context* ctx) 
 {
     uint64_t hi = 0, lo = 0, result = 0;
     unsigned int rounding_mode = DEFAULT_ROUNDING_MODE;
@@ -69,11 +73,11 @@ L_800528F0:
     // addiu       $v1, $v1, 0x58
     ctx->r3 = ADD32(ctx->r3, 0X58);
     // lbu         $s3, 0x1($s2)
-    ctx->r19 = MEM_BU(0X1, ctx->r18);
+    ctx->r19 = MEM_BU(ST_PLAYER_POSITION_REQUEST_GRID_X, ctx->r18);
     // lbu         $s5, 0x2($s2)
-    ctx->r21 = MEM_BU(0X2, ctx->r18);
+    ctx->r21 = MEM_BU(ST_PLAYER_POSITION_REQUEST_GRID_Y, ctx->r18);
     // lbu         $s4, 0x3($s2)
-    ctx->r20 = MEM_BU(0X3, ctx->r18);
+    ctx->r20 = MEM_BU(ST_PLAYER_POSITION_REQUEST_GRID_Z, ctx->r18);
     // jal         0x80057C54
     // lui         $s0, 0x801B
     ctx->r16 = S32(0X801B << 16);
@@ -248,11 +252,11 @@ L_80052A08:
     // sb          $zero, 0x218($s0)
     MEM_B(0X218, ctx->r16) = 0;
     // sh          $zero, 0x28C($s0)
-    MEM_H(0X28C, ctx->r16) = 0;
+    MEM_H(ST_PLAYER_VIEW_TRANSIENT_ROTATION_Z, ctx->r16) = 0;
     // sh          $zero, 0x28A($s0)
-    MEM_H(0X28A, ctx->r16) = 0;
+    MEM_H(ST_PLAYER_VIEW_TRANSIENT_ROTATION_Y, ctx->r16) = 0;
     // sh          $zero, 0x288($s0)
-    MEM_H(0X288, ctx->r16) = 0;
+    MEM_H(ST_PLAYER_VIEW_TRANSIENT_ROTATION_X, ctx->r16) = 0;
     // lwl         $v0, 0x27B($s0)
     ctx->r2 = do_lwl(rdram, ctx->r2, 0X27B, ctx->r16);
     // lwr         $v0, 0x278($s0)
@@ -270,34 +274,34 @@ L_80052A08:
     // swr         $v1, 0x26C($s0)
     do_swr(rdram, 0X26C, ctx->r16, ctx->r3);
     // lh          $v1, 0x4($s2)
-    ctx->r3 = MEM_HS(0X4, ctx->r18);
+    ctx->r3 = MEM_HS(ST_PLAYER_POSITION_REQUEST_FINE_X, ctx->r18);
     // sll         $v0, $s3, 12
     ctx->r2 = S32(ctx->r19) << 12;
     // addu        $v0, $v0, $v1
     ctx->r2 = ADD32(ctx->r2, ctx->r3);
     // sw          $v0, 0x248($s0)
-    MEM_W(0X248, ctx->r16) = ctx->r2;
+    MEM_W(ST_PLAYER_POSITION_X, ctx->r16) = ctx->r2;
     // lh          $v1, 0x8($s2)
-    ctx->r3 = MEM_HS(0X8, ctx->r18);
+    ctx->r3 = MEM_HS(ST_PLAYER_POSITION_REQUEST_FINE_Z, ctx->r18);
     // sll         $v0, $s4, 12
     ctx->r2 = S32(ctx->r20) << 12;
     // addu        $v0, $v0, $v1
     ctx->r2 = ADD32(ctx->r2, ctx->r3);
     // sw          $v0, 0x250($s0)
-    MEM_W(0X250, ctx->r16) = ctx->r2;
+    MEM_W(ST_PLAYER_POSITION_Z, ctx->r16) = ctx->r2;
     // lh          $v1, 0x6($s2)
-    ctx->r3 = MEM_HS(0X6, ctx->r18);
+    ctx->r3 = MEM_HS(ST_PLAYER_POSITION_REQUEST_FINE_Y, ctx->r18);
     // sll         $v0, $s5, 12
     ctx->r2 = S32(ctx->r21) << 12;
     // addu        $v0, $v0, $v1
     ctx->r2 = ADD32(ctx->r2, ctx->r3);
     // jal         0x8003EAD0
     // sw          $v0, 0x24C($s0)
-    MEM_W(0X24C, ctx->r16) = ctx->r2;
+    MEM_W(ST_PLAYER_POSITION_Y, ctx->r16) = ctx->r2;
     ST_ClearPlayerMovementLimits(rdram, ctx);
     goto after_7;
     // sw          $v0, 0x24C($s0)
-    MEM_W(0X24C, ctx->r16) = ctx->r2;
+    MEM_W(ST_PLAYER_POSITION_Y, ctx->r16) = ctx->r2;
     after_7:
     // lui         $v0, 0x8019
     ctx->r2 = S32(0X8019 << 16);
@@ -314,37 +318,37 @@ L_80052A08:
     // addiu       $v0, $v0, 0x310
     ctx->r2 = ADD32(ctx->r2, 0X310);
     // sh          $zero, 0x71A8($v0)
-    MEM_H(0X71A8, ctx->r2) = 0;
+    MEM_H(0, ST_PLAYER_QUARTER_CONTRIBUTION_Z_ADDRESS) = 0;
     // sh          $zero, 0x71A6($v0)
-    MEM_H(0X71A6, ctx->r2) = 0;
+    MEM_H(0, ST_PLAYER_QUARTER_CONTRIBUTION_Y_ADDRESS) = 0;
     // sh          $zero, 0x71A4($v0)
-    MEM_H(0X71A4, ctx->r2) = 0;
+    MEM_H(0, ST_PLAYER_QUARTER_CONTRIBUTION_X_ADDRESS) = 0;
     // lui         $v0, 0x801B
     ctx->r2 = S32(0X801B << 16);
     // addiu       $v0, $v0, 0x5948
     ctx->r2 = ADD32(ctx->r2, 0X5948);
     // sh          $zero, 0x47D2($v0)
-    MEM_H(0X47D2, ctx->r2) = 0;
+    MEM_H(ST_COLLISION_QUERY_RECORD_VECTOR_SUM_Z, ctx->r2) = 0;
     // sh          $zero, 0x47D0($v0)
-    MEM_H(0X47D0, ctx->r2) = 0;
+    MEM_H(ST_COLLISION_QUERY_RECORD_VECTOR_SUM_Y, ctx->r2) = 0;
     // sh          $zero, 0x47CE($v0)
-    MEM_H(0X47CE, ctx->r2) = 0;
+    MEM_H(ST_COLLISION_QUERY_RECORD_VECTOR_SUM_X, ctx->r2) = 0;
     // lui         $v0, 0x801C
     ctx->r2 = S32(0X801C << 16);
     // addiu       $v0, $v0, -0x5EC8
     ctx->r2 = ADD32(ctx->r2, -0X5EC8);
     // sh          $zero, 0x6164($v0)
-    MEM_H(0X6164, ctx->r2) = 0;
+    MEM_H(0, ST_PLAYER_HALF_CONTRIBUTION_Z_ADDRESS) = 0;
     // sh          $zero, 0x6162($v0)
-    MEM_H(0X6162, ctx->r2) = 0;
+    MEM_H(0, ST_PLAYER_HALF_CONTRIBUTION_Y_ADDRESS) = 0;
     // sh          $zero, 0x6160($v0)
-    MEM_H(0X6160, ctx->r2) = 0;
+    MEM_H(0, ST_PLAYER_HALF_CONTRIBUTION_X_ADDRESS) = 0;
     // sh          $zero, 0x1D0($s0)
-    MEM_H(0X1D0, ctx->r16) = 0;
+    MEM_H(ST_PLAYER_MOVE_Z, ctx->r16) = 0;
     // sh          $zero, 0x1CE($s0)
-    MEM_H(0X1CE, ctx->r16) = 0;
+    MEM_H(ST_PLAYER_MOVE_Y, ctx->r16) = 0;
     // sh          $zero, 0x1CC($s0)
-    MEM_H(0X1CC, ctx->r16) = 0;
+    MEM_H(ST_PLAYER_MOVE_X, ctx->r16) = 0;
 L_80052ACC:
     // sb          $a2, 0x0($a0)
     MEM_B(0X0, ctx->r4) = ctx->r6;

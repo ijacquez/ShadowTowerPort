@@ -1194,7 +1194,7 @@
     <ClCompile Include="scr\st\sub_8003C054.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_8003C95C.c">
+    <ClCompile Include="scr\st\ST_RequestLevelStreamingPair.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\sub_8003CAE4.c">
@@ -3057,7 +3057,7 @@
     <ClCompile Include="scr\st\ST_UpdateLevelRecords.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_80052894.c">
+    <ClCompile Include="scr\st\ST_SetPlayerPositionAndRequestLevelStreaming.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\sub_80053174.c">
@@ -3336,6 +3336,9 @@
       <Filter>Исходные файлы\scr\st</Filter>
     </ClInclude>
     <ClInclude Include="scr\st\ST_PlayerState.h">
+      <Filter>Исходные файлы\scr\st</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\st\ST_PlayerPositionRequest.h">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClInclude>
     <ClInclude Include="scr\_context.h">

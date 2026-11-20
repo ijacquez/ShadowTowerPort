@@ -1118,7 +1118,7 @@ Y, and Z. For each axis, the offset is `(coarse << 12) + (fine << 7)`, using
 the matching `ST_LEVEL_STREAMING_TRANSLATION_COARSE_X`, `_Y`, or `_Z` and
 `ST_LEVEL_STREAMING_TRANSLATION_FINE_X`, `_Y`, or `_Z`. Each byte is signed and
 each position addition wraps to 32 bits. **OPEN:** the record's full meaning
-and all callers that request these offsets have not been established.
+and whether loaded code has additional request callers have not been established.
 
 On its request path, [ST_RequestLevelStreaming](../scr/st/ST_RequestLevelStreaming.c)
 sets the streaming status to 1, the phase to 0, and stores six bytes from
@@ -1139,6 +1139,23 @@ and `ST_LEVEL_RECORD_TRANSLATION_FINE_X`, `_Y`, and `_Z` in the current
 level record. The resulting translation uses steps of 4096
 and 128 stored position units, respectively. These are the same 88-byte
 records scanned by `ST_QueryIndexedCollisionRecords`.
+
+The other direct request calls in the recompiled source, in
+[ST_UpdateLevelRecords](../scr/st/ST_UpdateLevelRecords.c),
+[ST_RequestLevelStreamingPair](../scr/st/ST_RequestLevelStreamingPair.c), and
+[ST_SetPlayerPositionAndRequestLevelStreaming](../scr/st/ST_SetPlayerPositionAndRequestLevelStreaming.c),
+pass `ST_LEVEL_STREAMING_NO_TRANSLATION` for all three coarse values and zero
+for all three fine values. The active-stream replacement described above can
+still change those coarse values.
+
+`ST_SetPlayerPositionAndRequestLevelStreaming` also writes player position
+directly. For each axis it takes an unsigned grid byte and a signed fine
+halfword from its request, and stores `(grid << 12) + fine` in the corresponding
+`ST_PLAYER_POSITION_*` word. The request offsets are named in
+[ST_PlayerPositionRequest.h](../scr/st/ST_PlayerPositionRequest.h). It clears
+the transient view rotations, movement limits and movement components, both
+contribution vectors, and the collision-record vector sums. **OPEN:** the
+complete format and in-game meaning of this request are not established.
 
 ## Vertical movement
 

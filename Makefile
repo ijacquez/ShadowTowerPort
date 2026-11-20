@@ -570,7 +570,7 @@ SRCS:= scr/st/AddPrim.c \
 	scr/st/sub_8003C0E0.c \
 	scr/st/ST_UpdateCounterAndTarget.c \
 	scr/st/ST_UpdatePlayerCountersAndEffects.c \
-	scr/st/sub_8003C95C.c \
+	scr/st/ST_RequestLevelStreamingPair.c \
 	scr/st/sub_8003CAE4.c \
 	scr/st/ST_RecalculatePlayerRecordModifiers.c \
 	scr/st/sub_8003CEDC.c \
@@ -719,7 +719,7 @@ SRCS:= scr/st/AddPrim.c \
 	scr/st/sub_80050564.c \
 	scr/st/sub_8005066C.c \
 	scr/st/ST_UpdateLevelRecords.c \
-	scr/st/sub_80052894.c \
+	scr/st/ST_SetPlayerPositionAndRequestLevelStreaming.c \
 	scr/st/sub_80052C24.c \
 	scr/st/sub_80052C5C.c \
 	scr/st/sub_80052CA4.c \
@@ -1120,6 +1120,7 @@ scr/st/ST_SelectSpatialCandidates.o: scr/st/ST_SpatialCandidate.h scr/st/ST_Leve
 scr/st/ST_NormalizeVectorRegisters.o scr/st/InvSquareRoot.o: scr/st/ST_VectorNormalization.h
 scr/st/ST_RequestLevelStreaming.o scr/st/ST_StartLevelStreamingAndWait.o scr/st/ST_UpdateLevelStreaming.o: scr/st/ST_LevelStreaming.h
 scr/st/ST_UpdateLevelStreaming.o: scr/st/ST_PlayerState.h
+scr/st/ST_SetPlayerPositionAndRequestLevelStreaming.o: scr/st/ST_PlayerPositionRequest.h scr/st/ST_PlayerState.h scr/st/ST_PlayerMovementContributions.h scr/st/ST_CollisionQuery.h
 
 %.o: %.c
 	$(CXX) $(CFLAGS) -o $@ -c $<

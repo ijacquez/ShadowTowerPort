@@ -713,7 +713,7 @@
     <ClCompile Include="scr\st\sub_8003C0E0.c" />
     <ClCompile Include="scr\st\ST_UpdateCounterAndTarget.c" />
     <ClCompile Include="scr\st\sub_8003C24C.c" />
-    <ClCompile Include="scr\st\sub_8003C95C.c" />
+    <ClCompile Include="scr\st\ST_RequestLevelStreamingPair.c" />
     <ClCompile Include="scr\st\sub_8003CAE4.c" />
     <ClCompile Include="scr\st\ST_RecalculatePlayerRecordModifiers.c" />
     <ClCompile Include="scr\st\sub_8003CEDC.c" />
@@ -862,7 +862,7 @@
     <ClCompile Include="scr\st\sub_80050564.c" />
     <ClCompile Include="scr\st\sub_8005066C.c" />
     <ClCompile Include="scr\st\ST_UpdateLevelRecords.c" />
-    <ClCompile Include="scr\st\sub_80052894.c" />
+    <ClCompile Include="scr\st\ST_SetPlayerPositionAndRequestLevelStreaming.c" />
     <ClCompile Include="scr\st\sub_80052C24.c" />
     <ClCompile Include="scr\st\sub_80052C5C.c" />
     <ClCompile Include="scr\st\sub_80052CA4.c" />
@@ -1277,6 +1277,7 @@
     <ClInclude Include="scr\st\disable_warnings.h" />
     <ClInclude Include="scr\st\funcs.h" />
     <ClInclude Include="scr\st\ST_PlayerState.h" />
+    <ClInclude Include="scr\st\ST_PlayerPositionRequest.h" />
     <ClInclude Include="scr\_context.h" />
   </ItemGroup>
   <ItemGroup>
