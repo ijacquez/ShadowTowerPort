@@ -64,6 +64,9 @@ unsigned int gte_leadingzerocount(unsigned int lzcs)
 	return lzcr;
 #endif
 
+	// LZCR counts leading sign bits, as in the reference loop above.
+	if (lzcs & 0x80000000u)
+		lzcs = ~lzcs;
 	if (!lzcs)
 		return 32;
 

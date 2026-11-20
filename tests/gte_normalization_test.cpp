@@ -8,7 +8,8 @@ uint8_t rdram[2 * 1024 * 1024];
 int main() {
     struct LeadingCase { uint32_t value, count; };
     const LeadingCase leadingCases[] = {
-        {0, 32}, {1, 31}, {0x01000000, 7}, {0x7FFFFFFF, 1}
+        {0, 32}, {1, 31}, {0x01000000, 7}, {0x7FFFFFFF, 1},
+        {0x80000000, 1}, {0xC0000000, 2}, {0xFFFFFFFE, 31}, {0xFFFFFFFF, 32}
     };
     for (const auto& test : leadingCases) {
         recomp_context ctx{};
@@ -23,6 +24,22 @@ int main() {
         gte_mtc2(&ctx, 4, 31);
         if (gte_mfc2(&ctx, 31) != test.count) {
             std::fputs("leading-zero result was not read-only\n", stderr);
+            return 1;
+        }
+    }
+    uint32_t sample = 0x96C42E15;
+    for (int i = 0; i < 100000; ++i) {
+        sample ^= sample << 13;
+        sample ^= sample >> 17;
+        sample ^= sample << 5;
+        unsigned count = 0;
+        while (count < 32 && ((sample >> (31 - count)) & 1u) == (sample >> 31))
+            ++count;
+        recomp_context ctx{};
+        ctx.r4 = sample;
+        gte_mtc2(&ctx, 4, 30);
+        if (gte_mfc2(&ctx, 31) != count) {
+            std::fprintf(stderr, "leading-bit count mismatch for %08x\n", sample);
             return 1;
         }
     }
@@ -111,6 +128,6 @@ int main() {
         std::fputs("zero normalization failed\n", stderr);
         return 1;
     }
-    std::puts("4 GTE leading-zero, 6 transfer, and 5 normalization cases passed");
+    std::puts("100008 GTE leading-bit, 6 transfer, and 5 normalization cases passed");
     return 0;
 }

@@ -979,8 +979,9 @@ The query result controls the next step, in this order:
 halfwords. Its [ST_NormalizeVectorRegisters](../scr/st/ST_NormalizeVectorRegisters.c)
 helper squares the signed low halfword of each input with the GTE and sums
 the three results with 32-bit wrapping. It writes the sum to the GTE's
-leading-zero input and clears the low bit of the resulting count. Let that
-even count be `n`. The helper shifts the signed sum left by `n - 24` when
+leading-bit input and clears the low bit of the resulting count. The GTE
+count is the number of consecutive bits matching the sign bit, including the
+sign bit. Let the resulting even count be `n`. The helper shifts the signed sum left by `n - 24` when
 `n >= 24`, otherwise arithmetic-shifts it right by `24 - n`; the shift count
 is masked to five bits. It subtracts 64, doubles the result, and uses it as
 a byte offset from `ST_NORMALIZATION_INVERSE_ROOT_TABLE_ADDRESS`. The signed
