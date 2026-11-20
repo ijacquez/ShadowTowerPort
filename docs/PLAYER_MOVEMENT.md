@@ -550,8 +550,11 @@ offset `0x30`. If movement is at least `0x480` (0.28125 cells per update)
 and that query word is at least `0x640` (0.390625 cells), it calls
 [sub_8003BD14](../scr/st/sub_8003BD14.c) with zero and sets player byte
 `0x238` to 1. Unless player byte `0x218` is already 4, that helper sets it
-to 4, clears the player halfword at `0x02`, and performs additional state
-updates. **OPEN:** the game meanings of those state fields are not established.
+to 4, clears the current HP halfword at player offset `0x02`, and performs
+additional state updates. The [player-stat display](../scr/st/sub_80029B74.c)
+reads current and maximum HP from offsets `0x02` and `0x00`, and current and
+maximum MP from offsets `0x06` and `0x04`. **OPEN:** the game meanings of
+bytes `0x218` and `0x238` are not established.
 
 The level-rendering path establishes the Y direction. For a level,
 unrotated view, [ST_TransformLevelOriginsForView](../scr/st/ST_TransformLevelOriginsForView.c) subtracts player

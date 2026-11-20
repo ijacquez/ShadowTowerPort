@@ -1,5 +1,6 @@
 #include "recomp.h"
 #include "disable_warnings.h"
+#include "ST_PlayerState.h"
 
 void sub_80029B74(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
@@ -579,7 +580,7 @@ L_80029EF0:
     // addiu       $s2, $s3, -0x70D8
     ctx->r18 = ADD32(ctx->r19, -0X70D8);
     // lhu         $a0, 0x2($s2)
-    ctx->r4 = MEM_HU(0X2, ctx->r18);
+    ctx->r4 = MEM_HU(ST_PLAYER_CURRENT_HP, ctx->r18);
     // lui         $s1, 0x400
     ctx->r17 = S32(0X400 << 16);
     // jal         0x800276BC
@@ -609,7 +610,7 @@ L_80029EF0:
     // addiu       $a2, $zero, 0x30
     ctx->r6 = ADD32(0, 0X30);
     // lhu         $a0, -0x70D8($s3)
-    ctx->r4 = MEM_HU(-0X70D8, ctx->r19);
+    ctx->r4 = MEM_HU(ST_PLAYER_MAX_HP - 0x70D8, ctx->r19);
     // addu        $a3, $s0, $zero
     ctx->r7 = ADD32(ctx->r16, 0);
     // jal         0x800276BC
@@ -625,7 +626,7 @@ L_80029EF0:
     // addiu       $a2, $zero, 0x40
     ctx->r6 = ADD32(0, 0X40);
     // lhu         $a0, 0x6($s2)
-    ctx->r4 = MEM_HU(0X6, ctx->r18);
+    ctx->r4 = MEM_HU(ST_PLAYER_CURRENT_MP, ctx->r18);
     // addu        $a3, $s0, $zero
     ctx->r7 = ADD32(ctx->r16, 0);
     // jal         0x800276BC
@@ -655,7 +656,7 @@ L_80029EF0:
     // addiu       $a2, $zero, 0x40
     ctx->r6 = ADD32(0, 0X40);
     // lhu         $a0, 0x4($s2)
-    ctx->r4 = MEM_HU(0X4, ctx->r18);
+    ctx->r4 = MEM_HU(ST_PLAYER_MAX_MP, ctx->r18);
     // addu        $a3, $s0, $zero
     ctx->r7 = ADD32(ctx->r16, 0);
     // jal         0x800276BC

@@ -1,5 +1,6 @@
 #include "recomp.h"
 #include "disable_warnings.h"
+#include "ST_PlayerState.h"
 
 void sub_8003BD14(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
@@ -31,7 +32,7 @@ void sub_8003BD14(uint8_t* rdram, recomp_context* ctx) {
     MEM_B(0X218, ctx->r16) = ctx->r3;
     // jal         0x80057C0C
     // sh          $zero, 0x2($s0)
-    MEM_H(0X2, ctx->r16) = 0;
+    MEM_H(ST_PLAYER_CURRENT_HP, ctx->r16) = 0;
     sub_80057C0C(rdram, ctx);
     goto after_0;
     // sh          $zero, 0x2($s0)
