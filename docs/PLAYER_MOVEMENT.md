@@ -45,7 +45,26 @@ state, transient, and additional view rotation components. The state-16 path cle
 `ST_PLAYER_DIRECTIONAL_MOVE_DISABLED` after collision. States 5 and 6 clear
 the movement limits, all three movement components, and the three contribution
 sets before the shared post-dispatch work. **OPEN:** the in-game meanings of
-the remaining state values and the player-update gate are not established.
+the remaining state values are not established.
+
+The update gate is also used by the type `0xE0` record path in
+[sub_80050768](../scr/st/sub_80050768.c). On a qualifying path with the gate
+at zero, the routine sets it to 1 and clears the movement limits. With the
+gate at 1, it synchronizes pending loads, sets
+`ST_PLAYER_DIRECTIONAL_MOVE_DISABLED`, and examines eight slots. For each
+slot whose first byte is not `0xFF`, it stores cosine and sine of that slot's
+signed `ST_LEVEL_RECORD_SLOT_DIRECTION_ANGLE_OFFSET` halfword minus `0x400`,
+divided by 256 toward zero, in
+`ST_LEVEL_RECORD_DIRECTION_X_GP_OFFSET` and
+`ST_LEVEL_RECORD_DIRECTION_Z_GP_OFFSET`. Each qualifying slot replaces the
+previous slot's values. If at least one slot qualifies, the gate becomes 2.
+At gate 2 the routine clears the movement limits and copies the two stored
+values to the X and Z quarter-contribution halfwords. A subsequent condition
+in the same slot loop can set the gate to 3. At gate 3 the routine clears the
+stored direction values, sets the gate to 4, and requests level streaming.
+[sub_8004567C](../scr/st/sub_8004567C.c) clears the gate. **OPEN:** the
+in-game meanings of these record types, slots, and gate states remain
+unestablished.
 
 ## View rotation
 

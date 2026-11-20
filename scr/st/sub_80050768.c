@@ -1,5 +1,8 @@
 #include "recomp.h"
 #include "disable_warnings.h"
+#include "ST_LevelStreaming.h"
+#include "ST_PlayerMovementContributions.h"
+#include "ST_PlayerState.h"
 
 void sub_80050768(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
@@ -1095,18 +1098,18 @@ L_80050D38:
     // addiu       $t3, $t3, 0x310
     ctx->r11 = ADD32(ctx->r11, 0X310);
     // lhu         $v0, 0x71A4($t3)
-    ctx->r2 = MEM_HU(0X71A4, ctx->r11);
+    ctx->r2 = MEM_HU(0, ST_PLAYER_QUARTER_CONTRIBUTION_X_ADDRESS);
     // sra         $v1, $v1, 5
     ctx->r3 = S32(ctx->r3) >> 5;
     // addu        $v0, $v0, $v1
     ctx->r2 = ADD32(ctx->r2, ctx->r3);
     // jal         0x800743F4
     // sh          $v0, 0x71A4($t3)
-    MEM_H(0X71A4, ctx->r11) = ctx->r2;
+    MEM_H(0, ST_PLAYER_QUARTER_CONTRIBUTION_X_ADDRESS) = ctx->r2;
     rsin(rdram, ctx);
     goto after_7;
     // sh          $v0, 0x71A4($t3)
-    MEM_H(0X71A4, ctx->r11) = ctx->r2;
+    MEM_H(0, ST_PLAYER_QUARTER_CONTRIBUTION_X_ADDRESS) = ctx->r2;
     after_7:
     // addu        $v1, $v0, $zero
     ctx->r3 = ADD32(ctx->r2, 0);
@@ -1124,17 +1127,17 @@ L_80050D64:
     // addiu       $t2, $t2, 0x310
     ctx->r10 = ADD32(ctx->r10, 0X310);
     // lhu         $v0, 0x71A8($t2)
-    ctx->r2 = MEM_HU(0X71A8, ctx->r10);
+    ctx->r2 = MEM_HU(0, ST_PLAYER_QUARTER_CONTRIBUTION_Z_ADDRESS);
     // sra         $v1, $v1, 5
     ctx->r3 = S32(ctx->r3) >> 5;
     // addu        $v0, $v0, $v1
     ctx->r2 = ADD32(ctx->r2, ctx->r3);
     // j           L_8005279C
     // sh          $v0, 0x71A8($t2)
-    MEM_H(0X71A8, ctx->r10) = ctx->r2;
+    MEM_H(0, ST_PLAYER_QUARTER_CONTRIBUTION_Z_ADDRESS) = ctx->r2;
     goto L_8005279C;
     // sh          $v0, 0x71A8($t2)
-    MEM_H(0X71A8, ctx->r10) = ctx->r2;
+    MEM_H(0, ST_PLAYER_QUARTER_CONTRIBUTION_Z_ADDRESS) = ctx->r2;
 L_80050D7C:
     // lbu         $a0, -0x7($s1)
     ctx->r4 = MEM_BU(-0X7, ctx->r17);
@@ -4450,7 +4453,7 @@ L_80051FF0:
     // addiu       $t3, $t3, -0x5EC8
     ctx->r11 = ADD32(ctx->r11, -0X5EC8);
     // lbu         $v0, 0x6169($t3)
-    ctx->r2 = MEM_BU(0X6169, ctx->r11);
+    ctx->r2 = MEM_BU(0, ST_PLAYER_UPDATE_GATE_ADDRESS);
     // nop
 
     // bne         $v0, $zero, L_80052058
@@ -4491,11 +4494,11 @@ L_80051FF0:
     ctx->r10 = ADD32(0, 0X1);
     // jal         0x8003EAD0
     // sb          $t2, 0x6169($t3)
-    MEM_B(0X6169, ctx->r11) = ctx->r10;
+    MEM_B(0, ST_PLAYER_UPDATE_GATE_ADDRESS) = ctx->r10;
     ST_ClearPlayerMovementLimits(rdram, ctx);
     goto after_59;
     // sb          $t2, 0x6169($t3)
-    MEM_B(0X6169, ctx->r11) = ctx->r10;
+    MEM_B(0, ST_PLAYER_UPDATE_GATE_ADDRESS) = ctx->r10;
     after_59:
     // jal         0x80057A3C
     // nop
@@ -4511,7 +4514,7 @@ L_80052058:
     // addiu       $t3, $t3, -0x5EC8
     ctx->r11 = ADD32(ctx->r11, -0X5EC8);
     // lbu         $v0, 0x6169($t3)
-    ctx->r2 = MEM_BU(0X6169, ctx->r11);
+    ctx->r2 = MEM_BU(0, ST_PLAYER_UPDATE_GATE_ADDRESS);
     // addiu       $t2, $zero, 0x1
     ctx->r10 = ADD32(0, 0X1);
     // bne         $v0, $t2, L_80052160
@@ -4527,7 +4530,7 @@ L_80052058:
     // addiu       $t3, $t3, -0x5EC8
     ctx->r11 = ADD32(ctx->r11, -0X5EC8);
     // addiu       $s3, $t3, 0x2E60
-    ctx->r19 = ADD32(ctx->r11, 0X2E60);
+    ctx->r19 = ST_LEVEL_RECORD_FIRST_SLOT_ADDRESS;
     // jal         0x80015AD4
     // addu        $s2, $zero, $zero
     ctx->r18 = ADD32(0, 0);
@@ -4539,7 +4542,7 @@ L_80052058:
     // addiu       $t2, $zero, 0x1
     ctx->r10 = ADD32(0, 0X1);
     // sb          $t2, 0x21E($s6)
-    MEM_B(0X21E, ctx->r22) = ctx->r10;
+    MEM_B(ST_PLAYER_DIRECTIONAL_MOVE_DISABLED, ctx->r22) = ctx->r10;
     // addiu       $s4, $zero, 0x7
     ctx->r20 = ADD32(0, 0X7);
     // lui         $t3, 0x801C
@@ -4547,7 +4550,7 @@ L_80052058:
     // addiu       $t3, $t3, -0x5EC8
     ctx->r11 = ADD32(ctx->r11, -0X5EC8);
     // addiu       $s0, $t3, 0x2EB6
-    ctx->r16 = ADD32(ctx->r11, 0X2EB6);
+    ctx->r16 = ADD32(ST_LEVEL_RECORD_FIRST_SLOT_ADDRESS, ST_LEVEL_RECORD_SLOT_DIRECTION_ANGLE_OFFSET);
 L_8005209C:
     // sh          $zero, -0x2C($s0)
     MEM_H(-0X2C, ctx->r16) = 0;
@@ -4627,7 +4630,7 @@ L_80052108:
     // sra         $v0, $v0, 8
     ctx->r2 = S32(ctx->r2) >> 8;
     // sh          $v0, 0x320($gp)
-    MEM_H(0X320, ctx->r28) = ctx->r2;
+    MEM_H(ST_LEVEL_RECORD_DIRECTION_X_GP_OFFSET, ctx->r28) = ctx->r2;
     // lh          $a0, 0x0($s0)
     ctx->r4 = MEM_HS(0X0, ctx->r16);
     // jal         0x800743F4
@@ -4652,7 +4655,7 @@ L_80052128:
     // sra         $v0, $v0, 8
     ctx->r2 = S32(ctx->r2) >> 8;
     // sh          $v0, 0x324($gp)
-    MEM_H(0X324, ctx->r28) = ctx->r2;
+    MEM_H(ST_LEVEL_RECORD_DIRECTION_Z_GP_OFFSET, ctx->r28) = ctx->r2;
     // addiu       $s2, $zero, 0x1
     ctx->r18 = ADD32(0, 0X1);
 L_80052134:
@@ -4683,7 +4686,7 @@ L_80052134:
     // addiu       $t3, $t3, -0x5EC8
     ctx->r11 = ADD32(ctx->r11, -0X5EC8);
     // sb          $v0, 0x6169($t3)
-    MEM_B(0X6169, ctx->r11) = ctx->r2;
+    MEM_B(0, ST_PLAYER_UPDATE_GATE_ADDRESS) = ctx->r2;
 L_8005215C:
     // lui         $t2, 0x801C
     ctx->r10 = S32(0X801C << 16);
@@ -4691,7 +4694,7 @@ L_80052160:
     // addiu       $t2, $t2, -0x5EC8
     ctx->r10 = ADD32(ctx->r10, -0X5EC8);
     // lbu         $v1, 0x6169($t2)
-    ctx->r3 = MEM_BU(0X6169, ctx->r10);
+    ctx->r3 = MEM_BU(0, ST_PLAYER_UPDATE_GATE_ADDRESS);
     // addiu       $v0, $zero, 0x2
     ctx->r2 = ADD32(0, 0X2);
     // bne         $v1, $v0, L_80052210
@@ -4727,15 +4730,15 @@ L_80052160:
     // lui         $t3, 0x801C
     ctx->r11 = S32(0X801C << 16);
     // lhu         $v0, 0x320($gp)
-    ctx->r2 = MEM_HU(0X320, ctx->r28);
+    ctx->r2 = MEM_HU(ST_LEVEL_RECORD_DIRECTION_X_GP_OFFSET, ctx->r28);
     // lhu         $v1, 0x324($gp)
-    ctx->r3 = MEM_HU(0X324, ctx->r28);
+    ctx->r3 = MEM_HU(ST_LEVEL_RECORD_DIRECTION_Z_GP_OFFSET, ctx->r28);
     // addiu       $t3, $t3, 0x310
     ctx->r11 = ADD32(ctx->r11, 0X310);
     // sh          $v0, 0x71A4($t3)
-    MEM_H(0X71A4, ctx->r11) = ctx->r2;
+    MEM_H(0, ST_PLAYER_QUARTER_CONTRIBUTION_X_ADDRESS) = ctx->r2;
     // sh          $v1, 0x71A8($t3)
-    MEM_H(0X71A8, ctx->r11) = ctx->r3;
+    MEM_H(0, ST_PLAYER_QUARTER_CONTRIBUTION_Z_ADDRESS) = ctx->r3;
 L_800521B0:
     // lbu         $v0, 0x0($s3)
     ctx->r2 = MEM_BU(0X0, ctx->r19);
@@ -4777,11 +4780,11 @@ L_800521B0:
     ctx->r11 = ADD32(ctx->r11, -0X5EC8);
     // jal         0x80057A3C
     // sb          $t2, 0x6169($t3)
-    MEM_B(0X6169, ctx->r11) = ctx->r10;
+    MEM_B(0, ST_PLAYER_UPDATE_GATE_ADDRESS) = ctx->r10;
     sub_80057A3C(rdram, ctx);
     goto after_67;
     // sb          $t2, 0x6169($t3)
-    MEM_B(0X6169, ctx->r11) = ctx->r10;
+    MEM_B(0, ST_PLAYER_UPDATE_GATE_ADDRESS) = ctx->r10;
     after_67:
 L_800521F4:
     // addiu       $s0, $s0, 0xD4
@@ -4835,9 +4838,9 @@ L_80052210:
     ctx->r10 = S32(0X801C << 16);
 L_80052234:
     // sh          $zero, 0x320($gp)
-    MEM_H(0X320, ctx->r28) = 0;
+    MEM_H(ST_LEVEL_RECORD_DIRECTION_X_GP_OFFSET, ctx->r28) = 0;
     // sh          $zero, 0x324($gp)
-    MEM_H(0X324, ctx->r28) = 0;
+    MEM_H(ST_LEVEL_RECORD_DIRECTION_Z_GP_OFFSET, ctx->r28) = 0;
     // addiu       $v0, $zero, 0x4
     ctx->r2 = ADD32(0, 0X4);
     // lui         $t2, 0x801C
@@ -4846,7 +4849,7 @@ L_80052244:
     // addiu       $t2, $t2, -0x5EC8
     ctx->r10 = ADD32(ctx->r10, -0X5EC8);
     // sb          $v0, 0x6169($t2)
-    MEM_B(0X6169, ctx->r10) = ctx->r2;
+    MEM_B(0, ST_PLAYER_UPDATE_GATE_ADDRESS) = ctx->r2;
     // lbu         $a0, -0x3($s1)
     ctx->r4 = MEM_BU(-0X3, ctx->r17);
     // nop
@@ -4914,9 +4917,9 @@ L_80052244:
     // addiu       $t3, $t3, 0x310
     ctx->r11 = ADD32(ctx->r11, 0X310);
     // lh          $v0, 0x320($gp)
-    ctx->r2 = MEM_HS(0X320, ctx->r28);
+    ctx->r2 = MEM_HS(ST_LEVEL_RECORD_DIRECTION_X_GP_OFFSET, ctx->r28);
     // lh          $v1, 0x324($gp)
-    ctx->r3 = MEM_HS(0X324, ctx->r28);
+    ctx->r3 = MEM_HS(ST_LEVEL_RECORD_DIRECTION_Z_GP_OFFSET, ctx->r28);
     // negu        $v0, $v0
     ctx->r2 = SUB32(0, ctx->r2);
     // sll         $v0, $v0, 1
@@ -4926,9 +4929,9 @@ L_80052244:
     // sll         $v1, $v1, 1
     ctx->r3 = S32(ctx->r3) << 1;
     // sh          $v0, 0x71A4($t3)
-    MEM_H(0X71A4, ctx->r11) = ctx->r2;
+    MEM_H(0, ST_PLAYER_QUARTER_CONTRIBUTION_X_ADDRESS) = ctx->r2;
     // sh          $v1, 0x71A8($t3)
-    MEM_H(0X71A8, ctx->r11) = ctx->r3;
+    MEM_H(0, ST_PLAYER_QUARTER_CONTRIBUTION_Z_ADDRESS) = ctx->r3;
     // lw          $v0, -0x2C($s1)
     ctx->r2 = MEM_W(-0X2C, ctx->r17);
     // nop
@@ -5462,11 +5465,11 @@ L_800525A4:
     // addiu       $t2, $t2, -0x5EC8
     ctx->r10 = ADD32(ctx->r10, -0X5EC8);
     // sh          $zero, 0x71A8($t3)
-    MEM_H(0X71A8, ctx->r11) = 0;
+    MEM_H(0, ST_PLAYER_QUARTER_CONTRIBUTION_Z_ADDRESS) = 0;
     // sh          $zero, 0x71A6($t3)
-    MEM_H(0X71A6, ctx->r11) = 0;
+    MEM_H(0, ST_PLAYER_QUARTER_CONTRIBUTION_Y_ADDRESS) = 0;
     // sh          $zero, 0x71A4($t3)
-    MEM_H(0X71A4, ctx->r11) = 0;
+    MEM_H(0, ST_PLAYER_QUARTER_CONTRIBUTION_X_ADDRESS) = 0;
     // sh          $zero, 0x47D2($v0)
     MEM_H(0X47D2, ctx->r2) = 0;
     // sh          $zero, 0x47D0($v0)
@@ -5731,9 +5734,9 @@ L_800527A4:
     // addiu       $a2, $v0, 0x310
     ctx->r6 = ADD32(ctx->r2, 0X310);
     // lhu         $v0, 0x71A4($a2)
-    ctx->r2 = MEM_HU(0X71A4, ctx->r6);
+    ctx->r2 = MEM_HU(0, ST_PLAYER_QUARTER_CONTRIBUTION_X_ADDRESS);
     // lhu         $v1, 0x71A8($a2)
-    ctx->r3 = MEM_HU(0X71A8, ctx->r6);
+    ctx->r3 = MEM_HU(0, ST_PLAYER_QUARTER_CONTRIBUTION_Z_ADDRESS);
     // sw          $zero, 0x71B0($a2)
     MEM_W(0X71B0, ctx->r6) = 0;
     // sll         $v0, $v0, 16
@@ -5749,13 +5752,13 @@ L_800527A4:
     // sll         $v1, $v1, 16
     ctx->r3 = S32(ctx->r3) << 16;
     // sh          $a1, 0x71A4($a2)
-    MEM_H(0X71A4, ctx->r6) = ctx->r5;
+    MEM_H(0, ST_PLAYER_QUARTER_CONTRIBUTION_X_ADDRESS) = ctx->r5;
     // addiu       $a1, $a1, 0x3
     ctx->r5 = ADD32(ctx->r5, 0X3);
     // andi        $a1, $a1, 0xFFFF
     ctx->r5 = ctx->r5 & 0XFFFF;
     // lhu         $v0, 0x71A6($a2)
-    ctx->r2 = MEM_HU(0X71A6, ctx->r6);
+    ctx->r2 = MEM_HU(0, ST_PLAYER_QUARTER_CONTRIBUTION_Y_ADDRESS);
     // sltiu       $a1, $a1, 0x7
     ctx->r5 = ctx->r5 < 0X7 ? 1 : 0;
     // sll         $v0, $v0, 16
@@ -5777,17 +5780,17 @@ L_800527A4:
     // sra         $v1, $v0, 1
     ctx->r3 = S32(ctx->r2) >> 1;
     // sh          $a0, 0x71A6($a2)
-    MEM_H(0X71A6, ctx->r6) = ctx->r4;
+    MEM_H(0, ST_PLAYER_QUARTER_CONTRIBUTION_Y_ADDRESS) = ctx->r4;
     // beq         $a1, $zero, L_80052834
     if (ctx->r5 == 0) {
         // sh          $v1, 0x71A8($a2)
-        MEM_H(0X71A8, ctx->r6) = ctx->r3;
+        MEM_H(0, ST_PLAYER_QUARTER_CONTRIBUTION_Z_ADDRESS) = ctx->r3;
         goto L_80052834;
     }
     // sh          $v1, 0x71A8($a2)
-    MEM_H(0X71A8, ctx->r6) = ctx->r3;
+    MEM_H(0, ST_PLAYER_QUARTER_CONTRIBUTION_Z_ADDRESS) = ctx->r3;
     // sh          $zero, 0x71A4($a2)
-    MEM_H(0X71A4, ctx->r6) = 0;
+    MEM_H(0, ST_PLAYER_QUARTER_CONTRIBUTION_X_ADDRESS) = 0;
 L_80052834:
     // addiu       $v0, $a0, 0x3
     ctx->r2 = ADD32(ctx->r4, 0X3);
@@ -5804,7 +5807,7 @@ L_80052834:
     // addiu       $v0, $v1, 0x3
     ctx->r2 = ADD32(ctx->r3, 0X3);
     // sh          $zero, 0x71A6($a2)
-    MEM_H(0X71A6, ctx->r6) = 0;
+    MEM_H(0, ST_PLAYER_QUARTER_CONTRIBUTION_Y_ADDRESS) = 0;
 L_8005284C:
     // andi        $v0, $v0, 0xFFFF
     ctx->r2 = ctx->r2 & 0XFFFF;
@@ -5819,7 +5822,7 @@ L_8005284C:
     // nop
 
     // sh          $zero, 0x71A8($a2)
-    MEM_H(0X71A8, ctx->r6) = 0;
+    MEM_H(0, ST_PLAYER_QUARTER_CONTRIBUTION_Z_ADDRESS) = 0;
 L_80052860:
     // lw          $ra, 0x9C($sp)
     ctx->r31 = MEM_W(0X9C, ctx->r29);
