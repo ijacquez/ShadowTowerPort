@@ -301,7 +301,7 @@ SRCS:= scr/st/AddPrim.c \
 	scr/st/AsyncStructForcedLoadSync.c \
 	scr/st/sub_80015B2C.c \
 	scr/st/sub_80042CEC.c \
-	scr/st/sub_8004AE38.c \
+	scr/st/ST_EnterActiveCollisionRecordStateThree.c \
 	scr/st/sub_8004CEE8.c \
 	scr/st/VerifyChecksum.c \
 	scr/st/ST_QueueDiscRead.c \

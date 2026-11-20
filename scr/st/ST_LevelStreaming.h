@@ -15,7 +15,8 @@ enum {
 // Callback addresses in stage 0's loaded slot-2 resource.
 enum {
     ST_STAGE_ZERO_ACTIVE_RECORD_PERIODIC_CALLBACK = 0x801ED4A0,
-    ST_STAGE_ZERO_ACTIVE_RECORD_UPDATE_CALLBACK = 0x801ED6E4
+    ST_STAGE_ZERO_ACTIVE_RECORD_UPDATE_CALLBACK = 0x801ED6E4,
+    ST_STAGE_ZERO_ACTIVE_RECORD_UPDATE_COUNTDOWN = 0x801ECE7C
 };
 
 // Offsets from the emulated global pointer used by the level-record path.

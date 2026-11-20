@@ -1,7 +1,8 @@
 #include "recomp.h"
 #include "disable_warnings.h"
+#include "ST_ActiveCollisionRecord.h"
 
-void sub_8004AE38(uint8_t* rdram, recomp_context* ctx) {
+void ST_EnterActiveCollisionRecordStateThree(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
     unsigned int rounding_mode = DEFAULT_ROUNDING_MODE;
     int c1cs = 0; 
@@ -12,7 +13,7 @@ void sub_8004AE38(uint8_t* rdram, recomp_context* ctx) {
     // sw          $ra, 0x10($sp)
     MEM_W(0X10, ctx->r29) = ctx->r31;
     // lbu         $v1, 0x2($a1)
-    ctx->r3 = MEM_BU(0X2, ctx->r5);
+    ctx->r3 = MEM_BU(ST_ACTIVE_COLLISION_RECORD_CLASS_INDEX, ctx->r5);
     // nop
 
     // sll         $v0, $v1, 1
@@ -28,7 +29,7 @@ void sub_8004AE38(uint8_t* rdram, recomp_context* ctx) {
     // addu        $a2, $v0, $a0
     ctx->r6 = ADD32(ctx->r2, ctx->r4);
     // lbu         $v1, 0x5($a1)
-    ctx->r3 = MEM_BU(0X5, ctx->r5);
+    ctx->r3 = MEM_BU(ST_ACTIVE_COLLISION_RECORD_STATE, ctx->r5);
     // addiu       $v0, $zero, 0x5
     ctx->r2 = ADD32(0, 0X5);
     // bne         $v1, $v0, L_8004AE90
@@ -96,13 +97,13 @@ L_8004AE90:
     MEM_H(0X30, ctx->r3) = ctx->r2;
 L_8004AED4:
     // addiu       $v0, $zero, 0x3
-    ctx->r2 = ADD32(0, 0X3);
+    ctx->r2 = ADD32(0, ST_ACTIVE_COLLISION_RECORD_STATE_THREE);
     // lui         $v1, 0x801C
     ctx->r3 = S32(0X801C << 16);
     // addiu       $v1, $v1, -0x5EC8
     ctx->r3 = ADD32(ctx->r3, -0X5EC8);
     // sb          $v0, 0x5($a1)
-    MEM_B(0X5, ctx->r5) = ctx->r2;
+    MEM_B(ST_ACTIVE_COLLISION_RECORD_STATE, ctx->r5) = ctx->r2;
     // lhu         $a0, 0x12($a2)
     ctx->r4 = MEM_HU(0X12, ctx->r6);
     // lw          $v0, 0x612C($v1)

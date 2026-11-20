@@ -308,7 +308,33 @@ sets `ST_CURRENT_ACTIVE_COLLISION_RECORD_ADDRESS` to the record and
 these addresses through its MIPS interpreter. The update callback begins by
 adding `ST_ACTIVE_COLLISION_RECORD_UPDATE_STEP` to
 `ST_ACTIVE_COLLISION_RECORD_UPDATE_ACCUMULATOR` and storing the low halfword,
-then calls another function. **OPEN:** the callbacks' complete effects.
+then calls `ST_STAGE_ZERO_ACTIVE_RECORD_UPDATE_COUNTDOWN`. This routine reads
+`ST_ACTIVE_COLLISION_RECORD_UPDATE_COUNTDOWN` as signed. If it is negative,
+the routine returns zero. Otherwise it subtracts the absolute signed
+`ST_ACTIVE_COLLISION_RECORD_UPDATE_STEP`, stores the low halfword as the
+countdown, and tests that stored halfword as signed.
+
+If the resulting countdown is negative and
+`ST_ACTIVE_COLLISION_RECORD_TIMER_BEHAVIOR` is zero, the routine returns 1;
+when the signed update accumulator is at least 4095, it first calls
+[ST_EnterActiveCollisionRecordStateThree](../scr/st/ST_EnterActiveCollisionRecordStateThree.c).
+If the resulting countdown is negative and the timer behavior is nonzero,
+it sets the countdown to -1, clears bit `0x20` in
+`ST_ACTIVE_COLLISION_RECORD_TIMER_FLAGS`, and returns zero. If the countdown
+is nonnegative, the signed accumulator is at least 4096, and the record is in
+state 5, it sets the accumulator to 4095 and returns zero; otherwise it
+returns zero without that adjustment. The state-three routine sets
+`ST_ACTIVE_COLLISION_RECORD_STATE` to 3 and recalculates the record position
+from its placement. **OPEN:** the callbacks' complete effects and the in-game
+meanings of these record fields.
+
+If the countdown routine returns 1, the update callback returns immediately.
+Otherwise it reads the signed step and accumulator. It sets
+`ST_ACTIVE_COLLISION_RECORD_CALLBACK_CONTROL` to `0xFF` and calls the
+periodic callback when the step is nonnegative and the accumulator is at
+least 4096, or the step is negative and the accumulator is at most zero.
+Afterward, if `ST_ACTIVE_COLLISION_RECORD_CALLBACK_DATA` is nonzero, it calls
+another stage-zero routine and sets the control byte to `0xF0`.
 
 After this processing, if the signed 16-bit movement magnitude is nonzero and
 `ST_PLAYER_DIRECTIONAL_MOVE_DISABLED` (`0x21E`) is zero, `ST_PlayerUpdateMovement` calls
