@@ -406,7 +406,7 @@ L_80020CA0:
     // addiu       $a0, $sp, 0x10
     ctx->r4 = ADD32(ctx->r29, 0X10);
    
-    sub_8001CB88(rdram, ctx);
+    ST_TransformLevelOriginsForView(rdram, ctx);
 
 
     goto after_4;
@@ -488,7 +488,7 @@ L_80020CA0:
     // jal         0x8001CDF8
     // sw          $v0, 0x68($s2)
     MEM_W(0X68, ctx->r18) = ctx->r2;
-    sub_8001CDF8(rdram, ctx);
+    ST_ProjectLevelVertices(rdram, ctx);
 
     goto after_5;
     // sw          $v0, 0x68($s2)

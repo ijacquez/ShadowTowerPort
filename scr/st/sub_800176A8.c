@@ -136,7 +136,7 @@ L_8001772C:
     // jal         0x800498CC
     // addiu       $a1, $a1, -0x4248
     ctx->r5 = ADD32(ctx->r5, -0X4248);
-    sub_800498CC(rdram, ctx);
+    ST_BuildQuarterTurnMatrices(rdram, ctx);
     goto after_2;
     // addiu       $a1, $a1, -0x4248
     ctx->r5 = ADD32(ctx->r5, -0X4248);

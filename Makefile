@@ -374,8 +374,8 @@ SRCS:= scr/st/AddPrim.c \
 	scr/st/sub_8001C8E0.c \
 	scr/st/sub_8001C9C8.c \
 	scr/st/sub_8001CAB8.c \
-	scr/st/sub_8001CB88.c \
-	scr/st/sub_8001CDF8.c \
+	scr/st/ST_TransformLevelOriginsForView.c \
+	scr/st/ST_ProjectLevelVertices.c \
 	scr/st/sub_8001D224.c \
 	scr/st/sub_8001D264.c \
 	scr/st/sub_8001D2A8.c \
@@ -641,7 +641,7 @@ SRCS:= scr/st/AddPrim.c \
 	scr/st/ST_SetCollisionReference.c \
 	scr/st/ST_RunCollisionQuery.c \
 	scr/st/sub_800496C8.c \
-	scr/st/sub_800498CC.c \
+	scr/st/ST_BuildQuarterTurnMatrices.c \
 	scr/st/sub_80049AAC.c \
 	scr/st/sub_80049CD4.c \
 	scr/st/sub_80049D48.c \

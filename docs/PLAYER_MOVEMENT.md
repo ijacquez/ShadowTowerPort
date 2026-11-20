@@ -496,11 +496,11 @@ the player's full height are not established. The branches below describe
 stored values.
 
 The level-rendering path establishes the Y direction. For a level,
-unrotated view, [sub_8001CB88](../scr/st/sub_8001CB88.c) subtracts player
+unrotated view, [ST_TransformLevelOriginsForView](../scr/st/ST_TransformLevelOriginsForView.c) subtracts player
 Y and the two view adjustments from a level placement's Y. The rotation
 matrix from [RotMatrix](../scr/st/RotMatrix.c) is the identity at zero
-angles; [sub_800498CC](../scr/st/sub_800498CC.c) preserves the Y axis in
-the placement matrices. [sub_8001CDF8](../scr/st/sub_8001CDF8.c) uses those
+angles; [ST_BuildQuarterTurnMatrices](../scr/st/ST_BuildQuarterTurnMatrices.c) preserves the Y axis in
+the placement matrices. [ST_ProjectLevelVertices](../scr/st/ST_ProjectLevelVertices.c) uses those
 matrices and the placement translation to project level vertices. In the
 [GTE projection](../PsyCross/src/gte/PsyX_GTE.cpp), for positive depth and
 without saturation, increasing relative Y increases screen Y. The
