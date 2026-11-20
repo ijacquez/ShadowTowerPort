@@ -1102,6 +1102,39 @@ the horizontal extension and Y is the displacement Y without the vertical
 parameter added. Passing this test does not by itself select a record: distance
 and edge tests follow.
 
+For a four-vertex record that reaches horizontal selection with bit `0x2` set
+in `ST_GEOMETRY_RECORD_FLAGS`, the helper tests two points: the query's current
+position, and a reference point with the same X/Z and Y equal to query Y plus
+`ST_COLLISION_QUERY_VERTICAL_PARAMETER` minus
+`ST_COLLISION_GEOMETRY_REFERENCE_Y_BIAS` (`0x403`, 0.250732421875 cells).
+For each point it subtracts that point from each transformed vertex, takes the
+signed low halfword of each component, and uses the GTE outer-product command
+to form four cross products in vertex order `(0,1)`, `(1,3)`, `(3,2)`,
+`(2,0)`. The command arithmetic-shifts each cross-product component right by
+12 before storing its 32-bit result. For each cross product, the helper takes
+the dot product with the rotated record vector using 32-bit wrapped products
+and sums. If all four signed results are nonpositive, it considers that record
+for the point's direct normal result. Otherwise it takes the dot products with
+the signed extended displacement; if all four are nonnegative, it considers
+the record for the point's fallback result. Equality passes both comparisons.
+
+The current-position test updates
+`ST_COLLISION_GEOMETRY_SCRATCH_FIRST_NORMAL_DISTANCE` or
+`ST_COLLISION_GEOMETRY_SCRATCH_FIRST_NORMAL_FALLBACK_DISTANCE`; the reference
+point test updates `ST_COLLISION_GEOMETRY_SCRATCH_SECOND_NORMAL_DISTANCE` or
+`ST_COLLISION_GEOMETRY_SCRATCH_SECOND_NORMAL_FALLBACK_DISTANCE`. Each update
+keeps a strictly smaller signed point-to-record value and its rotated vector.
+The current-position value is used for the first pair, and the reference-point
+value for the second. Once all records have been scanned,
+`ST_QueryLevelGeometry` uses a fallback value and its vector only if the
+corresponding direct value remains at `ST_COLLISION_GEOMETRY_NO_RESULT`. The later
+threshold comparisons produce the query's first and second normal result bits.
+Earlier direction, distance, and record-flag checks can reject the record
+before these tests. See
+[ST_TestFourVertexCollisionRecords](../scr/st/ST_TestFourVertexCollisionRecords.c),
+[ST_TransformCandidateVertices](../scr/st/ST_TransformCandidateVertices.c),
+and [ST_QueryLevelGeometry](../scr/st/ST_QueryLevelGeometry.c).
+
 For example, take only stage 0 model 2's `0x29CC` record, with placement 3's
 rotation and origin, and no matching active or indexed records. Its transformed
 vector is `(0, 0, 0x1000)` (0.0, 0.0, 1.0) and its plane Z is `0x3F400`

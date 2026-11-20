@@ -141,12 +141,18 @@ int main() {
     MEM_H(0x800, 0x80081710) = 4096;
     static uint8_t wallInitial[sizeof rdram];
     std::memcpy(wallInitial, rdram, sizeof rdram);
-    struct WallCase { int y, flag, resultOffset, normalOffset; };
+    struct WallCase { int y, flag, resultOffset, normalOffset, fallbackOffset, fallbackDistance; };
     const WallCase wallCases[] = {
         {0x41480, ST_COLLISION_RESULT_SECOND_NORMAL_THRESHOLD,
-            ST_COLLISION_QUERY_SECOND_NORMAL_RESULT, ST_COLLISION_QUERY_SECOND_NORMAL_Z},
+            ST_COLLISION_QUERY_SECOND_NORMAL_RESULT, ST_COLLISION_QUERY_SECOND_NORMAL_Z,
+            ST_COLLISION_GEOMETRY_SCRATCH_SECOND_NORMAL_FALLBACK_DISTANCE, 256},
         {0x416C0, ST_COLLISION_RESULT_FIRST_NORMAL_THRESHOLD,
-            ST_COLLISION_QUERY_FIRST_NORMAL_RESULT, ST_COLLISION_QUERY_FIRST_NORMAL_Z}
+            ST_COLLISION_QUERY_FIRST_NORMAL_RESULT, ST_COLLISION_QUERY_FIRST_NORMAL_Z,
+            ST_COLLISION_GEOMETRY_SCRATCH_FIRST_NORMAL_FALLBACK_DISTANCE, 256},
+        {0x41C00, ST_COLLISION_RESULT_FIRST_NORMAL_THRESHOLD,
+            ST_COLLISION_QUERY_FIRST_NORMAL_RESULT, ST_COLLISION_QUERY_FIRST_NORMAL_Z,
+            ST_COLLISION_GEOMETRY_SCRATCH_FIRST_NORMAL_FALLBACK_DISTANCE,
+            ST_COLLISION_GEOMETRY_NO_RESULT}
     };
     for (const auto& test : wallCases) {
         std::memcpy(rdram, wallInitial, sizeof rdram);
@@ -160,7 +166,8 @@ int main() {
         ST_QueryLevelGeometry(rdram, &queryCtx);
         if (queryCtx.r2 != test.flag || MEM_HU(ST_COLLISION_QUERY_CANDIDATE_COUNT, query) != 1 ||
             S32(MEM_W(test.resultOffset, query)) != 256 ||
-            MEM_HS(test.normalOffset, query) != 4096) {
+            MEM_HS(test.normalOffset, query) != 4096 ||
+            MEM_W(test.fallbackOffset, 0x1F800000) != test.fallbackDistance) {
             std::fprintf(stderr, "wall geometry query failed at Y 0x%x\n", test.y);
             return 1;
         }

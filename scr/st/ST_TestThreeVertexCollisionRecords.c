@@ -1777,7 +1777,7 @@ L_800473FC:
     // slti        $v0, $s1, -0x100
     ctx->r2 = SIGNED(ctx->r17) < -0X100 ? 1 : 0;
     // lw          $v0, 0x12C($t3)
-    ctx->r2 = MEM_W(0X12C, ctx->r11);
+    ctx->r2 = MEM_W(ST_COLLISION_GEOMETRY_SCRATCH_FIRST_NORMAL_FALLBACK_DISTANCE, ctx->r11);
     // nop
 
     // slt         $v0, $s0, $v0
@@ -1791,7 +1791,7 @@ L_800473FC:
     // slti        $v0, $s1, -0x100
     ctx->r2 = SIGNED(ctx->r17) < -0X100 ? 1 : 0;
     // sw          $s0, 0x12C($t3)
-    MEM_W(0X12C, ctx->r11) = ctx->r16;
+    MEM_W(ST_COLLISION_GEOMETRY_SCRATCH_FIRST_NORMAL_FALLBACK_DISTANCE, ctx->r11) = ctx->r16;
     // lw          $v0, 0x0($t9)
     ctx->r2 = MEM_W(0X0, ctx->r25);
     // lw          $v1, 0x4($t9)
@@ -1806,7 +1806,7 @@ L_800473FC:
     MEM_W(0X17C, ctx->r11) = ctx->r3;
 L_80047504:
     // lw          $v0, 0x128($t3)
-    ctx->r2 = MEM_W(0X128, ctx->r11);
+    ctx->r2 = MEM_W(ST_COLLISION_GEOMETRY_SCRATCH_FIRST_NORMAL_DISTANCE, ctx->r11);
     // nop
 
     // slt         $v0, $s0, $v0
@@ -1822,7 +1822,7 @@ L_80047504:
     // lhu         $v0, 0x44CE($s6)
     ctx->r2 = MEM_HU(ST_COLLISION_QUERY_CANDIDATE_INDICES, ctx->r22);
     // sw          $s0, 0x128($t3)
-    MEM_W(0X128, ctx->r11) = ctx->r16;
+    MEM_W(ST_COLLISION_GEOMETRY_SCRATCH_FIRST_NORMAL_DISTANCE, ctx->r11) = ctx->r16;
     // sh          $v0, 0x22($t3)
     MEM_H(0X22, ctx->r11) = ctx->r2;
     // lw          $v0, 0x0($t9)
@@ -2170,7 +2170,7 @@ L_80047690:
     // nop
 
     // lw          $v0, 0x134($t3)
-    ctx->r2 = MEM_W(0X134, ctx->r11);
+    ctx->r2 = MEM_W(ST_COLLISION_GEOMETRY_SCRATCH_SECOND_NORMAL_FALLBACK_DISTANCE, ctx->r11);
     // nop
 
     // slt         $v0, $s4, $v0
@@ -2184,7 +2184,7 @@ L_80047690:
     // nop
 
     // sw          $s4, 0x134($t3)
-    MEM_W(0X134, ctx->r11) = ctx->r20;
+    MEM_W(ST_COLLISION_GEOMETRY_SCRATCH_SECOND_NORMAL_FALLBACK_DISTANCE, ctx->r11) = ctx->r20;
     // lw          $v0, 0x0($t9)
     ctx->r2 = MEM_W(0X0, ctx->r25);
     // lw          $v1, 0x4($t9)
@@ -2199,7 +2199,7 @@ L_80047690:
     MEM_W(0X18C, ctx->r11) = ctx->r3;
 L_80047798:
     // lw          $v0, 0x130($t3)
-    ctx->r2 = MEM_W(0X130, ctx->r11);
+    ctx->r2 = MEM_W(ST_COLLISION_GEOMETRY_SCRATCH_SECOND_NORMAL_DISTANCE, ctx->r11);
     // nop
 
     // slt         $v0, $s4, $v0
@@ -2213,7 +2213,7 @@ L_80047798:
     // nop
 
     // sw          $s4, 0x130($t3)
-    MEM_W(0X130, ctx->r11) = ctx->r20;
+    MEM_W(ST_COLLISION_GEOMETRY_SCRATCH_SECOND_NORMAL_DISTANCE, ctx->r11) = ctx->r20;
     // lw          $v0, 0x0($t9)
     ctx->r2 = MEM_W(0X0, ctx->r25);
     // lw          $v1, 0x4($t9)

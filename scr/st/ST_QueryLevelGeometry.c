@@ -107,7 +107,7 @@ void ST_QueryLevelGeometry(uint8_t* rdram, recomp_context* ctx) {
     // addu        $v0, $v0, $v1
     ctx->r2 = ADD32(ctx->r2, ctx->r3);
     // addiu       $v0, $v0, -0x403
-    ctx->r2 = ADD32(ctx->r2, -0X403);
+    ctx->r2 = ADD32(ctx->r2, -ST_COLLISION_GEOMETRY_REFERENCE_Y_BIAS);
     // sw          $v0, 0x108($s4)
     MEM_W(0X108, ctx->r20) = ctx->r2;
     // lui         $v0, 0x801B
@@ -141,7 +141,7 @@ void ST_QueryLevelGeometry(uint8_t* rdram, recomp_context* ctx) {
     // addu        $v0, $s7, $zero
     ctx->r2 = ADD32(ctx->r23, 0);
     // lui         $v1, 0x8
-    ctx->r3 = S32(0X8 << 16);
+    ctx->r3 = S32(ST_COLLISION_GEOMETRY_NO_RESULT);
     // sw          $v1, 0x2C($s0)
     MEM_W(ST_COLLISION_QUERY_PROPOSED_Y_RESULT, ctx->r16) = ctx->r3;
     // j           L_800492C4
@@ -393,7 +393,7 @@ L_80048D2C:
     MEM_H(ST_COLLISION_GEOMETRY_SCRATCH_EXTENDED_DISPLACEMENT_Z, ctx->r20) = ctx->r2;
 L_80048D3C:
     // lui         $s5, 0x8
-    ctx->r21 = S32(0X8 << 16);
+    ctx->r21 = S32(ST_COLLISION_GEOMETRY_NO_RESULT);
     // addiu       $v0, $zero, -0x1
     ctx->r2 = ADD32(0, -0X1);
     // sh          $v0, 0x22($s4)
@@ -423,13 +423,13 @@ L_80048D3C:
     // sw          $s5, 0x114($s4)
     MEM_W(0X114, ctx->r20) = ctx->r21;
     // sw          $s5, 0x128($s4)
-    MEM_W(0X128, ctx->r20) = ctx->r21;
+    MEM_W(ST_COLLISION_GEOMETRY_SCRATCH_FIRST_NORMAL_DISTANCE, ctx->r20) = ctx->r21;
     // sw          $s5, 0x12C($s4)
-    MEM_W(0X12C, ctx->r20) = ctx->r21;
+    MEM_W(ST_COLLISION_GEOMETRY_SCRATCH_FIRST_NORMAL_FALLBACK_DISTANCE, ctx->r20) = ctx->r21;
     // sw          $s5, 0x130($s4)
-    MEM_W(0X130, ctx->r20) = ctx->r21;
+    MEM_W(ST_COLLISION_GEOMETRY_SCRATCH_SECOND_NORMAL_DISTANCE, ctx->r20) = ctx->r21;
     // sw          $s5, 0x134($s4)
-    MEM_W(0X134, ctx->r20) = ctx->r21;
+    MEM_W(ST_COLLISION_GEOMETRY_SCRATCH_SECOND_NORMAL_FALLBACK_DISTANCE, ctx->r20) = ctx->r21;
     // sw          $zero, 0x198($s4)
     MEM_W(ST_COLLISION_GEOMETRY_SCRATCH_RECORD_FLAGS, ctx->r20) = 0;
     // sw          $s3, 0x10($s4)
@@ -475,7 +475,7 @@ L_80048D3C:
     ctx->r4 = ADD32(ctx->r29, 0X10);
     after_9:
     // lw          $v0, 0x128($s4)
-    ctx->r2 = MEM_W(0X128, ctx->r20);
+    ctx->r2 = MEM_W(ST_COLLISION_GEOMETRY_SCRATCH_FIRST_NORMAL_DISTANCE, ctx->r20);
     // nop
 
     // bne         $v0, $s5, L_80048E0C
@@ -503,14 +503,14 @@ L_80048D3C:
     // swr         $v1, 0x174($s4)
     do_swr(rdram, 0X174, ctx->r20, ctx->r3);
     // lw          $v0, 0x12C($s4)
-    ctx->r2 = MEM_W(0X12C, ctx->r20);
+    ctx->r2 = MEM_W(ST_COLLISION_GEOMETRY_SCRATCH_FIRST_NORMAL_FALLBACK_DISTANCE, ctx->r20);
     // nop
 
     // sw          $v0, 0x128($s4)
-    MEM_W(0X128, ctx->r20) = ctx->r2;
+    MEM_W(ST_COLLISION_GEOMETRY_SCRATCH_FIRST_NORMAL_DISTANCE, ctx->r20) = ctx->r2;
 L_80048E0C:
     // lw          $v0, 0x130($s4)
-    ctx->r2 = MEM_W(0X130, ctx->r20);
+    ctx->r2 = MEM_W(ST_COLLISION_GEOMETRY_SCRATCH_SECOND_NORMAL_DISTANCE, ctx->r20);
     // nop
 
     // bne         $v0, $s5, L_80048E48
@@ -538,11 +538,11 @@ L_80048E0C:
     // swr         $v1, 0x184($s4)
     do_swr(rdram, 0X184, ctx->r20, ctx->r3);
     // lw          $v0, 0x134($s4)
-    ctx->r2 = MEM_W(0X134, ctx->r20);
+    ctx->r2 = MEM_W(ST_COLLISION_GEOMETRY_SCRATCH_SECOND_NORMAL_FALLBACK_DISTANCE, ctx->r20);
     // nop
 
     // sw          $v0, 0x130($s4)
-    MEM_W(0X130, ctx->r20) = ctx->r2;
+    MEM_W(ST_COLLISION_GEOMETRY_SCRATCH_SECOND_NORMAL_DISTANCE, ctx->r20) = ctx->r2;
 L_80048E48:
     // lw          $v0, 0x114($s4)
     ctx->r2 = MEM_W(0X114, ctx->r20);
@@ -1010,7 +1010,7 @@ L_80049104:
     // lhu         $a0, 0x1C($s6)
     ctx->r4 = MEM_HU(ST_COLLISION_QUERY_HORIZONTAL_PARAMETER, ctx->r22);
     // lw          $v0, 0x128($s4)
-    ctx->r2 = MEM_W(0X128, ctx->r20);
+    ctx->r2 = MEM_W(ST_COLLISION_GEOMETRY_SCRATCH_FIRST_NORMAL_DISTANCE, ctx->r20);
     // subu        $v1, $a0, $v1
     ctx->r3 = SUB32(ctx->r4, ctx->r3);
     // slt         $v0, $v0, $v1
@@ -1076,7 +1076,7 @@ L_80049120:
     ctx->r3 = S32(ctx->r2) >> 12;
 L_80049178:
     // lw          $v0, 0x130($s4)
-    ctx->r2 = MEM_W(0X130, ctx->r20);
+    ctx->r2 = MEM_W(ST_COLLISION_GEOMETRY_SCRATCH_SECOND_NORMAL_DISTANCE, ctx->r20);
     // subu        $v1, $a0, $v1
     ctx->r3 = SUB32(ctx->r4, ctx->r3);
     // slt         $v0, $v0, $v1
@@ -1099,13 +1099,13 @@ L_80049190:
     // lw          $a1, 0x118($s4)
     ctx->r5 = MEM_W(0X118, ctx->r20);
     // lw          $a2, 0x128($s4)
-    ctx->r6 = MEM_W(0X128, ctx->r20);
+    ctx->r6 = MEM_W(ST_COLLISION_GEOMETRY_SCRATCH_FIRST_NORMAL_DISTANCE, ctx->r20);
     // lw          $a3, 0x12C($s4)
-    ctx->r7 = MEM_W(0X12C, ctx->r20);
+    ctx->r7 = MEM_W(ST_COLLISION_GEOMETRY_SCRATCH_FIRST_NORMAL_FALLBACK_DISTANCE, ctx->r20);
     // lw          $t0, 0x130($s4)
-    ctx->r8 = MEM_W(0X130, ctx->r20);
+    ctx->r8 = MEM_W(ST_COLLISION_GEOMETRY_SCRATCH_SECOND_NORMAL_DISTANCE, ctx->r20);
     // lw          $t1, 0x134($s4)
-    ctx->r9 = MEM_W(0X134, ctx->r20);
+    ctx->r9 = MEM_W(ST_COLLISION_GEOMETRY_SCRATCH_SECOND_NORMAL_FALLBACK_DISTANCE, ctx->r20);
     // lw          $t2, 0x138($s4)
     ctx->r10 = MEM_W(0X138, ctx->r20);
     // lw          $t3, 0x13C($s4)
