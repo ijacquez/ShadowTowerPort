@@ -6,7 +6,15 @@
 enum {
     ST_DIRECTIONAL_NORMAL_CORRECTION_BIAS = 0x101,
     ST_DIRECTIONAL_ACTIVE_RECORD_MARGIN = 0x300,
-    ST_DIRECTIONAL_INDEXED_RECORD_MARGIN = 0x100
+    ST_DIRECTIONAL_INDEXED_RECORD_MARGIN = 0x100,
+    ST_DIRECTIONAL_WORK_X = 0x10,
+    ST_DIRECTIONAL_WORK_Y = 0x14,
+    ST_DIRECTIONAL_WORK_Z = 0x18,
+    ST_DIRECTIONAL_REFERENCE_DELTA_X = 0x20,
+    ST_DIRECTIONAL_REFERENCE_DELTA_Y = 0x24,
+    ST_DIRECTIONAL_REFERENCE_DELTA_Z = 0x28,
+    ST_DIRECTIONAL_REFERENCE_NORMAL_X = 0x30,
+    ST_DIRECTIONAL_REFERENCE_NORMAL_Z = 0x34
 };
 
 void ST_ApplyDirectionalMovementWithCollision(uint8_t* rdram, recomp_context* ctx) {
@@ -69,7 +77,7 @@ L_800411A8:
     // sra         $v0, $v0, 12
     ctx->r2 = S32(ctx->r2) >> 12;
     // sw          $v0, 0x10($sp)
-    MEM_W(0X10, ctx->r29) = ctx->r2;
+    MEM_W(ST_DIRECTIONAL_WORK_X, ctx->r29) = ctx->r2;
     // jal         0x800743F4
     // addu        $a0, $s4, $zero
     ctx->r4 = ADD32(ctx->r20, 0);
@@ -102,11 +110,11 @@ L_800411CC:
     // addiu       $v1, $a1, 0x5948
     ctx->r3 = ADD32(ctx->r5, 0X5948);
     // lw          $v0, 0x248($a0)
-    ctx->r2 = MEM_W(0X248, ctx->r4);
+    ctx->r2 = MEM_W(ST_PLAYER_POSITION_X, ctx->r4);
     // lw          $a2, 0x24C($a0)
-    ctx->r6 = MEM_W(0X24C, ctx->r4);
+    ctx->r6 = MEM_W(ST_PLAYER_POSITION_Y, ctx->r4);
     // lw          $a3, 0x250($a0)
-    ctx->r7 = MEM_W(0X250, ctx->r4);
+    ctx->r7 = MEM_W(ST_PLAYER_POSITION_Z, ctx->r4);
     // lw          $t0, 0x254($a0)
     ctx->r8 = MEM_W(0X254, ctx->r4);
     // sw          $v0, 0x4($v1)
@@ -120,7 +128,7 @@ L_800411CC:
     // sra         $v0, $t1, 12
     ctx->r2 = S32(ctx->r9) >> 12;
     // sw          $v0, 0x18($sp)
-    MEM_W(0X18, ctx->r29) = ctx->r2;
+    MEM_W(ST_DIRECTIONAL_WORK_Z, ctx->r29) = ctx->r2;
     // addiu       $v0, $zero, 0x100
     ctx->r2 = ADD32(0, 0X100);
     // sh          $v0, 0x1C($v1)
@@ -130,13 +138,13 @@ L_800411CC:
     // sh          $v0, 0x1E($v1)
     MEM_H(ST_COLLISION_QUERY_VERTICAL_PARAMETER, ctx->r3) = ctx->r2;
     // lh          $v1, 0x2D4($a0)
-    ctx->r3 = MEM_HS(0X2D4, ctx->r4);
+    ctx->r3 = MEM_HS(ST_PLAYER_VERTICAL_MOVE, ctx->r4);
     // addiu       $v0, $zero, 0x432
     ctx->r2 = ADD32(0, 0X432);
     // sw          $v0, 0x5948($a1)
     MEM_W(0X5948, ctx->r5) = ctx->r2;
     // sw          $v1, 0x14($sp)
-    MEM_W(0X14, ctx->r29) = ctx->r3;
+    MEM_W(ST_DIRECTIONAL_WORK_Y, ctx->r29) = ctx->r3;
 // Rebuild the query vector from the current candidate and stored movement.
 // A zero result applies the candidate; nonzero results enter the branches below.
 L_80041224:
@@ -145,7 +153,7 @@ L_80041224:
     // addiu       $s1, $v0, -0x70D8
     ctx->r17 = ADD32(ctx->r2, -0X70D8);
     // lhu         $v0, 0x18($sp)
-    ctx->r2 = MEM_HU(0X18, ctx->r29);
+    ctx->r2 = MEM_HU(ST_DIRECTIONAL_WORK_Z, ctx->r29);
     // lhu         $v1, 0x1D0($s1)
     ctx->r3 = MEM_HU(ST_PLAYER_MOVE_Z, ctx->r17);
     // nop
@@ -155,7 +163,7 @@ L_80041224:
     // sh          $v0, 0x264($s1)
     MEM_H(ST_PLAYER_COLLISION_DISPLACEMENT_Z, ctx->r17) = ctx->r2;
     // lhu         $v0, 0x10($sp)
-    ctx->r2 = MEM_HU(0X10, ctx->r29);
+    ctx->r2 = MEM_HU(ST_DIRECTIONAL_WORK_X, ctx->r29);
     // lhu         $v1, 0x1CC($s1)
     ctx->r3 = MEM_HU(ST_PLAYER_MOVE_X, ctx->r17);
     // lh          $a0, 0x264($s1)
@@ -165,7 +173,7 @@ L_80041224:
     // sh          $v0, 0x260($s1)
     MEM_H(ST_PLAYER_COLLISION_DISPLACEMENT_X, ctx->r17) = ctx->r2;
     // lhu         $v0, 0x14($sp)
-    ctx->r2 = MEM_HU(0X14, ctx->r29);
+    ctx->r2 = MEM_HU(ST_DIRECTIONAL_WORK_Y, ctx->r29);
     // lh          $a1, 0x260($s1)
     ctx->r5 = MEM_HS(ST_PLAYER_COLLISION_DISPLACEMENT_X, ctx->r17);
     // sh          $v0, 0x262($s1)
@@ -199,7 +207,7 @@ L_80041224:
 
     after_2:
     // lw          $v1, 0x10($sp)
-    ctx->r3 = MEM_W(0X10, ctx->r29);
+    ctx->r3 = MEM_W(ST_DIRECTIONAL_WORK_X, ctx->r29);
     // nop
 
     // mult        $v1, $v1
@@ -207,7 +215,7 @@ L_80041224:
     // mflo        $a0
     ctx->r4 = lo;
     // lw          $v1, 0x18($sp)
-    ctx->r3 = MEM_W(0X18, ctx->r29);
+    ctx->r3 = MEM_W(ST_DIRECTIONAL_WORK_Z, ctx->r29);
     // nop
 
     // mult        $v1, $v1
@@ -257,35 +265,35 @@ L_800412E4:
     // addiu       $v1, $v1, -0x70D8
     ctx->r3 = ADD32(ctx->r3, -0X70D8);
     // lw          $v0, 0x248($v1)
-    ctx->r2 = MEM_W(0X248, ctx->r3);
+    ctx->r2 = MEM_W(ST_PLAYER_POSITION_X, ctx->r3);
     // lw          $a0, 0x10($sp)
-    ctx->r4 = MEM_W(0X10, ctx->r29);
+    ctx->r4 = MEM_W(ST_DIRECTIONAL_WORK_X, ctx->r29);
     // nop
 
     // addu        $v0, $v0, $a0
     ctx->r2 = ADD32(ctx->r2, ctx->r4);
     // sw          $v0, 0x248($v1)
-    MEM_W(0X248, ctx->r3) = ctx->r2;
+    MEM_W(ST_PLAYER_POSITION_X, ctx->r3) = ctx->r2;
     // lw          $v0, 0x24C($v1)
-    ctx->r2 = MEM_W(0X24C, ctx->r3);
+    ctx->r2 = MEM_W(ST_PLAYER_POSITION_Y, ctx->r3);
     // lw          $a1, 0x14($sp)
-    ctx->r5 = MEM_W(0X14, ctx->r29);
+    ctx->r5 = MEM_W(ST_DIRECTIONAL_WORK_Y, ctx->r29);
     // lw          $a0, 0x250($v1)
-    ctx->r4 = MEM_W(0X250, ctx->r3);
+    ctx->r4 = MEM_W(ST_PLAYER_POSITION_Z, ctx->r3);
     // lw          $a2, 0x18($sp)
-    ctx->r6 = MEM_W(0X18, ctx->r29);
+    ctx->r6 = MEM_W(ST_DIRECTIONAL_WORK_Z, ctx->r29);
     // addu        $v0, $v0, $a1
     ctx->r2 = ADD32(ctx->r2, ctx->r5);
     // addu        $a0, $a0, $a2
     ctx->r4 = ADD32(ctx->r4, ctx->r6);
     // sw          $v0, 0x24C($v1)
-    MEM_W(0X24C, ctx->r3) = ctx->r2;
+    MEM_W(ST_PLAYER_POSITION_Y, ctx->r3) = ctx->r2;
     // j           L_80041598
     // sw          $a0, 0x250($v1)
-    MEM_W(0X250, ctx->r3) = ctx->r4;
+    MEM_W(ST_PLAYER_POSITION_Z, ctx->r3) = ctx->r4;
     goto L_80041598;
     // sw          $a0, 0x250($v1)
-    MEM_W(0X250, ctx->r3) = ctx->r4;
+    MEM_W(ST_PLAYER_POSITION_Z, ctx->r3) = ctx->r4;
 // Limit correction processing to three nonzero results. A fourth query may
 // still return zero and apply its candidate before reaching this check.
 L_80041320:
@@ -365,11 +373,11 @@ L_80041370:
     // bgez        $v1, L_80041390
     if (SIGNED(ctx->r3) >= 0) {
         // sw          $v0, 0x10($sp)
-        MEM_W(0X10, ctx->r29) = ctx->r2;
+        MEM_W(ST_DIRECTIONAL_WORK_X, ctx->r29) = ctx->r2;
         goto L_80041390;
     }
     // sw          $v0, 0x10($sp)
-    MEM_W(0X10, ctx->r29) = ctx->r2;
+    MEM_W(ST_DIRECTIONAL_WORK_X, ctx->r29) = ctx->r2;
     // addiu       $v1, $v1, 0xFFF
     ctx->r3 = ADD32(ctx->r3, 0XFFF);
 L_80041390:
@@ -378,11 +386,11 @@ L_80041390:
     // bne         $fp, $zero, L_800412E0
     if (ctx->r30 != 0) {
         // sw          $v0, 0x18($sp)
-        MEM_W(0X18, ctx->r29) = ctx->r2;
+        MEM_W(ST_DIRECTIONAL_WORK_Z, ctx->r29) = ctx->r2;
         goto L_800412E0;
     }
     // sw          $v0, 0x18($sp)
-    MEM_W(0X18, ctx->r29) = ctx->r2;
+    MEM_W(ST_DIRECTIONAL_WORK_Z, ctx->r29) = ctx->r2;
     // jal         0x80076EA4
     // addiu       $fp, $zero, 0x1
     ctx->r30 = ADD32(0, 0X1);
@@ -461,11 +469,11 @@ L_800413F4:
     // bgez        $v1, L_80041414
     if (SIGNED(ctx->r3) >= 0) {
         // sw          $v0, 0x10($sp)
-        MEM_W(0X10, ctx->r29) = ctx->r2;
+        MEM_W(ST_DIRECTIONAL_WORK_X, ctx->r29) = ctx->r2;
         goto L_80041414;
     }
     // sw          $v0, 0x10($sp)
-    MEM_W(0X10, ctx->r29) = ctx->r2;
+    MEM_W(ST_DIRECTIONAL_WORK_X, ctx->r29) = ctx->r2;
     // addiu       $v1, $v1, 0xFFF
     ctx->r3 = ADD32(ctx->r3, 0XFFF);
 L_80041414:
@@ -474,11 +482,11 @@ L_80041414:
     // bne         $s6, $zero, L_800412E0
     if (ctx->r22 != 0) {
         // sw          $v0, 0x18($sp)
-        MEM_W(0X18, ctx->r29) = ctx->r2;
+        MEM_W(ST_DIRECTIONAL_WORK_Z, ctx->r29) = ctx->r2;
         goto L_800412E0;
     }
     // sw          $v0, 0x18($sp)
-    MEM_W(0X18, ctx->r29) = ctx->r2;
+    MEM_W(ST_DIRECTIONAL_WORK_Z, ctx->r29) = ctx->r2;
     // jal         0x80076EA4
     // addiu       $s6, $zero, 0x1
     ctx->r22 = ADD32(0, 0X1);
@@ -523,24 +531,24 @@ L_8004144C:
     ctx->r2 = S32(0X801B << 16);
     // jal         0x800492F4
     // addiu       $a0, $s1, 0x248
-    ctx->r4 = ADD32(ctx->r17, 0X248);
+    ctx->r4 = ADD32(ctx->r17, ST_PLAYER_POSITION_X);
     ST_SetCollisionReference(rdram, ctx);
     goto after_9;
     // addiu       $a0, $s1, 0x248
-    ctx->r4 = ADD32(ctx->r17, 0X248);
+    ctx->r4 = ADD32(ctx->r17, ST_PLAYER_POSITION_X);
     after_9:
     // addiu       $a0, $sp, 0x20
-    ctx->r4 = ADD32(ctx->r29, 0X20);
+    ctx->r4 = ADD32(ctx->r29, ST_DIRECTIONAL_REFERENCE_DELTA_X);
     // addiu       $a1, $sp, 0x30
-    ctx->r5 = ADD32(ctx->r29, 0X30);
+    ctx->r5 = ADD32(ctx->r29, ST_DIRECTIONAL_REFERENCE_NORMAL_X);
     // sw          $zero, 0x24($sp)
-    MEM_W(0X24, ctx->r29) = 0;
+    MEM_W(ST_DIRECTIONAL_REFERENCE_DELTA_Y, ctx->r29) = 0;
     // lw          $v0, 0x248($s1)
-    ctx->r2 = MEM_W(0X248, ctx->r17);
+    ctx->r2 = MEM_W(ST_PLAYER_POSITION_X, ctx->r17);
     // lw          $a2, 0xAC($s2)
     ctx->r6 = MEM_W(0XAC, ctx->r18);
     // lw          $v1, 0x250($s1)
-    ctx->r3 = MEM_W(0X250, ctx->r17);
+    ctx->r3 = MEM_W(ST_PLAYER_POSITION_Z, ctx->r17);
     // lw          $a3, 0xB4($s2)
     ctx->r7 = MEM_W(0XB4, ctx->r18);
     // subu        $v0, $v0, $a2
@@ -548,14 +556,14 @@ L_8004144C:
     // subu        $v1, $v1, $a3
     ctx->r3 = SUB32(ctx->r3, ctx->r7);
     // sw          $v0, 0x20($sp)
-    MEM_W(0X20, ctx->r29) = ctx->r2;
+    MEM_W(ST_DIRECTIONAL_REFERENCE_DELTA_X, ctx->r29) = ctx->r2;
     // jal         0x800747E0
     // sw          $v1, 0x28($sp)
-    MEM_W(0X28, ctx->r29) = ctx->r3;
+    MEM_W(ST_DIRECTIONAL_REFERENCE_DELTA_Z, ctx->r29) = ctx->r3;
     VectorNormalS(rdram, ctx);
     goto after_10;
     // sw          $v1, 0x28($sp)
-    MEM_W(0X28, ctx->r29) = ctx->r3;
+    MEM_W(ST_DIRECTIONAL_REFERENCE_DELTA_Z, ctx->r29) = ctx->r3;
     after_10:
     // lhu         $v1, 0x44C0($s2)
     ctx->r3 = MEM_HU(ST_COLLISION_QUERY_REFERENCE_HORIZONTAL_EXTENT, ctx->r18);
@@ -581,7 +589,7 @@ L_800414AC:
     // addiu       $v0, $zero, 0x1
     ctx->r2 = ADD32(0, 0X1);
     // lh          $v1, 0x30($sp)
-    ctx->r3 = MEM_HS(0X30, ctx->r29);
+    ctx->r3 = MEM_HS(ST_DIRECTIONAL_REFERENCE_NORMAL_X, ctx->r29);
     // subu        $a0, $v0, $a0
     ctx->r4 = SUB32(ctx->r2, ctx->r4);
     // mult        $a0, $v1
@@ -600,7 +608,7 @@ L_800414AC:
     ctx->r3 = ADD32(ctx->r3, 0XFFF);
 L_800414CC:
     // lh          $v0, 0x34($sp)
-    ctx->r2 = MEM_HS(0X34, ctx->r29);
+    ctx->r2 = MEM_HS(ST_DIRECTIONAL_REFERENCE_NORMAL_Z, ctx->r29);
     // nop
 
     // mult        $a0, $v0
@@ -612,11 +620,11 @@ L_800414CC:
     // bgez        $a0, L_800414EC
     if (SIGNED(ctx->r4) >= 0) {
         // sw          $v0, 0x10($sp)
-        MEM_W(0X10, ctx->r29) = ctx->r2;
+        MEM_W(ST_DIRECTIONAL_WORK_X, ctx->r29) = ctx->r2;
         goto L_800414EC;
     }
     // sw          $v0, 0x10($sp)
-    MEM_W(0X10, ctx->r29) = ctx->r2;
+    MEM_W(ST_DIRECTIONAL_WORK_X, ctx->r29) = ctx->r2;
     // addiu       $a0, $a0, 0xFFF
     ctx->r4 = ADD32(ctx->r4, 0XFFF);
 L_800414EC:
@@ -625,15 +633,15 @@ L_800414EC:
     // bne         $s7, $zero, L_80041598
     if (ctx->r23 != 0) {
         // sw          $v0, 0x18($sp)
-        MEM_W(0X18, ctx->r29) = ctx->r2;
+        MEM_W(ST_DIRECTIONAL_WORK_Z, ctx->r29) = ctx->r2;
         goto L_80041598;
     }
     // sw          $v0, 0x18($sp)
-    MEM_W(0X18, ctx->r29) = ctx->r2;
+    MEM_W(ST_DIRECTIONAL_WORK_Z, ctx->r29) = ctx->r2;
     // lw          $a0, 0x28($sp)
-    ctx->r4 = MEM_W(0X28, ctx->r29);
+    ctx->r4 = MEM_W(ST_DIRECTIONAL_REFERENCE_DELTA_Z, ctx->r29);
     // lw          $a1, 0x20($sp)
-    ctx->r5 = MEM_W(0X20, ctx->r29);
+    ctx->r5 = MEM_W(ST_DIRECTIONAL_REFERENCE_DELTA_X, ctx->r29);
     // jal         0x80076EA4
     // addiu       $s7, $zero, 0x1
     ctx->r23 = ADD32(0, 0X1);
@@ -708,18 +716,18 @@ L_80041534:
     ctx->r3 = ADD32(ctx->r3, 0XFFF);
 L_8004155C:
     // lw          $v0, 0x10($sp)
-    ctx->r2 = MEM_W(0X10, ctx->r29);
+    ctx->r2 = MEM_W(ST_DIRECTIONAL_WORK_X, ctx->r29);
     // sra         $v1, $v1, 12
     ctx->r3 = S32(ctx->r3) >> 12;
     // addu        $v0, $v0, $v1
     ctx->r2 = ADD32(ctx->r2, ctx->r3);
     // jal         0x800743F4
     // sw          $v0, 0x10($sp)
-    MEM_W(0X10, ctx->r29) = ctx->r2;
+    MEM_W(ST_DIRECTIONAL_WORK_X, ctx->r29) = ctx->r2;
     rsin(rdram, ctx);
     goto after_14;
     // sw          $v0, 0x10($sp)
-    MEM_W(0X10, ctx->r29) = ctx->r2;
+    MEM_W(ST_DIRECTIONAL_WORK_X, ctx->r29) = ctx->r2;
     after_14:
     // mult        $v0, $s0
     result = S64(S32(ctx->r2)) * S64(S32(ctx->r16)); lo = S32(result >> 0); hi = S32(result >> 32);
@@ -737,17 +745,17 @@ L_8004155C:
     ctx->r3 = ADD32(ctx->r3, 0XFFF);
 L_80041584:
     // lw          $v0, 0x18($sp)
-    ctx->r2 = MEM_W(0X18, ctx->r29);
+    ctx->r2 = MEM_W(ST_DIRECTIONAL_WORK_Z, ctx->r29);
     // sra         $v1, $v1, 12
     ctx->r3 = S32(ctx->r3) >> 12;
     // addu        $v0, $v0, $v1
     ctx->r2 = ADD32(ctx->r2, ctx->r3);
     // j           L_80041224
     // sw          $v0, 0x18($sp)
-    MEM_W(0X18, ctx->r29) = ctx->r2;
+    MEM_W(ST_DIRECTIONAL_WORK_Z, ctx->r29) = ctx->r2;
     goto L_80041224;
     // sw          $v0, 0x18($sp)
-    MEM_W(0X18, ctx->r29) = ctx->r2;
+    MEM_W(ST_DIRECTIONAL_WORK_Z, ctx->r29) = ctx->r2;
 // Save the final candidate and add one quarter of the query's X/Z outputs
 // to the stored movement components. The query fields are signed halfwords.
 L_80041598:
@@ -795,11 +803,11 @@ L_800415D0:
     // lhu         $v0, 0x1D0($a3)
     ctx->r2 = MEM_HU(ST_PLAYER_MOVE_Z, ctx->r7);
     // lhu         $a0, 0x10($sp)
-    ctx->r4 = MEM_HU(0X10, ctx->r29);
+    ctx->r4 = MEM_HU(ST_DIRECTIONAL_WORK_X, ctx->r29);
     // lhu         $a1, 0x14($sp)
-    ctx->r5 = MEM_HU(0X14, ctx->r29);
+    ctx->r5 = MEM_HU(ST_DIRECTIONAL_WORK_Y, ctx->r29);
     // lhu         $a2, 0x18($sp)
-    ctx->r6 = MEM_HU(0X18, ctx->r29);
+    ctx->r6 = MEM_HU(ST_DIRECTIONAL_WORK_Z, ctx->r29);
     // addu        $v0, $v0, $v1
     ctx->r2 = ADD32(ctx->r2, ctx->r3);
     // sh          $v0, 0x1D0($a3)

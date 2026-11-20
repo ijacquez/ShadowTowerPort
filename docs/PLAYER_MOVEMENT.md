@@ -865,8 +865,10 @@ case is encountered again.
 takes the angle and magnitude computed by
 `ST_PlayerUpdateMovement`. It starts with `x = rcos(angle) * magnitude / 4096`
 and `z = rsin(angle) * magnitude / 4096`, using the low 32 bits of each
-product and rounding the signed division toward zero. It copies the signed
-vertical-movement halfword into `y`. It initializes the query at
+product and rounding the signed division toward zero. These working values
+are `ST_DIRECTIONAL_WORK_X` and `ST_DIRECTIONAL_WORK_Z` in the function's
+stack frame. It copies the signed vertical-movement halfword into
+`ST_DIRECTIONAL_WORK_Y`. It initializes the query at
 `0x801B5948` from the player position, with flags `0x432` and halfwords
 `0x100` and `0x640`. Before each query, it writes the low halfwords of
 `x + ST_PLAYER_MOVE_X`, `y`, and `z + ST_PLAYER_MOVE_Z` into the query vector.
