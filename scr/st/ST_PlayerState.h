@@ -31,7 +31,7 @@ enum ST_PlayerStateOffset {
     ST_PLAYER_TURN_LIMIT = 0x2E8
 };
 
-// Y offset used when querying the player's collision geometry. Its exact
-// relationship to the player's full height remains unknown.
+// Y offset 0x640 (0.390625 spatial cells). Its relationship to the player's
+// full height remains unknown.
 enum { ST_PLAYER_COLLISION_Y_OFFSET = 0x640 };
 enum { ST_PLAYER_VIEW_Y_OFFSET = 0x640 };

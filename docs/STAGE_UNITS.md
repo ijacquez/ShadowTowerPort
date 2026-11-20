@@ -21,7 +21,8 @@ across these slots. The 512 placement records include unused records.
 - `Extracted/ST/FN` begins with floor 0 and player appearance coordinates
   X=0, Y=2, Z=-1. `ST_LoadInitialGameState` adds 64 to each value, shifts
   left 12, and subtracts 1600 from Y. The resulting stored player position is
-  `(262144, 268736, 258048)`.
+  `(262144, 268736, 258048)`, or `(0x40000, 0x419C0, 0x3F000)`
+  (64.0, 65.609375, 63.0) in spatial-cell units.
 - Stage 0 placement record 3 decodes to `(262144, 270336, 258048)` and
   references model 2. Thus its origin matches the initial player X/Z exactly,
   and its stored Y is exactly 1600 greater than the player Y. This establishes
@@ -41,7 +42,8 @@ across these slots. The 512 placement records include unused records.
   model-coordinate unit equals one stored world-position unit**, apart from
   rotation and integer rounding. It is not multiplied by 16 during placement.
 - Model 2's four-vertex collision record at stage resource offset `0x29DC`
-  has flag halfword `0x0001` and references vector `(0, -4096, 0)`. Its
+  has flag halfword `0x0001` and references vector `(0, -0x1000, 0)`
+  (0.0, -1.0, 0.0) in the GTE's 12-fractional-bit scale. Its
   four vertices are `(-1024, -1024, -2048)`, `(-1024, -1024, 2048)`,
   `(1024, -1024, -2048)`, and `(1024, -1024, 2048)`. Placement record 3
   selects rotation 1, which leaves Y unchanged. Its transformed plane is
@@ -52,10 +54,11 @@ across these slots. The 512 placement records include unused records.
   [COLLISION_GEOMETRY.md](COLLISION_GEOMETRY.md).
 
 Using one spatial cell as one world unit, positions and movement displacements
-have 12 fractional bits: divide stored values by 4096. A cell is 1.0, the
-model edge above is 0.5, and the player Y offset is 0.390625. The default
-movement limit is 192/4096 = 0.046875 units per update, and its default
-acceleration step is 48/4096 = 0.01171875 units per update.
+have 12 fractional bits: divide stored values by 4096. A cell is `0x1000`
+(1.0), the model edge above is `0x800` (0.5), and the player Y offset is
+`0x640` (0.390625). The default movement limit is `0xC0` (0.046875 units
+per update), and its default acceleration step is `0x30` (0.01171875 units
+per update). The 576-unit initial plane separation is `0x240` (0.140625).
 
 The collision routine adds the stored movement displacement directly to the
 stored player position, and compares geometry transformed into the same

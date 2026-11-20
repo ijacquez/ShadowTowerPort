@@ -21,10 +21,13 @@ cancel; the positive Z branch takes precedence if both Z controls are held.
 With a positive movement limit `L` and no 32-bit arithmetic wrap, a held direction changes its accumulator
 by `L >> 2`, clamped to `+L` or `-L`. With no direction it approaches zero
 by `L >> 3`, clamped at zero. Reversing direction uses the held-direction
-step. The gameplay state normally sets L to 192, but can reduce or clear it.
+step. The gameplay state normally sets L to 192 (`0xC0`, or 0.046875 spatial
+cells), but can reduce or clear it.
 For example, starting from zero with only positive Z held and L unchanged,
-Z is 48, 96, 144, 192, then 192 on successive updates. On release from 192,
-it decreases by 24 per update. The shifts truncate the step; for example,
+Z is 48 (`0x30`, or 0.01171875 cells), 96 (`0x60`, 0.0234375),
+144 (`0x90`, 0.03515625), 192 (`0xC0`, 0.046875), then 192 on successive
+updates. On release from 192, it decreases by 24 (`0x18`, 0.005859375) per
+update. The shifts truncate the step; for example,
 `L >> 3` is zero when `L` is between 1 and 7. The default and modified
 limits are set in [sub_80042D74.c](../scr/st/sub_80042D74.c).
 
@@ -511,6 +514,22 @@ less `0x640`, while the collision query
 temporarily adds that same offset to Y. **OPEN:** the physical meaning of q and the offset's relationship to
 the player's full height are not established. The branches below describe
 stored values.
+
+In spatial-cell units, the fixed-point quantities used below have 12
+fractional bits:
+
+| Stored value | Spatial-cell value |
+| --- | --- |
+| `0x10` (16) | 0.00390625 |
+| `0x20` (32) | 0.0078125 |
+| `0x30` (48) | 0.01171875 |
+| `0x100` (256) | 0.0625 |
+| `0x240` (576) | 0.140625 |
+| `0x3E8` (1000) | 0.244140625 |
+| `0x400` (1024) | 0.25 |
+| `0x640` (1600) | 0.390625 |
+| `0x800` (2048) | 0.5 |
+| `0x1000` (4096) | 1.0 |
 
 The level-rendering path establishes the Y direction. For a level,
 unrotated view, [ST_TransformLevelOriginsForView](../scr/st/ST_TransformLevelOriginsForView.c) subtracts player
