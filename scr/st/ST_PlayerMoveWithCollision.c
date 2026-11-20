@@ -177,11 +177,11 @@ L_80041714:
     // sh          $v0, 0x20($s2)
     MEM_H(ST_COLLISION_QUERY_DIRECTION, ctx->r18) = ctx->r2;
     // sh          $v1, 0x14($s2)
-    MEM_H(0X14, ctx->r18) = ctx->r3;
+    MEM_H(ST_COLLISION_QUERY_DISPLACEMENT_X, ctx->r18) = ctx->r3;
     // sh          $a0, 0x16($s2)
-    MEM_H(0X16, ctx->r18) = ctx->r4;
+    MEM_H(ST_COLLISION_QUERY_DISPLACEMENT_Y, ctx->r18) = ctx->r4;
     // sh          $a1, 0x18($s2)
-    MEM_H(0X18, ctx->r18) = ctx->r5;
+    MEM_H(ST_COLLISION_QUERY_DISPLACEMENT_Z, ctx->r18) = ctx->r5;
     // mflo        $a3
     ctx->r7 = lo;
     // jal         0x800746C4

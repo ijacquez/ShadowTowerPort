@@ -1000,9 +1000,13 @@ product and rounding the signed division toward zero. These working values
 are `ST_DIRECTIONAL_WORK_X` and `ST_DIRECTIONAL_WORK_Z` in the function's
 stack frame. It copies the signed vertical-movement halfword into
 `ST_DIRECTIONAL_WORK_Y`. It initializes the query at
-`0x801B5948` from the player position, with flags `0x432` and halfwords
-`0x100` and `0x640`. Before each query, it writes the low halfwords of
-`x + ST_PLAYER_MOVE_X`, `y`, and `z + ST_PLAYER_MOVE_Z` into the query vector.
+`ST_COLLISION_QUERY_BASE_ADDRESS` from the player position, with
+`ST_COLLISION_QUERY_PLAYER_MOVEMENT_CHECKS`,
+`ST_COLLISION_QUERY_HORIZONTAL_PARAMETER` set to `0x100` (0.0625 cells), and
+`ST_COLLISION_QUERY_VERTICAL_PARAMETER` set to `0x640` (0.390625 cells).
+Before each query, it writes the low halfwords of `x + ST_PLAYER_MOVE_X`, `y`,
+and `z + ST_PLAYER_MOVE_Z` into `ST_COLLISION_QUERY_DISPLACEMENT_X`,
+`ST_COLLISION_QUERY_DISPLACEMENT_Y`, and `ST_COLLISION_QUERY_DISPLACEMENT_Z`.
 It also writes an angle from `ratan2` of the first and third vector components
 and the low halfword of `SquareRoot0(x*x + z*z)`. Products and additions here
 use their low 32 bits.

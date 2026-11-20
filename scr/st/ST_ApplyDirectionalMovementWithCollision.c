@@ -191,13 +191,13 @@ L_80041224:
     // lwr         $v1, 0x264($s1)
     ctx->r3 = do_lwr(rdram, ctx->r3, ST_PLAYER_COLLISION_DISPLACEMENT_Z, ctx->r17);
     // swl         $v0, 0x17($s2)
-    do_swl(rdram, 0X17, ctx->r18, ctx->r2);
+    do_swl(rdram, ST_COLLISION_QUERY_DISPLACEMENT_X + 3, ctx->r18, ctx->r2);
     // swr         $v0, 0x14($s2)
-    do_swr(rdram, 0X14, ctx->r18, ctx->r2);
+    do_swr(rdram, ST_COLLISION_QUERY_DISPLACEMENT_X, ctx->r18, ctx->r2);
     // swl         $v1, 0x1B($s2)
-    do_swl(rdram, 0X1B, ctx->r18, ctx->r3);
+    do_swl(rdram, ST_COLLISION_QUERY_DISPLACEMENT_Z + 3, ctx->r18, ctx->r3);
     // swr         $v1, 0x18($s2)
-    do_swr(rdram, 0X18, ctx->r18, ctx->r3);
+    do_swr(rdram, ST_COLLISION_QUERY_DISPLACEMENT_Z, ctx->r18, ctx->r3);
     // jal         0x80076EA4
     // nop
 
