@@ -552,9 +552,9 @@ L_8004144C:
     MEM_W(0X28, ctx->r29) = ctx->r3;
     after_10:
     // lhu         $v1, 0x44C0($s2)
-    ctx->r3 = MEM_HU(0X44C0, ctx->r18);
+    ctx->r3 = MEM_HU(ST_COLLISION_QUERY_REFERENCE_HORIZONTAL_EXTENT, ctx->r18);
     // lw          $v0, 0xBC($s2)
-    ctx->r2 = MEM_W(0XBC, ctx->r18);
+    ctx->r2 = MEM_W(ST_COLLISION_QUERY_REFERENCE_HORIZONTAL_DISTANCE, ctx->r18);
     // nop
 
     // subu        $v1, $v0, $v1

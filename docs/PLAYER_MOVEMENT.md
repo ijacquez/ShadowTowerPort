@@ -909,35 +909,36 @@ paths that modify the sums remain unestablished.
 ### Collision reference selection
 
 [ST_SetCollisionReference](../scr/st/ST_SetCollisionReference.c) takes a
-pointer to a position and selects a reference in this order. Offsets below are
-relative to the shared query at `0x801B5948`:
+pointer to a position and selects a reference in this order:
 
-1. If result word `0x74` has bit `0x80`, select the four words at player
-   offsets `0x248` through `0x254`, and write `0x100` and `0x3E8` to query
-   halfwords `0x44C0` and `0x44C2`.
-2. Otherwise, if query word `0x5C` is not `-1`, use it as an index into
-   records starting at `0x801BA138` with stride 212 bytes. Select four words
-   at record offset `0x74` and copy record halfwords `0x2E` and `0x30` to
-   query offsets `0x44C0` and `0x44C2`.
-3. Otherwise, if query word `0x64` is not `-1`, use it as an index into
-   records starting at `0x801C2230` with stride 88 bytes. Select four words
-   at record offset `0x24`. The record's unsigned halfword `0x0A` indexes
-   24-byte records at `0x801C0310`. Copy the indexed record's halfwords
-   `0x04` and `0x08` to query `0x44C0` and `0x44C2`; if bit `0x10` of the
-   first record's byte `0x04` is set, multiply the first halfword by its byte
-   `0x48`, take the low 32-bit product, and arithmetic-shift it right by 7
-   before storing.
-4. If both index words equal `-1` and bit `0x80` is clear, leave those query
-   fields unchanged.
+1. If `ST_COLLISION_QUERY_RESULT_FLAGS` contains `ST_COLLISION_RESULT_PLAYER_HIT`,
+   select the player position and its fourth word. Set
+   `ST_COLLISION_QUERY_REFERENCE_HORIZONTAL_EXTENT` to `0x100` (0.0625 cells)
+   and `ST_COLLISION_QUERY_REFERENCE_SECOND_VALUE` to `0x3E8` (1000).
+2. Otherwise, if `ST_COLLISION_QUERY_ACTIVE_RECORD_INDEX` is not `-1`, select
+   that active record's position and fourth word, and copy its horizontal and
+   vertical extents to the two query values.
+3. Otherwise, if `ST_COLLISION_QUERY_INDEXED_RECORD_INDEX` is not `-1`, select
+   that level record's position and fourth word. Its
+   `ST_LEVEL_RECORD_INDEXED_DATA_INDEX` selects an indexed record. Copy
+   `ST_LEVEL_RECORD_INDEXED_HORIZONTAL_EXTENT` and
+   `ST_LEVEL_RECORD_INDEXED_REFERENCE_SECOND_VALUE` to the two query values.
+   If `ST_LEVEL_RECORD_REFERENCE_FLAGS` contains
+   `ST_LEVEL_RECORD_FLAG_SCALE_REFERENCE_EXTENT`, multiply the horizontal
+   extent by `ST_LEVEL_RECORD_REFERENCE_EXTENT_SCALE`, take the low 32-bit
+   product, and arithmetic-shift it right by 7 before storing.
+4. If both index words equal `-1` and the player-hit bit is clear, leave the
+   reference fields unchanged.
 
-For each selected reference, the helper copies the four words to query
-offsets `0xAC` through `0xB8`. It subtracts the selected X and Z words from
+For each selected reference, the helper copies the four words to
+`ST_COLLISION_QUERY_REFERENCE_X`, `_Y`, `_Z`, and `_FOURTH_WORD`. It subtracts the selected X and Z words from
 the supplied position's X and Z words, sums the low 32-bit squares with
-32-bit wrap, passes the sum to `SquareRoot0`, and stores its result at query
-offset `0xBC`. The dispatcher writes words `0x5C` and `0x64` from the
+32-bit wrap, passes the sum to `SquareRoot0`, and stores its result in
+`ST_COLLISION_QUERY_REFERENCE_HORIZONTAL_DISTANCE`. The dispatcher writes
+the two index fields from the
 results of `ST_QueryActiveCollisionRecords` and `ST_QueryIndexedCollisionRecords`, respectively. **OPEN:** the
-record types and the physical meanings of the two halfwords remain
-unidentified.
+record types and the physical meaning of the second value and fourth word
+remain unidentified.
 
 ### Indexed-record collision check
 

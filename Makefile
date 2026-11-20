@@ -1111,6 +1111,8 @@ scr/st/ST_ProcessPlayerActionControls.o: scr/st/ST_PlayerState.h scr/st/ST_Playe
 scr/st/ST_QueryActiveCollisionRecords.o scr/st/ST_ResetActiveCollisionRecords.o: scr/st/ST_ActiveCollisionRecord.h
 scr/st/ST_QueryActiveCollisionRecords.o: scr/st/ST_ActiveCollisionClass.h
 scr/st/ST_QueryIndexedCollisionRecords.o scr/st/ST_UpdateLevelRecords.o: scr/st/ST_LevelRecord.h
+scr/st/ST_SetCollisionReference.o: scr/st/ST_LevelRecord.h scr/st/ST_ActiveCollisionRecord.h scr/st/ST_PlayerState.h scr/st/ST_CollisionQuery.h
+scr/st/ST_ApplyDirectionalMovementWithCollision.o: scr/st/ST_CollisionQuery.h
 
 %.o: %.c
 	$(CXX) $(CFLAGS) -o $@ -c $<

@@ -2,6 +2,7 @@
 #include "st/ST_ActiveCollisionRecord.h"
 #include "st/ST_CollisionQuery.h"
 #include "st/ST_PlayerState.h"
+#include "st/ST_LevelRecord.h"
 #include <cmath>
 #include <cstdio>
 #include <cstring>
@@ -41,5 +42,34 @@ int main() {
             return 1;
         }
     }
-    std::puts("3 collision reference selection cases passed");
+    constexpr uint32_t levelRecord = ST_LEVEL_RECORD_TABLE_ADDRESS + 3 * 88;
+    constexpr uint32_t indexedData = ST_LEVEL_RECORD_INDEXED_DATA_TABLE_ADDRESS + 5 * 24;
+    for (int scaled = 0; scaled < 2; ++scaled) {
+        std::memset(rdram, 0, sizeof rdram);
+        MEM_W(ST_COLLISION_QUERY_ACTIVE_RECORD_INDEX, query) = 0xFFFFFFFF;
+        MEM_W(ST_COLLISION_QUERY_INDEXED_RECORD_INDEX, query) = 3;
+        MEM_W(ST_LEVEL_RECORD_POSITION_X, levelRecord) = 30;
+        MEM_W(ST_LEVEL_RECORD_POSITION_Z, levelRecord) = 40;
+        MEM_W(ST_LEVEL_RECORD_POSITION_FOURTH_WORD, levelRecord) = 0x12345678;
+        MEM_H(ST_LEVEL_RECORD_INDEXED_DATA_INDEX, levelRecord) = 5;
+        MEM_B(ST_LEVEL_RECORD_REFERENCE_FLAGS, levelRecord) =
+            scaled ? ST_LEVEL_RECORD_FLAG_SCALE_REFERENCE_EXTENT : 0;
+        MEM_B(ST_LEVEL_RECORD_REFERENCE_EXTENT_SCALE, levelRecord) = 63;
+        MEM_H(ST_LEVEL_RECORD_INDEXED_HORIZONTAL_EXTENT, indexedData) = 257;
+        MEM_H(ST_LEVEL_RECORD_INDEXED_REFERENCE_SECOND_VALUE, indexedData) = 321;
+        recomp_context ctx{};
+        ctx.r4 = source;
+        ctx.r29 = 0x80110000;
+        ST_SetCollisionReference(rdram, &ctx);
+        if (MEM_W(ST_COLLISION_QUERY_REFERENCE_X, query) != 30 ||
+            MEM_W(ST_COLLISION_QUERY_REFERENCE_Z, query) != 40 ||
+            MEM_W(ST_COLLISION_QUERY_REFERENCE_FOURTH_WORD, query) != 0x12345678 ||
+            MEM_W(ST_COLLISION_QUERY_REFERENCE_HORIZONTAL_DISTANCE, query) != 50 ||
+            MEM_HU(ST_COLLISION_QUERY_REFERENCE_HORIZONTAL_EXTENT, query) != (scaled ? 126 : 257) ||
+            MEM_HU(ST_COLLISION_QUERY_REFERENCE_SECOND_VALUE, query) != 321) {
+            std::fprintf(stderr, "indexed collision reference case %d failed\n", scaled);
+            return 1;
+        }
+    }
+    std::puts("5 collision reference selection cases passed");
 }

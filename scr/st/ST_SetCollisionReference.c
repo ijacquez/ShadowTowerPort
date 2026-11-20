@@ -1,6 +1,9 @@
 #include "recomp.h"
 #include "disable_warnings.h"
 #include "ST_CollisionQuery.h"
+#include "ST_ActiveCollisionRecord.h"
+#include "ST_LevelRecord.h"
+#include "ST_PlayerState.h"
 
 // Copy a selected reference position and two halfwords into the shared query and
 // calculate its X/Z distance from the supplied position.
@@ -15,7 +18,7 @@ void ST_SetCollisionReference(uint8_t* rdram, recomp_context* ctx) {
     // sw          $s2, 0x18($sp)
     MEM_W(0X18, ctx->r29) = ctx->r18;
     // addiu       $s2, $v0, 0x5948
-    ctx->r18 = ADD32(ctx->r2, 0X5948);
+    ctx->r18 = ST_COLLISION_QUERY_BASE_ADDRESS;
     // sw          $ra, 0x1C($sp)
     MEM_W(0X1C, ctx->r29) = ctx->r31;
     // sw          $s1, 0x14($sp)
@@ -41,7 +44,7 @@ void ST_SetCollisionReference(uint8_t* rdram, recomp_context* ctx) {
     // lw          $v1, 0x0($a0)
     ctx->r3 = MEM_W(0X0, ctx->r4);
     // lw          $v0, 0x248($s0)
-    ctx->r2 = MEM_W(0X248, ctx->r16);
+    ctx->r2 = MEM_W(ST_PLAYER_POSITION_X, ctx->r16);
     // nop
 
     // subu        $v1, $v1, $v0
@@ -51,7 +54,7 @@ void ST_SetCollisionReference(uint8_t* rdram, recomp_context* ctx) {
     // lw          $v1, 0x8($a0)
     ctx->r3 = MEM_W(0X8, ctx->r4);
     // lw          $v0, 0x250($s0)
-    ctx->r2 = MEM_W(0X250, ctx->r16);
+    ctx->r2 = MEM_W(ST_PLAYER_POSITION_Z, ctx->r16);
     // mflo        $a1
     ctx->r5 = lo;
     // subu        $v1, $v1, $v0
@@ -71,15 +74,15 @@ void ST_SetCollisionReference(uint8_t* rdram, recomp_context* ctx) {
     ctx->r4 = ADD32(ctx->r5, ctx->r3);
     after_0:
     // sw          $v0, 0xBC($s2)
-    MEM_W(0XBC, ctx->r18) = ctx->r2;
+    MEM_W(ST_COLLISION_QUERY_REFERENCE_HORIZONTAL_DISTANCE, ctx->r18) = ctx->r2;
     // lw          $v0, 0x248($s0)
-    ctx->r2 = MEM_W(0X248, ctx->r16);
+    ctx->r2 = MEM_W(ST_PLAYER_POSITION_X, ctx->r16);
     // lw          $v1, 0x24C($s0)
-    ctx->r3 = MEM_W(0X24C, ctx->r16);
+    ctx->r3 = MEM_W(ST_PLAYER_POSITION_Y, ctx->r16);
     // lw          $a0, 0x250($s0)
-    ctx->r4 = MEM_W(0X250, ctx->r16);
+    ctx->r4 = MEM_W(ST_PLAYER_POSITION_Z, ctx->r16);
     // lw          $a1, 0x254($s0)
-    ctx->r5 = MEM_W(0X254, ctx->r16);
+    ctx->r5 = MEM_W(ST_PLAYER_POSITION_FOURTH_WORD, ctx->r16);
     // sw          $v0, 0xAC($s2)
     MEM_W(ST_COLLISION_QUERY_REFERENCE_X, ctx->r18) = ctx->r2;
     // sw          $v1, 0xB0($s2)
@@ -87,19 +90,19 @@ void ST_SetCollisionReference(uint8_t* rdram, recomp_context* ctx) {
     // sw          $a0, 0xB4($s2)
     MEM_W(ST_COLLISION_QUERY_REFERENCE_Z, ctx->r18) = ctx->r4;
     // sw          $a1, 0xB8($s2)
-    MEM_W(0XB8, ctx->r18) = ctx->r5;
+    MEM_W(ST_COLLISION_QUERY_REFERENCE_FOURTH_WORD, ctx->r18) = ctx->r5;
     // addiu       $v0, $zero, 0x100
     ctx->r2 = ADD32(0, 0X100);
     // sh          $v0, 0x44C0($s2)
-    MEM_H(0X44C0, ctx->r18) = ctx->r2;
+    MEM_H(ST_COLLISION_QUERY_REFERENCE_HORIZONTAL_EXTENT, ctx->r18) = ctx->r2;
     // addiu       $v0, $zero, 0x3E8
     ctx->r2 = ADD32(0, 0X3E8);
     // j           L_80049528
     // sh          $v0, 0x44C2($s2)
-    MEM_H(0X44C2, ctx->r18) = ctx->r2;
+    MEM_H(ST_COLLISION_QUERY_REFERENCE_SECOND_VALUE, ctx->r18) = ctx->r2;
     goto L_80049528;
     // sh          $v0, 0x44C2($s2)
-    MEM_H(0X44C2, ctx->r18) = ctx->r2;
+    MEM_H(ST_COLLISION_QUERY_REFERENCE_SECOND_VALUE, ctx->r18) = ctx->r2;
 L_80049398:
     // lw          $a1, 0x5C($s2)
     ctx->r5 = MEM_W(ST_COLLISION_QUERY_ACTIVE_RECORD_INDEX, ctx->r18);
@@ -128,13 +131,13 @@ L_80049398:
     // lui         $v0, 0x801C
     ctx->r2 = S32(0X801C << 16);
     // addiu       $v0, $v0, -0x5EC8
-    ctx->r2 = ADD32(ctx->r2, -0X5EC8);
+    ctx->r2 = ST_ACTIVE_COLLISION_RECORD_TABLE_ADDRESS;
     // addu        $s0, $s0, $v0
     ctx->r16 = ADD32(ctx->r16, ctx->r2);
     // lw          $v1, 0x0($a0)
     ctx->r3 = MEM_W(0X0, ctx->r4);
     // lw          $v0, 0x74($s0)
-    ctx->r2 = MEM_W(0X74, ctx->r16);
+    ctx->r2 = MEM_W(ST_ACTIVE_COLLISION_RECORD_POSITION_X, ctx->r16);
     // nop
 
     // subu        $v1, $v1, $v0
@@ -144,7 +147,7 @@ L_80049398:
     // lw          $v1, 0x8($a0)
     ctx->r3 = MEM_W(0X8, ctx->r4);
     // lw          $v0, 0x7C($s0)
-    ctx->r2 = MEM_W(0X7C, ctx->r16);
+    ctx->r2 = MEM_W(ST_ACTIVE_COLLISION_RECORD_POSITION_Z, ctx->r16);
     // mflo        $a1
     ctx->r5 = lo;
     // subu        $v1, $v1, $v0
@@ -164,15 +167,15 @@ L_80049398:
     ctx->r4 = ADD32(ctx->r5, ctx->r3);
     after_1:
     // sw          $v0, 0xBC($s2)
-    MEM_W(0XBC, ctx->r18) = ctx->r2;
+    MEM_W(ST_COLLISION_QUERY_REFERENCE_HORIZONTAL_DISTANCE, ctx->r18) = ctx->r2;
     // lw          $v0, 0x74($s0)
-    ctx->r2 = MEM_W(0X74, ctx->r16);
+    ctx->r2 = MEM_W(ST_ACTIVE_COLLISION_RECORD_POSITION_X, ctx->r16);
     // lw          $v1, 0x78($s0)
-    ctx->r3 = MEM_W(0X78, ctx->r16);
+    ctx->r3 = MEM_W(ST_ACTIVE_COLLISION_RECORD_POSITION_Y, ctx->r16);
     // lw          $a0, 0x7C($s0)
-    ctx->r4 = MEM_W(0X7C, ctx->r16);
+    ctx->r4 = MEM_W(ST_ACTIVE_COLLISION_RECORD_POSITION_Z, ctx->r16);
     // lw          $a1, 0x80($s0)
-    ctx->r5 = MEM_W(0X80, ctx->r16);
+    ctx->r5 = MEM_W(ST_ACTIVE_COLLISION_RECORD_POSITION_FOURTH_WORD, ctx->r16);
     // sw          $v0, 0xAC($s2)
     MEM_W(ST_COLLISION_QUERY_REFERENCE_X, ctx->r18) = ctx->r2;
     // sw          $v1, 0xB0($s2)
@@ -180,21 +183,21 @@ L_80049398:
     // sw          $a0, 0xB4($s2)
     MEM_W(ST_COLLISION_QUERY_REFERENCE_Z, ctx->r18) = ctx->r4;
     // sw          $a1, 0xB8($s2)
-    MEM_W(0XB8, ctx->r18) = ctx->r5;
+    MEM_W(ST_COLLISION_QUERY_REFERENCE_FOURTH_WORD, ctx->r18) = ctx->r5;
     // lhu         $v0, 0x2E($s0)
-    ctx->r2 = MEM_HU(0X2E, ctx->r16);
+    ctx->r2 = MEM_HU(ST_ACTIVE_COLLISION_RECORD_HORIZONTAL_EXTENT, ctx->r16);
     // nop
 
     // sh          $v0, 0x44C0($s2)
-    MEM_H(0X44C0, ctx->r18) = ctx->r2;
+    MEM_H(ST_COLLISION_QUERY_REFERENCE_HORIZONTAL_EXTENT, ctx->r18) = ctx->r2;
     // lhu         $v0, 0x30($s0)
-    ctx->r2 = MEM_HU(0X30, ctx->r16);
+    ctx->r2 = MEM_HU(ST_ACTIVE_COLLISION_RECORD_VERTICAL_EXTENT, ctx->r16);
     // j           L_80049528
     // sh          $v0, 0x44C2($s2)
-    MEM_H(0X44C2, ctx->r18) = ctx->r2;
+    MEM_H(ST_COLLISION_QUERY_REFERENCE_SECOND_VALUE, ctx->r18) = ctx->r2;
     goto L_80049528;
     // sh          $v0, 0x44C2($s2)
-    MEM_H(0X44C2, ctx->r18) = ctx->r2;
+    MEM_H(ST_COLLISION_QUERY_REFERENCE_SECOND_VALUE, ctx->r18) = ctx->r2;
 L_80049440:
     // lw          $v1, 0x64($s2)
     ctx->r3 = MEM_W(ST_COLLISION_QUERY_INDEXED_RECORD_INDEX, ctx->r18);
@@ -219,13 +222,13 @@ L_80049440:
     // lui         $a1, 0x801C
     ctx->r5 = S32(0X801C << 16);
     // addiu       $a1, $a1, 0x2230
-    ctx->r5 = ADD32(ctx->r5, 0X2230);
+    ctx->r5 = ST_LEVEL_RECORD_TABLE_ADDRESS;
     // addu        $s0, $v0, $a1
     ctx->r16 = ADD32(ctx->r2, ctx->r5);
     // lw          $v1, 0x0($a0)
     ctx->r3 = MEM_W(0X0, ctx->r4);
     // lw          $v0, 0x24($s0)
-    ctx->r2 = MEM_W(0X24, ctx->r16);
+    ctx->r2 = MEM_W(ST_LEVEL_RECORD_POSITION_X, ctx->r16);
     // nop
 
     // subu        $v1, $v1, $v0
@@ -235,7 +238,7 @@ L_80049440:
     // lw          $v1, 0x8($a0)
     ctx->r3 = MEM_W(0X8, ctx->r4);
     // lw          $v0, 0x2C($s0)
-    ctx->r2 = MEM_W(0X2C, ctx->r16);
+    ctx->r2 = MEM_W(ST_LEVEL_RECORD_POSITION_Z, ctx->r16);
     // mflo        $a2
     ctx->r6 = lo;
     // subu        $v1, $v1, $v0
@@ -245,9 +248,9 @@ L_80049440:
     // mult        $v1, $v1
     result = S64(S32(ctx->r3)) * S64(S32(ctx->r3)); lo = S32(result >> 0); hi = S32(result >> 32);
     // lhu         $v1, 0xA($s0)
-    ctx->r3 = MEM_HU(0XA, ctx->r16);
+    ctx->r3 = MEM_HU(ST_LEVEL_RECORD_INDEXED_DATA_INDEX, ctx->r16);
     // addiu       $a1, $a1, -0x1F20
-    ctx->r5 = ADD32(ctx->r5, -0X1F20);
+    ctx->r5 = ST_LEVEL_RECORD_INDEXED_DATA_TABLE_ADDRESS;
     // sll         $v0, $v1, 1
     ctx->r2 = S32(ctx->r3) << 1;
     // addu        $v0, $v0, $v1
@@ -267,15 +270,15 @@ L_80049440:
     ctx->r4 = ADD32(ctx->r6, ctx->r8);
     after_2:
     // sw          $v0, 0xBC($s2)
-    MEM_W(0XBC, ctx->r18) = ctx->r2;
+    MEM_W(ST_COLLISION_QUERY_REFERENCE_HORIZONTAL_DISTANCE, ctx->r18) = ctx->r2;
     // lw          $v0, 0x24($s0)
-    ctx->r2 = MEM_W(0X24, ctx->r16);
+    ctx->r2 = MEM_W(ST_LEVEL_RECORD_POSITION_X, ctx->r16);
     // lw          $v1, 0x28($s0)
-    ctx->r3 = MEM_W(0X28, ctx->r16);
+    ctx->r3 = MEM_W(ST_LEVEL_RECORD_POSITION_Y, ctx->r16);
     // lw          $a0, 0x2C($s0)
-    ctx->r4 = MEM_W(0X2C, ctx->r16);
+    ctx->r4 = MEM_W(ST_LEVEL_RECORD_POSITION_Z, ctx->r16);
     // lw          $a1, 0x30($s0)
-    ctx->r5 = MEM_W(0X30, ctx->r16);
+    ctx->r5 = MEM_W(ST_LEVEL_RECORD_POSITION_FOURTH_WORD, ctx->r16);
     // sw          $v0, 0xAC($s2)
     MEM_W(ST_COLLISION_QUERY_REFERENCE_X, ctx->r18) = ctx->r2;
     // sw          $v1, 0xB0($s2)
@@ -283,13 +286,13 @@ L_80049440:
     // sw          $a0, 0xB4($s2)
     MEM_W(ST_COLLISION_QUERY_REFERENCE_Z, ctx->r18) = ctx->r4;
     // sw          $a1, 0xB8($s2)
-    MEM_W(0XB8, ctx->r18) = ctx->r5;
+    MEM_W(ST_COLLISION_QUERY_REFERENCE_FOURTH_WORD, ctx->r18) = ctx->r5;
     // lbu         $v1, 0x4($s0)
-    ctx->r3 = MEM_BU(0X4, ctx->r16);
+    ctx->r3 = MEM_BU(ST_LEVEL_RECORD_REFERENCE_FLAGS, ctx->r16);
     // nop
 
     // andi        $v0, $v1, 0x10
-    ctx->r2 = ctx->r3 & 0X10;
+    ctx->r2 = ctx->r3 & ST_LEVEL_RECORD_FLAG_SCALE_REFERENCE_EXTENT;
     // beq         $v0, $zero, L_80049510
     if (ctx->r2 == 0) {
         // nop
@@ -299,9 +302,9 @@ L_80049440:
     // nop
 
     // lhu         $v1, 0x4($s1)
-    ctx->r3 = MEM_HU(0X4, ctx->r17);
+    ctx->r3 = MEM_HU(ST_LEVEL_RECORD_INDEXED_HORIZONTAL_EXTENT, ctx->r17);
     // lbu         $v0, 0x48($s0)
-    ctx->r2 = MEM_BU(0X48, ctx->r16);
+    ctx->r2 = MEM_BU(ST_LEVEL_RECORD_REFERENCE_EXTENT_SCALE, ctx->r16);
     // nop
 
     // mult        $v1, $v0
@@ -316,18 +319,18 @@ L_80049440:
     ctx->r2 = S32(ctx->r7) >> 7;
 L_80049510:
     // lhu         $v0, 0x4($s1)
-    ctx->r2 = MEM_HU(0X4, ctx->r17);
+    ctx->r2 = MEM_HU(ST_LEVEL_RECORD_INDEXED_HORIZONTAL_EXTENT, ctx->r17);
 L_80049514:
     // nop
 
     // sh          $v0, 0x44C0($s2)
-    MEM_H(0X44C0, ctx->r18) = ctx->r2;
+    MEM_H(ST_COLLISION_QUERY_REFERENCE_HORIZONTAL_EXTENT, ctx->r18) = ctx->r2;
     // lhu         $v1, 0x8($s1)
-    ctx->r3 = MEM_HU(0X8, ctx->r17);
+    ctx->r3 = MEM_HU(ST_LEVEL_RECORD_INDEXED_REFERENCE_SECOND_VALUE, ctx->r17);
     // lui         $v0, 0x801C
     ctx->r2 = S32(0X801C << 16);
     // sh          $v1, -0x61F6($v0)
-    MEM_H(-0X61F6, ctx->r2) = ctx->r3;
+    MEM_H(ST_COLLISION_QUERY_REFERENCE_SECOND_VALUE, ctx->r18) = ctx->r3;
 L_80049528:
     // lw          $ra, 0x1C($sp)
     ctx->r31 = MEM_W(0X1C, ctx->r29);
