@@ -7,6 +7,8 @@ recompiled MIPS: `ctx` registers and `MEM_*`
 accesses represent emulated state, and comments retain original instructions.
 `ST_PlayerState.h` names confirmed offsets from the player-state base
 `0x80198F28`; it does not define a native C struct.
+[ST_PlayerControls.h](../scr/st/ST_PlayerControls.h) names the verified
+movement and view binding offsets in the control state at `0x801CD180`.
 
 ## Horizontal input
 

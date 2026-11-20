@@ -1,6 +1,7 @@
 #include "recomp.h"
 #include "disable_warnings.h"
 #include "ST_PlayerState.h"
+#include "ST_PlayerControls.h"
 
 void ST_PlayerUpdateTurning(uint8_t* rdram, recomp_context* ctx) {
     // Preserve the emulated callee-saved registers used by this routine.
@@ -12,16 +13,16 @@ void ST_PlayerUpdateTurning(uint8_t* rdram, recomp_context* ctx) {
     // both turn bindings are held.
     const uint32_t controls = 0x801CD180;
     const uint32_t player = 0x80198F28;
-    const uint16_t held = MEM_HU(0x02, controls);
+    const uint16_t held = MEM_HU(ST_CONTROL_HELD, controls);
     const int32_t limit = S32(MEM_W(ST_PLAYER_TURN_LIMIT, player));
     const int32_t step = limit >> 2;
     uint16_t rate = MEM_HU(ST_PLAYER_TURN_RATE, player);
 
-    if (held & MEM_HU(0x26, controls)) {
+    if (held & MEM_HU(ST_CONTROL_TURN_POSITIVE, controls)) {
         rate = (uint16_t)(rate + (uint32_t)step);
         if ((int16_t)rate > limit)
             rate = (uint16_t)limit;
-    } else if (held & MEM_HU(0x28, controls)) {
+    } else if (held & MEM_HU(ST_CONTROL_TURN_NEGATIVE, controls)) {
         rate = (uint16_t)(rate - (uint32_t)step);
         if ((int16_t)rate < S32(SUB32(0, limit)))
             rate = (uint16_t)SUB32(0, limit);
@@ -39,8 +40,8 @@ void ST_PlayerUpdateTurning(uint8_t* rdram, recomp_context* ctx) {
     // Apply yaw before updating the second angular control.
     MEM_H(ST_PLAYER_YAW, player) =
         (MEM_HU(ST_PLAYER_YAW, player) + rate) & 0xFFF;
-    const bool pitchNegative = (held & MEM_HU(0x2E, controls)) != 0;
-    const bool pitchPositive = (held & MEM_HU(0x30, controls)) != 0;
+    const bool pitchNegative = (held & MEM_HU(ST_CONTROL_PITCH_NEGATIVE, controls)) != 0;
+    const bool pitchPositive = (held & MEM_HU(ST_CONTROL_PITCH_POSITIVE, controls)) != 0;
     const int16_t pitch = (int16_t)MEM_HU(ST_PLAYER_PITCH, player);
     uint16_t pitchRate = MEM_HU(ST_PLAYER_PITCH_RATE, player);
     bool skipPositiveRateCheck = false;

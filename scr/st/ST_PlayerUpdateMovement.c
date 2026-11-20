@@ -1,6 +1,7 @@
 #include "recomp.h"
 #include "disable_warnings.h"
 #include "ST_PlayerState.h"
+#include "ST_PlayerControls.h"
 
 // Update one signed 32-bit input accumulator, preserving the game's
 // 32-bit wrapping and arithmetic-shift behavior.
@@ -58,12 +59,12 @@ void ST_PlayerUpdateMovement(uint8_t* rdram, recomp_context* ctx) {
     // X treats simultaneous positive and negative bindings as neutral.
     const uint32_t controls = 0x801CD180;
     const uint32_t player = 0x80198F28;
-    const uint16_t held = MEM_HU(0x02, controls);
+    const uint16_t held = MEM_HU(ST_CONTROL_HELD, controls);
     const int32_t limit = S32(MEM_W(ST_PLAYER_MOVE_LIMIT, player));
-    const bool zPositive = (held & MEM_HU(0x22, controls)) != 0;
-    const bool zNegative = (held & MEM_HU(0x24, controls)) != 0;
-    const bool xPositive = (held & MEM_HU(0x2C, controls)) != 0;
-    const bool xNegative = (held & MEM_HU(0x2A, controls)) != 0;
+    const bool zPositive = (held & MEM_HU(ST_CONTROL_MOVE_Z_POSITIVE, controls)) != 0;
+    const bool zNegative = (held & MEM_HU(ST_CONTROL_MOVE_Z_NEGATIVE, controls)) != 0;
+    const bool xPositive = (held & MEM_HU(ST_CONTROL_MOVE_X_POSITIVE, controls)) != 0;
+    const bool xNegative = (held & MEM_HU(ST_CONTROL_MOVE_X_NEGATIVE, controls)) != 0;
     const int zDirection = zPositive ? 1 : (zNegative ? -1 : 0);
     const int xDirection = xPositive == xNegative ? 0 : (xPositive ? 1 : -1);
     MEM_W(ST_PLAYER_LOCAL_MOVE_Z, player) = ST_UpdateMovementAxis(
