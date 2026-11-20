@@ -128,7 +128,7 @@ L_8004B6EC:
     // jal         0x8004A484
     // ori         $a2, $zero, 0xFFFF
     ctx->r6 = 0 | 0XFFFF;
-    sub_8004A484(rdram, ctx);
+    ST_QueryHorizontalDistanceWithVerticalBounds(rdram, ctx);
     goto after_0;
     // ori         $a2, $zero, 0xFFFF
     ctx->r6 = 0 | 0XFFFF;

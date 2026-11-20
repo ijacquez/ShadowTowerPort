@@ -118,7 +118,7 @@ L_800495D0:
     // jal         0x8004BE80
     // addu        $a0, $s1, $zero
     ctx->r4 = ADD32(ctx->r17, 0);
-    sub_8004BE80(rdram, ctx);
+    ST_QueryActiveCollisionRecordsWithOffsets(rdram, ctx);
     goto after_2;
     // addu        $a0, $s1, $zero
     ctx->r4 = ADD32(ctx->r17, 0);

@@ -659,7 +659,7 @@ SRCS:= scr/st/AddPrim.c \
 	scr/st/sub_8004A340.c \
 	scr/st/sub_8004A390.c \
 	scr/st/sub_8004A40C.c \
-	scr/st/sub_8004A484.c \
+	scr/st/ST_QueryHorizontalDistanceWithVerticalBounds.c \
 	scr/st/sub_8004A580.c \
 	scr/st/sub_8004A67C.c \
 	scr/st/sub_8004A830.c \
@@ -680,7 +680,7 @@ SRCS:= scr/st/AddPrim.c \
 	scr/st/sub_8004B2DC.c \
 	scr/st/sub_8004B658.c \
 	scr/st/ST_QueryActiveCollisionRecords.c \
-	scr/st/sub_8004BE80.c \
+	scr/st/ST_QueryActiveCollisionRecordsWithOffsets.c \
 	scr/st/ST_SetCurrentActiveCollisionRecord.c \
 	scr/st/ST_ResolveActiveCollisionRecordDisplacement.c \
 	scr/st/sub_8004C934.c \
@@ -1116,6 +1116,8 @@ scr/st/ST_PlayerUpdateMovement.o scr/st/ST_PlayerUpdateTurning.o scr/st/ST_Playe
 .PHONY: test-player-movement
 test-player-movement:
 	mkdir -p scratchpad
+	$(CXX) $(CFLAGS) -std=c++17 tests/collision_distance_bounds_test.cpp scr/st/ST_QueryHorizontalDistanceWithVerticalBounds.c -o scratchpad/collision-distance-bounds-test
+	scratchpad/collision-distance-bounds-test
 	$(CXX) $(CFLAGS) -std=c++17 tests/collision_reference_test.cpp scr/st/ST_SetCollisionReference.c -o scratchpad/collision-reference-test
 	scratchpad/collision-reference-test
 	$(CXX) $(CFLAGS) -std=c++17 tests/active_record_player_response_test.cpp scr/st/ST_ResolveActiveCollisionRecordDisplacement.c -o scratchpad/active-record-player-response-test

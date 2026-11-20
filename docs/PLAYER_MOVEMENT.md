@@ -572,7 +572,7 @@ the following input bits in order:
 | --- | --- | --- |
 | `0x2` | Calls [ST_QueryLevelGeometry](../scr/st/ST_QueryLevelGeometry.c). | Uses the helper's return value as the initial result. |
 | `0x10` | Calls [ST_QueryActiveCollisionRecords](../scr/st/ST_QueryActiveCollisionRecords.c), passing `2` as its second argument if input bit `0x400` is set, otherwise `0`. | ORs `0x10` if the helper returns anything other than `-1`. |
-| `0x40` | Calls [sub_8004BE80](../scr/st/sub_8004BE80.c). | ORs `0x10` if the helper returns anything other than `-1`. |
+| `0x40` | Calls [ST_QueryActiveCollisionRecordsWithOffsets](../scr/st/ST_QueryActiveCollisionRecordsWithOffsets.c). | ORs `0x10` if the helper returns anything other than `-1`. |
 | `0x20` | Calls [ST_QueryIndexedCollisionRecords](../scr/st/ST_QueryIndexedCollisionRecords.c). | ORs `0x40` if the helper returns anything other than `-1`. |
 | `ST_COLLISION_QUERY_CHECK_PLAYER` (`0x80`) | Calls [ST_QueryPlayerCollision](../scr/st/ST_QueryPlayerCollision.c). If input bit `0x800` is also set, first adds `0x200` (0.125 cells) to `ST_COLLISION_QUERY_HORIZONTAL_PARAMETER`. | ORs `ST_COLLISION_RESULT_PLAYER_HIT` (`0x80`) if the helper returns anything other than `-1`. |
 
@@ -613,6 +613,36 @@ For the vertical check, absent 32-bit wrap, the query Y must be in the
 inclusive interval from player Y to player Y plus `0x640` (0.390625 cells)
 plus the unsigned query vertical parameter. A match returns the horizontal
 distance; a rejection returns -1.
+
+`ST_QueryActiveCollisionRecordsWithOffsets` checks up to 64 active records,
+skipping records outside state 1, records whose filter flags intersect
+`ST_ACTIVE_COLLISION_RECORD_FILTER_MASK_ADDRESS`, and the current active
+record. A record with `ST_ACTIVE_COLLISION_RECORD_FLAG_ALTERNATE_Y` is also
+skipped when its signed `ST_ACTIVE_COLLISION_RECORD_LOCAL_X` equals
+`ST_ACTIVE_RECORD_CURRENT_INDEX_ADDRESS`. Otherwise its test position uses
+record X/Z and record Y minus the unsigned vertical extent plus signed
+`ST_ACTIVE_COLLISION_RECORD_LOCAL_Z`. If that flag is clear and
+`ST_ACTIVE_COLLISION_RECORD_FLAG_POSITION_OFFSET` is set, it calls
+`sub_8004C934` and adds the returned vector to the record position. With
+neither flag it uses the record position directly. All position arithmetic
+wraps to 32 bits. It passes this position, the query position, the sum of
+the two unsigned horizontal parameters, and both unsigned vertical
+parameters to
+[ST_QueryHorizontalDistanceWithVerticalBounds](../scr/st/ST_QueryHorizontalDistanceWithVerticalBounds.c).
+It returns the first record index for which that helper does not return -1,
+or -1 if none matches. **OPEN:** the full effects of `sub_8004C934` and the
+in-game meaning of these record flags.
+
+The distance helper first rejects either wrapped signed X/Z difference if it
+is outside `[-radius, radius]`. Unless query Y equals the sentinel `0xFFFF`,
+it checks vertical overlap using the supplied candidate and query extents:
+when candidate Y is below query Y numerically, candidate Y must be at least
+query Y minus the query extent; otherwise query Y must be at least candidate Y
+minus the candidate extent. It arithmetic-shifts both horizontal differences
+right by 3, takes `SquareRoot0` of their wrapped squared sum, and shifts the
+result left by 3. It returns this distance if it is at most the signed radius,
+or -1 otherwise. This check quantizes negative and positive differences by
+arithmetic shift before calculating distance.
 
 ### Active-record collision check for movement
 

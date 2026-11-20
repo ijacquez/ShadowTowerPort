@@ -1320,7 +1320,7 @@
     <ClCompile Include="scr\st\sub_8004A390.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_8004A484.c">
+    <ClCompile Include="scr\st\ST_QueryHorizontalDistanceWithVerticalBounds.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\sub_8004A580.c">
@@ -1377,7 +1377,7 @@
     <ClCompile Include="scr\st\ST_QueryActiveCollisionRecords.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_8004BE80.c">
+    <ClCompile Include="scr\st\ST_QueryActiveCollisionRecordsWithOffsets.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\ST_ResolveActiveCollisionRecordDisplacement.c">

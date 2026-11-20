@@ -802,7 +802,7 @@
     <ClCompile Include="scr\st\sub_8004A340.c" />
     <ClCompile Include="scr\st\sub_8004A390.c" />
     <ClCompile Include="scr\st\sub_8004A40C.c" />
-    <ClCompile Include="scr\st\sub_8004A484.c" />
+    <ClCompile Include="scr\st\ST_QueryHorizontalDistanceWithVerticalBounds.c" />
     <ClCompile Include="scr\st\sub_8004A580.c" />
     <ClCompile Include="scr\st\sub_8004A67C.c" />
     <ClCompile Include="scr\st\sub_8004A830.c" />
@@ -823,7 +823,7 @@
     <ClCompile Include="scr\st\sub_8004B2DC.c" />
     <ClCompile Include="scr\st\sub_8004B658.c" />
     <ClCompile Include="scr\st\ST_QueryActiveCollisionRecords.c" />
-    <ClCompile Include="scr\st\sub_8004BE80.c" />
+    <ClCompile Include="scr\st\ST_QueryActiveCollisionRecordsWithOffsets.c" />
     <ClCompile Include="scr\st\ST_SetCurrentActiveCollisionRecord.c" />
     <ClCompile Include="scr\st\ST_ResolveActiveCollisionRecordDisplacement.c" />
     <ClCompile Include="scr\st\sub_8004C934.c" />
