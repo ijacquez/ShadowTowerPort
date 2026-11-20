@@ -306,9 +306,9 @@ L_80041808:
     // addiu       $v1, $zero, 0x101
     ctx->r3 = ADD32(0, 0X101);
     // lw          $v0, 0x3C($s2)
-    ctx->r2 = MEM_W(0X3C, ctx->r18);
+    ctx->r2 = MEM_W(ST_COLLISION_QUERY_FIRST_NORMAL_RESULT, ctx->r18);
     // lh          $a1, 0x8C($s2)
-    ctx->r5 = MEM_HS(0X8C, ctx->r18);
+    ctx->r5 = MEM_HS(ST_COLLISION_QUERY_FIRST_NORMAL_X, ctx->r18);
     // subu        $v1, $v1, $v0
     ctx->r3 = SUB32(ctx->r3, ctx->r2);
     // mult        $v1, $a1
@@ -327,7 +327,7 @@ L_80041808:
     ctx->r2 = ADD32(ctx->r2, 0XFFF);
 L_80041834:
     // lh          $a0, 0x90($s2)
-    ctx->r4 = MEM_HS(0X90, ctx->r18);
+    ctx->r4 = MEM_HS(ST_COLLISION_QUERY_FIRST_NORMAL_Z, ctx->r18);
     // nop
 
     // mult        $v1, $a0
@@ -401,9 +401,9 @@ L_8004188C:
     // lui         $v0, 0x801B
     ctx->r2 = S32(0X801B << 16);
     // lw          $v0, 0x44($s2)
-    ctx->r2 = MEM_W(0X44, ctx->r18);
+    ctx->r2 = MEM_W(ST_COLLISION_QUERY_SECOND_NORMAL_RESULT, ctx->r18);
     // lh          $a1, 0x9C($s2)
-    ctx->r5 = MEM_HS(0X9C, ctx->r18);
+    ctx->r5 = MEM_HS(ST_COLLISION_QUERY_SECOND_NORMAL_X, ctx->r18);
     // subu        $v1, $v1, $v0
     ctx->r3 = SUB32(ctx->r3, ctx->r2);
     // mult        $v1, $a1
@@ -422,7 +422,7 @@ L_8004188C:
     ctx->r2 = ADD32(ctx->r2, 0XFFF);
 L_800418B8:
     // lh          $a0, 0xA0($s2)
-    ctx->r4 = MEM_HS(0XA0, ctx->r18);
+    ctx->r4 = MEM_HS(ST_COLLISION_QUERY_SECOND_NORMAL_Z, ctx->r18);
     // nop
 
     // mult        $v1, $a0

@@ -326,6 +326,28 @@ stride of 212 bytes, and the scan examines at most 64 records. These
 operations identify the result bits' producers; the
 physical meanings of the helpers and their results are **OPEN**.
 
+When the geometry search has candidates, `ST_QueryLevelGeometry` sets its
+four low result bits using the following signed comparisons. Let `D` be the
+three signed displacement halfwords and let `H` and `V` be the unsigned
+horizontal and vertical query parameters. `N1` and `N2` are the signed
+halfword vectors at `ST_COLLISION_QUERY_FIRST_NORMAL_X` and
+`ST_COLLISION_QUERY_SECOND_NORMAL_X`. For each dot product, the code wraps
+products and sums to 32 bits, interprets the result as signed, and divides
+by `0x1000` (1.0 in the normal-vector scale), rounding toward zero.
+
+| Geometry result bit | Condition |
+| --- | --- |
+| `ST_COLLISION_RESULT_CURRENT_Y_THRESHOLD` (`0x1`) | `ST_COLLISION_QUERY_CURRENT_Y_RESULT < V + D.y` |
+| `ST_COLLISION_RESULT_FIRST_NORMAL_THRESHOLD` (`0x2`) | `ST_COLLISION_QUERY_FIRST_NORMAL_RESULT < H - dot(D, N1) / 4096` |
+| `ST_COLLISION_RESULT_VERTICAL_THRESHOLD` (`0x4`) | `ST_COLLISION_QUERY_VERTICAL_THRESHOLD_RESULT < 0x100 - D.y` |
+| `ST_COLLISION_RESULT_SECOND_NORMAL_THRESHOLD` (`0x8`) | `ST_COLLISION_QUERY_SECOND_NORMAL_RESULT < H - dot(D, N2) / 4096` |
+
+The additions and subtractions in the comparisons also wrap to 32 bits.
+The normal-result words and vectors are copied from the geometry helpers'
+scratch values before the function returns. If the candidate search is empty,
+the geometry function returns zero without these comparisons. **OPEN:** the
+complete physical interpretation of these thresholds and result bits.
+
 When the result is zero, the current candidate displacement is applied to
 position. Bit `0x1` also applies it, after which other bits are still handled.
 Bits `0x2` and `0x8` select separate horizontal correction paths. These use
@@ -360,13 +382,15 @@ The query result controls the next step, in this order:
   addition if three nonzero results have already been processed. Otherwise,
   it increments its counter. Thus the loop can issue a fourth query; a zero
   fourth result is still applied.
-- If bit `0x2` is set, it calculates replacement X and Z from query word
-  `0x3C` and signed halfwords `0x8C` and `0x90`: each component is the low
+- If `ST_COLLISION_RESULT_FIRST_NORMAL_THRESHOLD` is set, it calculates replacement X and Z from
+  `ST_COLLISION_QUERY_FIRST_NORMAL_RESULT` and signed
+  `ST_COLLISION_QUERY_FIRST_NORMAL_X` and `ST_COLLISION_QUERY_FIRST_NORMAL_Z`: each component is the low
   32-bit product of `257 - word` and the corresponding halfword, divided by
   4096 with rounding toward zero. If this bit was handled on an earlier
   iteration, the replacement displacement is applied immediately.
-- Otherwise, if bit `0x8` is set, the same operation uses query word `0x44`
-  and signed halfwords `0x9C` and `0xA0`. A second occurrence also applies
+- Otherwise, if `ST_COLLISION_RESULT_SECOND_NORMAL_THRESHOLD` is set, the same operation uses
+  `ST_COLLISION_QUERY_SECOND_NORMAL_RESULT`, `ST_COLLISION_QUERY_SECOND_NORMAL_X`,
+  and `ST_COLLISION_QUERY_SECOND_NORMAL_Z`. A second occurrence also applies
   the replacement displacement immediately.
 - Otherwise, if either bit in `0x50` is set, the function calls
   `ST_SetCollisionReference`, forms the X/Z difference between player position and query

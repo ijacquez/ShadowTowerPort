@@ -63,7 +63,7 @@ void ST_QueryLevelGeometry(uint8_t* rdram, recomp_context* ctx) {
     // sw          $v0, 0xEC($s4)
     MEM_W(0XEC, ctx->r20) = ctx->r2;
     // lh          $v1, 0x14($s6)
-    ctx->r3 = MEM_HS(0X14, ctx->r22);
+    ctx->r3 = MEM_HS(ST_COLLISION_QUERY_DISPLACEMENT_X, ctx->r22);
     // lw          $v0, 0x4($s6)
     ctx->r2 = MEM_W(0X4, ctx->r22);
     // addu        $a0, $s4, $zero
@@ -73,7 +73,7 @@ void ST_QueryLevelGeometry(uint8_t* rdram, recomp_context* ctx) {
     // sw          $v0, 0xF4($s4)
     MEM_W(0XF4, ctx->r20) = ctx->r2;
     // lh          $v1, 0x16($s6)
-    ctx->r3 = MEM_HS(0X16, ctx->r22);
+    ctx->r3 = MEM_HS(ST_COLLISION_QUERY_DISPLACEMENT_Y, ctx->r22);
     // lw          $v0, 0x8($s6)
     ctx->r2 = MEM_W(0X8, ctx->r22);
     // ori         $a0, $a0, 0xE4
@@ -83,7 +83,7 @@ void ST_QueryLevelGeometry(uint8_t* rdram, recomp_context* ctx) {
     // sw          $v0, 0xF8($s4)
     MEM_W(0XF8, ctx->r20) = ctx->r2;
     // lh          $v1, 0x18($s6)
-    ctx->r3 = MEM_HS(0X18, ctx->r22);
+    ctx->r3 = MEM_HS(ST_COLLISION_QUERY_DISPLACEMENT_Z, ctx->r22);
     // lw          $v0, 0xC($s6)
     ctx->r2 = MEM_W(0XC, ctx->r22);
     // addu        $a1, $s4, $zero
@@ -196,7 +196,7 @@ L_80048BD8:
     // nop
 
     // lh          $v0, 0x14($s6)
-    ctx->r2 = MEM_HS(0X14, ctx->r22);
+    ctx->r2 = MEM_HS(ST_COLLISION_QUERY_DISPLACEMENT_X, ctx->r22);
     // nop
 
     // bne         $v0, $zero, L_80048C54
@@ -208,7 +208,7 @@ L_80048BD8:
     // nop
 
     // lh          $v0, 0x18($s6)
-    ctx->r2 = MEM_HS(0X18, ctx->r22);
+    ctx->r2 = MEM_HS(ST_COLLISION_QUERY_DISPLACEMENT_Z, ctx->r22);
     // nop
 
     // bne         $v0, $zero, L_80048C54
@@ -237,9 +237,9 @@ L_80048BD8:
     MEM_H(0X14A, ctx->r20) = ctx->r2;
 L_80048C54:
     // lh          $a0, 0x18($s6)
-    ctx->r4 = MEM_HS(0X18, ctx->r22);
+    ctx->r4 = MEM_HS(ST_COLLISION_QUERY_DISPLACEMENT_Z, ctx->r22);
     // lh          $a1, 0x14($s6)
-    ctx->r5 = MEM_HS(0X14, ctx->r22);
+    ctx->r5 = MEM_HS(ST_COLLISION_QUERY_DISPLACEMENT_X, ctx->r22);
     // jal         0x80076EA4
     // nop
 
@@ -294,9 +294,9 @@ L_80048C88:
     // sh          $v0, 0x14A($s4)
     MEM_H(0X14A, ctx->r20) = ctx->r2;
     // lh          $a0, 0x18($s6)
-    ctx->r4 = MEM_HS(0X18, ctx->r22);
+    ctx->r4 = MEM_HS(ST_COLLISION_QUERY_DISPLACEMENT_Z, ctx->r22);
     // lh          $a1, 0x14($s6)
-    ctx->r5 = MEM_HS(0X14, ctx->r22);
+    ctx->r5 = MEM_HS(ST_COLLISION_QUERY_DISPLACEMENT_X, ctx->r22);
     // jal         0x80076EA4
     // nop
 
@@ -904,7 +904,7 @@ L_80049058:
     ctx->r2 = ADD32(0, 0X100);
 L_8004905C:
     // lh          $a2, 0x16($s6)
-    ctx->r6 = MEM_HS(0X16, ctx->r22);
+    ctx->r6 = MEM_HS(ST_COLLISION_QUERY_DISPLACEMENT_Y, ctx->r22);
     // lw          $t6, 0x120($s4)
     ctx->r14 = MEM_W(0X120, ctx->r20);
     // subu        $v0, $v0, $a2
@@ -920,7 +920,7 @@ L_8004905C:
     // sll         $v0, $a2, 12
     ctx->r2 = S32(ctx->r6) << 12;
     // ori         $s7, $s7, 0x4
-    ctx->r23 = ctx->r23 | 0X4;
+    ctx->r23 = ctx->r23 | ST_COLLISION_RESULT_VERTICAL_THRESHOLD;
 L_80049078:
     // negu        $v0, $v0
     ctx->r2 = SUB32(0, ctx->r2);
@@ -954,12 +954,12 @@ L_80049088:
     // nop
 
     // ori         $s7, $s7, 0x1
-    ctx->r23 = ctx->r23 | 0X1;
+    ctx->r23 = ctx->r23 | ST_COLLISION_RESULT_CURRENT_Y_THRESHOLD;
 L_800490A8:
     // lhu         $v0, 0x170($s4)
     ctx->r2 = MEM_HU(0X170, ctx->r20);
     // lh          $a3, 0x14($s6)
-    ctx->r7 = MEM_HS(0X14, ctx->r22);
+    ctx->r7 = MEM_HS(ST_COLLISION_QUERY_DISPLACEMENT_X, ctx->r22);
     // sll         $v0, $v0, 16
     ctx->r2 = S32(ctx->r2) << 16;
     // sra         $v0, $v0, 16
@@ -977,7 +977,7 @@ L_800490A8:
     // mult        $a2, $v0
     result = S64(S32(ctx->r6)) * S64(S32(ctx->r2)); lo = S32(result >> 0); hi = S32(result >> 32);
     // lh          $a1, 0x18($s6)
-    ctx->r5 = MEM_HS(0X18, ctx->r22);
+    ctx->r5 = MEM_HS(ST_COLLISION_QUERY_DISPLACEMENT_Z, ctx->r22);
     // lhu         $v0, 0x174($s4)
     ctx->r2 = MEM_HU(0X174, ctx->r20);
     // mflo        $v1
@@ -1024,7 +1024,7 @@ L_80049104:
     // nop
 
     // ori         $s7, $s7, 0x2
-    ctx->r23 = ctx->r23 | 0X2;
+    ctx->r23 = ctx->r23 | ST_COLLISION_RESULT_FIRST_NORMAL_THRESHOLD;
 L_80049120:
     // lhu         $v0, 0x180($s4)
     ctx->r2 = MEM_HU(0X180, ctx->r20);
@@ -1090,7 +1090,7 @@ L_80049178:
     // lui         $v1, 0x801B
     ctx->r3 = S32(0X801B << 16);
     // ori         $s7, $s7, 0x8
-    ctx->r23 = ctx->r23 | 0X8;
+    ctx->r23 = ctx->r23 | ST_COLLISION_RESULT_SECOND_NORMAL_THRESHOLD;
 L_80049190:
     // lw          $v0, 0x124($s4)
     ctx->r2 = MEM_W(0X124, ctx->r20);
@@ -1117,7 +1117,7 @@ L_80049190:
     // addiu       $v1, $v1, 0x5948
     ctx->r3 = ADD32(ctx->r3, 0X5948);
     // sw          $t6, 0x38($v1)
-    MEM_W(0X38, ctx->r3) = ctx->r14;
+    MEM_W(ST_COLLISION_QUERY_VERTICAL_THRESHOLD_RESULT, ctx->r3) = ctx->r14;
     // sw          $v0, 0x34($v1)
     MEM_W(0X34, ctx->r3) = ctx->r2;
     // sw          $a0, 0x30($v1)
@@ -1125,11 +1125,11 @@ L_80049190:
     // sw          $a1, 0x2C($v1)
     MEM_W(ST_COLLISION_QUERY_PROPOSED_Y_RESULT, ctx->r3) = ctx->r5;
     // sw          $a2, 0x3C($v1)
-    MEM_W(0X3C, ctx->r3) = ctx->r6;
+    MEM_W(ST_COLLISION_QUERY_FIRST_NORMAL_RESULT, ctx->r3) = ctx->r6;
     // sw          $a3, 0x40($v1)
     MEM_W(0X40, ctx->r3) = ctx->r7;
     // sw          $t0, 0x44($v1)
-    MEM_W(0X44, ctx->r3) = ctx->r8;
+    MEM_W(ST_COLLISION_QUERY_SECOND_NORMAL_RESULT, ctx->r3) = ctx->r8;
     // sw          $t1, 0x48($v1)
     MEM_W(0X48, ctx->r3) = ctx->r9;
     // sw          $t2, 0x4C($v1)
