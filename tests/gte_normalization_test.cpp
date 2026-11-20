@@ -43,6 +43,29 @@ int main() {
         std::fputs("unsigned GTE transfer did not zero-extend\n", stderr);
         return 1;
     }
+    transfers.cp2d[12] = 1;
+    transfers.cp2d[13] = 2;
+    transfers.cp2d[14] = 3;
+    transfers.r4 = 4;
+    gte_mtc2(&transfers, 4, 15);
+    if (transfers.cp2d[12] != 2 || transfers.cp2d[13] != 3 ||
+        transfers.cp2d[14] != 4 || gte_mfc2(&transfers, 15) != 4) {
+        std::fputs("GTE screen-coordinate FIFO transfer failed\n", stderr);
+        return 1;
+    }
+    transfers.r4 = 0x7FFF;
+    gte_mtc2(&transfers, 4, 28);
+    if (gte_mfc2(&transfers, 28) != 0x7FFF) {
+        std::fputs("GTE packed color transfer failed\n", stderr);
+        return 1;
+    }
+    transfers.cp2d[9] = 0xFFFF;
+    transfers.cp2d[10] = 0x0F80;
+    transfers.cp2d[11] = 0x7FFF;
+    if (gte_mfc2(&transfers, 29) != 0x7FE0) {
+        std::fputs("GTE packed color saturation failed\n", stderr);
+        return 1;
+    }
 
     constexpr uint32_t input = 0x80100000;
     constexpr uint32_t output = 0x80100020;
@@ -63,6 +86,6 @@ int main() {
             return 1;
         }
     }
-    std::puts("4 GTE leading-zero, 3 transfer, and 3 normalization cases passed");
+    std::puts("4 GTE leading-zero, 6 transfer, and 3 normalization cases passed");
     return 0;
 }

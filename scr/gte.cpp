@@ -37,7 +37,17 @@ void gte_command(recomp_context* ctx, uint32_t cmd) {
 void gte_mtc2(recomp_context* ctx, int rt, int rd) {
     const uint32_t value = (&ctx->r0)[rt];
     if (rd == 31) return;
-    if (rd == 30) ctx->cp2d[31] = gte_leadingzerocount(value);
+    if (rd == 15) {
+        ctx->cp2d[12] = ctx->cp2d[13];
+        ctx->cp2d[13] = ctx->cp2d[14];
+        ctx->cp2d[14] = value;
+    } else if (rd == 28) {
+        ctx->cp2d[9] = (ctx->cp2d[9] & 0xFFFF0000u) | ((value & 0x1Fu) << 7);
+        ctx->cp2d[10] = (ctx->cp2d[10] & 0xFFFF0000u) | ((value & 0x3E0u) << 2);
+        ctx->cp2d[11] = (ctx->cp2d[11] & 0xFFFF0000u) | ((value & 0x7C00u) >> 3);
+    } else if (rd == 30) {
+        ctx->cp2d[31] = gte_leadingzerocount(value);
+    }
     ctx->cp2d[rd] = value;
 }
 
@@ -59,6 +69,20 @@ uint32_t gte_mfc2(recomp_context* ctx, int rd) {
     case 7: case 16: case 17: case 18: case 19:
         ctx->cp2d[rd] = (uint16_t)ctx->cp2d[rd];
         break;
+    case 15:
+        ctx->cp2d[rd] = ctx->cp2d[14];
+        break;
+    case 28: case 29: {
+        uint32_t packed = 0;
+        for (int i = 0; i < 3; ++i) {
+            int component = (int16_t)ctx->cp2d[9 + i] >> 7;
+            if (component < 0) component = 0;
+            if (component > 31) component = 31;
+            packed |= (uint32_t)component << (5 * i);
+        }
+        ctx->cp2d[rd] = packed;
+        break;
+    }
     }
     return ctx->cp2d[rd];
 }
