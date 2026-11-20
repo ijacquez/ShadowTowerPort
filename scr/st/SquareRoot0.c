@@ -1,5 +1,4 @@
 #include "recomp.h"
-#include "psx/libgte.h"
 #include "ST_VectorNormalization.h"
 
 // Preserve the game routine's register and GTE effects, including signed
@@ -33,15 +32,5 @@ void ST_SquareRoot0(uint8_t* rdram, recomp_context* ctx) {
 }
 
 void SquareRoot0(uint8_t* rdram, recomp_context* ctx) {
-    // Negative wrapped sums address memory before the game's lookup table.
-    if (S32(ctx->r4) < 0) {
-        ST_SquareRoot0(rdram, ctx);
-        return;
-    }
-
-    const int input = (int)ctx->r4;
-    ctx_to_gte(ctx);
-    const int result = SquareRoot0(input);
-    gte_to_ctx(ctx);
-    ctx->r2 = (uint32_t)result;
+    ST_SquareRoot0(rdram, ctx);
 }

@@ -34,5 +34,12 @@ int main() {
         std::fputs("minimum signed square root case failed\n", stderr);
         return 1;
     }
-    std::puts("4 wrapped square root cases passed");
+    MEM_H(0, ST_SQUARE_ROOT_TABLE_ADDRESS) = 0x1000;
+    ctx.r4 = 1;
+    SquareRoot0(rdram, &ctx);
+    if (ctx.r2 != 1 || ctx.cp2d[30] != 1 || ctx.cp2d[31] != 31) {
+        std::fputs("positive square root did not update GTE leading-bit registers\n", stderr);
+        return 1;
+    }
+    std::puts("5 square root input and GTE state cases passed");
 }

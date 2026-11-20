@@ -351,15 +351,15 @@ See [ST_PlayerUpdateMovement.c](../scr/st/ST_PlayerUpdateMovement.c), the
 [IR register definitions](../PsyCross/include/psx/gtereg.h). The integer
 divisions discard any fractional remainder.
 
-The port's [SquareRoot0](../scr/st/SquareRoot0.c) wrapper uses the PsyCross
-lookup for nonnegative inputs. For a negative signed input it executes the
-recompiled game routine, which uses the GTE leading-sign-bit count and reads
-a signed halfword relative to `ST_SQUARE_ROOT_TABLE_ADDRESS`; a negative index
+The port's [SquareRoot0](../scr/st/SquareRoot0.c) wrapper executes the
+recompiled game routine, which updates the GTE leading-sign-bit registers
+and reads a signed halfword relative to `ST_SQUARE_ROOT_TABLE_ADDRESS`;
+for a negative signed input, a negative index
 there addresses earlier emulated memory. The all-ones input takes the
 routine's zero-result branch. Thus a wrapped negative squared sum does not
 establish a nonnegative geometric distance.
 
-For positive input `s`, the PsyCross implementation clears the low bit of
+For positive input `s`, the game routine clears the low bit of
 the leading-sign-bit count to obtain `n`, then computes `index` by shifting
 `s` right by `24 - n` if `n < 24`, or left by `n - 24` otherwise. It
 returns `SQRT[index - 64] << ((31 - n) >> 1) >> 12`. Zero returns zero.

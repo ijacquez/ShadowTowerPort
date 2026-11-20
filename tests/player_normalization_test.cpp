@@ -1,5 +1,6 @@
 #include "recomp.h"
 #include "st/ST_PlayerState.h"
+#include "st/ST_VectorNormalization.h"
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -7,6 +8,12 @@
 uint8_t rdram[2 * 1024 * 1024];
 static int32_t normalizedX, normalizedZ;
 static int directionCalls;
+extern short SQRT[];
+
+static void initializeSquareRootTable() {
+    for (int i = 0; i < 192; ++i)
+        MEM_H(i * 2, ST_SQUARE_ROOT_TABLE_ADDRESS) = (uint16_t)SQRT[i];
+}
 
 void do_break(uint32_t) { std::abort(); }
 void RotMatrix(uint8_t*, recomp_context* ctx) {
@@ -33,6 +40,7 @@ int main() {
     };
     for (const auto& test : cases) {
         std::memset(rdram, 0, sizeof rdram);
+        initializeSquareRootTable();
         MEM_W(ST_PLAYER_LOCAL_MOVE_X, player) = test.x;
         MEM_W(ST_PLAYER_LOCAL_MOVE_Z, player) = test.z;
         recomp_context ctx{};
@@ -46,6 +54,7 @@ int main() {
         }
     }
     std::memset(rdram, 0, sizeof rdram);
+    initializeSquareRootTable();
     MEM_H(ST_PLAYER_MOVE_X, player) = 8;
     MEM_H(ST_PLAYER_MOVE_Y, player) = -8;
     MEM_H(ST_PLAYER_MOVE_Z, player) = 8;
@@ -64,6 +73,7 @@ int main() {
         return 1;
     }
     std::memset(rdram, 0, sizeof rdram);
+    initializeSquareRootTable();
     MEM_H(ST_PLAYER_MOVE_X, player) = 3;
     MEM_H(ST_PLAYER_MOVE_Y, player) = -3;
     MEM_H(ST_PLAYER_MOVE_Z, player) = 4;
