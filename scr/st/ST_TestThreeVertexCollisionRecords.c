@@ -1,7 +1,8 @@
 #include "recomp.h"
 #include "disable_warnings.h"
 
-void sub_800468C0(uint8_t* rdram, recomp_context* ctx) {
+void ST_TestThreeVertexCollisionRecords(uint8_t* rdram, recomp_context* ctx) {
+    // Tests the 12-byte collision records using three transformed vertices.
     uint64_t hi = 0, lo = 0, result = 0;
     unsigned int rounding_mode = DEFAULT_ROUNDING_MODE;
     int c1cs = 0; 

@@ -635,8 +635,8 @@ SRCS:= scr/st/AddPrim.c \
 	scr/st/ST_SelectSpatialCandidates.c \
 	scr/st/ST_DecodeCandidateOrigins.c \
 	scr/st/ST_TransformCandidateVertices.c \
-	scr/st/sub_800468C0.c \
-	scr/st/sub_80047884.c \
+	scr/st/ST_TestThreeVertexCollisionRecords.c \
+	scr/st/ST_TestFourVertexCollisionRecords.c \
 	scr/st/ST_QueryLevelGeometry.c \
 	scr/st/ST_SetCollisionReference.c \
 	scr/st/ST_RunCollisionQuery.c \

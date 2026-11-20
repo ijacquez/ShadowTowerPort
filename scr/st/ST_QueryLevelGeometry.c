@@ -450,7 +450,7 @@ L_80048D3C:
     // jal         0x800468C0
     // addiu       $a0, $sp, 0x10
     ctx->r4 = ADD32(ctx->r29, 0X10);
-    sub_800468C0(rdram, ctx);
+    ST_TestThreeVertexCollisionRecords(rdram, ctx);
     goto after_8;
     // addiu       $a0, $sp, 0x10
     ctx->r4 = ADD32(ctx->r29, 0X10);
@@ -468,7 +468,7 @@ L_80048D3C:
     // jal         0x80047884
     // addiu       $a0, $sp, 0x10
     ctx->r4 = ADD32(ctx->r29, 0X10);
-    sub_80047884(rdram, ctx);
+    ST_TestFourVertexCollisionRecords(rdram, ctx);
     goto after_9;
     // addiu       $a0, $sp, 0x10
     ctx->r4 = ADD32(ctx->r29, 0X10);
