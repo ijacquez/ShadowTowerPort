@@ -73,7 +73,10 @@ full model and collision formats have not yet been established. See
    The halfwords in this expression are unsigned. For each such record,
    its unsigned halfword at offset 4 is added to `base + 12 + word(entry +
    8)` to address a vector loaded into the GTE and transformed with the
-   selected record's matrix. **OPEN:** the full formats and exact individual
+   selected record's matrix. `sub_80047884` starts at the same calculated
+   address plus `12 * halfword(entry + 0x20)` and iterates
+   `halfword(entry + 0x24)` records with a 16-byte stride. Both count
+   halfwords are unsigned. **OPEN:** the full formats and exact individual
    responsibilities of the two geometry helpers are not established.
 6. Results, including flags and distance-like values, are written to the
    shared query structure. `ST_PlayerMoveWithCollision` uses them to choose
