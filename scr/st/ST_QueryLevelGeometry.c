@@ -578,6 +578,8 @@ L_80048E48:
     // sw          $v0, 0x114($s4)
     MEM_W(0X114, ctx->r20) = ctx->r2;
 L_80048E84:
+    // Fall back to the current-position result when no proposed-position
+    // result was selected, carrying its transformed vector with it.
     // lw          $v0, 0x118($s4)
     ctx->r2 = MEM_W(0X118, ctx->r20);
     // nop
@@ -750,6 +752,8 @@ L_80048F78:
     // sw          $v1, 0x114($s4)
     MEM_W(0X114, ctx->r20) = ctx->r3;
 L_80048F84:
+    // Adjust the selected value using its transformed vector before copying
+    // it to query offset 0x2C. The Z product uses both saved vectors.
     // lw          $v1, 0x118($s4)
     ctx->r3 = MEM_W(0X118, ctx->r20);
     // lui         $v0, 0x8

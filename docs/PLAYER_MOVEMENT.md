@@ -490,9 +490,33 @@ it adds 48. The initial
 player Y is also initialized from a decimal text field shifted by 12 bits,
 less `0x640`, while the collision query
 temporarily adds that same offset to Y. These operations alone do not prove
-which physical direction is up. **OPEN:** the exact meaning of q and the offset's relationship to
+which physical direction is up. **OPEN:** the physical meaning of q and the offset's relationship to
 the player's full height are not established. The branches below describe
 stored values.
+
+For a selected three- or four-vertex collision record, the geometry helpers
+rotate the record's referenced vector into signed halfwords `N` and select
+its first transformed vertex `V`. They calculate a value from the proposed
+position `P` as `N dot P - N dot V`, with each product and sum wrapped to
+32 bits, then divide the signed result by 4096 toward zero. On qualifying
+paths, the smaller signed result replaces a scratch value initialized to
+`0x80000`. If that scratch value is still the sentinel after both helpers,
+the geometry query copies another scratch value calculated from the current
+position instead. It also copies the associated rotated vector.
+
+When the resulting value is not the sentinel and its associated Y halfword
+is nonzero, the geometry query calculates a horizontal magnitude using the
+associated X halfword squared plus the product of its Z halfword and a Z
+halfword from the other scratch result, with 32-bit arithmetic. If the
+`SquareRoot0` result is nonzero, it obtains an angle from `ratan2(-Y,
+horizontalMagnitude)` and divides the 32-bit result of `value << 12` by
+`rsin(angle)`, with signed division toward zero when the divisor is nonzero.
+The code contains a division-by-zero break for a zero divisor. When the
+horizontal magnitude is zero, it leaves the value unchanged. It writes the
+result to `q`.
+See [ST_QueryLevelGeometry](../scr/st/ST_QueryLevelGeometry.c),
+[ST_TestThreeVertexCollisionRecords](../scr/st/ST_TestThreeVertexCollisionRecords.c),
+and [ST_TestFourVertexCollisionRecords](../scr/st/ST_TestFourVertexCollisionRecords.c).
 
 For `d < 0`:
 
