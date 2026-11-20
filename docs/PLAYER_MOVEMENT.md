@@ -188,7 +188,12 @@ these counters and targets have not been established.
 clears all player halfwords from `0x190` through `0x1C2`, including both
 movement-related counter pairs, and clears player word `0x2C`. It then calls
 [ST_ResetPlayerViewAndVerticalMovement](../scr/st/ST_ResetPlayerViewAndVerticalMovement.c),
-which clears vertical movement and the view adjustments described below.
+which clears vertical movement, the view adjustments, and the state,
+transient, and additional view rotation components. It copies the two words
+starting at `ST_PLAYER_PITCH` and `ST_PLAYER_BASE_ROTATION_Z` to the words
+starting at `ST_PLAYER_VIEW_ROTATION_X` and `ST_PLAYER_VIEW_ROTATION_Z`,
+respectively. It also clears both player collision Y flags and
+`ST_COLLISION_QUERY_RECORD_FLAGS`.
 
 When the helper's signed halfword result for the suppression pair is
 not `-1`, `ST_UpdatePlayerCountersAndEffects` clears the movement and turn
