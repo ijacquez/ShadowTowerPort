@@ -273,8 +273,9 @@ in-game meaning of selector 5 and the names of the indexed records.
 [ST_SerializeGameState](../scr/st/ST_SerializeGameState.c) copies both
 current/target pairs to buffer offsets `0x1880` through `0x188A`.
 [ST_DeserializeGameState](../scr/st/ST_DeserializeGameState.c) restores the
-same halfwords to the player. In [sub_80054A54](../scr/st/sub_80054A54.c),
-dispatch value `0x11F` checks bits `0x18` of `ST_PLAYER_EFFECT_FLAGS`; when
+same halfwords to the player. In [ST_ExecutePlayerActionCode](../scr/st/ST_ExecutePlayerActionCode.c),
+`ST_PLAYER_ACTION_CLEAR_MOVE_SUPPRESSION` (`0x11F`) checks
+`ST_PLAYER_EFFECT_MOVE_SUPPRESSION_MASK` (`0x18`) in `ST_PLAYER_EFFECT_FLAGS`; when
 either is set, it clears the suppression current and target and those bits.
 These paths do not establish the effects' in-game names.
 

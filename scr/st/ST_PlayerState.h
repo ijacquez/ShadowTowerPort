@@ -74,6 +74,11 @@ enum ST_PlayerStateOffset {
 enum { ST_PLAYER_STATE_ZERO_HP = 4 };
 
 enum { ST_PLAYER_EFFECT_BLOCK_ACTIVE_RECORD_POSITION_UPDATE = 0x40000 };
+enum { ST_PLAYER_EFFECT_MOVE_SUPPRESSION_MASK = 0x18 };
+enum {
+    ST_PLAYER_ACTION_DISPATCH_FIRST = 0x10A,
+    ST_PLAYER_ACTION_CLEAR_MOVE_SUPPRESSION = 0x11F
+};
 
 // Y offset 0x640 (0.390625 spatial cells). Its relationship to the player's
 // full height remains unknown.

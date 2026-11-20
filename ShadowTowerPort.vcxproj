@@ -883,7 +883,7 @@
     <ClCompile Include="scr\st\sub_800542D0.c" />
     <ClCompile Include="scr\st\sub_80054368.c" />
     <ClCompile Include="scr\st\sub_80054858.c" />
-    <ClCompile Include="scr\st\sub_80054A54.c" />
+    <ClCompile Include="scr\st\ST_ExecutePlayerActionCode.c" />
     <ClCompile Include="scr\st\sub_800552BC.c" />
     <ClCompile Include="scr\st\sub_80055374.c" />
     <ClCompile Include="scr\st\sub_80055990.c" />

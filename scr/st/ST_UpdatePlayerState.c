@@ -1731,7 +1731,7 @@ L_800435E4:
     // jal         0x80054A54
     // nop
 
-    sub_80054A54(rdram, ctx);
+    ST_ExecutePlayerActionCode(rdram, ctx);
     goto after_52;
     // nop
 

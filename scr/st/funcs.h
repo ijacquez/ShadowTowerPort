@@ -481,7 +481,7 @@ void sub_80054278(uint8_t* rdram, recomp_context* ctx);
 void sub_800542D0(uint8_t* rdram, recomp_context* ctx);
 void sub_80054368(uint8_t* rdram, recomp_context* ctx);
 void sub_80054858(uint8_t* rdram, recomp_context* ctx);
-void sub_80054A54(uint8_t* rdram, recomp_context* ctx);
+void ST_ExecutePlayerActionCode(uint8_t* rdram, recomp_context* ctx);
 void sub_800552BC(uint8_t* rdram, recomp_context* ctx);
 void sub_80055374(uint8_t* rdram, recomp_context* ctx);
 void sub_80055990(uint8_t* rdram, recomp_context* ctx);

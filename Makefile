@@ -740,7 +740,7 @@ SRCS:= scr/st/AddPrim.c \
 	scr/st/sub_800542D0.c \
 	scr/st/sub_80054368.c \
 	scr/st/sub_80054858.c \
-	scr/st/sub_80054A54.c \
+	scr/st/ST_ExecutePlayerActionCode.c \
 	scr/st/sub_800552BC.c \
 	scr/st/sub_80055374.c \
 	scr/st/sub_80055990.c \
@@ -1120,6 +1120,7 @@ scr/st/ST_SelectSpatialCandidates.o: scr/st/ST_SpatialCandidate.h scr/st/ST_Leve
 scr/st/ST_NormalizeVectorRegisters.o scr/st/InvSquareRoot.o: scr/st/ST_VectorNormalization.h
 scr/st/ST_RequestLevelStreaming.o scr/st/ST_StartLevelStreamingAndWait.o scr/st/ST_UpdateLevelStreaming.o: scr/st/ST_LevelStreaming.h
 scr/st/ST_UpdateLevelStreaming.o: scr/st/ST_PlayerState.h
+scr/st/ST_ExecutePlayerActionCode.o: scr/st/ST_PlayerState.h
 scr/st/ST_SetPlayerPositionAndRequestLevelStreaming.o: scr/st/ST_PlayerPositionRequest.h scr/st/ST_PlayerState.h scr/st/ST_PlayerMovementContributions.h scr/st/ST_CollisionQuery.h
 
 %.o: %.c

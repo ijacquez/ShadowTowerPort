@@ -2139,7 +2139,7 @@
     <ClCompile Include="scr\st\sub_80053FF0.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_80054A54.c">
+    <ClCompile Include="scr\st\ST_ExecutePlayerActionCode.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\sub_80055CF4.c">

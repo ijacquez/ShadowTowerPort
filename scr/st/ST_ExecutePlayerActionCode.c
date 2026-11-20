@@ -2,7 +2,7 @@
 #include "disable_warnings.h"
 #include "ST_PlayerState.h"
 
-void sub_80054A54(uint8_t* rdram, recomp_context* ctx) {
+void ST_ExecutePlayerActionCode(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
     unsigned int rounding_mode = DEFAULT_ROUNDING_MODE;
     int c1cs = 0; 
@@ -51,7 +51,7 @@ void sub_80054A54(uint8_t* rdram, recomp_context* ctx) {
     // sw          $v1, -0x2F20($a0)
     MEM_W(-0X2F20, ctx->r4) = ctx->r3;
     // addiu       $v1, $s3, -0x10A
-    ctx->r3 = ADD32(ctx->r19, -0X10A);
+    ctx->r3 = ADD32(ctx->r19, -ST_PLAYER_ACTION_DISPATCH_FIRST);
     // addiu       $v0, $v0, 0x640
     ctx->r2 = ADD32(ctx->r2, 0X640);
     // sw          $v0, 0x14($sp)
@@ -102,7 +102,7 @@ void sub_80054A54(uint8_t* rdram, recomp_context* ctx) {
         case 18: goto L_80054CF4; break;
         case 19: goto L_80054D20; break;
         case 20: goto L_80054D4C; break;
-        case 21: goto L_80054D80; break;
+        case ST_PLAYER_ACTION_CLEAR_MOVE_SUPPRESSION - ST_PLAYER_ACTION_DISPATCH_FIRST: goto L_80054D80; break;
         case 22: goto L_80054DB4; break;
         case 23: goto L_800551D0; break;
         case 24: goto L_80054E00; break;
@@ -598,7 +598,7 @@ L_80054D80:
     // nop
 
     // andi        $v0, $a2, 0x18
-    ctx->r2 = ctx->r6 & 0X18;
+    ctx->r2 = ctx->r6 & ST_PLAYER_EFFECT_MOVE_SUPPRESSION_MASK;
     // beq         $v0, $zero, L_800551D0
     if (ctx->r2 == 0) {
         // addiu       $a0, $zero, 0x8

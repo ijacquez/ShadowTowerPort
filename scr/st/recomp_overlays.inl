@@ -494,7 +494,7 @@ static FuncEntry section_1_text_funcs[] = {
     { .func = sub_800542D0, .offset = 0x000442d0 },
     { .func = sub_80054368, .offset = 0x00044368 },
     { .func = sub_80054858, .offset = 0x00044858 },
-    { .func = sub_80054A54, .offset = 0x00044a54 },
+    { .func = ST_ExecutePlayerActionCode, .offset = 0x00044a54 },
     { .func = sub_800552BC, .offset = 0x000452bc },
     { .func = sub_80055374, .offset = 0x00045374 },
     { .func = sub_80055990, .offset = 0x00045990 },
