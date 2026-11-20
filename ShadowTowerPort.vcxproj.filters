@@ -2058,7 +2058,7 @@
     <ClCompile Include="scr\st\sub_80042B9C.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_80042C10.c">
+    <ClCompile Include="scr\st\ST_ResetPlayerStateAndViewRotationOffsets.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\sub_80042C44.c">

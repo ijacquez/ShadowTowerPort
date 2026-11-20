@@ -356,7 +356,7 @@ static FuncEntry section_1_text_funcs[] = {
     { .func = sub_80042620, .offset = 0x00032620 },
     { .func = sub_80042900, .offset = 0x00032900 },
     { .func = sub_80042B9C, .offset = 0x00032b9c },
-    { .func = sub_80042C10, .offset = 0x00032c10 },
+    { .func = ST_ResetPlayerStateAndViewRotationOffsets, .offset = 0x00032c10 },
     { .func = sub_80042C44, .offset = 0x00032c44 },
     { .func = sub_80042CEC, .offset = 0x00032CEC },
     { .func = sub_80042CFC, .offset = 0x00032cfc },

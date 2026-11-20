@@ -1,5 +1,6 @@
 #include "recomp.h"
 #include "disable_warnings.h"
+#include "ST_LevelStreaming.h"
 
 void ST_StartLevelStreamingAndWait(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
@@ -28,7 +29,7 @@ void ST_StartLevelStreamingAndWait(uint8_t* rdram, recomp_context* ctx) {
     // sw          $ra, 0x1C($sp)
     MEM_W(0X1C, ctx->r29) = ctx->r31;
     // sh          $v0, 0x5920($s1)
-    MEM_H(0X5920, ctx->r17) = ctx->r2;
+    MEM_H(0, ST_LEVEL_STREAMING_STATUS_ADDRESS) = ctx->r2;
     // lbu         $v1, 0x4($s0)
     ctx->r3 = MEM_BU(0X4, ctx->r16);
     // lbu         $a0, 0x5($s0)
@@ -91,7 +92,7 @@ L_80044F70:
 
     after_1:
     // lh          $v0, 0x5920($s1)
-    ctx->r2 = MEM_HS(0X5920, ctx->r17);
+    ctx->r2 = MEM_HS(0, ST_LEVEL_STREAMING_STATUS_ADDRESS);
     // nop
 
     // beq         $v0, $zero, L_80044FC4

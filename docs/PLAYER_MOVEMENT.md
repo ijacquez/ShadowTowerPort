@@ -26,6 +26,42 @@ when more than one millisecond remains. Other work and other calls to `VSync`
 can affect the elapsed time between movement updates. The target is not a
 guaranteed update rate, and the original game's update rate is **OPEN**.
 
+## State dispatch and movement gating
+
+On reaching its state dispatch, [ST_UpdatePlayerState](../scr/st/ST_UpdatePlayerState.c)
+selects a path from `ST_PLAYER_STATE`. For states 0 and 1 it first calls
+`sub_80042900`. If the signed halfword at
+`ST_LEVEL_STREAMING_STATUS_ADDRESS` is 1, or the byte at
+`ST_PLAYER_UPDATE_GATE_ADDRESS` is nonzero, it skips the turning, movement,
+and collision calls. Otherwise it calls those three functions in that order,
+then clears `ST_PLAYER_DIRECTIONAL_MOVE_DISABLED`.
+
+For state 16, the same three calls occur without those two gates. Between
+the movement and collision calls, if the word beginning at
+`ST_PLAYER_VIEW_STATE_ROTATION_X` and the signed halfword
+`ST_PLAYER_VIEW_STATE_ROTATION_Z` are both zero,
+`ST_ResetPlayerStateAndViewRotationOffsets` clears the state and the three
+state, transient, and additional view rotation components. The state-16 path clears
+`ST_PLAYER_DIRECTIONAL_MOVE_DISABLED` after collision. States 5 and 6 clear
+the movement limits, all three movement components, and the three contribution
+sets before the shared post-dispatch work. **OPEN:** the in-game meanings of
+the remaining state values and the player-update gate are not established.
+
+## View rotation
+
+In the shared post-dispatch work, `ST_UpdatePlayerState` forms each view
+rotation component by adding four unsigned halfwords. X uses `ST_PLAYER_PITCH`,
+Y uses `ST_PLAYER_YAW`, and Z uses `ST_PLAYER_BASE_ROTATION_Z`; each also
+uses the matching `ST_PLAYER_VIEW_STATE_ROTATION_*`,
+`ST_PLAYER_VIEW_TRANSIENT_ROTATION_*`, and
+`ST_PLAYER_VIEW_ADDITIONAL_ROTATION_*` components. It stores the low 16 bits
+of each sum in `ST_PLAYER_VIEW_ROTATION_*` and clears the transient components.
+It also stores the low 16 bits of `0x1000 - sum` in each corresponding
+`ST_PLAYER_INVERSE_VIEW_ROTATION_*` component and passes those components
+to [RotMatrixZYX](../scr/st/RotMatrixZYX.c), with the output at
+`ST_PLAYER_VIEW_ROTATION_MATRIX`. **OPEN:** the full set of writers and in-game meanings of the state,
+transient, and additional rotation components.
+
 ## Horizontal input
 
 `ST_PLAYER_LOCAL_MOVE_X` (`0x2B8`) and `ST_PLAYER_LOCAL_MOVE_Z` (`0x2C0`)

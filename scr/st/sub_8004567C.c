@@ -1,5 +1,6 @@
 #include "recomp.h"
 #include "disable_warnings.h"
+#include "ST_LevelStreaming.h"
 
 void sub_8004567C(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
@@ -10,7 +11,7 @@ void sub_8004567C(uint8_t* rdram, recomp_context* ctx) {
     // lui         $a1, 0x801B
     ctx->r5 = S32(0X801B << 16);
     // sb          $zero, 0x2A1($v0)
-    MEM_B(0X2A1, ctx->r2) = 0;
+    MEM_B(0, ST_PLAYER_UPDATE_GATE_ADDRESS) = 0;
     // addiu       $v0, $a1, 0x5920
     ctx->r2 = ADD32(ctx->r5, 0X5920);
     // lbu         $v1, 0x10($v0)
@@ -90,7 +91,7 @@ L_800456DC:
 L_800456F0:
     // jr          $ra
     // sh          $zero, 0x5920($a1)
-    MEM_H(0X5920, ctx->r5) = 0;
+    MEM_H(0, ST_LEVEL_STREAMING_STATUS_ADDRESS) = 0;
     return;
     // sh          $zero, 0x5920($a1)
     MEM_H(0X5920, ctx->r5) = 0;

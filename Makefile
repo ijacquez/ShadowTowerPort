@@ -610,7 +610,7 @@ SRCS:= scr/st/AddPrim.c \
 	scr/st/sub_80042620.c \
 	scr/st/sub_80042900.c \
 	scr/st/sub_80042B9C.c \
-	scr/st/sub_80042C10.c \
+	scr/st/ST_ResetPlayerStateAndViewRotationOffsets.c \
 	scr/st/sub_80042C44.c \
 	scr/st/sub_80042CFC.c \
 	scr/st/ST_UpdatePlayerState.c \

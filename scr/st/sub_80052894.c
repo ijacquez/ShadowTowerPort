@@ -561,7 +561,7 @@ L_80052BE4:
     // jal         0x80042C10
     // nop
 
-    sub_80042C10(rdram, ctx);
+    ST_ResetPlayerStateAndViewRotationOffsets(rdram, ctx);
     goto after_19;
     // nop
 

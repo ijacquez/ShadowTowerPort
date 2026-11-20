@@ -753,7 +753,7 @@
     <ClCompile Include="scr\st\sub_80042620.c" />
     <ClCompile Include="scr\st\sub_80042900.c" />
     <ClCompile Include="scr\st\sub_80042B9C.c" />
-    <ClCompile Include="scr\st\sub_80042C10.c" />
+    <ClCompile Include="scr\st\ST_ResetPlayerStateAndViewRotationOffsets.c" />
     <ClCompile Include="scr\st\sub_80042C44.c" />
     <ClCompile Include="scr\st\sub_80042CFC.c" />
     <ClCompile Include="scr\st\ST_UpdatePlayerState.c" />

@@ -346,7 +346,7 @@ void ST_PlayerUpdateMovement(uint8_t* rdram, recomp_context* ctx);
 void sub_80042620(uint8_t* rdram, recomp_context* ctx);
 void sub_80042900(uint8_t* rdram, recomp_context* ctx);
 void sub_80042B9C(uint8_t* rdram, recomp_context* ctx);
-void sub_80042C10(uint8_t* rdram, recomp_context* ctx);
+void ST_ResetPlayerStateAndViewRotationOffsets(uint8_t* rdram, recomp_context* ctx);
 void sub_80042C44(uint8_t* rdram, recomp_context* ctx);
 void sub_80042CFC(uint8_t* rdram, recomp_context* ctx);
 void ST_UpdatePlayerState(uint8_t* rdram, recomp_context* ctx);
