@@ -71,74 +71,51 @@ void ST_PlayerUpdateMovement(uint8_t* rdram, recomp_context* ctx) {
     MEM_W(ST_PLAYER_LOCAL_MOVE_X, player) = ST_UpdateMovementAxis(
         MEM_W(ST_PLAYER_LOCAL_MOVE_X, player), limit, xDirection);
 
-    // The GTE code below expects the high half of the player-state address.
-    ctx->r8 = 0x801A0000;
-L_800422C0:
-    // addiu       $t0, $t0, -0x6E20
-    ctx->r8 = ADD32(ctx->r8, -0X6E20);
-    // lwc2        $9, 0x0($t0)
+    // Square the signed low halfwords of the local X/Z accumulators in the GTE.
+    ctx->r8 = player + ST_PLAYER_LOCAL_MOVE_X;
     gte_lwc2(rdram, ctx, 9, 8, 0);
-    // lwc2        $10, 0x4($t0)
     gte_lwc2(rdram, ctx, 10, 8, 4);
-    // lwc2        $11, 0x8($t0)
     gte_lwc2(rdram, ctx, 11, 8, 8);
-    // nop
-
-    // nop
-
-    // .word       0x4AA00428                   # INVALID     $s5, $zero, 0x428 # 00000000 <InstrIdType: CPU_COP2>
     gte_command(ctx, 0x4AA00428);
-    // addiu       $v0, $sp, 0x28
-    ctx->r2 = ADD32(ctx->r29, 0X28);
-    // swc2        $25, 0x0($v0)
+    ctx->r2 = ADD32(ctx->r29, 0x28);
     gte_swc2(rdram, ctx, 25, 2, 0);
-    // swc2        $26, 0x4($v0)
     gte_swc2(rdram, ctx, 26, 2, 4);
-    // swc2        $27, 0x8($v0)
     gte_swc2(rdram, ctx, 27, 2, 8);
-    // lw          $v0, 0x28($sp)
-    ctx->r2 = MEM_W(0X28, ctx->r29);
-    // lw          $a0, 0x30($sp)
-    ctx->r4 = MEM_W(0X30, ctx->r29);
-    // jal         0x800746C4
-    // addu        $a0, $v0, $a0
+    ctx->r2 = MEM_W(0x28, ctx->r29);
+    ctx->r4 = MEM_W(0x30, ctx->r29);
     ctx->r4 = ADD32(ctx->r2, ctx->r4);
     SquareRoot0(rdram, ctx);
-    goto after_0;
-    // addu        $a0, $v0, $a0
-    ctx->r4 = ADD32(ctx->r2, ctx->r4);
-after_0:
-// The GTE produced squared signed-halfword components in the
-// stack slots. SquareRoot0 supplies a signed-halfword divisor.
-ctx->r3 = player;
-MEM_H(ST_PLAYER_MOVE_MAGNITUDE, player) = ctx->r2;
-ctx->r2 = U32(ctx->r2) << 16;
-ctx->r4 = S32(ctx->r2) >> 16;
-if (ctx->r4 == 0) {
-    MEM_W(0x18, ctx->r29) = 0;
-    MEM_W(0x20, ctx->r29) = 0;
-} else {
-    uint32_t xSquared = MEM_W(0x28, ctx->r29);
-    uint32_t zSquared = MEM_W(0x30, ctx->r29);
-    if (S32(MEM_W(ST_PLAYER_LOCAL_MOVE_X, player)) < 0) {
-        xSquared = 0u - xSquared;
-        MEM_W(0x28, ctx->r29) = xSquared;
+    // The GTE produced squared signed-halfword components in the
+    // stack slots. SquareRoot0 supplies a signed-halfword divisor.
+    ctx->r3 = player;
+    MEM_H(ST_PLAYER_MOVE_MAGNITUDE, player) = ctx->r2;
+    ctx->r2 = U32(ctx->r2) << 16;
+    ctx->r4 = S32(ctx->r2) >> 16;
+    if (ctx->r4 == 0) {
+        MEM_W(0x18, ctx->r29) = 0;
+        MEM_W(0x20, ctx->r29) = 0;
+    } else {
+        uint32_t xSquared = MEM_W(0x28, ctx->r29);
+        uint32_t zSquared = MEM_W(0x30, ctx->r29);
+        if (S32(MEM_W(ST_PLAYER_LOCAL_MOVE_X, player)) < 0) {
+            xSquared = 0u - xSquared;
+            MEM_W(0x28, ctx->r29) = xSquared;
+        }
+        if (S32(MEM_W(ST_PLAYER_LOCAL_MOVE_Z, player)) < 0) {
+            zSquared = 0u - zSquared;
+            MEM_W(0x30, ctx->r29) = zSquared;
+        }
+        const int32_t divisor = S32(ctx->r4);
+        ctx->r1 = 0x80000000;
+        if (divisor == -1 && xSquared == 0x80000000)
+            do_break(2147754896);
+        ctx->r3 = (uint32_t)((int64_t)S32(xSquared) / divisor);
+        if (divisor == -1 && zSquared == 0x80000000)
+            do_break(2147754948);
+        ctx->r2 = (uint32_t)((int64_t)S32(zSquared) / divisor);
+        MEM_W(0x18, ctx->r29) = ctx->r3;
+        MEM_W(0x20, ctx->r29) = ctx->r2;
     }
-    if (S32(MEM_W(ST_PLAYER_LOCAL_MOVE_Z, player)) < 0) {
-        zSquared = 0u - zSquared;
-        MEM_W(0x30, ctx->r29) = zSquared;
-    }
-    const int32_t divisor = S32(ctx->r4);
-    ctx->r1 = 0x80000000;
-    if (divisor == -1 && xSquared == 0x80000000)
-        do_break(2147754896);
-    ctx->r3 = (uint32_t)((int64_t)S32(xSquared) / divisor);
-    if (divisor == -1 && zSquared == 0x80000000)
-        do_break(2147754948);
-    ctx->r2 = (uint32_t)((int64_t)S32(zSquared) / divisor);
-    MEM_W(0x18, ctx->r29) = ctx->r3;
-    MEM_W(0x20, ctx->r29) = ctx->r2;
-}
 L_800423D4:
     // addiu       $a0, $sp, 0x58
     ctx->r4 = ADD32(ctx->r29, 0X58);
@@ -168,7 +145,7 @@ L_800423D4:
     after_1:
     // lhu         $v0, 0x18($sp)
     ctx->r2 = MEM_HU(0X18, ctx->r29);
-    // This stack halfword's prior writer is unknown. With the loaded game's
+    // This stack halfword's final prior writer is unknown. With the game's
     // zero-angle table entry, it cannot contribute to rotated X or Z; see
     // docs/PLAYER_MOVEMENT.md for the matrix and executable evidence.
     // lhu         $v1, 0x1C($sp)
