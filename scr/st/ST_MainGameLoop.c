@@ -416,7 +416,7 @@ L_80014BD4:
     // jal         0x80050768
     // nop
 
-    sub_80050768(rdram, ctx);
+    ST_UpdateLevelRecords(rdram, ctx);
 
     goto after_37;
     // nop
@@ -425,7 +425,7 @@ L_80014BD4:
     // jal         0x8004E324
     // nop
 
-    sub_8004E324(rdram, ctx);
+    ST_UpdateActiveCollisionRecords(rdram, ctx);
 
     goto after_38;
     // nop

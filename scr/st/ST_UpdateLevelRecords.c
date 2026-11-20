@@ -2,10 +2,11 @@
 #include "disable_warnings.h"
 #include "ST_LevelStreaming.h"
 #include "ST_LevelRecord.h"
+#include "ST_ActiveCollisionRecord.h"
 #include "ST_PlayerMovementContributions.h"
 #include "ST_PlayerState.h"
 
-void sub_80050768(uint8_t* rdram, recomp_context* ctx) {
+void ST_UpdateLevelRecords(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
     unsigned int rounding_mode = DEFAULT_ROUNDING_MODE;
     int c1cs = 0; 
@@ -4531,7 +4532,7 @@ L_80052058:
     // addiu       $t3, $t3, -0x5EC8
     ctx->r11 = ADD32(ctx->r11, -0X5EC8);
     // addiu       $s3, $t3, 0x2E60
-    ctx->r19 = ST_LEVEL_RECORD_FIRST_SLOT_ADDRESS;
+    ctx->r19 = ST_ACTIVE_COLLISION_RECORD_FINAL_EIGHT_ADDRESS;
     // jal         0x80015AD4
     // addu        $s2, $zero, $zero
     ctx->r18 = ADD32(0, 0);
@@ -4551,7 +4552,7 @@ L_80052058:
     // addiu       $t3, $t3, -0x5EC8
     ctx->r11 = ADD32(ctx->r11, -0X5EC8);
     // addiu       $s0, $t3, 0x2EB6
-    ctx->r16 = ADD32(ST_LEVEL_RECORD_FIRST_SLOT_ADDRESS, ST_LEVEL_RECORD_SLOT_DIRECTION_ANGLE_OFFSET);
+    ctx->r16 = ADD32(ST_ACTIVE_COLLISION_RECORD_FINAL_EIGHT_ADDRESS, ST_ACTIVE_COLLISION_RECORD_PLAYER_TO_RECORD_ANGLE);
 L_8005209C:
     // sh          $zero, -0x2C($s0)
     MEM_H(-0X2C, ctx->r16) = 0;
@@ -4712,11 +4713,11 @@ L_80052160:
     ctx->r11 = ADD32(ctx->r11, -0X5EC8);
     // jal         0x8003EAD0
     // addiu       $s3, $t3, 0x2E60
-    ctx->r19 = ADD32(ctx->r11, 0X2E60);
+    ctx->r19 = ST_ACTIVE_COLLISION_RECORD_FINAL_EIGHT_ADDRESS;
     ST_ClearPlayerMovementLimits(rdram, ctx);
     goto after_66;
     // addiu       $s3, $t3, 0x2E60
-    ctx->r19 = ADD32(ctx->r11, 0X2E60);
+    ctx->r19 = ST_ACTIVE_COLLISION_RECORD_FINAL_EIGHT_ADDRESS;
     after_66:
     // addiu       $s2, $zero, 0x7
     ctx->r18 = ADD32(0, 0X7);
@@ -5570,7 +5571,7 @@ L_800526E4:
     // jal         0x8004E324
     // nop
 
-    sub_8004E324(rdram, ctx);
+    ST_UpdateActiveCollisionRecords(rdram, ctx);
     goto after_81;
     // nop
 

@@ -695,7 +695,7 @@ SRCS:= scr/st/AddPrim.c \
 	scr/st/sub_8004DE24.c \
 	scr/st/sub_8004DEF8.c \
 	scr/st/sub_8004E2D8.c \
-	scr/st/sub_8004E324.c \
+	scr/st/ST_UpdateActiveCollisionRecords.c \
 	scr/st/sub_8004E8EC.c \
 	scr/st/ST_LoadActiveCollisionRecords.c \
 	scr/st/sub_8004ED54.c \
@@ -718,7 +718,7 @@ SRCS:= scr/st/AddPrim.c \
 	scr/st/sub_80050468.c \
 	scr/st/sub_80050564.c \
 	scr/st/sub_8005066C.c \
-	scr/st/sub_80050768.c \
+	scr/st/ST_UpdateLevelRecords.c \
 	scr/st/sub_80052894.c \
 	scr/st/sub_80052C24.c \
 	scr/st/sub_80052C5C.c \

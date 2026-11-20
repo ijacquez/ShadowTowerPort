@@ -838,7 +838,7 @@
     <ClCompile Include="scr\st\sub_8004DE24.c" />
     <ClCompile Include="scr\st\sub_8004DEF8.c" />
     <ClCompile Include="scr\st\sub_8004E2D8.c" />
-    <ClCompile Include="scr\st\sub_8004E324.c" />
+    <ClCompile Include="scr\st\ST_UpdateActiveCollisionRecords.c" />
     <ClCompile Include="scr\st\sub_8004E8EC.c" />
     <ClCompile Include="scr\st\ST_LoadActiveCollisionRecords.c" />
     <ClCompile Include="scr\st\sub_8004ED54.c" />
@@ -861,7 +861,7 @@
     <ClCompile Include="scr\st\sub_80050468.c" />
     <ClCompile Include="scr\st\sub_80050564.c" />
     <ClCompile Include="scr\st\sub_8005066C.c" />
-    <ClCompile Include="scr\st\sub_80050768.c" />
+    <ClCompile Include="scr\st\ST_UpdateLevelRecords.c" />
     <ClCompile Include="scr\st\sub_80052894.c" />
     <ClCompile Include="scr\st\sub_80052C24.c" />
     <ClCompile Include="scr\st\sub_80052C5C.c" />

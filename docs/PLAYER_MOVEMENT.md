@@ -27,8 +27,8 @@ can affect the elapsed time between movement updates. The target is not a
 guaranteed update rate, and the original game's update rate is **OPEN**.
 
 Within each main-loop iteration, `ST_UpdatePlayerState` runs before
-[sub_80050768](../scr/st/sub_80050768.c) and
-[sub_8004E324](../scr/st/sub_8004E324.c), in that order. The latter two
+[ST_UpdateLevelRecords](../scr/st/ST_UpdateLevelRecords.c) and
+[ST_UpdateActiveCollisionRecords](../scr/st/ST_UpdateActiveCollisionRecords.c), in that order. The latter two
 therefore update their contribution vectors after that iteration's player
 movement update. Other code can also write those vectors.
 
@@ -54,24 +54,31 @@ sets before the shared post-dispatch work. **OPEN:** the in-game meanings of
 the remaining state values are not established.
 
 The update gate is also used by the `ST_LEVEL_RECORD_TYPE` `0xE0` path in
-[sub_80050768](../scr/st/sub_80050768.c). On a qualifying path with the gate
+[ST_UpdateLevelRecords](../scr/st/ST_UpdateLevelRecords.c). On a qualifying path with the gate
 at zero, the routine sets it to 1 and clears the movement limits. With the
 gate at 1, it synchronizes pending loads, sets
-`ST_PLAYER_DIRECTIONAL_MOVE_DISABLED`, and examines eight slots. For each
-slot whose first byte is not `0xFF`, it stores cosine and sine of that slot's
-signed `ST_LEVEL_RECORD_SLOT_DIRECTION_ANGLE_OFFSET` halfword minus `0x400`,
+`ST_PLAYER_DIRECTIONAL_MOVE_DISABLED`, and examines the final eight active
+collision records, starting at `ST_ACTIVE_COLLISION_RECORD_FINAL_EIGHT_ADDRESS`.
+For each record whose first byte is not `0xFF`, it stores cosine and sine of
+its signed `ST_ACTIVE_COLLISION_RECORD_PLAYER_TO_RECORD_ANGLE` halfword minus `0x400`,
 divided by 256 toward zero, in
 `ST_LEVEL_RECORD_DIRECTION_X_GP_OFFSET` and
-`ST_LEVEL_RECORD_DIRECTION_Z_GP_OFFSET`. Each qualifying slot replaces the
-previous slot's values. If at least one slot qualifies, the gate becomes 2.
+`ST_LEVEL_RECORD_DIRECTION_Z_GP_OFFSET`. Each qualifying record replaces the
+previous record's values. If at least one record qualifies, the gate becomes 2.
 At gate 2 the routine clears the movement limits and copies the two stored
 values to the X and Z quarter-contribution halfwords; its end-of-loop
 damping, described below, then applies to the copied values. A subsequent condition
 in the same slot loop can set the gate to 3. At gate 3 the routine clears the
 stored direction values, sets the gate to 4, and requests level streaming.
 [sub_8004567C](../scr/st/sub_8004567C.c) clears the gate. **OPEN:** the
-in-game meanings of these record types, slots, and gate states remain
+in-game meanings of these record types and gate states remain
 unestablished.
+
+For each nonempty active record, `ST_UpdateActiveCollisionRecords` sets
+`ST_ACTIVE_COLLISION_RECORD_PLAYER_TO_RECORD_ANGLE` to
+`(ratan2(recordZ - playerZ, recordX - playerX) - 0x400) & 0xFFF` using
+32-bit wrapped differences. The main-loop order means the level-record
+update runs before this calculation in the same iteration.
 
 The `ST_LEVEL_RECORD_TYPE` `0xE0` path first calls
 [ST_IsPlayerWithinGridBounds](../scr/st/ST_IsPlayerWithinGridBounds.c) with
@@ -266,20 +273,31 @@ quarter of `ST_PLAYER_QUARTER_CONTRIBUTION_X_ADDRESS` to X and one quarter of
 `ST_PLAYER_HALF_CONTRIBUTION_X_ADDRESS` and `ST_PLAYER_HALF_CONTRIBUTION_Z_ADDRESS`
 to X and Z, respectively, again rounding toward zero. These names identify
 the addresses of signed halfwords; each result is stored as a
-halfword. [sub_80050768](../scr/st/sub_80050768.c) adds cosine and sine
+halfword. [ST_UpdateLevelRecords](../scr/st/ST_UpdateLevelRecords.c) adds cosine and sine
 results divided by 32 to the first pair on one path. At the end of its
 240-record loop, it halves the signed halfwords at
 `ST_PLAYER_QUARTER_CONTRIBUTION_X_ADDRESS`,
 `ST_PLAYER_QUARTER_CONTRIBUTION_Y_ADDRESS`, and
 `ST_PLAYER_QUARTER_CONTRIBUTION_Z_ADDRESS`, rounding toward zero, and clears each
 result in the range -3 through 3. On a path following its 64-record loop,
-[sub_8004E324](../scr/st/sub_8004E324.c) halves the signed halfwords at
+[ST_UpdateActiveCollisionRecords](../scr/st/ST_UpdateActiveCollisionRecords.c) halves the signed halfwords at
 `ST_PLAYER_HALF_CONTRIBUTION_X_ADDRESS`, `ST_PLAYER_HALF_CONTRIBUTION_Y_ADDRESS`,
 and `ST_PLAYER_HALF_CONTRIBUTION_Z_ADDRESS` with an arithmetic right
 shift, then clears each result in the range -3 through 3. Thus negative odd
 values round down in the second set, unlike the first set. **OPEN:** the
 complete set of writers and the meanings of these values have not been
 established.
+
+During that 64-record loop, `ST_UpdateActiveCollisionRecords` skips callback
+dispatch for records whose `ST_ACTIVE_COLLISION_RECORD_ID_OR_EMPTY` is
+`0xFF`. For a record in state 1, it calls the function at
+`ST_LEVEL_CALLBACK_ACTIVE_RECORD_PERIODIC` when the low two bits of
+`ST_ACTIVE_RECORD_UPDATE_COUNTER_ADDRESS` and
+`ST_ACTIVE_RECORD_PROCESSED_COUNTER_ADDRESS` match, then calls the function
+at `ST_LEVEL_CALLBACK_ACTIVE_RECORD_UPDATE`. For state 5 it calls only the
+latter. The function pointers come from the table addressed by
+`ST_LEVEL_STREAMING_CALLBACK_TABLE_OFFSET`. **OPEN:** the complete set of
+callback targets and their writes to the contribution vectors.
 
 After this processing, if the signed 16-bit movement magnitude is nonzero and
 `ST_PLAYER_DIRECTIONAL_MOVE_DISABLED` (`0x21E`) is zero, `ST_PlayerUpdateMovement` calls
@@ -721,7 +739,7 @@ steps to streaming-state offsets `0x20` through `0x25`. A separate path in
 and writes `0x7F` to offsets `0x20`, `0x21`, and `0x22`; the first of those
 bytes causes the later translation to be skipped.
 
-On one path through [sub_80050768](../scr/st/sub_80050768.c), the six
+On one path through [ST_UpdateLevelRecords](../scr/st/ST_UpdateLevelRecords.c), the six
 arguments come from the current 88-byte record in the array beginning at
 `0x801C2230`: record bytes `0x50`, `0x52`, and `0x51` provide the coarse
 X, Z, and Y components, and bytes `0x4B`, `0x4C`, and `0x4F` provide the

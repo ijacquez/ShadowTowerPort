@@ -1425,7 +1425,7 @@
     <ClCompile Include="scr\st\sub_8004E8EC.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_8004E324.c">
+    <ClCompile Include="scr\st\ST_UpdateActiveCollisionRecords.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\ST_LoadActiveCollisionRecords.c">
@@ -3054,7 +3054,7 @@
     <ClCompile Include="scr\st\sub_80050564.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_80050768.c">
+    <ClCompile Include="scr\st\ST_UpdateLevelRecords.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\sub_80052894.c">

@@ -453,7 +453,7 @@ L_80052B60:
     // jal         0x8004E324
     // nop
 
-    sub_8004E324(rdram, ctx);
+    ST_UpdateActiveCollisionRecords(rdram, ctx);
     goto after_11;
     // nop
 

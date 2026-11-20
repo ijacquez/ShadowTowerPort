@@ -1,7 +1,10 @@
 #include "recomp.h"
 #include "disable_warnings.h"
+#include "ST_LevelStreaming.h"
+#include "ST_PlayerMovementContributions.h"
+#include "ST_ActiveCollisionRecord.h"
 
-void sub_8004E324(uint8_t* rdram, recomp_context* ctx) {
+void ST_UpdateActiveCollisionRecords(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
     unsigned int rounding_mode = DEFAULT_ROUNDING_MODE;
     int c1cs = 0; 
@@ -353,14 +356,14 @@ L_8004E4F0:
     // addu        $s4, $s3, $zero
     ctx->r20 = ADD32(ctx->r19, 0);
     // addiu       $s0, $s4, 0x23
-    ctx->r16 = ADD32(ctx->r20, 0X23);
+    ctx->r16 = ADD32(ctx->r20, ST_ACTIVE_COLLISION_RECORD_UPDATE_CURSOR);
     // sw          $zero, 0x614C($s3)
-    MEM_W(0X614C, ctx->r19) = 0;
+    MEM_W(0, ST_ACTIVE_RECORD_PROCESSED_COUNTER_ADDRESS) = 0;
     // sw          $zero, 0x6144($s3)
     MEM_W(0X6144, ctx->r19) = 0;
 L_8004E51C:
     // lbu         $v1, 0x0($s3)
-    ctx->r3 = MEM_BU(0X0, ctx->r19);
+    ctx->r3 = MEM_BU(ST_ACTIVE_COLLISION_RECORD_ID_OR_EMPTY, ctx->r19);
     // addiu       $v0, $zero, 0xFF
     ctx->r2 = ADD32(0, 0XFF);
     // beq         $v1, $v0, L_8004E7C0
@@ -515,7 +518,7 @@ L_8004E5E8:
     // andi        $v0, $v0, 0xFFF
     ctx->r2 = ctx->r2 & 0XFFF;
     // sh          $v0, 0x33($s0)
-    MEM_H(0X33, ctx->r16) = ctx->r2;
+    MEM_H(ST_ACTIVE_COLLISION_RECORD_PLAYER_TO_RECORD_ANGLE - ST_ACTIVE_COLLISION_RECORD_UPDATE_CURSOR, ctx->r16) = ctx->r2;
     // subu        $v1, $v1, $v0
     ctx->r3 = SUB32(ctx->r3, ctx->r2);
     // andi        $v1, $v1, 0xFFF
@@ -544,7 +547,7 @@ L_8004E624:
     // sh          $zero, 0x79($s0)
     MEM_H(0X79, ctx->r16) = 0;
     // lw          $v1, 0x6150($s4)
-    ctx->r3 = MEM_W(0X6150, ctx->r20);
+    ctx->r3 = MEM_W(0, ST_ACTIVE_RECORD_UPDATE_COUNTER_ADDRESS);
     // lbu         $v0, -0x1C($s0)
     ctx->r2 = MEM_BU(-0X1C, ctx->r16);
     // andi        $v1, $v1, 0x3
@@ -582,7 +585,7 @@ L_8004E658:
     after_13:
 L_8004E660:
     // lbu         $v1, -0x1E($s0)
-    ctx->r3 = MEM_BU(-0X1E, ctx->r16);
+    ctx->r3 = MEM_BU(ST_ACTIVE_COLLISION_RECORD_STATE - ST_ACTIVE_COLLISION_RECORD_UPDATE_CURSOR, ctx->r16);
     // addiu       $v0, $zero, 0x1
     ctx->r2 = ADD32(0, 0X1);
     // bne         $v1, $v0, L_8004E7A0
@@ -594,9 +597,9 @@ L_8004E660:
     // addiu       $v0, $zero, 0x5
     ctx->r2 = ADD32(0, 0X5);
     // lw          $v1, 0x6150($s4)
-    ctx->r3 = MEM_W(0X6150, ctx->r20);
+    ctx->r3 = MEM_W(0, ST_ACTIVE_RECORD_UPDATE_COUNTER_ADDRESS);
     // lw          $v0, 0x614C($s4)
-    ctx->r2 = MEM_W(0X614C, ctx->r20);
+    ctx->r2 = MEM_W(0, ST_ACTIVE_RECORD_PROCESSED_COUNTER_ADDRESS);
     // andi        $v1, $v1, 0x3
     ctx->r3 = ctx->r3 & 0X3;
     // andi        $v0, $v0, 0x3
@@ -610,11 +613,11 @@ L_8004E660:
     // nop
 
     // lw          $v0, 0xC($s7)
-    ctx->r2 = MEM_W(0XC, ctx->r23);
+    ctx->r2 = MEM_W(ST_LEVEL_STREAMING_CALLBACK_TABLE_OFFSET, ctx->r23);
     // nop
 
     // lw          $v0, 0x40($v0)
-    ctx->r2 = MEM_W(0X40, ctx->r2);
+    ctx->r2 = MEM_W(ST_LEVEL_CALLBACK_ACTIVE_RECORD_PERIODIC, ctx->r2);
     // nop
 
     // jalr        $v0
@@ -627,11 +630,11 @@ L_8004E660:
     after_14:
 L_8004E6A0:
     // lw          $v0, 0xC($s7)
-    ctx->r2 = MEM_W(0XC, ctx->r23);
+    ctx->r2 = MEM_W(ST_LEVEL_STREAMING_CALLBACK_TABLE_OFFSET, ctx->r23);
     // nop
 
     // lw          $v0, 0x44($v0)
-    ctx->r2 = MEM_W(0X44, ctx->r2);
+    ctx->r2 = MEM_W(ST_LEVEL_CALLBACK_ACTIVE_RECORD_UPDATE, ctx->r2);
     // nop
 
     // jalr        $v0
@@ -788,17 +791,17 @@ L_8004E740:
     MEM_W(0X59, ctx->r16) = ctx->r3;
 L_8004E78C:
     // lw          $v0, 0x614C($s4)
-    ctx->r2 = MEM_W(0X614C, ctx->r20);
+    ctx->r2 = MEM_W(0, ST_ACTIVE_RECORD_PROCESSED_COUNTER_ADDRESS);
     // nop
 
     // addiu       $v0, $v0, 0x1
     ctx->r2 = ADD32(ctx->r2, 0X1);
     // j           L_8004E7C0
     // sw          $v0, 0x614C($s4)
-    MEM_W(0X614C, ctx->r20) = ctx->r2;
+    MEM_W(0, ST_ACTIVE_RECORD_PROCESSED_COUNTER_ADDRESS) = ctx->r2;
     goto L_8004E7C0;
     // sw          $v0, 0x614C($s4)
-    MEM_W(0X614C, ctx->r20) = ctx->r2;
+    MEM_W(0, ST_ACTIVE_RECORD_PROCESSED_COUNTER_ADDRESS) = ctx->r2;
 L_8004E7A0:
     // bne         $v1, $v0, L_8004E7C0
     if (ctx->r3 != ctx->r2) {
@@ -809,11 +812,11 @@ L_8004E7A0:
     // nop
 
     // lw          $v0, 0xC($s7)
-    ctx->r2 = MEM_W(0XC, ctx->r23);
+    ctx->r2 = MEM_W(ST_LEVEL_STREAMING_CALLBACK_TABLE_OFFSET, ctx->r23);
     // nop
 
     // lw          $v0, 0x44($v0)
-    ctx->r2 = MEM_W(0X44, ctx->r2);
+    ctx->r2 = MEM_W(ST_LEVEL_CALLBACK_ACTIVE_RECORD_UPDATE, ctx->r2);
     // nop
 
     // jalr        $v0
@@ -862,17 +865,17 @@ L_8004E7C0:
     // sh          $v0, 0x615E($a2)
     MEM_H(0X615E, ctx->r6) = ctx->r2;
     // lw          $v0, 0x6150($a2)
-    ctx->r2 = MEM_W(0X6150, ctx->r6);
+    ctx->r2 = MEM_W(0, ST_ACTIVE_RECORD_UPDATE_COUNTER_ADDRESS);
     // sh          $v1, 0x615C($a2)
     MEM_H(0X615C, ctx->r6) = ctx->r3;
     // Halve the three movement contributions with arithmetic shifts, then
     // clear each result in the range -3 through 3.
     // lhu         $v1, 0x6160($a2)
-    ctx->r3 = MEM_HU(0X6160, ctx->r6);
+    ctx->r3 = MEM_HU(0, ST_PLAYER_HALF_CONTRIBUTION_X_ADDRESS);
     // sh          $a0, 0x615A($a2)
     MEM_H(0X615A, ctx->r6) = ctx->r4;
     // lhu         $a0, 0x6162($a2)
-    ctx->r4 = MEM_HU(0X6162, ctx->r6);
+    ctx->r4 = MEM_HU(0, ST_PLAYER_HALF_CONTRIBUTION_Y_ADDRESS);
     // sh          $a1, 0x6158($a2)
     MEM_H(0X6158, ctx->r6) = ctx->r5;
     // addiu       $v0, $v0, 0x1
@@ -886,7 +889,7 @@ L_8004E7C0:
     // sra         $a0, $a0, 17
     ctx->r4 = S32(ctx->r4) >> 17;
     // sh          $v1, 0x6160($a2)
-    MEM_H(0X6160, ctx->r6) = ctx->r3;
+    MEM_H(0, ST_PLAYER_HALF_CONTRIBUTION_X_ADDRESS) = ctx->r3;
     // bgez        $v1, L_8004E83C
     if (SIGNED(ctx->r3) >= 0) {
         // nop
@@ -899,13 +902,13 @@ L_8004E7C0:
     ctx->r3 = SUB32(0, ctx->r3);
 L_8004E83C:
     // sw          $v0, 0x6150($a2)
-    MEM_W(0X6150, ctx->r6) = ctx->r2;
+    MEM_W(0, ST_ACTIVE_RECORD_UPDATE_COUNTER_ADDRESS) = ctx->r2;
     // lhu         $v0, 0x6164($a2)
-    ctx->r2 = MEM_HU(0X6164, ctx->r6);
+    ctx->r2 = MEM_HU(0, ST_PLAYER_HALF_CONTRIBUTION_Z_ADDRESS);
     // slti        $v1, $v1, 0x4
     ctx->r3 = SIGNED(ctx->r3) < 0X4 ? 1 : 0;
     // sh          $a0, 0x6162($a2)
-    MEM_H(0X6162, ctx->r6) = ctx->r4;
+    MEM_H(0, ST_PLAYER_HALF_CONTRIBUTION_Y_ADDRESS) = ctx->r4;
     // sll         $v0, $v0, 16
     ctx->r2 = S32(ctx->r2) << 16;
     // sra         $a1, $v0, 17
@@ -913,13 +916,13 @@ L_8004E83C:
     // beq         $v1, $zero, L_8004E860
     if (ctx->r3 == 0) {
         // sh          $a1, 0x6164($a2)
-        MEM_H(0X6164, ctx->r6) = ctx->r5;
+        MEM_H(0, ST_PLAYER_HALF_CONTRIBUTION_Z_ADDRESS) = ctx->r5;
         goto L_8004E860;
     }
     // sh          $a1, 0x6164($a2)
-    MEM_H(0X6164, ctx->r6) = ctx->r5;
+    MEM_H(0, ST_PLAYER_HALF_CONTRIBUTION_Z_ADDRESS) = ctx->r5;
     // sh          $zero, 0x6160($a2)
-    MEM_H(0X6160, ctx->r6) = 0;
+    MEM_H(0, ST_PLAYER_HALF_CONTRIBUTION_X_ADDRESS) = 0;
 L_8004E860:
     // bgez        $a0, L_8004E86C
     if (SIGNED(ctx->r4) >= 0) {
@@ -943,7 +946,7 @@ L_8004E86C:
     // nop
 
     // sh          $zero, 0x6162($a2)
-    MEM_H(0X6162, ctx->r6) = 0;
+    MEM_H(0, ST_PLAYER_HALF_CONTRIBUTION_Y_ADDRESS) = 0;
 L_8004E87C:
     // bgez        $a1, L_8004E888
     if (SIGNED(ctx->r5) >= 0) {
@@ -967,7 +970,7 @@ L_8004E888:
     // nop
 
     // sh          $zero, 0x6164($a2)
-    MEM_H(0X6164, ctx->r6) = 0;
+    MEM_H(0, ST_PLAYER_HALF_CONTRIBUTION_Z_ADDRESS) = 0;
 L_8004E898:
     // jal         0x8004C03C
     // addu        $a0, $zero, $zero
