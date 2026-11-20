@@ -1090,14 +1090,17 @@ that record. The prepared components are
 `ST_COLLISION_GEOMETRY_SCRATCH_EXTENDED_DISPLACEMENT_X`,
 `ST_COLLISION_GEOMETRY_SCRATCH_EXTENDED_DISPLACEMENT_Y`, and
 `ST_COLLISION_GEOMETRY_SCRATCH_EXTENDED_DISPLACEMENT_Z`. The products and sum
-wrap to 32 bits. For the movement query's
-`ST_COLLISION_QUERY_DIRECTION_FROM_DISPLACEMENT` direction, the prepared X/Z
+wrap to 32 bits. For `ST_COLLISION_QUERY_DIRECTION_FROM_DISPLACEMENT`, used by
+`ST_PlayerMoveWithCollision`, the prepared X/Z
 components are the displacement plus a horizontal extension of
 `ST_COLLISION_QUERY_HORIZONTAL_PARAMETER` in the displacement direction; its Y
 component is the displacement Y plus `ST_COLLISION_QUERY_VERTICAL_PARAMETER`.
 Each prepared component is stored as a halfword. If the horizontal displacement
-is zero, the prepared X/Z components are zero. Passing this test does not by
-itself select a record: distance and edge tests follow.
+is zero, the prepared X/Z components are zero. With an explicit query direction,
+used by `ST_ApplyDirectionalMovementWithCollision`, X/Z use that direction for
+the horizontal extension and Y is the displacement Y without the vertical
+parameter added. Passing this test does not by itself select a record: distance
+and edge tests follow.
 
 For example, take only stage 0 model 2's `0x29CC` record, with placement 3's
 rotation and origin, and no matching active or indexed records. Its transformed
@@ -1119,6 +1122,15 @@ and zero movement magnitude replaces the Z displacement with `0x1`
 result is the no-result sentinel, so the subsequent vertical update sets
 `ST_PLAYER_VERTICAL_MOVE` to `0x10` (0.00390625 cells per call). This example
 does not establish which records are selected when other geometry is present.
+
+For the same isolated record, X and Z, and with the player's stored movement
+components zero, `ST_ApplyDirectionalMovementWithCollision` called with angle
+`0xC00` (three quarters of a full turn) and magnitude `0x30` (0.01171875
+cells) produces a different result at Y `0x416C0` (65.421875 cells): it applies
+Z `-0x30`, ending at `0x3F4D0` (63.30078125 cells). At Y `0x41C00` (65.75
+cells), it instead applies Z `0x1` (0.000244140625 cells), ending at `0x3F501`
+(63.312744140625 cells). The two passes' different prepared Y components are
+part of their geometry queries; the edge tests also determine the result.
 
 Each movement query clears `ST_COLLISION_QUERY_RECORD_VECTOR_SUM_X`,
 `ST_COLLISION_QUERY_RECORD_VECTOR_SUM_Y` (`0x47D0`), and

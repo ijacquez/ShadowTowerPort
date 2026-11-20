@@ -21,6 +21,8 @@ void ST_QueryPlayerCollision(uint8_t*, recomp_context* ctx) { ctx->r2 = 0xFFFFFF
 void ST_EnterPlayerZeroHpState(uint8_t*, recomp_context*) { ++unexpectedCalls; }
 void ST_HandleDownwardCollisionFeedback(uint8_t*, recomp_context*) { ++unexpectedCalls; }
 void ST_RequestMovementSound(uint8_t*, recomp_context*) { ++unexpectedCalls; }
+void ST_SetCollisionReference(uint8_t*, recomp_context*) { ++unexpectedCalls; }
+void VectorNormalS(uint8_t*, recomp_context*) { ++unexpectedCalls; }
 
 int main() {
     // One synthetic placement uses the initial stage's horizontal plane.
@@ -181,6 +183,32 @@ int main() {
             MEM_HS(ST_PLAYER_VERTICAL_MOVE, player) != 16 ||
             MEM_W(ST_COLLISION_QUERY_RESULT_FLAGS, query) != 0 || unexpectedCalls) {
             std::fprintf(stderr, "wall movement failed at Y 0x%x\n", test.y);
+            return 1;
+        }
+    }
+    struct DirectionalCase { int y, z, displacement; };
+    const DirectionalCase directionalCases[] = {
+        {0x416C0, 0x3F4D0, -48},
+        {0x41C00, 0x3F501, 1}
+    };
+    for (const auto& test : directionalCases) {
+        std::memcpy(rdram, wallInitial, sizeof rdram);
+        std::memset(g_psxScratchpad, 0, sizeof g_psxScratchpad);
+        MEM_W(ST_PLAYER_POSITION_X, player) = 0x40000;
+        MEM_W(ST_PLAYER_POSITION_Y, player) = test.y;
+        MEM_W(ST_PLAYER_POSITION_Z, player) = 0x3F500;
+        recomp_context directionalCtx{};
+        directionalCtx.r29 = 0x801EF000;
+        directionalCtx.r28 = 0x80080000;
+        directionalCtx.r4 = 0xC00;
+        directionalCtx.r5 = 48;
+        ST_ApplyDirectionalMovementWithCollision(rdram, &directionalCtx);
+        if (MEM_W(ST_PLAYER_POSITION_X, player) != 0x40000 ||
+            MEM_W(ST_PLAYER_POSITION_Y, player) != test.y ||
+            MEM_W(ST_PLAYER_POSITION_Z, player) != test.z ||
+            MEM_HS(ST_PLAYER_COLLISION_DISPLACEMENT_Z, player) != test.displacement ||
+            unexpectedCalls) {
+            std::fprintf(stderr, "directional wall movement failed at Y 0x%x\n", test.y);
             return 1;
         }
     }
