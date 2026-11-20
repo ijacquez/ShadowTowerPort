@@ -1185,6 +1185,8 @@ test-player-movement:
 	scratchpad/player-bounds-test
 	$(CXX) $(CFLAGS) -std=c++17 -w -Wno-narrowing -ffunction-sections -fdata-sections tests/player_normalization_test.cpp scr/st/ST_PlayerUpdateMovement.c scr/st/SquareRoot0.c scr/gte.cpp PsyCross/src/gte/PsyX_GTE.cpp PsyCross/src/psx/LIBGTE.C -Wl,--gc-sections -o scratchpad/player-normalization-test
 	scratchpad/player-normalization-test
+	$(CXX) $(CFLAGS) -std=c++17 -w -Wno-narrowing -ffunction-sections -fdata-sections tests/player_movement_clear_path_test.cpp scr/st/ST_InitDefaultControlBindings.c scr/st/ST_PlayerUpdateMovement.c scr/st/ST_ApplyDirectionalMovementWithCollision.c scr/st/SquareRoot0.c scr/st/RotMatrix.c scr/st/ratan2.c scr/st/rcos.c scr/st/rsin.c scr/st/sin_1.c scr/gte.cpp scr/recomp.cpp PsyCross/src/gte/PsyX_GTE.cpp PsyCross/src/psx/LIBGTE.C -Wl,--gc-sections -o scratchpad/player-movement-clear-path-test
+	scratchpad/player-movement-clear-path-test
 	$(CXX) $(CFLAGS) -std=c++17 tests/player_counter_test.cpp scr/st/ST_UpdateCounterAndTarget.c -o scratchpad/player-counter-test
 	scratchpad/player-counter-test
 	$(CXX) $(CFLAGS) -std=c++17 tests/player_view_test.cpp scr/st/ST_BuildPlayerView.c scr/st/ST_TranslatePlayerPosition.c scr/st/ST_ClearPlayerMovementLimits.c -o scratchpad/player-view-test

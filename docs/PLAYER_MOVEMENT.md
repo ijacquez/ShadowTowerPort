@@ -194,6 +194,23 @@ update. The shifts truncate the step; for example,
 `L >> 3` is zero when `L` is between 1 and 7. The default and modified
 limits are set in [ST_UpdatePlayerState.c](../scr/st/ST_UpdatePlayerState.c).
 
+With the supplied executable's lookup values, zero yaw, zero initial
+movement contributions and vertical movement, and a zero result from each
+directional collision query, those five updates also add the same successive
+values to world Z. Starting at world Z zero, the positions immediately after
+`ST_PlayerUpdateMovement` are `0x30`, `0x90`, `0x120`, `0x1E0`, and `0x2A0`
+(0.01171875, 0.03515625, 0.0703125, 0.1171875, and 0.1640625 cells).
+World X remains zero. This example describes that function's clear-query
+path; later movement and collision processing can change the position.
+Releasing the control under the same conditions gives Z displacements of
+`0xA8`, `0x90`, `0x78`, `0x60`, `0x48`, `0x30`, `0x18`, and `0`
+(0.041015625, 0.03515625, 0.029296875, 0.0234375, 0.017578125,
+0.01171875, 0.005859375, and 0 cells). The final Z position is `0x540`
+(0.328125 cells). On the first release update, the first square-root lookup
+returns `0xA7` (0.040771484375 cells) for the accumulator magnitude, the
+subsequent squared-component division gives `0xA9` (0.041259765625 cells),
+and the second lookup returns `0xA8` (0.041015625 cells).
+
 On the state machine path beginning at `L_8004323C`, `ST_PLAYER_MOVE_LIMIT` is
 set to `0xC0` (0.046875 cells) and `ST_PLAYER_TURN_LIMIT` to 32. If neither
 `ST_CONTROL_MOVE_Z_POSITIVE` nor `ST_CONTROL_MOVE_Z_NEGATIVE` is held, the turn
