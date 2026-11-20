@@ -13,7 +13,7 @@ extern uint8_t rdram[2 * 1024 * 1024];
 
 typedef uint32_t gpr;
 
-static uint8_t scratchpad[1024]; // 1KB Scratchpad
+inline uint8_t g_psxScratchpad[1024] = {}; // Shared PS1 scratchpad
 
 #define CHECK_HEAP() { \
     if (MEM_W(0, 0x801EFD60) == 0) \
@@ -27,7 +27,7 @@ static uint8_t scratchpad[1024]; // 1KB Scratchpad
 inline uint8_t* GET_PTR_FUNC(uint32_t addr) {
     uint32_t phys = addr & 0x1FFFFFFF;
     if (phys >= 0x1F800000 && phys < 0x1F800400)
-        return &scratchpad[phys - 0x1F800000];
+        return &g_psxScratchpad[phys - 0x1F800000];
     return &rdram[addr & 0x1FFFFF];
 }
 #define GET_PTR(addr) GET_PTR_FUNC(addr)
