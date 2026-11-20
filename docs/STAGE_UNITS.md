@@ -40,6 +40,16 @@ across these slots. The 512 placement records include unused records.
   matrix uses 4096 for one and the GTE shifts the product by 12, so **one
   model-coordinate unit equals one stored world-position unit**, apart from
   rotation and integer rounding. It is not multiplied by 16 during placement.
+- Model 2's four-vertex collision record at stage resource offset `0x29DC`
+  has flag halfword `0x0001` and references vector `(0, -4096, 0)`. Its
+  four vertices are `(-1024, -1024, -2048)`, `(-1024, -1024, 2048)`,
+  `(1024, -1024, -2048)`, and `(1024, -1024, 2048)`. Placement record 3
+  selects rotation 1, which leaves Y unchanged. Its transformed plane is
+  therefore at stored Y `270336 - 1024 = 269312`, with its horizontal
+  extent containing the initial player X/Z. Since positive world Y is down,
+  that plane is 576 stored units below the initial player Y of 268736.
+  The record format and transformation are described in
+  [COLLISION_GEOMETRY.md](COLLISION_GEOMETRY.md).
 
 Using one spatial cell as one world unit, positions and movement displacements
 have 12 fractional bits: divide stored values by 4096. A cell is 1.0, the

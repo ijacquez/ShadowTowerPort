@@ -481,13 +481,14 @@ In [ST_PlayerMoveWithCollision](../scr/st/ST_PlayerMoveWithCollision.c),
 `ST_PLAYER_VERTICAL_MOVE` (`0x2D4`) is a signed 16-bit value used as the Y
 component of collision-tested movement. A positive value increases the stored
 Y coordinate when that displacement is applied. **Positive world Y is down;
-negative world Y is up.** On the path that applies the
+negative world Y is up.** A positive vertical movement value therefore moves
+the player down, and a negative value moves the player up. On the path that applies the
 candidate, the current value is used before the later vertical update. After the
 collision query, let `q` be its word at `0x801B5974` and `d = q - 0x640`
 (1600). When the geometry search finds no candidates, `ST_QueryLevelGeometry` sets q
 to `0x80000`. With a zero vertical value and this positive difference, the
 update writes 16; with a positive value and the relevant query flags clear,
-it adds 48. The initial
+it adds 48. These are downward changes. The initial
 player Y is also initialized from a decimal text field shifted by 12 bits,
 less `0x640`, while the collision query
 temporarily adds that same offset to Y. **OPEN:** the physical meaning of q and the offset's relationship to
