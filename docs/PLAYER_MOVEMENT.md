@@ -1427,6 +1427,28 @@ At the final displacement the proposed-position value is below `-0x100`
 (-0.0625 cells), so that record does not replace the proposed-position
 sentinel; the query uses the current-position result instead.
 
+With that same single plane, no matching active or indexed records, zero X/Z
+movement, initial Y `0x419C0` (65.609375 cells), and initial vertical movement
+zero, successive calls to `ST_PlayerMoveWithCollision` produce the following
+Y and next vertical movement. Each call applies the previous vertical movement
+before calculating the next one.
+
+| Call | Player Y after call (cells) | Next vertical movement (cells per call) |
+| --- | --- | --- |
+| 1 | `0x419C0` (65.609375) | `-0x10` (-0.00390625) |
+| 2 | `0x419B0` (65.60546875) | `-0x40` (-0.015625) |
+| 3 | `0x41970` (65.58984375) | `-0x70` (-0.02734375) |
+| 4 | `0x41900` (65.5625) | `-0xA0` (-0.0390625) |
+| 5 | `0x41860` (65.5234375) | `-0xD0` (-0.05078125) |
+| 6 | `0x41790` (65.47265625) | `-0x100` (-0.0625) |
+| 7 | `0x41690` (65.41015625) | `-0xD0` (-0.05078125) |
+| 8 | `0x415C0` (65.359375) | `0` (0.0) |
+
+The seventh call limits the next movement to the remaining separation from
+`q = 0x640` (0.390625 cells). On the eighth call that separation is reached
+and the next vertical movement is zero. Under the same conditions, subsequent
+calls leave Y and vertical movement unchanged.
+
 For `d < 0`:
 
 - If vertical movement is positive, call `ST_HandleDownwardCollisionFeedback`, then arithmetic-shift

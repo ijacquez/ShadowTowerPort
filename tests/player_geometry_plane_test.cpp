@@ -3,10 +3,24 @@
 #include "st/ST_LevelGeometry.h"
 #include "st/ST_LevelPlacement.h"
 #include "st/ST_SpatialCandidate.h"
+#include "st/ST_PlayerState.h"
 #include <cstdio>
 #include <cstring>
 
 uint8_t rdram[2 * 1024 * 1024];
+
+static int unexpectedCalls;
+void memset_recomp(uint8_t* rdram, recomp_context* ctx) {
+    std::memset(GET_PTR(ctx->r4), ctx->r5, ctx->r6);
+    ctx->r2 = ctx->r4;
+}
+void ST_QueryActiveCollisionRecords(uint8_t*, recomp_context* ctx) { ctx->r2 = 0xFFFFFFFF; }
+void ST_QueryActiveCollisionRecordsWithOffsets(uint8_t*, recomp_context* ctx) { ctx->r2 = 0xFFFFFFFF; }
+void ST_QueryIndexedCollisionRecords(uint8_t*, recomp_context* ctx) { ctx->r2 = 0xFFFFFFFF; }
+void ST_QueryPlayerCollision(uint8_t*, recomp_context* ctx) { ctx->r2 = 0xFFFFFFFF; }
+void ST_EnterPlayerZeroHpState(uint8_t*, recomp_context*) { ++unexpectedCalls; }
+void ST_HandleDownwardCollisionFeedback(uint8_t*, recomp_context*) { ++unexpectedCalls; }
+void ST_RequestMovementSound(uint8_t*, recomp_context*) { ++unexpectedCalls; }
 
 int main() {
     // One synthetic placement uses the initial stage's horizontal plane.
@@ -78,5 +92,36 @@ int main() {
             return 1;
         }
     }
-    std::puts("6 isolated plane geometry queries passed");
+    // Exercise successive movement calls with no matching object records.
+    std::memcpy(rdram, initial, sizeof rdram);
+    std::memset(g_psxScratchpad, 0, sizeof g_psxScratchpad);
+    constexpr uint32_t player = 0x80198F28;
+    MEM_W(ST_PLAYER_POSITION_X, player) = 0x40000;
+    MEM_W(ST_PLAYER_POSITION_Y, player) = 0x419C0;
+    MEM_W(ST_PLAYER_POSITION_Z, player) = 0x3F000;
+    MEM_W(ST_PLAYER_MOVE_LIMIT, player) = 192;
+    MEM_B(ST_PLAYER_VIEW_AND_SOUND_UPDATE_DISABLED, player) = 1;
+    recomp_context ctx{};
+    ctx.r29 = 0x801EF000;
+    ctx.r28 = 0x80080000;
+    struct MovementCase { int y, vertical, proposed, flags; };
+    const MovementCase movementCases[] = {
+        {0x419C0, -16, 576, 1}, {0x419B0, -64, 592, 1},
+        {0x41970, -112, 656, 1}, {0x41900, -160, 768, 1},
+        {0x41860, -208, 928, 1}, {0x41790, -256, 1136, 1},
+        {0x41690, -208, 1392, 1}, {0x415C0, 0, 1600, 0},
+        {0x415C0, 0, 1600, 0}
+    };
+    for (const auto& test : movementCases) {
+        ST_PlayerMoveWithCollision(rdram, &ctx);
+        if (MEM_W(ST_PLAYER_POSITION_Y, player) != test.y ||
+            MEM_HS(ST_PLAYER_VERTICAL_MOVE, player) != test.vertical ||
+            S32(MEM_W(ST_COLLISION_QUERY_PROPOSED_Y_RESULT, query)) != test.proposed ||
+            MEM_W(ST_COLLISION_QUERY_RESULT_FLAGS, query) != test.flags ||
+            MEM_HU(ST_COLLISION_QUERY_CANDIDATE_COUNT, query) != 1 || unexpectedCalls) {
+            std::fprintf(stderr, "plane movement failed at Y 0x%x\n", test.y);
+            return 1;
+        }
+    }
+    std::puts("6 plane geometry queries and 9 movement updates passed");
 }
