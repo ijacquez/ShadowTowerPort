@@ -260,13 +260,13 @@ When that halfword is not `9999`, the geometry routine uses it for the
 cosine and sine terms and uses the query's Y displacement without adding
 `0x640` to that vector component.
 
-### Query dispatcher: observed input and output flags
+### Query dispatcher input and output flags
 
 [ST_RunCollisionQuery](../scr/st/ST_RunCollisionQuery.c) reads a 32-bit
 input mask at query offset `0`. It initializes the result to zero and handles
 the following input bits in order:
 
-| Input bit | Observed operation | Result contribution |
+| Input bit | Operation | Result contribution |
 | --- | --- | --- |
 | `0x2` | Calls [ST_QueryLevelGeometry](../scr/st/ST_QueryLevelGeometry.c). | Uses the helper's return value as the initial result. |
 | `0x10` | Calls [sub_8004BB88](../scr/st/sub_8004BB88.c), passing `2` as its second argument if input bit `0x400` is set, otherwise `0`. | ORs `0x10` if the helper returns anything other than `-1`. |
@@ -302,9 +302,8 @@ case is encountered again.
 
 ## Directional collision pass
 
-The following observations come from
-[ST_ApplyDirectionalMovementWithCollision](../scr/st/ST_ApplyDirectionalMovementWithCollision.c).
-Its arguments are the angle and magnitude computed by
+[ST_ApplyDirectionalMovementWithCollision](../scr/st/ST_ApplyDirectionalMovementWithCollision.c)
+takes the angle and magnitude computed by
 `ST_PlayerUpdateMovement`. It starts with `x = rcos(angle) * magnitude / 4096`
 and `z = rsin(angle) * magnitude / 4096`, using the low 32 bits of each
 product and rounding the signed division toward zero. It copies the signed
@@ -347,7 +346,7 @@ and queries again. On exit it adds one quarter of signed query halfwords
 `0x47CE` and `0x47D2` to player movement halfwords `0x1CC` and `0x1D0`,
 respectively, rounding toward zero, and stores the final X/Y/Z displacement
 as halfwords at player offsets `0x260`, `0x262`, and `0x264`. The query fields
-and result bits are identified by their observed offsets and masks. **OPEN:**
+and result bits are identified by their offsets and masks. **OPEN:**
 their complete geometric meanings have not been established.
 
 ### Collision reference selection

@@ -50,8 +50,8 @@ full model and collision formats have not yet been established. See
 4. The geometry query invokes `sub_80046604`, `sub_800468C0`, and
    `sub_80047884` to prepare and test candidate geometry. The latter two
    access the shared level-data pointer and derive subrecord addresses using
-   fields from the selected 12-byte records. Their full formats and exact
-   individual responsibilities need further investigation.
+   fields from the selected 12-byte records. **OPEN:** their full formats
+   and exact individual responsibilities are not established.
 5. Results, including flags and distance-like values, are written to the
    shared query structure. `ST_PlayerMoveWithCollision` uses them to choose
    and adjust the displacement; see [PLAYER_MOVEMENT.md](PLAYER_MOVEMENT.md).
