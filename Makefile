@@ -679,7 +679,7 @@ SRCS:= scr/st/AddPrim.c \
 	scr/st/sub_8004B1E8.c \
 	scr/st/sub_8004B2DC.c \
 	scr/st/sub_8004B658.c \
-	scr/st/sub_8004BB88.c \
+	scr/st/ST_QueryActiveCollisionRecords.c \
 	scr/st/sub_8004BE80.c \
 	scr/st/sub_8004C03C.c \
 	scr/st/sub_8004C1B4.c \
@@ -1124,6 +1124,8 @@ test-player-movement:
 	scratchpad/player-view-test
 	$(CXX) $(CFLAGS) -std=c++17 tests/player_collision_y_flags_test.cpp scr/st/ST_UpdatePlayerCollisionYFlags.c -o scratchpad/player-collision-y-flags-test
 	scratchpad/player-collision-y-flags-test
+	$(CXX) $(CFLAGS) -std=c++17 tests/player_active_collision_test.cpp scr/st/ST_QueryActiveCollisionRecords.c -o scratchpad/player-active-collision-test
+	scratchpad/player-active-collision-test
 	$(CXX) $(CFLAGS) -std=c++17 tests/player_rotation_test.cpp scr/st/RotMatrix.c scr/gte.cpp PsyCross/src/gte/PsyX_GTE.cpp -o scratchpad/player-rotation-test
 	scratchpad/player-rotation-test
 	$(CXX) $(CFLAGS) -std=c++17 -ffunction-sections -fdata-sections tests/player_movement_axis_test.cpp -Wl,--gc-sections -o scratchpad/player-movement-axis-test

@@ -822,7 +822,7 @@
     <ClCompile Include="scr\st\sub_8004B1E8.c" />
     <ClCompile Include="scr\st\sub_8004B2DC.c" />
     <ClCompile Include="scr\st\sub_8004B658.c" />
-    <ClCompile Include="scr\st\sub_8004BB88.c" />
+    <ClCompile Include="scr\st\ST_QueryActiveCollisionRecords.c" />
     <ClCompile Include="scr\st\sub_8004BE80.c" />
     <ClCompile Include="scr\st\sub_8004C03C.c" />
     <ClCompile Include="scr\st\sub_8004C1B4.c" />

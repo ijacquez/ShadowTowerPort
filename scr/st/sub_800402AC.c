@@ -538,7 +538,7 @@ L_800405A8:
     // jal         0x8004BB88
     // sh          $s4, 0x86($sp)
     MEM_H(0X86, ctx->r29) = ctx->r20;
-    sub_8004BB88(rdram, ctx);
+    ST_QueryActiveCollisionRecords(rdram, ctx);
     goto after_1;
     // sh          $s4, 0x86($sp)
     MEM_H(0X86, ctx->r29) = ctx->r20;

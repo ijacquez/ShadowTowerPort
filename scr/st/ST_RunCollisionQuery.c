@@ -68,7 +68,7 @@ L_80049578:
     // jal         0x8004BB88
     // sll         $a1, $a1, 1
     ctx->r5 = S32(ctx->r5) << 1;
-    sub_8004BB88(rdram, ctx);
+    ST_QueryActiveCollisionRecords(rdram, ctx);
     goto after_1;
     // sll         $a1, $a1, 1
     ctx->r5 = S32(ctx->r5) << 1;

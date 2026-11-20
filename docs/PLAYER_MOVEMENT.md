@@ -305,7 +305,7 @@ the following input bits in order:
 | Input bit | Operation | Result contribution |
 | --- | --- | --- |
 | `0x2` | Calls [ST_QueryLevelGeometry](../scr/st/ST_QueryLevelGeometry.c). | Uses the helper's return value as the initial result. |
-| `0x10` | Calls [sub_8004BB88](../scr/st/sub_8004BB88.c), passing `2` as its second argument if input bit `0x400` is set, otherwise `0`. | ORs `0x10` if the helper returns anything other than `-1`. |
+| `0x10` | Calls [ST_QueryActiveCollisionRecords](../scr/st/ST_QueryActiveCollisionRecords.c), passing `2` as its second argument if input bit `0x400` is set, otherwise `0`. | ORs `0x10` if the helper returns anything other than `-1`. |
 | `0x40` | Calls [sub_8004BE80](../scr/st/sub_8004BE80.c). | ORs `0x10` if the helper returns anything other than `-1`. |
 | `0x20` | Calls [ST_QueryIndexedCollisionRecords](../scr/st/ST_QueryIndexedCollisionRecords.c). | ORs `0x40` if the helper returns anything other than `-1`. |
 | `0x80` | Calls [sub_8003BEB4](../scr/st/sub_8003BEB4.c). If input bit `0x800` is also set, first adds `0x200` (0.125 cells) to `ST_COLLISION_QUERY_HORIZONTAL_PARAMETER`. | ORs `0x80` if the helper returns anything other than `-1`. |
@@ -319,12 +319,49 @@ remaining checks. Before returning it subtracts the then-current unsigned
 `ST_COLLISION_QUERY_VERTICAL_PARAMETER`, stores the final mask at `0x801B59BC`, and returns it.
 For the movement routines' `0x432` input mask, the enabled checks are
 `0x2`, `0x10`, and `0x20`, and `0x400` selects second argument `2` for
-`sub_8004BB88`. With that second argument, the latter adds `0x200` (0.125 cells) to the
+`ST_QueryActiveCollisionRecords`. With that second argument, the latter adds `0x200` (0.125 cells) to the
 sum of `ST_COLLISION_QUERY_HORIZONTAL_PARAMETER` and a candidate's halfword `0x2E` before its
 horizontal comparison. The candidate records begin at `0x801BA138`, have a
 stride of 212 bytes, and the scan examines at most 64 records. These
 operations identify the result bits' producers; the
 physical meanings of the helpers and their results are **OPEN**.
+
+### Active-record collision check for movement
+
+[ST_QueryActiveCollisionRecords](../scr/st/ST_QueryActiveCollisionRecords.c)
+examines up to 64 records at `0x801BA138`, each 212 bytes long. With the
+movement query's second argument of 2, a record is considered only if
+`ST_ACTIVE_COLLISION_RECORD_STATE` equals 1, its
+`ST_ACTIVE_COLLISION_RECORD_FILTER_FLAGS` has no bit in common with the byte
+at `0x801C0239`, and its address differs from the word at `0x801C0270`.
+Its `ST_ACTIVE_COLLISION_RECORD_CLASS_INDEX` selects a 192-byte entry at
+`0x801BD638`; the entry's unsigned halfword at `0x16` must be nonzero.
+
+The check subtracts the query X and Z from the record's
+`ST_ACTIVE_COLLISION_RECORD_POSITION_X` and `_Z`, using 32-bit arithmetic,
+and skips the record unless both differences are in
+`[-0x2800, 0x2800]` (-2.5 to 2.5 cells). It computes their wrapped squared
+sum, passes that to `SquareRoot0`, and obtains an angle with `ratan2`. From
+the distance it subtracts the signed low-32-bit product of
+`ST_COLLISION_QUERY_HORIZONTAL_MAGNITUDE` and
+`rcos(ST_COLLISION_QUERY_DIRECTION - angle)`, divided by `0x1000` (1.0 in
+the trigonometric scale), rounding toward zero. The record passes this test
+only if the result is less than `ST_COLLISION_QUERY_HORIZONTAL_PARAMETER`
+plus `ST_ACTIVE_COLLISION_RECORD_HORIZONTAL_EXTENT` plus `0x200` (0.125
+cells).
+
+After a horizontal match, the check compares the signed record Y with the
+query Y already adjusted by the dispatcher. If record Y is less, it rejects
+the record when it is below query Y minus
+`ST_COLLISION_QUERY_VERTICAL_PARAMETER`. Otherwise it rejects the record when
+query Y is below record Y minus `ST_ACTIVE_COLLISION_RECORD_VERTICAL_EXTENT`.
+Subtractions wrap to 32 bits. In movement mode, either vertical rejection
+returns `-1` immediately; a vertical match returns the current record index.
+If no horizontal candidate is accepted, it returns `-1`. **OPEN:** the
+in-game identity of the records and the full meaning of their extent fields
+are not established.
+
+### Level-geometry result bits
 
 When the geometry search has candidates, `ST_QueryLevelGeometry` sets its
 four low result bits using the following signed comparisons. Let `D` be the
@@ -454,7 +491,7 @@ offsets `0xAC` through `0xB8`. It subtracts the selected X and Z words from
 the supplied position's X and Z words, sums the low 32-bit squares with
 32-bit wrap, passes the sum to `SquareRoot0`, and stores its result at query
 offset `0xBC`. The dispatcher writes words `0x5C` and `0x64` from the
-results of `sub_8004BB88` and `ST_QueryIndexedCollisionRecords`, respectively. **OPEN:** the
+results of `ST_QueryActiveCollisionRecords` and `ST_QueryIndexedCollisionRecords`, respectively. **OPEN:** the
 record types and the physical meanings of the two halfwords remain
 unidentified.
 

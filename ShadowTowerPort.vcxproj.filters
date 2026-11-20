@@ -1374,7 +1374,7 @@
     <ClCompile Include="scr\st\sub_8004B658.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_8004BB88.c">
+    <ClCompile Include="scr\st\ST_QueryActiveCollisionRecords.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\sub_8004BE80.c">

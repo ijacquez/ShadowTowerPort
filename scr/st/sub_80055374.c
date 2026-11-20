@@ -139,7 +139,7 @@ L_80055460:
     // jal         0x8004BB88
     // addiu       $a1, $zero, 0x1
     ctx->r5 = ADD32(0, 0X1);
-    sub_8004BB88(rdram, ctx);
+    ST_QueryActiveCollisionRecords(rdram, ctx);
     goto after_1;
     // addiu       $a1, $zero, 0x1
     ctx->r5 = ADD32(0, 0X1);
