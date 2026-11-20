@@ -42,7 +42,8 @@ selects a path from `ST_PLAYER_STATE`. For states 0 and 1 it first calls
 and collision calls. Otherwise it calls those three functions in that order,
 then clears `ST_PLAYER_DIRECTIONAL_MOVE_DISABLED`.
 
-For state 16, the same three calls occur without those two gates. Between
+For state 16, `ST_ProcessPlayerActionControls` and the same three movement
+calls occur without those two gates. Between
 the movement and collision calls, if the word beginning at
 `ST_PLAYER_VIEW_STATE_ROTATION_X` and the signed halfword
 `ST_PLAYER_VIEW_STATE_ROTATION_Z` are both zero,
@@ -52,6 +53,28 @@ state, transient, and additional view rotation components. The state-16 path cle
 the movement limits, all three movement components, and the three contribution
 sets before the shared post-dispatch work. **OPEN:** the in-game meanings of
 the remaining state values are not established.
+
+States 2, 3, and 7 through 15, and values above 16, dispatch directly to
+shared post-dispatch work without calling the turning, movement, or collision
+functions on that dispatch path. State 4 takes its own path; it does not call
+those three functions there, though it can request streaming and clear movement
+limits. Other functions in the shared work can still affect player state.
+
+In the shared work, each of three bits in `ST_COLLISION_QUERY_RECORD_FLAGS`
+is checked independently. If the bit is set and signed
+`ST_COLLISION_QUERY_CURRENT_Y_RESULT` is at most `0x640` (0.390625 cells),
+the state update calls `ST_ApplyPlayerDamageAndEffects` with multiplier
+`0x1000` (1.0 in Q.12):
+
+| Record flag | Third argument | First argument |
+| --- | --- | --- |
+| `ST_COLLISION_RECORD_EFFECT_7_FLAG` (`0x10`) | `0x7` | An 18-byte zeroed buffer. |
+| `ST_COLLISION_RECORD_EFFECT_400_FLAG` (`0x20`) | `0x400` | An 18-byte zeroed buffer. |
+| `ST_COLLISION_RECORD_EFFECT_INPUT_FLAG` (`0x8`) | `0` | An 18-byte zeroed buffer with `ST_COLLISION_RECORD_EFFECT_INPUT_HALFWORD_OFFSET` set to 150. |
+
+Each call also receives a separate zeroed 16-byte output buffer. These flags
+can cause more than one call in the same update; their in-game meanings are
+**OPEN**.
 
 The update gate is also used by the `ST_LEVEL_RECORD_TYPE` `0xE0` path in
 [ST_UpdateLevelRecords](../scr/st/ST_UpdateLevelRecords.c). On a qualifying path with the gate

@@ -2769,11 +2769,11 @@ L_80043C34:
     // addiu       $v0, $v0, -0x70D8
     ctx->r2 = ADD32(ctx->r2, -0X70D8);
     // sh          $zero, 0x1D0($v0)
-    MEM_H(0X1D0, ctx->r2) = 0;
+    MEM_H(ST_PLAYER_MOVE_Z, ctx->r2) = 0;
     // sh          $zero, 0x1CE($v0)
-    MEM_H(0X1CE, ctx->r2) = 0;
+    MEM_H(ST_PLAYER_MOVE_Y, ctx->r2) = 0;
     // sh          $zero, 0x1CC($v0)
-    MEM_H(0X1CC, ctx->r2) = 0;
+    MEM_H(ST_PLAYER_MOVE_X, ctx->r2) = 0;
 L_80043C8C:
     // lui         $v0, 0x801B
     ctx->r2 = S32(0X801B << 16);
@@ -2781,11 +2781,11 @@ L_80043C90:
     // addiu       $v1, $v0, 0x5948
     ctx->r3 = ADD32(ctx->r2, 0X5948);
     // lw          $v0, 0x47DC($v1)
-    ctx->r2 = MEM_W(0X47DC, ctx->r3);
+    ctx->r2 = MEM_W(ST_COLLISION_QUERY_RECORD_FLAGS, ctx->r3);
     // nop
 
     // andi        $v0, $v0, 0x10
-    ctx->r2 = ctx->r2 & 0X10;
+    ctx->r2 = ctx->r2 & ST_COLLISION_RECORD_EFFECT_7_FLAG;
     // beq         $v0, $zero, L_80043CF8
     if (ctx->r2 == 0) {
         // lui         $v0, 0x801B
@@ -2795,7 +2795,7 @@ L_80043C90:
     // lui         $v0, 0x801B
     ctx->r2 = S32(0X801B << 16);
     // lw          $v0, 0x30($v1)
-    ctx->r2 = MEM_W(0X30, ctx->r3);
+    ctx->r2 = MEM_W(ST_COLLISION_QUERY_CURRENT_Y_RESULT, ctx->r3);
     // nop
 
     // slti        $v0, $v0, 0x641
@@ -2855,11 +2855,11 @@ L_80043CF8:
     // addiu       $v1, $v0, 0x5948
     ctx->r3 = ADD32(ctx->r2, 0X5948);
     // lw          $v0, 0x47DC($v1)
-    ctx->r2 = MEM_W(0X47DC, ctx->r3);
+    ctx->r2 = MEM_W(ST_COLLISION_QUERY_RECORD_FLAGS, ctx->r3);
     // nop
 
     // andi        $v0, $v0, 0x20
-    ctx->r2 = ctx->r2 & 0X20;
+    ctx->r2 = ctx->r2 & ST_COLLISION_RECORD_EFFECT_400_FLAG;
     // beq         $v0, $zero, L_80043D60
     if (ctx->r2 == 0) {
         // lui         $v0, 0x801B
@@ -2869,7 +2869,7 @@ L_80043CF8:
     // lui         $v0, 0x801B
     ctx->r2 = S32(0X801B << 16);
     // lw          $v0, 0x30($v1)
-    ctx->r2 = MEM_W(0X30, ctx->r3);
+    ctx->r2 = MEM_W(ST_COLLISION_QUERY_CURRENT_Y_RESULT, ctx->r3);
     // nop
 
     // slti        $v0, $v0, 0x641
@@ -2929,11 +2929,11 @@ L_80043D60:
     // addiu       $v1, $v0, 0x5948
     ctx->r3 = ADD32(ctx->r2, 0X5948);
     // lw          $v0, 0x47DC($v1)
-    ctx->r2 = MEM_W(0X47DC, ctx->r3);
+    ctx->r2 = MEM_W(ST_COLLISION_QUERY_RECORD_FLAGS, ctx->r3);
     // nop
 
     // andi        $v0, $v0, 0x8
-    ctx->r2 = ctx->r2 & 0X8;
+    ctx->r2 = ctx->r2 & ST_COLLISION_RECORD_EFFECT_INPUT_FLAG;
     // beq         $v0, $zero, L_80043DD0
     if (ctx->r2 == 0) {
         // lui         $v0, 0x801A
@@ -2943,7 +2943,7 @@ L_80043D60:
     // lui         $v0, 0x801A
     ctx->r2 = S32(0X801A << 16);
     // lw          $v0, 0x30($v1)
-    ctx->r2 = MEM_W(0X30, ctx->r3);
+    ctx->r2 = MEM_W(ST_COLLISION_QUERY_CURRENT_Y_RESULT, ctx->r3);
     // nop
 
     // slti        $v0, $v0, 0x641
@@ -2971,7 +2971,7 @@ L_80043D60:
     // addiu       $v0, $zero, 0x96
     ctx->r2 = ADD32(0, 0X96);
     // sh          $v0, 0x86($sp)
-    MEM_H(0X86, ctx->r29) = ctx->r2;
+    MEM_H(0X80 + ST_COLLISION_RECORD_EFFECT_INPUT_HALFWORD_OFFSET, ctx->r29) = ctx->r2;
     // addiu       $s1, $sp, 0x98
     ctx->r17 = ADD32(ctx->r29, 0X98);
     // addu        $a0, $s1, $zero
