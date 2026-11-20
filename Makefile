@@ -910,7 +910,7 @@ SRCS:= scr/st/AddPrim.c \
 	scr/st/sub_800739F4.c \
 	scr/st/SsVabTransBodyPartly.c \
 	scr/st/ST_InitGeom.c \
-	scr/st/sub_80074854.c \
+	scr/st/ST_NormalizeVectorRegisters.c \
 	scr/st/sub_80075E40.c \
 	scr/st/sub_800762D0.c \
 	scr/st/sub_800767F4.c \
@@ -1117,6 +1117,7 @@ scr/st/ST_ResolveActiveCollisionRecordDisplacement.o: scr/st/ST_CollisionQuery.h
 scr/st/ST_RunCollisionQuery.o scr/st/ST_QueryLevelGeometry.o scr/st/ST_TestThreeVertexCollisionRecords.o scr/st/ST_TestFourVertexCollisionRecords.o: scr/st/ST_CollisionQuery.h
 scr/st/ST_SelectSpatialCandidates.o scr/st/ST_DecodeCandidateOrigins.o scr/st/ST_TransformCandidateVertices.o: scr/st/ST_CollisionQuery.h
 scr/st/ST_SelectSpatialCandidates.o: scr/st/ST_SpatialCandidate.h scr/st/ST_LevelPlacement.h scr/st/ST_LevelStreaming.h
+scr/st/ST_NormalizeVectorRegisters.o scr/st/InvSquareRoot.o: scr/st/ST_VectorNormalization.h
 scr/st/ST_RequestLevelStreaming.o scr/st/ST_StartLevelStreamingAndWait.o scr/st/ST_UpdateLevelStreaming.o: scr/st/ST_LevelStreaming.h
 scr/st/ST_UpdateLevelStreaming.o: scr/st/ST_PlayerState.h
 
@@ -1148,7 +1149,7 @@ test-player-movement:
 	scratchpad/spatial-candidates-test
 	$(CXX) $(CFLAGS) -O2 tests/player_directional_collision_test.cpp scr/st/ST_ApplyDirectionalMovementWithCollision.c -o scratchpad/player-directional-collision-test
 	scratchpad/player-directional-collision-test
-	$(CXX) $(CFLAGS) -O2 tests/gte_normalization_test.cpp scr/st/VectorNormalS.c scr/st/sub_80074854.c scr/gte.cpp PsyCross/src/gte/PsyX_GTE.cpp -o scratchpad/gte-normalization-test
+	$(CXX) $(CFLAGS) -O2 tests/gte_normalization_test.cpp scr/st/VectorNormalS.c scr/st/ST_NormalizeVectorRegisters.c scr/gte.cpp PsyCross/src/gte/PsyX_GTE.cpp -o scratchpad/gte-normalization-test
 	scratchpad/gte-normalization-test
 	$(CXX) $(CFLAGS) -std=c++17 tests/player_record_modifiers_test.cpp scr/st/ST_RecalculatePlayerRecordModifiers.c -o scratchpad/player-record-modifiers-test
 	scratchpad/player-record-modifiers-test

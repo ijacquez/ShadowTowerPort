@@ -3183,7 +3183,7 @@
     <ClCompile Include="scr\st\SsVabTransBodyPartly.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_80074854.c">
+    <ClCompile Include="scr\st\ST_NormalizeVectorRegisters.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\sub_80077580.c">

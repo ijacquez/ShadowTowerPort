@@ -909,6 +909,21 @@ The query result controls the next step, in this order:
   without adding the replacement to position.
 - If none of these cases applies, it exits without adding the displacement.
 
+`VectorNormalS` reads three 32-bit input words and writes three output
+halfwords. Its [ST_NormalizeVectorRegisters](../scr/st/ST_NormalizeVectorRegisters.c)
+helper squares the signed low halfword of each input with the GTE and sums
+the three results with 32-bit wrapping. It writes the sum to the GTE's
+leading-zero input and clears the low bit of the resulting count. Let that
+even count be `n`. The helper shifts the signed sum left by `n - 24` when
+`n >= 24`, otherwise arithmetic-shifts it right by `24 - n`; the shift count
+is masked to five bits. It subtracts 64, doubles the result, and uses it as
+a byte offset from `ST_NORMALIZATION_INVERSE_ROOT_TABLE_ADDRESS`. The signed
+table halfword and original signed low input halfwords feed a GTE GPF command.
+Finally, it arithmetic-shifts each resulting MAC word right by
+`((31 - n) >> 1) & 31` and `VectorNormalS` stores the low halfword.
+The lookup and shifts are part of the calculation; the output is not an
+exact mathematical division by a real-valued length.
+
 On the first occurrence of any of the three correction cases, let `t` be
 `ratan2(normalZ, normalX)` for a normal-threshold result, or
 `ratan2(playerZ - referenceZ, playerX - referenceX)` for an object hit. Let

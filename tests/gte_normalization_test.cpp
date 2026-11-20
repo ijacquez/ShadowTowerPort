@@ -1,4 +1,5 @@
 #include "recomp.h"
+#include "st/ST_VectorNormalization.h"
 #include <cstdio>
 #include <cstring>
 
@@ -28,11 +29,10 @@ int main() {
 
     constexpr uint32_t input = 0x80100000;
     constexpr uint32_t output = 0x80100020;
-    constexpr uint32_t inverseRootTable = 0x800820F4;
     const int values[] = {4096, -4096, -2048};
     for (int value : values) {
         std::memset(rdram, 0, sizeof(rdram));
-        MEM_H(0, inverseRootTable) = 0x1000;
+        MEM_H(0, ST_NORMALIZATION_INVERSE_ROOT_TABLE_ADDRESS) = 0x1000;
         MEM_W(0, input) = value;
         recomp_context ctx{};
         ctx.r4 = input;

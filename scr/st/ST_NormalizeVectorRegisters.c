@@ -1,7 +1,9 @@
 #include "recomp.h"
 #include "disable_warnings.h"
+#include "ST_VectorNormalization.h"
 
-void sub_80074854(uint8_t* rdram, recomp_context* ctx) {
+// Normalize the signed low halfwords in emulated registers t0, t1 and t2.
+void ST_NormalizeVectorRegisters(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
     unsigned int rounding_mode = DEFAULT_ROUNDING_MODE;
     int c1cs = 0; 
@@ -76,7 +78,7 @@ L_800748C0:
     // addu        $t5, $t5, $t4
     ctx->r13 = ADD32(ctx->r13, ctx->r12);
     // lh          $t5, 0x20F4($t5)
-    ctx->r13 = MEM_HS(0X20F4, ctx->r13);
+    ctx->r13 = MEM_HS(ST_NORMALIZATION_INVERSE_ROOT_TABLE_ADDRESS & 0xFFFF, ctx->r13);
     // nop
 
     // mtc2        $t5, $8

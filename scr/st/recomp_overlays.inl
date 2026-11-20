@@ -808,7 +808,7 @@ static FuncEntry section_1_text_funcs[] = {
     { .func = SquareRoot0, .offset = 0x000646c4 },
     { .func = InvSquareRoot, .offset = 0x00064754 },
     { .func = VectorNormalS, .offset = 0x000647e0 },
-    { .func = sub_80074854, .offset = 0x00064854 },
+    { .func = ST_NormalizeVectorRegisters, .offset = 0x00064854 },
     { .func = MatrixNormal, .offset = 0x00064914 },
     { .func = gteMIMefunc, .offset = 0x00064a04 },
     { .func = MulMatrix, .offset = 0x00064a84 },

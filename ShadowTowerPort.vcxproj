@@ -1053,7 +1053,7 @@
     <ClCompile Include="scr\st\sub_800739F4.c" />
     <ClCompile Include="scr\st\SsVabTransBodyPartly.c" />
     <ClCompile Include="scr\st\ST_InitGeom.c" />
-    <ClCompile Include="scr\st\sub_80074854.c" />
+    <ClCompile Include="scr\st\ST_NormalizeVectorRegisters.c" />
     <ClCompile Include="scr\st\sub_80075E40.c" />
     <ClCompile Include="scr\st\sub_800762D0.c" />
     <ClCompile Include="scr\st\sub_800767F4.c" />

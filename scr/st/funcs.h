@@ -795,7 +795,7 @@ void ST_InitGeom(uint8_t* rdram, recomp_context* ctx);
 void SquareRoot0(uint8_t* rdram, recomp_context* ctx);
 void InvSquareRoot(uint8_t* rdram, recomp_context* ctx);
 void VectorNormalS(uint8_t* rdram, recomp_context* ctx);
-void sub_80074854(uint8_t* rdram, recomp_context* ctx);
+void ST_NormalizeVectorRegisters(uint8_t* rdram, recomp_context* ctx);
 void MatrixNormal(uint8_t* rdram, recomp_context* ctx);
 void gteMIMefunc(uint8_t* rdram, recomp_context* ctx);
 void MulMatrix(uint8_t* rdram, recomp_context* ctx);

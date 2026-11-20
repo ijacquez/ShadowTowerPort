@@ -1,5 +1,6 @@
 #include "recomp.h"
 #include "disable_warnings.h"
+#include "ST_VectorNormalization.h"
 
 void InvSquareRoot(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
@@ -76,7 +77,7 @@ L_800747B0:
     // addu        $t5, $t5, $t4
     ctx->r13 = ADD32(ctx->r13, ctx->r12);
     // lh          $t5, 0x20F4($t5)
-    ctx->r13 = MEM_HS(0X20F4, ctx->r13);
+    ctx->r13 = MEM_HS(ST_NORMALIZATION_INVERSE_ROOT_TABLE_ADDRESS & 0xFFFF, ctx->r13);
     // sw          $t1, 0x0($a2)
     MEM_W(0X0, ctx->r6) = ctx->r9;
     // sw          $t5, 0x0($a1)

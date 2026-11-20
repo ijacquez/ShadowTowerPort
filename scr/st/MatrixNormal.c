@@ -78,7 +78,7 @@ void MatrixNormal(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x80074854
     // nop
 
-    sub_80074854(rdram, ctx);
+    ST_NormalizeVectorRegisters(rdram, ctx);
     goto after_0;
     // nop
 
@@ -98,7 +98,7 @@ void MatrixNormal(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x80074854
     // nop
 
-    sub_80074854(rdram, ctx);
+    ST_NormalizeVectorRegisters(rdram, ctx);
     goto after_1;
     // nop
 
@@ -116,7 +116,7 @@ void MatrixNormal(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x80074854
     // addu        $t2, $t9, $zero
     ctx->r10 = ADD32(ctx->r25, 0);
-    sub_80074854(rdram, ctx);
+    ST_NormalizeVectorRegisters(rdram, ctx);
     goto after_2;
     // addu        $t2, $t9, $zero
     ctx->r10 = ADD32(ctx->r25, 0);
