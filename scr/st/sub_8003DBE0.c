@@ -615,7 +615,7 @@ L_8003DF1C:
     // addiu       $s0, $s2, -0x70D8
     ctx->r16 = ADD32(ctx->r18, -0X70D8);
     // lw          $v1, 0x2C($s0)
-    ctx->r3 = MEM_W(0X2C, ctx->r16);
+    ctx->r3 = MEM_W(ST_PLAYER_EFFECT_FLAGS, ctx->r16);
     // nop
 
     // andi        $v0, $v1, 0x80
@@ -1217,7 +1217,7 @@ L_8003E1B0:
     // subu        $t1, $v1, $v0
     ctx->r9 = SUB32(ctx->r3, ctx->r2);
     // lh          $v0, 0x19E($t2)
-    ctx->r2 = MEM_HS(0X19E, ctx->r10);
+    ctx->r2 = MEM_HS(ST_PLAYER_MOVE_REDUCTION_TARGET, ctx->r10);
     // nop
 
     // slt         $v0, $a2, $v0
@@ -1231,10 +1231,10 @@ L_8003E1B0:
     // addu        $v1, $t1, $zero
     ctx->r3 = ADD32(ctx->r9, 0);
     // sh          $a2, 0x19E($t2)
-    MEM_H(0X19E, ctx->r10) = ctx->r6;
+    MEM_H(ST_PLAYER_MOVE_REDUCTION_TARGET, ctx->r10) = ctx->r6;
 L_8003E2F8:
     // lh          $v0, 0x196($t2)
-    ctx->r2 = MEM_HS(0X196, ctx->r10);
+    ctx->r2 = MEM_HS(ST_PLAYER_MOVE_SUPPRESSION_TARGET, ctx->r10);
     // nop
 
     // slt         $v0, $a1, $v0
@@ -1248,7 +1248,7 @@ L_8003E2F8:
     // nop
 
     // sh          $a1, 0x196($t2)
-    MEM_H(0X196, ctx->r10) = ctx->r5;
+    MEM_H(ST_PLAYER_MOVE_SUPPRESSION_TARGET, ctx->r10) = ctx->r5;
 L_8003E310:
     // lh          $v0, 0x19A($t2)
     ctx->r2 = MEM_HS(0X19A, ctx->r10);

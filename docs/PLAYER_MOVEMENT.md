@@ -42,8 +42,8 @@ set to `0xC0` (0.046875 cells) and `ST_PLAYER_TURN_LIMIT` to 32. If neither
 `ST_CONTROL_MOVE_Z_POSITIVE` nor `ST_CONTROL_MOVE_Z_NEGATIVE` is held, the turn
 limit becomes 40. A nonzero signed `ST_PLAYER_MOVE_REDUCTION_COUNTER` (`0x19C`)
 changes the movement limit to `0x60` (0.0234375 cells). A nonzero signed
-`ST_PLAYER_MOVE_SUPPRESSION_COUNTER` (`0x194`) then clears the movement limit; if player word
-`0x2C` also has bit `0x10` set, it clears the turn limit.
+`ST_PLAYER_MOVE_SUPPRESSION_COUNTER` (`0x194`) then clears the movement limit; if
+`ST_PLAYER_EFFECT_FLAGS` (`0x2C`) also has bit `0x10` set, it clears the turn limit.
 
 Finally, if the unsigned `ST_PLAYER_MOVE_PENALTY_TOTAL` (`0x22`) exceeds
 `ST_PLAYER_MOVE_PENALTY_THRESHOLD` (`0x24`), the code subtracts their difference divided by 5, discarding the
@@ -110,7 +110,19 @@ current counter and sets one of those bits, or sets the current counter to
 20. Dispatch value `0x80` selects the reduction pair and sets its
 target to 300. If bit `0x80` of player word `0x2C` is clear, the code clears
 the current counter and sets the bit; otherwise, it sets the current counter
-to 20. These are particular producers, not an exhaustive list.
+to 20. After this dispatch, the routine calculates limits using player fields
+`0x20` and `0x1C8`; if a target interpreted as signed exceeds its calculated
+limit, the routine replaces it with the low halfword of that limit. The
+75 and 300 values above therefore are subject to this later cap. **OPEN:** the
+in-game meanings of the two fields used to calculate the caps are not established.
+
+[ST_SerializeGameState](../scr/st/ST_SerializeGameState.c) copies both
+current/target pairs to buffer offsets `0x1880` through `0x188A`.
+[ST_DeserializeGameState](../scr/st/ST_DeserializeGameState.c) restores the
+same halfwords to the player. In [sub_80054A54](../scr/st/sub_80054A54.c),
+dispatch value `0x11F` checks bits `0x18` of `ST_PLAYER_EFFECT_FLAGS`; when
+either is set, it clears the suppression current and target and those bits.
+These paths do not establish the effects' in-game names.
 
 The routine processes the X/Z magnitudes and rotates the local vector by
 negative player yaw using the GTE. It also damps existing movement components

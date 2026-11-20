@@ -1,7 +1,8 @@
 #include "recomp.h"
 #include "disable_warnings.h"
+#include "ST_PlayerState.h"
 
-void sub_80056AA0(uint8_t* rdram, recomp_context* ctx) {
+void ST_DeserializeGameState(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
     unsigned int rounding_mode = DEFAULT_ROUNDING_MODE;
     int c1cs = 0; 
@@ -747,13 +748,13 @@ L_80056EFC:
     // nop
 
     // sh          $v0, 0x194($s0)
-    MEM_H(0X194, ctx->r16) = ctx->r2;
+    MEM_H(ST_PLAYER_MOVE_SUPPRESSION_COUNTER, ctx->r16) = ctx->r2;
     // lhu         $v0, 0x1882($s3)
     ctx->r2 = MEM_HU(0X1882, ctx->r19);
     // nop
 
     // sh          $v0, 0x196($s0)
-    MEM_H(0X196, ctx->r16) = ctx->r2;
+    MEM_H(ST_PLAYER_MOVE_SUPPRESSION_TARGET, ctx->r16) = ctx->r2;
     // lhu         $v0, 0x1884($s3)
     ctx->r2 = MEM_HU(0X1884, ctx->r19);
     // nop
@@ -771,13 +772,13 @@ L_80056EFC:
     // nop
 
     // sh          $v0, 0x19C($s0)
-    MEM_H(0X19C, ctx->r16) = ctx->r2;
+    MEM_H(ST_PLAYER_MOVE_REDUCTION_COUNTER, ctx->r16) = ctx->r2;
     // lhu         $v0, 0x188A($s3)
     ctx->r2 = MEM_HU(0X188A, ctx->r19);
     // nop
 
     // sh          $v0, 0x19E($s0)
-    MEM_H(0X19E, ctx->r16) = ctx->r2;
+    MEM_H(ST_PLAYER_MOVE_REDUCTION_TARGET, ctx->r16) = ctx->r2;
     // lhu         $v0, 0x188C($s3)
     ctx->r2 = MEM_HU(0X188C, ctx->r19);
     // nop

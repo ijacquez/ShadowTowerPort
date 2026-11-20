@@ -747,8 +747,8 @@ SRCS:= scr/st/AddPrim.c \
 	scr/st/sub_800559BC.c \
 	scr/st/sub_80055CF4.c \
 	scr/st/sub_80055F9C.c \
-	scr/st/sub_800562D4.c \
-	scr/st/sub_80056AA0.c \
+	scr/st/ST_SerializeGameState.c \
+	scr/st/ST_DeserializeGameState.c \
 	scr/st/sub_8005735C.c \
 	scr/st/sub_8005738C.c \
 	scr/st/ST_InitDefaultControlBindings.c \

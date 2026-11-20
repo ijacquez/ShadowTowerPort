@@ -2148,7 +2148,7 @@
     <ClCompile Include="scr\st\sub_80055F9C.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_80056AA0.c">
+    <ClCompile Include="scr\st\ST_DeserializeGameState.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\sub_80057A3C.c">
@@ -2532,7 +2532,7 @@
     <ClCompile Include="scr\st\sub_800559BC.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_800562D4.c">
+    <ClCompile Include="scr\st\ST_SerializeGameState.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\ST_InitDefaultControlBindings.c">

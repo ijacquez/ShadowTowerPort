@@ -1,5 +1,6 @@
 #include "recomp.h"
 #include "disable_warnings.h"
+#include "ST_PlayerState.h"
 
 void sub_80054A54(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
@@ -613,13 +614,13 @@ L_80054D80:
     // and         $v0, $a2, $v0
     ctx->r2 = ctx->r6 & ctx->r2;
     // sh          $zero, 0x196($v1)
-    MEM_H(0X196, ctx->r3) = 0;
+    MEM_H(ST_PLAYER_MOVE_SUPPRESSION_TARGET, ctx->r3) = 0;
     // j           L_80054DE4
     // sh          $zero, 0x194($v1)
-    MEM_H(0X194, ctx->r3) = 0;
+    MEM_H(ST_PLAYER_MOVE_SUPPRESSION_COUNTER, ctx->r3) = 0;
     goto L_80054DE4;
     // sh          $zero, 0x194($v1)
-    MEM_H(0X194, ctx->r3) = 0;
+    MEM_H(ST_PLAYER_MOVE_SUPPRESSION_COUNTER, ctx->r3) = 0;
 L_80054DB4:
     // lui         $v0, 0x801A
     ctx->r2 = S32(0X801A << 16);

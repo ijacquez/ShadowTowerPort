@@ -890,8 +890,8 @@
     <ClCompile Include="scr\st\sub_800559BC.c" />
     <ClCompile Include="scr\st\sub_80055CF4.c" />
     <ClCompile Include="scr\st\sub_80055F9C.c" />
-    <ClCompile Include="scr\st\sub_800562D4.c" />
-    <ClCompile Include="scr\st\sub_80056AA0.c" />
+    <ClCompile Include="scr\st\ST_SerializeGameState.c" />
+    <ClCompile Include="scr\st\ST_DeserializeGameState.c" />
     <ClCompile Include="scr\st\sub_8005735C.c" />
     <ClCompile Include="scr\st\sub_8005738C.c" />
     <ClCompile Include="scr\st\ST_InitDefaultControlBindings.c" />

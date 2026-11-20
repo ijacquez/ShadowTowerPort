@@ -579,7 +579,7 @@ L_80062EF4:
     // jal         0x800562D4
     // addu        $a0, $s2, $zero
     ctx->r4 = ADD32(ctx->r18, 0);
-    sub_800562D4(rdram, ctx);
+    ST_SerializeGameState(rdram, ctx);
     goto after_18;
     // addu        $a0, $s2, $zero
     ctx->r4 = ADD32(ctx->r18, 0);
@@ -620,7 +620,7 @@ L_80062F24:
     // jal         0x80056AA0
     // addu        $a0, $s2, $zero
     ctx->r4 = ADD32(ctx->r18, 0);
-    sub_80056AA0(rdram, ctx);
+    ST_DeserializeGameState(rdram, ctx);
     goto after_21;
     // addu        $a0, $s2, $zero
     ctx->r4 = ADD32(ctx->r18, 0);
