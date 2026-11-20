@@ -532,6 +532,18 @@ See [ST_QueryLevelGeometry](../scr/st/ST_QueryLevelGeometry.c),
 [ST_TestThreeVertexCollisionRecords](../scr/st/ST_TestThreeVertexCollisionRecords.c),
 and [ST_TestFourVertexCollisionRecords](../scr/st/ST_TestFourVertexCollisionRecords.c).
 
+For the particular case where the selected proposed-position record has
+rotated vector `(0, -4096, 0)`, and the intermediate arithmetic does not
+wrap, `q` is the record's plane Y minus the proposed player Y. Its horizontal
+magnitude is zero, so the later angle-based adjustment is skipped. On that
+path, `q = 1600` places the proposed player position 1600 stored units above
+the plane, and `d` is the excess or shortfall from that separation. For
+example, the initial stage contains a plane 576 units below the initial
+player position; if it supplies the selected result with zero proposed Y
+movement, then `q = 576` and `d = -1024`. This conditional calculation does
+not establish which collision record wins or the player's full height. See
+[STAGE_UNITS.md](STAGE_UNITS.md) for that plane's data.
+
 For `d < 0`:
 
 - If vertical movement is positive, call `sub_80057B48`, then arithmetic-shift
