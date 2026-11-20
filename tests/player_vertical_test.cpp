@@ -10,6 +10,7 @@ static int32_t sineResult;
 static int soundCalls;
 static int32_t soundMagnitude;
 static uint32_t collisionResult;
+static uint32_t secondCollisionResult;
 static int collisionQueries;
 void memset_recomp(uint8_t*, recomp_context* ctx) { std::memset(GET_PTR(ctx->r4), ctx->r5, ctx->r6); ctx->r2 = ctx->r4; }
 void SquareRoot0(uint8_t*, recomp_context* ctx) { ctx->r2 = 0; }
@@ -17,8 +18,9 @@ void ratan2(uint8_t*, recomp_context* ctx) { ctx->r2 = 0; }
 void rcos(uint8_t*, recomp_context* ctx) { ctx->r2 = 0; }
 void rsin(uint8_t*, recomp_context* ctx) { ctx->r2 = sineResult; }
 void ST_RunCollisionQuery(uint8_t*, recomp_context* ctx) {
-    ++collisionQueries;
-    ctx->r2 = collisionResult;
+    ctx->r2 = collisionQueries++ == 0 ? collisionResult : secondCollisionResult;
+    MEM_W(ST_COLLISION_QUERY_FIRST_NORMAL_RESULT, ST_COLLISION_QUERY_BASE_ADDRESS) = 256;
+    MEM_H(ST_COLLISION_QUERY_FIRST_NORMAL_X, ST_COLLISION_QUERY_BASE_ADDRESS) = 0x1000;
 }
 void ST_CheckHighDownwardMovement(uint8_t*, recomp_context* ctx) { ctx->r2 = 0; }
 void ST_HandleDownwardCollisionFeedback(uint8_t*, recomp_context*) { ++helperCalls; }
@@ -136,6 +138,20 @@ int main() {
             return 1;
         }
     }
+    std::memset(rdram, 0, sizeof rdram);
+    MEM_H(ST_PLAYER_MOVE_X, player) = 100;
+    MEM_W(ST_COLLISION_QUERY_PROPOSED_Y_RESULT, query) = ST_PLAYER_COLLISION_Y_OFFSET;
+    recomp_context correction{};
+    correction.r28 = 0x80080000;
+    correction.r29 = 0x801EF000;
+    collisionResult = ST_COLLISION_RESULT_CURRENT_Y_THRESHOLD | ST_COLLISION_RESULT_FIRST_NORMAL_THRESHOLD;
+    secondCollisionResult = 0;
+    collisionQueries = 0;
+    ST_PlayerMoveWithCollision(rdram, &correction);
+    if (collisionQueries != 2 || S32(MEM_W(ST_PLAYER_POSITION_X, player)) != 101) {
+        std::fputs("combined Y and normal flags did not apply both candidates\n", stderr);
+        return 1;
+    }
     collisionResult = 0;
     struct OscillationCase {
         uint8_t disabled, enabled;
@@ -207,7 +223,7 @@ int main() {
     }
     std::printf("%zu vertical cases passed\n", sizeof cases / sizeof cases[0]);
     std::printf("%zu vertical view pitch cases passed\n", sizeof pitchCases / sizeof pitchCases[0]);
-    std::printf("%zu collision result application cases passed\n", sizeof collisionCases / sizeof collisionCases[0]);
+    std::printf("%zu collision result application cases passed\n", 1 + sizeof collisionCases / sizeof collisionCases[0]);
     std::printf("%zu view oscillation cases passed\n", sizeof oscillationCases / sizeof oscillationCases[0]);
     std::printf("%zu movement sound countdown cases passed\n", sizeof soundCases / sizeof soundCases[0]);
     return 0;

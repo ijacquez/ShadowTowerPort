@@ -981,6 +981,15 @@ fully established. The routine tracks each of
 these two correction cases and applies the current candidate if that same
 case is encountered again.
 
+For example, suppose the current X candidate is `0x64` (0.0244140625
+cells), the first result contains both `ST_COLLISION_RESULT_CURRENT_Y_THRESHOLD`
+and `ST_COLLISION_RESULT_FIRST_NORMAL_THRESHOLD`, the first normal result is
+`0x100` (0.0625 cells), and its X component is `0x1000` (1.0). The first
+result adds `0x64` to player X and produces a replacement X of `0x1`
+(0.000244140625 cells). If the tangent contribution is zero and the next
+query returns zero, the replacement is also applied, for a total X change
+of `0x65` (0.024658203125 cells).
+
 ## Directional collision pass
 
 [ST_ApplyDirectionalMovementWithCollision](../scr/st/ST_ApplyDirectionalMovementWithCollision.c)
