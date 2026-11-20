@@ -1142,6 +1142,8 @@ value for the second. Once all records have been scanned,
 `ST_QueryLevelGeometry` uses a fallback value and its vector only if the
 corresponding direct value remains at `ST_COLLISION_GEOMETRY_NO_RESULT`. The later
 threshold comparisons produce the query's first and second normal result bits.
+Thus a direct result of `0x120` (0.0703125 cells) takes precedence over a
+fallback result of `0x100` (0.0625 cells), even though the fallback is smaller.
 Earlier direction, distance, and record-flag checks can reject the record
 before these tests. See
 [ST_TestThreeVertexCollisionRecords](../scr/st/ST_TestThreeVertexCollisionRecords.c),

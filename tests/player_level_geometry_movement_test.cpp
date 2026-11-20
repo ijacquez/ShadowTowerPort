@@ -269,5 +269,36 @@ int main() {
             return 1;
         }
     }
+    // A direct match wins over a closer fallback regardless of record order.
+    for (int directFirst = 0; directFirst <= 1; ++directFirst) {
+        std::memcpy(rdram, wallInitial, sizeof rdram);
+        std::memset(g_psxScratchpad, 0, sizeof g_psxScratchpad);
+        MEM_W(ST_GEOMETRY_MODEL_VERTEX_COUNT, model) = 8;
+        MEM_H(ST_GEOMETRY_MODEL_FOUR_VERTEX_COUNT, model) = 2;
+        for (int i = 0; i < 4; ++i) {
+            MEM_H(i * 8 + 32, vertices) = 992;
+            MEM_H(i * 8 + 34, vertices) = wall[i][1] - 1344;
+            MEM_H(i * 8 + 36, vertices) = wall[i][2];
+            MEM_H(ST_GEOMETRY_RECORD_VERTEX_0_OFFSET + i * 2, record) =
+                i * 8 + (directFirst ? 32 : 0);
+            MEM_H(ST_GEOMETRY_RECORD_VERTEX_0_OFFSET + i * 2, record + 16) =
+                i * 8 + (directFirst ? 0 : 32);
+        }
+        MEM_H(ST_GEOMETRY_RECORD_FLAGS, record + 16) = 0xA;
+        MEM_H(ST_GEOMETRY_RECORD_VECTOR_OFFSET, record + 16) = 0;
+        MEM_W(ST_COLLISION_QUERY_POSITION_Y, query) = 0x416C0;
+        MEM_W(ST_COLLISION_QUERY_POSITION_Z, query) = 0x3F500;
+        MEM_H(ST_COLLISION_QUERY_DISPLACEMENT_Z, query) = -48;
+        recomp_context competingCtx{};
+        competingCtx.r4 = query;
+        competingCtx.r29 = 0x801EF000;
+        ST_QueryLevelGeometry(rdram, &competingCtx);
+        if (competingCtx.r2 != ST_COLLISION_RESULT_FIRST_NORMAL_THRESHOLD ||
+            S32(MEM_W(ST_COLLISION_QUERY_FIRST_NORMAL_RESULT, query)) != 288 ||
+            MEM_W(ST_COLLISION_GEOMETRY_SCRATCH_FIRST_NORMAL_FALLBACK_DISTANCE, 0x1F800000) != 256) {
+            std::fprintf(stderr, "competing wall records failed, directFirst=%d\n", directFirst);
+            return 1;
+        }
+    }
     std::puts("plane and wall geometry queries and movement updates passed");
 }
