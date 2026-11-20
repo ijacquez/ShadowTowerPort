@@ -56,6 +56,12 @@ when current is below 20, or 4096 otherwise. The state machine calls
 movement-limit rules above. **OPEN:** the game meanings and all producers of
 these counters and targets have not been established.
 
+[ST_ResetPlayerCountersAndState](../scr/st/ST_ResetPlayerCountersAndState.c)
+clears all player halfwords from `0x190` through `0x1C2`, including both
+movement-related counter pairs, and clears player word `0x2C`. It then calls
+[ST_ResetPlayerViewAndVerticalMovement](../scr/st/ST_ResetPlayerViewAndVerticalMovement.c),
+which clears vertical movement and the view adjustments described below.
+
 When the helper's signed halfword result for the `0x194`/`0x196` pair is
 not `-1`, `ST_UpdatePlayerCountersAndEffects` clears the movement and turn
 limits via `ST_ClearPlayerMovementLimits`, and clears player movement
@@ -442,7 +448,7 @@ at `0x2D0`, masks the sum with `0xFFF`, and stores it as the new phase.
 It computes `t = rsin(phase) >> 5` using an arithmetic shift, then stores
 `abs(t) - (abs(t) >> 2)` as the adjustment. If player byte `0x239` is
 nonzero, this part of the routine leaves both phase and adjustment unchanged.
-[sub_8003C054](../scr/st/sub_8003C054.c) clears the phase and both Y
+[ST_ResetPlayerViewAndVerticalMovement](../scr/st/ST_ResetPlayerViewAndVerticalMovement.c) clears the phase and both Y
 adjustments. **OPEN:** the meanings of byte `0x239`, byte `0x801CD122`, and
 the second adjustment have not been established.
 

@@ -566,7 +566,7 @@ SRCS:= scr/st/AddPrim.c \
 	scr/st/sub_8003BDB0.c \
 	scr/st/ST_UpdatePlayerCollisionYFlags.c \
 	scr/st/sub_8003BEB4.c \
-	scr/st/sub_8003C054.c \
+	scr/st/ST_ResetPlayerViewAndVerticalMovement.c \
 	scr/st/sub_8003C0E0.c \
 	scr/st/ST_UpdateCounterAndTarget.c \
 	scr/st/ST_UpdatePlayerCountersAndEffects.c \
@@ -585,7 +585,7 @@ SRCS:= scr/st/AddPrim.c \
 	scr/st/sub_8003DBE0.c \
 	scr/st/sub_8003E718.c \
 	scr/st/ST_BuildPlayerView.c \
-	scr/st/sub_8003E794.c \
+	scr/st/ST_ResetPlayerCountersAndState.c \
 	scr/st/sub_8003E840.c \
 	scr/st/sub_8003E874.c \
 	scr/st/sub_8003EA20.c \

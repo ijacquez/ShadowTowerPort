@@ -216,7 +216,7 @@ void sub_8003E874(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x8003E794
     // sh          $zero, 0x1CC($s0)
     MEM_H(0X1CC, ctx->r16) = 0;
-    sub_8003E794(rdram, ctx);
+    ST_ResetPlayerCountersAndState(rdram, ctx);
     goto after_10;
     // sh          $zero, 0x1CC($s0)
     MEM_H(0X1CC, ctx->r16) = 0;

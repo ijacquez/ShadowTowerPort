@@ -86,7 +86,7 @@ void sub_8003C0E0(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x8003C054
     // nop
 
-    sub_8003C054(rdram, ctx);
+    ST_ResetPlayerViewAndVerticalMovement(rdram, ctx);
     goto after_6;
     // nop
 
