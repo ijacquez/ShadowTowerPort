@@ -3,6 +3,7 @@
 #include "ST_LevelStreaming.h"
 #include "ST_PlayerMovementContributions.h"
 #include "ST_ActiveCollisionRecord.h"
+#include "ST_PlayerState.h"
 
 void ST_UpdateActiveCollisionRecords(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
@@ -383,13 +384,13 @@ L_8004E51C:
     ctx->r4 = ADD32(ctx->r19, 0);
     after_10:
     // lw          $v1, 0x51($s0)
-    ctx->r3 = MEM_W(0X51, ctx->r16);
+    ctx->r3 = MEM_W(ST_ACTIVE_COLLISION_RECORD_POSITION_X - ST_ACTIVE_COLLISION_RECORD_UPDATE_CURSOR, ctx->r16);
     // lw          $v0, 0x248($s5)
     ctx->r2 = MEM_W(0X248, ctx->r21);
     // lw          $a1, 0x55($s0)
-    ctx->r5 = MEM_W(0X55, ctx->r16);
+    ctx->r5 = MEM_W(ST_ACTIVE_COLLISION_RECORD_POSITION_Y - ST_ACTIVE_COLLISION_RECORD_UPDATE_CURSOR, ctx->r16);
     // lw          $a0, 0x59($s0)
-    ctx->r4 = MEM_W(0X59, ctx->r16);
+    ctx->r4 = MEM_W(ST_ACTIVE_COLLISION_RECORD_POSITION_Z - ST_ACTIVE_COLLISION_RECORD_UPDATE_CURSOR, ctx->r16);
     // subu        $s2, $v1, $v0
     ctx->r18 = SUB32(ctx->r3, ctx->r2);
     // lw          $v1, 0x24C($s5)
@@ -541,11 +542,11 @@ L_8004E5E8:
     MEM_H(0X35, ctx->r16) = ctx->r2;
 L_8004E624:
     // sh          $zero, 0x7D($s0)
-    MEM_H(0X7D, ctx->r16) = 0;
+    MEM_H(ST_ACTIVE_COLLISION_RECORD_DISPLACEMENT_Z - ST_ACTIVE_COLLISION_RECORD_UPDATE_CURSOR, ctx->r16) = 0;
     // sh          $zero, 0x7B($s0)
-    MEM_H(0X7B, ctx->r16) = 0;
+    MEM_H(ST_ACTIVE_COLLISION_RECORD_DISPLACEMENT_Y - ST_ACTIVE_COLLISION_RECORD_UPDATE_CURSOR, ctx->r16) = 0;
     // sh          $zero, 0x79($s0)
-    MEM_H(0X79, ctx->r16) = 0;
+    MEM_H(ST_ACTIVE_COLLISION_RECORD_DISPLACEMENT_X - ST_ACTIVE_COLLISION_RECORD_UPDATE_CURSOR, ctx->r16) = 0;
     // lw          $v1, 0x6150($s4)
     ctx->r3 = MEM_W(0, ST_ACTIVE_RECORD_UPDATE_COUNTER_ADDRESS);
     // lbu         $v0, -0x1C($s0)
@@ -707,7 +708,7 @@ L_8004E6A0:
     MEM_B(-0X5, ctx->r16) = ctx->r2;
 L_8004E710:
     // lw          $v0, 0x79($s0)
-    ctx->r2 = MEM_W(0X79, ctx->r16);
+    ctx->r2 = MEM_W(ST_ACTIVE_COLLISION_RECORD_DISPLACEMENT_X - ST_ACTIVE_COLLISION_RECORD_UPDATE_CURSOR, ctx->r16);
     // nop
 
     // bne         $v0, $zero, L_8004E740
@@ -719,7 +720,7 @@ L_8004E710:
     // sb          $zero, 0x16($s0)
     MEM_B(0X16, ctx->r16) = 0;
     // lh          $v0, 0x7D($s0)
-    ctx->r2 = MEM_HS(0X7D, ctx->r16);
+    ctx->r2 = MEM_HS(ST_ACTIVE_COLLISION_RECORD_DISPLACEMENT_Z - ST_ACTIVE_COLLISION_RECORD_UPDATE_CURSOR, ctx->r16);
     // nop
 
     // bne         $v0, $zero, L_8004E740
@@ -731,7 +732,7 @@ L_8004E710:
     // nop
 
     // lh          $v0, -0xD($s0)
-    ctx->r2 = MEM_HS(-0XD, ctx->r16);
+    ctx->r2 = MEM_HS(ST_ACTIVE_COLLISION_RECORD_COLLISION_Y_INPUT - ST_ACTIVE_COLLISION_RECORD_UPDATE_CURSOR, ctx->r16);
     // nop
 
     // beq         $v0, $zero, L_8004E78C
@@ -746,15 +747,15 @@ L_8004E740:
     // jal         0x8004C1B4
     // addu        $a0, $s3, $zero
     ctx->r4 = ADD32(ctx->r19, 0);
-    sub_8004C1B4(rdram, ctx);
+    ST_ResolveActiveCollisionRecordDisplacement(rdram, ctx);
     goto after_17;
     // addu        $a0, $s3, $zero
     ctx->r4 = ADD32(ctx->r19, 0);
     after_17:
     // lw          $v0, 0x2C($s5)
-    ctx->r2 = MEM_W(0X2C, ctx->r21);
+    ctx->r2 = MEM_W(ST_PLAYER_EFFECT_FLAGS, ctx->r21);
     // lui         $v1, 0x4
-    ctx->r3 = S32(0X4 << 16);
+    ctx->r3 = ST_PLAYER_EFFECT_BLOCK_ACTIVE_RECORD_POSITION_UPDATE;
     // and         $v0, $v0, $v1
     ctx->r2 = ctx->r2 & ctx->r3;
     // bne         $v0, $zero, L_8004E78C
@@ -766,29 +767,29 @@ L_8004E740:
     // nop
 
     // lh          $v1, 0x79($s0)
-    ctx->r3 = MEM_HS(0X79, ctx->r16);
+    ctx->r3 = MEM_HS(ST_ACTIVE_COLLISION_RECORD_DISPLACEMENT_X - ST_ACTIVE_COLLISION_RECORD_UPDATE_CURSOR, ctx->r16);
     // lw          $v0, 0x51($s0)
-    ctx->r2 = MEM_W(0X51, ctx->r16);
+    ctx->r2 = MEM_W(ST_ACTIVE_COLLISION_RECORD_POSITION_X - ST_ACTIVE_COLLISION_RECORD_UPDATE_CURSOR, ctx->r16);
     // lh          $a0, 0x7B($s0)
-    ctx->r4 = MEM_HS(0X7B, ctx->r16);
+    ctx->r4 = MEM_HS(ST_ACTIVE_COLLISION_RECORD_DISPLACEMENT_Y - ST_ACTIVE_COLLISION_RECORD_UPDATE_CURSOR, ctx->r16);
     // lh          $a1, 0x7D($s0)
-    ctx->r5 = MEM_HS(0X7D, ctx->r16);
+    ctx->r5 = MEM_HS(ST_ACTIVE_COLLISION_RECORD_DISPLACEMENT_Z - ST_ACTIVE_COLLISION_RECORD_UPDATE_CURSOR, ctx->r16);
     // addu        $v0, $v0, $v1
     ctx->r2 = ADD32(ctx->r2, ctx->r3);
     // sw          $v0, 0x51($s0)
-    MEM_W(0X51, ctx->r16) = ctx->r2;
+    MEM_W(ST_ACTIVE_COLLISION_RECORD_POSITION_X - ST_ACTIVE_COLLISION_RECORD_UPDATE_CURSOR, ctx->r16) = ctx->r2;
     // lw          $v0, 0x55($s0)
-    ctx->r2 = MEM_W(0X55, ctx->r16);
+    ctx->r2 = MEM_W(ST_ACTIVE_COLLISION_RECORD_POSITION_Y - ST_ACTIVE_COLLISION_RECORD_UPDATE_CURSOR, ctx->r16);
     // lw          $v1, 0x59($s0)
-    ctx->r3 = MEM_W(0X59, ctx->r16);
+    ctx->r3 = MEM_W(ST_ACTIVE_COLLISION_RECORD_POSITION_Z - ST_ACTIVE_COLLISION_RECORD_UPDATE_CURSOR, ctx->r16);
     // addu        $v0, $v0, $a0
     ctx->r2 = ADD32(ctx->r2, ctx->r4);
     // addu        $v1, $v1, $a1
     ctx->r3 = ADD32(ctx->r3, ctx->r5);
     // sw          $v0, 0x55($s0)
-    MEM_W(0X55, ctx->r16) = ctx->r2;
+    MEM_W(ST_ACTIVE_COLLISION_RECORD_POSITION_Y - ST_ACTIVE_COLLISION_RECORD_UPDATE_CURSOR, ctx->r16) = ctx->r2;
     // sw          $v1, 0x59($s0)
-    MEM_W(0X59, ctx->r16) = ctx->r3;
+    MEM_W(ST_ACTIVE_COLLISION_RECORD_POSITION_Z - ST_ACTIVE_COLLISION_RECORD_UPDATE_CURSOR, ctx->r16) = ctx->r3;
 L_8004E78C:
     // lw          $v0, 0x614C($s4)
     ctx->r2 = MEM_W(0, ST_ACTIVE_RECORD_PROCESSED_COUNTER_ADDRESS);

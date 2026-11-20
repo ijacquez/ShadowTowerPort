@@ -1,7 +1,8 @@
 #include "recomp.h"
 #include "disable_warnings.h"
+#include "ST_ActiveCollisionRecord.h"
 
-void sub_8004C1B4(uint8_t* rdram, recomp_context* ctx) {
+void ST_ResolveActiveCollisionRecordDisplacement(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
     unsigned int rounding_mode = DEFAULT_ROUNDING_MODE;
     int c1cs = 0; 
@@ -30,7 +31,7 @@ void sub_8004C1B4(uint8_t* rdram, recomp_context* ctx) {
     // sw          $s0, 0x38($sp)
     MEM_W(0X38, ctx->r29) = ctx->r16;
     // lh          $v0, 0x9C($s2)
-    ctx->r2 = MEM_HS(0X9C, ctx->r18);
+    ctx->r2 = MEM_HS(ST_ACTIVE_COLLISION_RECORD_DISPLACEMENT_X, ctx->r18);
     // nop
 
     // mult        $v0, $v0
@@ -38,7 +39,7 @@ void sub_8004C1B4(uint8_t* rdram, recomp_context* ctx) {
     // mflo        $v1
     ctx->r3 = lo;
     // lh          $v0, 0xA0($s2)
-    ctx->r2 = MEM_HS(0XA0, ctx->r18);
+    ctx->r2 = MEM_HS(ST_ACTIVE_COLLISION_RECORD_DISPLACEMENT_Z, ctx->r18);
     // nop
 
     // mult        $v0, $v0
@@ -76,9 +77,9 @@ void sub_8004C1B4(uint8_t* rdram, recomp_context* ctx) {
     ctx->r23 = ADD32(ctx->r3, ctx->r2);
     after_0:
     // lh          $a0, 0xA0($s2)
-    ctx->r4 = MEM_HS(0XA0, ctx->r18);
+    ctx->r4 = MEM_HS(ST_ACTIVE_COLLISION_RECORD_DISPLACEMENT_Z, ctx->r18);
     // lh          $a1, 0x9C($s2)
-    ctx->r5 = MEM_HS(0X9C, ctx->r18);
+    ctx->r5 = MEM_HS(ST_ACTIVE_COLLISION_RECORD_DISPLACEMENT_X, ctx->r18);
     // jal         0x80076EA4
     // addu        $s6, $v0, $zero
     ctx->r22 = ADD32(ctx->r2, 0);
@@ -178,19 +179,19 @@ L_8004C2E8:
     // nop
 
     // sh          $v0, 0x9C($s2)
-    MEM_H(0X9C, ctx->r18) = ctx->r2;
+    MEM_H(ST_ACTIVE_COLLISION_RECORD_DISPLACEMENT_X, ctx->r18) = ctx->r2;
     // lhu         $v0, 0x12($sp)
     ctx->r2 = MEM_HU(0X12, ctx->r29);
     // nop
 
     // sh          $v0, 0x9E($s2)
-    MEM_H(0X9E, ctx->r18) = ctx->r2;
+    MEM_H(ST_ACTIVE_COLLISION_RECORD_DISPLACEMENT_Y, ctx->r18) = ctx->r2;
     // lhu         $v0, 0x14($sp)
     ctx->r2 = MEM_HU(0X14, ctx->r29);
     // nop
 
     // sh          $v0, 0xA0($s2)
-    MEM_H(0XA0, ctx->r18) = ctx->r2;
+    MEM_H(ST_ACTIVE_COLLISION_RECORD_DISPLACEMENT_Z, ctx->r18) = ctx->r2;
     // lui         $v0, 0x801B
     ctx->r2 = S32(0X801B << 16);
     // addiu       $s0, $v0, 0x5948
@@ -212,9 +213,9 @@ L_8004C2E8:
     // swr         $v1, 0x18($s0)
     do_swr(rdram, 0X18, ctx->r16, ctx->r3);
     // lh          $a0, 0xA0($s2)
-    ctx->r4 = MEM_HS(0XA0, ctx->r18);
+    ctx->r4 = MEM_HS(ST_ACTIVE_COLLISION_RECORD_DISPLACEMENT_Z, ctx->r18);
     // lh          $a1, 0x9C($s2)
-    ctx->r5 = MEM_HS(0X9C, ctx->r18);
+    ctx->r5 = MEM_HS(ST_ACTIVE_COLLISION_RECORD_DISPLACEMENT_X, ctx->r18);
     // jal         0x80076EA4
     // nop
 
@@ -1037,19 +1038,19 @@ L_8004C7B0:
     // nop
 
     // sh          $v0, 0x9C($s2)
-    MEM_H(0X9C, ctx->r18) = ctx->r2;
+    MEM_H(ST_ACTIVE_COLLISION_RECORD_DISPLACEMENT_X, ctx->r18) = ctx->r2;
     // lhu         $v0, 0x12($sp)
     ctx->r2 = MEM_HU(0X12, ctx->r29);
     // nop
 
     // sh          $v0, 0x9E($s2)
-    MEM_H(0X9E, ctx->r18) = ctx->r2;
+    MEM_H(ST_ACTIVE_COLLISION_RECORD_DISPLACEMENT_Y, ctx->r18) = ctx->r2;
     // lhu         $v0, 0x14($sp)
     ctx->r2 = MEM_HU(0X14, ctx->r29);
     // nop
 
     // sh          $v0, 0xA0($s2)
-    MEM_H(0XA0, ctx->r18) = ctx->r2;
+    MEM_H(ST_ACTIVE_COLLISION_RECORD_DISPLACEMENT_Z, ctx->r18) = ctx->r2;
     // lw          $ra, 0x5C($sp)
     ctx->r31 = MEM_W(0X5C, ctx->r29);
     // lw          $fp, 0x58($sp)

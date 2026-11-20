@@ -1380,7 +1380,7 @@
     <ClCompile Include="scr\st\sub_8004BE80.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_8004C1B4.c">
+    <ClCompile Include="scr\st\ST_ResolveActiveCollisionRecordDisplacement.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\ST_SetCurrentActiveCollisionRecord.c">

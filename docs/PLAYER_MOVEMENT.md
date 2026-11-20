@@ -336,6 +336,26 @@ least 4096, or the step is negative and the accumulator is at most zero.
 Afterward, if `ST_ACTIVE_COLLISION_RECORD_CALLBACK_DATA` is nonzero, it calls
 another stage-zero routine and sets the control byte to `0xF0`.
 
+One routine called by that stage-zero code,
+`ST_STAGE_ZERO_SET_ACTIVE_RECORD_HORIZONTAL_DISPLACEMENT`, writes the current
+record's `ST_ACTIVE_COLLISION_RECORD_DISPLACEMENT_X` and `_Z`. For its signed
+angle and magnitude arguments, it multiplies the magnitude by `rcos(angle)`
+and `rsin(angle)`, respectively; each low 32-bit product is arithmetically
+shifted right by 12 and stored as a halfword.
+
+Before active-record callbacks, `ST_UpdateActiveCollisionRecords` clears the
+record's three displacement halfwords. On the state-1 path after the update
+callback, if any displacement is nonzero or the signed
+`ST_ACTIVE_COLLISION_RECORD_COLLISION_Y_INPUT` is nonzero, it calls
+[ST_ResolveActiveCollisionRecordDisplacement](../scr/st/ST_ResolveActiveCollisionRecordDisplacement.c).
+That routine uses `ST_RunCollisionQuery` and can change the displacement.
+Unless `ST_PLAYER_EFFECT_BLOCK_ACTIVE_RECORD_POSITION_UPDATE` is set, the
+update then adds each signed displacement halfword to its corresponding
+record position with 32-bit wrapping. These record positions are subsequently
+used by `ST_QueryActiveCollisionRecords` when checking player movement.
+**OPEN:** the full collision-response branches and the complete set of
+displacement writers.
+
 After this processing, if the signed 16-bit movement magnitude is nonzero and
 `ST_PLAYER_DIRECTIONAL_MOVE_DISABLED` (`0x21E`) is zero, `ST_PlayerUpdateMovement` calls
 [ST_ApplyDirectionalMovementWithCollision](../scr/st/ST_ApplyDirectionalMovementWithCollision.c)
