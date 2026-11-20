@@ -431,6 +431,34 @@ it leaves working X/Z at zero and continues to the vertical response. The
 resolver allows at most three nonzero-result correction passes before that
 vertical response. Other query-result branches remain **OPEN**.
 
+For the vertical response, the resolver sets `D` to
+`ST_COLLISION_QUERY_PROPOSED_Y_RESULT` minus the unsigned
+`ST_ACTIVE_COLLISION_RECORD_VERTICAL_EXTENT` and stores the wrapped 32-bit
+result in `ST_ACTIVE_COLLISION_RECORD_VERTICAL_DIFFERENCE`. Its initial
+working Y is the original Y displacement when
+`ST_ACTIVE_COLLISION_RECORD_VERTICAL_MODE` is 2; otherwise it is
+`ST_ACTIVE_COLLISION_RECORD_COLLISION_Y_INPUT`. If the query result contains
+`ST_COLLISION_RESULT_VERTICAL_THRESHOLD`, it first adds `D` to working Y and
+stores the low halfword. It then applies these rules:
+
+- Modes 1 and 2 clear working Y and leave the Y input unchanged.
+- For positive `D` in modes other than 4, if `D` exceeds the unsigned
+  vertical extent and the mode is not 8, clear working X/Z. Otherwise, if
+  the signed Y input is positive and working Y exceeds `D`, set working Y
+  to the low halfword of `D` and clear the Y input. If the Y input is zero
+  and `D` is less than the signed `ST_ACTIVE_COLLISION_CLASS_VERTICAL_STEP`,
+  add `D` to working Y and clear the Y input. In the remaining cases add the
+  class vertical step to the Y input, storing the low halfword.
+- In the remaining modes and values of `D`, a nonnegative `D` clears working
+  Y and the Y input. For negative `D`, if wrapped `-D` is less than half the
+  unsigned vertical extent, add `D` to working Y and clear the Y input;
+  otherwise clear working X/Z.
+
+Working components are halfwords, comparisons are signed unless specified,
+and 32-bit additions and subtractions wrap. The final working components are
+written back to the active-record displacement vector. The in-game meaning of
+the vertical modes and class step remains **OPEN**.
+
 After this processing, if the signed 16-bit movement magnitude is nonzero and
 `ST_PLAYER_DIRECTIONAL_MOVE_DISABLED` (`0x21E`) is zero, `ST_PlayerUpdateMovement` calls
 [ST_ApplyDirectionalMovementWithCollision](../scr/st/ST_ApplyDirectionalMovementWithCollision.c)

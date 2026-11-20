@@ -1,5 +1,6 @@
 #include "recomp.h"
 #include "st/ST_ActiveCollisionRecord.h"
+#include "st/ST_ActiveCollisionClass.h"
 #include "st/ST_CollisionQuery.h"
 #include <cmath>
 #include <cstdlib>
@@ -9,6 +10,7 @@
 uint8_t rdram[2 * 1024 * 1024];
 static int queryCount;
 static uint32_t queryResult;
+static uint32_t proposedYResult;
 
 // This resolver uses the paired operations only for aligned words.
 uint32_t do_lwl(uint8_t*, uint32_t, uint32_t offset, uint32_t base) {
@@ -38,6 +40,7 @@ void VectorNormalS(uint8_t*, recomp_context*) {}
 void ST_RunCollisionQuery(uint8_t* memory, recomp_context* ctx) {
     ++queryCount;
     MEM_W(ST_COLLISION_QUERY_RESULT_FLAGS, ST_COLLISION_QUERY_BASE_ADDRESS) = queryResult;
+    MEM_W(ST_COLLISION_QUERY_PROPOSED_Y_RESULT, ST_COLLISION_QUERY_BASE_ADDRESS) = proposedYResult;
     MEM_W(ST_COLLISION_QUERY_FIRST_NORMAL_RESULT, ST_COLLISION_QUERY_BASE_ADDRESS) = 0x100;
     MEM_H(ST_COLLISION_QUERY_FIRST_NORMAL_X, ST_COLLISION_QUERY_BASE_ADDRESS) = 0x1000;
     MEM_W(ST_COLLISION_QUERY_SECOND_NORMAL_RESULT, ST_COLLISION_QUERY_BASE_ADDRESS) = 0x100;
@@ -61,6 +64,7 @@ int main() {
         std::memset(rdram, 0, sizeof rdram);
         queryCount = 0;
         queryResult = test.result;
+        proposedYResult = 0;
         MEM_H(ST_ACTIVE_COLLISION_RECORD_DISPLACEMENT_X, record) = 100;
         MEM_H(ST_ACTIVE_COLLISION_RECORD_HORIZONTAL_EXTENT, record) = 0x100;
         MEM_B(0x0E, record) = 1;
@@ -76,4 +80,44 @@ int main() {
         }
     }
     std::puts("3 repeated collision response cases passed");
+
+    struct VerticalCase {
+        uint8_t mode;
+        int16_t input, step, expectedX, expectedY, expectedInput;
+        int32_t difference;
+        uint32_t result;
+    };
+    const VerticalCase verticalCases[] = {
+        {1, 5, 3, 100, 0, 5, 20, 0},
+        {0, 0, 30, 100, 20, 0, 20, 0},
+        {0, 5, 3, 100, 5, 8, 20, 0},
+        {0, 5, 3, 0, 5, 5, 101, 0},
+        {8, 5, 3, 100, 5, 8, 101, 0},
+        {4, 5, 3, 100, 0, 0, 20, 0},
+        {0, 5, 3, 100, -15, 0, -20, 0},
+        {0, 5, 3, 0, 5, 5, -50, 0},
+        {0, 0, 3, 100, 20, 3, 20, ST_COLLISION_RESULT_VERTICAL_THRESHOLD},
+    };
+    for (const auto& test : verticalCases) {
+        std::memset(rdram, 0, sizeof rdram);
+        queryCount = 0;
+        queryResult = test.result;
+        proposedYResult = 100 + test.difference;
+        MEM_H(ST_ACTIVE_COLLISION_RECORD_DISPLACEMENT_X, record) = 100;
+        MEM_H(ST_ACTIVE_COLLISION_RECORD_VERTICAL_EXTENT, record) = 100;
+        MEM_H(ST_ACTIVE_COLLISION_RECORD_COLLISION_Y_INPUT, record) = test.input;
+        MEM_B(ST_ACTIVE_COLLISION_RECORD_VERTICAL_MODE, record) = test.mode;
+        MEM_H(ST_ACTIVE_COLLISION_CLASS_VERTICAL_STEP, ST_ACTIVE_COLLISION_CLASS_TABLE_ADDRESS) = test.step;
+        recomp_context ctx{};
+        ctx.r4 = record;
+        ctx.r29 = 0x80100000;
+        ST_ResolveActiveCollisionRecordDisplacement(rdram, &ctx);
+        if (MEM_HS(ST_ACTIVE_COLLISION_RECORD_DISPLACEMENT_X, record) != test.expectedX ||
+            MEM_HS(ST_ACTIVE_COLLISION_RECORD_DISPLACEMENT_Y, record) != test.expectedY ||
+            MEM_HS(ST_ACTIVE_COLLISION_RECORD_COLLISION_Y_INPUT, record) != test.expectedInput) {
+            std::fprintf(stderr, "vertical collision response case %zu failed\n", &test - verticalCases);
+            return 1;
+        }
+    }
+    std::puts("9 vertical collision response cases passed");
 }
