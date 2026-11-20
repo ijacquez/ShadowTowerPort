@@ -127,7 +127,8 @@ not `-1`, `ST_UpdatePlayerCountersAndEffects` clears the movement and turn
 limits via `ST_ClearPlayerMovementLimits`, and clears player movement
 halfwords `ST_PLAYER_MOVE_X`, `ST_PLAYER_MOVE_Y`, and `ST_PLAYER_MOVE_Z`.
 It also clears all three halfwords in
-each contribution set at `0x801C74B4` and `0x801C0298`, as well as the
+the vectors beginning at `ST_PLAYER_QUARTER_CONTRIBUTION_X_ADDRESS` and
+`ST_PLAYER_HALF_CONTRIBUTION_X_ADDRESS`, as well as the
 three halfwords at `0x801BA116`. If the word containing the counter and
 target is then zero, it clears bits `0x08` and `0x10` in player word `0x2C`.
 
