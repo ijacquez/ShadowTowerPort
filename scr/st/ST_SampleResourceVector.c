@@ -1,5 +1,6 @@
 #include "recomp.h"
 #include "disable_warnings.h"
+#include "ST_ResourceVectorFormat.h"
 
 void ST_SampleResourceVector(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
@@ -61,7 +62,7 @@ void ST_SampleResourceVector(uint8_t* rdram, recomp_context* ctx) {
     MEM_H(0X0, ctx->r18) = 0;
 L_80033E88:
     // lw          $v0, 0x8($s0)
-    ctx->r2 = MEM_W(0X8, ctx->r16);
+    ctx->r2 = MEM_W(ST_VECTOR_RESOURCE_MODEL_TABLE_OFFSET, ctx->r16);
     // nop
 
     // addu        $a2, $s0, $v0
@@ -88,7 +89,7 @@ L_80033EA0:
     // addu        $v0, $v0, $a2
     ctx->r2 = ADD32(ctx->r2, ctx->r6);
     // lw          $v0, 0xC($v0)
-    ctx->r2 = MEM_W(0XC, ctx->r2);
+    ctx->r2 = MEM_W(ST_VECTOR_MODEL_DATA_OFFSET, ctx->r2);
     // nop
 
     // addiu       $v0, $v0, 0xC
@@ -121,7 +122,7 @@ L_80033EA0:
     do_swr(rdram, 0X4, ctx->r18, ctx->r4);
 L_80033EF0:
     // lhu         $v0, 0x4($s0)
-    ctx->r2 = MEM_HU(0X4, ctx->r16);
+    ctx->r2 = MEM_HU(ST_VECTOR_RESOURCE_SEQUENCE_COUNT, ctx->r16);
     // nop
 
     // bne         $v0, $zero, L_80033F08
@@ -156,17 +157,17 @@ L_80033F08:
     // jal         0x80033CFC
     // addu        $a2, $s3, $zero
     ctx->r6 = ADD32(ctx->r19, 0);
-    sub_80033CFC(rdram, ctx);
+    ST_SelectResourceSequenceInterval(rdram, ctx);
     goto after_1;
     // addu        $a2, $s3, $zero
     ctx->r6 = ADD32(ctx->r19, 0);
     after_1:
     // lw          $a0, 0xC($s0)
-    ctx->r4 = MEM_W(0XC, ctx->r16);
+    ctx->r4 = MEM_W(ST_VECTOR_RESOURCE_FRAME_OFFSETS, ctx->r16);
     // lbu         $v1, 0x3($v0)
-    ctx->r3 = MEM_BU(0X3, ctx->r2);
+    ctx->r3 = MEM_BU(ST_VECTOR_INTERVAL_FIRST_FRAME, ctx->r2);
     // lbu         $v0, 0x2($v0)
-    ctx->r2 = MEM_BU(0X2, ctx->r2);
+    ctx->r2 = MEM_BU(ST_VECTOR_INTERVAL_SECOND_FRAME, ctx->r2);
     // addu        $a0, $s0, $a0
     ctx->r4 = ADD32(ctx->r16, ctx->r4);
     // sll         $v1, $v1, 2

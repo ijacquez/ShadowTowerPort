@@ -260,7 +260,7 @@ static FuncEntry section_1_text_funcs[] = {
     { .func = sub_80033A48, .offset = 0x00023a48 },
     { .func = sub_80033A84, .offset = 0x00023a84 },
     { .func = sub_80033B00, .offset = 0x00023b00 },
-    { .func = sub_80033CFC, .offset = 0x00023cfc },
+    { .func = ST_SelectResourceSequenceInterval, .offset = 0x00023cfc },
     { .func = sub_80033DB8, .offset = 0x00023db8 },
     { .func = ST_SampleResourceVector, .offset = 0x00023e30 },
     { .func = sub_800340C4, .offset = 0x000240c4 },

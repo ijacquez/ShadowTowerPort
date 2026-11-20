@@ -514,7 +514,7 @@ SRCS:= scr/st/AddPrim.c \
 	scr/st/sub_80033A48.c \
 	scr/st/sub_80033A84.c \
 	scr/st/sub_80033B00.c \
-	scr/st/sub_80033CFC.c \
+	scr/st/ST_SelectResourceSequenceInterval.c \
 	scr/st/sub_80033DB8.c \
 	scr/st/ST_SampleResourceVector.c \
 	scr/st/sub_800340C4.c \
@@ -1116,6 +1116,8 @@ scr/st/ST_PlayerUpdateMovement.o scr/st/ST_PlayerUpdateTurning.o scr/st/ST_Playe
 .PHONY: test-player-movement
 test-player-movement:
 	mkdir -p scratchpad
+	$(CXX) $(CFLAGS) -std=c++17 tests/resource_sequence_interval_test.cpp scr/st/ST_SelectResourceSequenceInterval.c -o scratchpad/resource-sequence-interval-test
+	scratchpad/resource-sequence-interval-test
 	$(CXX) $(CFLAGS) -std=c++17 tests/active_record_offset_test.cpp scr/st/ST_ComputeActiveCollisionRecordOffset.c -o scratchpad/active-record-offset-test
 	scratchpad/active-record-offset-test
 	$(CXX) $(CFLAGS) -std=c++17 tests/collision_distance_bounds_test.cpp scr/st/ST_QueryHorizontalDistanceWithVerticalBounds.c -o scratchpad/collision-distance-bounds-test

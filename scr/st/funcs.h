@@ -250,7 +250,7 @@ void sub_800339C4(uint8_t* rdram, recomp_context* ctx);
 void sub_80033A48(uint8_t* rdram, recomp_context* ctx);
 void sub_80033A84(uint8_t* rdram, recomp_context* ctx);
 void sub_80033B00(uint8_t* rdram, recomp_context* ctx);
-void sub_80033CFC(uint8_t* rdram, recomp_context* ctx);
+void ST_SelectResourceSequenceInterval(uint8_t* rdram, recomp_context* ctx);
 void sub_80033DB8(uint8_t* rdram, recomp_context* ctx);
 void ST_SampleResourceVector(uint8_t* rdram, recomp_context* ctx);
 void sub_800340C4(uint8_t* rdram, recomp_context* ctx);

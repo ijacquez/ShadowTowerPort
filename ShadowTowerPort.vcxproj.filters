@@ -2013,7 +2013,7 @@
     <ClCompile Include="scr\st\sub_80033B00.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_80033CFC.c">
+    <ClCompile Include="scr\st\ST_SelectResourceSequenceInterval.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\sub_80033DB8.c">

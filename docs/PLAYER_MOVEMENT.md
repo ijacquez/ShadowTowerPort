@@ -651,8 +651,9 @@ the matrix with [ST_BuildCompositeRotationMatrix](../scr/st/ST_BuildCompositeRot
 and passes it and the vector to `ApplyMatrix`, which writes three words. The
 matrix builder constructs X, Y, and Z matrices with the named axis helpers,
 uses `MulMatrix` to combine X and Z, then `MulMatrix2` to combine Y with that
-result. These matrix operations use the GTE. **OPEN:** the full resource
-vector format and in-game purpose of the sampled vector.
+result. These matrix operations use the GTE. The sampler's resource fields
+and interpolation are described in [FILE_FORMATS.md](FILE_FORMATS.md).
+**OPEN:** the full resource vector format and in-game purpose of the sampled vector.
 
 The distance helper first rejects either wrapped signed X/Z difference if it
 is outside `[-radius, radius]`. Unless query Y equals the sentinel `0xFFFF`,

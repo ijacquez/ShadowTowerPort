@@ -236,7 +236,7 @@ L_80034494:
     // jal         0x80033CFC
     // sw          $v0, 0x10($sp)
     MEM_W(0X10, ctx->r29) = ctx->r2;
-    sub_80033CFC(rdram, ctx);
+    ST_SelectResourceSequenceInterval(rdram, ctx);
     goto after_8;
     // sw          $v0, 0x10($sp)
     MEM_W(0X10, ctx->r29) = ctx->r2;

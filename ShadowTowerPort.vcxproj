@@ -657,7 +657,7 @@
     <ClCompile Include="scr\st\sub_80033A48.c" />
     <ClCompile Include="scr\st\sub_80033A84.c" />
     <ClCompile Include="scr\st\sub_80033B00.c" />
-    <ClCompile Include="scr\st\sub_80033CFC.c" />
+    <ClCompile Include="scr\st\ST_SelectResourceSequenceInterval.c" />
     <ClCompile Include="scr\st\sub_80033DB8.c" />
     <ClCompile Include="scr\st\ST_SampleResourceVector.c" />
     <ClCompile Include="scr\st\sub_800340C4.c" />

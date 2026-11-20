@@ -1,7 +1,8 @@
 #include "recomp.h"
 #include "disable_warnings.h"
+#include "ST_ResourceVectorFormat.h"
 
-void sub_80033CFC(uint8_t* rdram, recomp_context* ctx) {
+void ST_SelectResourceSequenceInterval(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
     unsigned int rounding_mode = DEFAULT_ROUNDING_MODE;
     int c1cs = 0; 
@@ -12,7 +13,7 @@ void sub_80033CFC(uint8_t* rdram, recomp_context* ctx) {
     // addu        $t0, $t2, $zero
     ctx->r8 = ADD32(ctx->r10, 0);
     // lw          $v0, 0x10($a0)
-    ctx->r2 = MEM_W(0X10, ctx->r4);
+    ctx->r2 = MEM_W(ST_VECTOR_RESOURCE_SEQUENCE_OFFSETS, ctx->r4);
     // sll         $a1, $a1, 2
     ctx->r5 = S32(ctx->r5) << 2;
     // addu        $v0, $a0, $v0
@@ -26,9 +27,9 @@ void sub_80033CFC(uint8_t* rdram, recomp_context* ctx) {
     // addu        $v0, $a0, $v0
     ctx->r2 = ADD32(ctx->r4, ctx->r2);
     // addiu       $t1, $v0, 0x4
-    ctx->r9 = ADD32(ctx->r2, 0X4);
+    ctx->r9 = ADD32(ctx->r2, ST_VECTOR_SEQUENCE_INTERVAL_OFFSETS);
     // lbu         $a1, 0x0($v0)
-    ctx->r5 = MEM_BU(0X0, ctx->r2);
+    ctx->r5 = MEM_BU(ST_VECTOR_SEQUENCE_INTERVAL_COUNT, ctx->r2);
     // addiu       $v0, $zero, -0x1
     ctx->r2 = ADD32(0, -0X1);
     // addiu       $a1, $a1, -0x1
@@ -51,7 +52,7 @@ L_80033D40:
     // addu        $t4, $a0, $v0
     ctx->r12 = ADD32(ctx->r4, ctx->r2);
     // lhu         $v1, 0x0($t4)
-    ctx->r3 = MEM_HU(0X0, ctx->r12);
+    ctx->r3 = MEM_HU(ST_VECTOR_INTERVAL_DURATION, ctx->r12);
     // nop
 
     // addu        $t0, $t0, $v1
