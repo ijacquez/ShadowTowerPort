@@ -86,6 +86,31 @@ int main() {
             return 1;
         }
     }
-    std::puts("4 GTE leading-zero, 6 transfer, and 3 normalization cases passed");
+    // The executable's inverse-root entry for a squared-length index of 64.
+    std::memset(rdram, 0, sizeof(rdram));
+    MEM_H(128, ST_NORMALIZATION_INVERSE_ROOT_TABLE_ADDRESS) = 0x0B50;
+    MEM_W(0, input) = 4096;
+    MEM_W(8, input) = 4096;
+    recomp_context diagonal{};
+    diagonal.r4 = input;
+    diagonal.r5 = output;
+    VectorNormalS(rdram, &diagonal);
+    if (MEM_HS(0, output) != 0x0B50 || MEM_HS(2, output) != 0 ||
+        MEM_HS(4, output) != 0x0B50) {
+        std::fputs("diagonal normalization failed\n", stderr);
+        return 1;
+    }
+
+    std::memset(rdram, 0, sizeof(rdram));
+    MEM_H(0, output) = MEM_H(2, output) = MEM_H(4, output) = 0xFFFF;
+    recomp_context zero{};
+    zero.r4 = input;
+    zero.r5 = output;
+    VectorNormalS(rdram, &zero);
+    if (MEM_HU(0, output) || MEM_HU(2, output) || MEM_HU(4, output)) {
+        std::fputs("zero normalization failed\n", stderr);
+        return 1;
+    }
+    std::puts("4 GTE leading-zero, 6 transfer, and 5 normalization cases passed");
     return 0;
 }

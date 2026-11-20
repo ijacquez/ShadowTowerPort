@@ -933,7 +933,10 @@ table halfword and original signed low input halfwords feed a GTE GPF command.
 Finally, it arithmetic-shifts each resulting MAC word right by
 `((31 - n) >> 1) & 31` and `VectorNormalS` stores the low halfword.
 The lookup and shifts are part of the calculation; the output is not an
-exact mathematical division by a real-valued length.
+exact mathematical division by a real-valued length. Three zero input
+halfwords produce three zero output halfwords. With the supplied executable's
+table, input `(0x1000, 0, 0x1000)` produces `(0xB50, 0, 0xB50)`:
+each nonzero output component is 0.70703125 in Q.12.
 
 On the first occurrence of any of the three correction cases, let `t` be
 `ratan2(normalZ, normalX)` for a normal-threshold result, or
