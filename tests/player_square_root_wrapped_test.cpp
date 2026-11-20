@@ -21,5 +21,18 @@ int main() {
         std::fputs("all-ones square root did not follow the game's zero branch\n", stderr);
         return 1;
     }
-    std::puts("2 wrapped square root cases passed");
+    MEM_H(-384, ST_SQUARE_ROOT_TABLE_ADDRESS) = 0x2000;
+    ctx.r4 = 0xFFFFFFFE;
+    SquareRoot0(rdram, &ctx);
+    if (ctx.r2 != 2 || ctx.cp2d[31] != 31) {
+        std::fputs("negative left-shift square root case failed\n", stderr);
+        return 1;
+    }
+    ctx.r4 = 0x80000000;
+    SquareRoot0(rdram, &ctx);
+    if (ctx.r2 != 0x10000 || ctx.cp2d[31] != 1) {
+        std::fputs("minimum signed square root case failed\n", stderr);
+        return 1;
+    }
+    std::puts("4 wrapped square root cases passed");
 }
