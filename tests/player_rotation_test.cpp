@@ -26,8 +26,10 @@ int main() {
         rotation.r4 = angles;
         rotation.r5 = matrix;
         RotMatrix(rdram, &rotation);
-        if (MEM_HS(2, matrix) != 0 || MEM_HS(14, matrix) != 0) {
-            std::fprintf(stderr, "yaw %d: nonzero horizontal Y coefficient\n", yaw);
+        if (MEM_HS(2, matrix) != 0 || MEM_HS(14, matrix) != 0 ||
+            MEM_HS(6, matrix) != 0 || MEM_HS(8, matrix) != 4096 ||
+            MEM_HS(10, matrix) != 0) {
+            std::fprintf(stderr, "yaw %d: unexpected Y matrix coefficients\n", yaw);
             return 1;
         }
 
@@ -40,11 +42,24 @@ int main() {
             gte.cp2d[0] = (uint16_t)1234 | ((uint32_t)(uint16_t)stackValues[i] << 16);
             gte.cp2d[1] = (uint16_t)-2345;
             gte_command(&gte, 0x4A486012);
+            if (S32(gte.cp2d[26]) != stackValues[i]) {
+                std::fprintf(stderr, "yaw %d: rotated Y mismatch\n", yaw);
+                return 1;
+            }
             if (i == 0) {
                 expectedX = gte.cp2d[25];
                 expectedZ = gte.cp2d[27];
             } else if (gte.cp2d[25] != expectedX || gte.cp2d[27] != expectedZ) {
                 std::fprintf(stderr, "yaw %d: stack Y changed horizontal output\n", yaw);
+                return 1;
+            }
+            gte.cp2d[9] = gte.cp2d[25];
+            gte.cp2d[10] = gte.cp2d[26];
+            gte.cp2d[11] = gte.cp2d[27];
+            gte_command(&gte, 0x4AA00428);
+            const int32_t y = stackValues[i];
+            if (gte.cp2d[26] != (uint32_t)(y * y)) {
+                std::fprintf(stderr, "yaw %d: squared Y mismatch\n", yaw);
                 return 1;
             }
         }

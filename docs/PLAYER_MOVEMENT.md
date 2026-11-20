@@ -153,8 +153,13 @@ every yaw. The [GTE MVMVA implementation](../PsyCross/src/gte/PsyX_GTE.cpp)
 multiplies those matrix entries by the vector's Y halfword, so that halfword
 contributes zero to rotated X and Z. The subsequent angle and magnitude use
 those X/Z results. This conclusion depends on that executable table entry
-still containing the stated value when the function runs; the prior stack
-writer and any effects outside those horizontal outputs remain **OPEN**.
+still containing the stated value when the function runs. The same matrix's
+Y row is `(0, 0x1000, 0)` (0.0, 1.0, 0.0), so the rotated Y is the signed
+input halfword. The routine writes that result as a word to stack offset
+`0x1C`, then squares it with the GTE and writes the square to stack offset
+`0x2C`. The GTE's Y result and flags can therefore depend on the input even
+though the horizontal results do not. **OPEN:** the final prior writer and
+any later uses of this GTE state have not been established.
 
 The rotation uses `-yaw` and writes GTE results back to the stack before
 computing another angle and magnitude. The later code updates each signed
