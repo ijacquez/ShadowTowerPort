@@ -51,7 +51,7 @@ At the start of every session, before any code change:
 2. This list will grow as the Project advances.
 3. Documentation goes into `docs/` and needs to be always correct and up to date.
 4. Use `scratchpad/` for your temporary work.
-5. Tools are to always be written in Java.
+5. Tools (in `tools/`) are to always be written in Java.
 6. You are allowed to modify the source tree (or duplicate then modify) if it
    facilitates the investigation.
 7. Tests/tools that need to run for a considerable amount of time is allowed.
