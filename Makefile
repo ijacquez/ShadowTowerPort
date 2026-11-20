@@ -563,7 +563,7 @@ SRCS:= scr/st/AddPrim.c \
 	scr/st/sub_8003BC10.c \
 	scr/st/sub_8003BC40.c \
 	scr/st/sub_8003BD14.c \
-	scr/st/sub_8003BDB0.c \
+	scr/st/ST_CheckHighDownwardMovement.c \
 	scr/st/ST_UpdatePlayerCollisionYFlags.c \
 	scr/st/sub_8003BEB4.c \
 	scr/st/ST_ResetPlayerViewAndVerticalMovement.c \

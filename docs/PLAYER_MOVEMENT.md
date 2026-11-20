@@ -539,9 +539,19 @@ fractional bits:
 | `0x240` (576) | 0.140625 |
 | `0x3E8` (1000) | 0.244140625 |
 | `0x400` (1024) | 0.25 |
+| `0x480` (1152) | 0.28125 |
 | `0x640` (1600) | 0.390625 |
 | `0x800` (2048) | 0.5 |
 | `0x1000` (4096) | 1.0 |
+
+Before the vertical update, [ST_CheckHighDownwardMovement](../scr/st/ST_CheckHighDownwardMovement.c)
+checks the current vertical movement and the signed collision-query word at
+offset `0x30`. If movement is at least `0x480` (0.28125 cells per update)
+and that query word is at least `0x640` (0.390625 cells), it calls
+[sub_8003BD14](../scr/st/sub_8003BD14.c) with zero and sets player byte
+`0x238` to 1. Unless player byte `0x218` is already 4, that helper sets it
+to 4, clears the player halfword at `0x02`, and performs additional state
+updates. **OPEN:** the game meanings of those state fields are not established.
 
 The level-rendering path establishes the Y direction. For a level,
 unrotated view, [ST_TransformLevelOriginsForView](../scr/st/ST_TransformLevelOriginsForView.c) subtracts player
@@ -585,14 +595,15 @@ See [ST_QueryLevelGeometry](../scr/st/ST_QueryLevelGeometry.c),
 and [ST_TestFourVertexCollisionRecords](../scr/st/ST_TestFourVertexCollisionRecords.c).
 
 For the particular case where the selected proposed-position record has
-rotated vector `(0, -4096, 0)`, and the intermediate arithmetic does not
+rotated vector `(0, -0x1000, 0)` (0.0, -1.0, 0.0), and the intermediate arithmetic does not
 wrap, `q` is the record's plane Y minus the proposed player Y. Its horizontal
 magnitude is zero, so the later angle-based adjustment is skipped. On that
-path, `q = 1600` places the proposed player position 1600 stored units above
+path, `q = 0x640` (0.390625 cells) places the proposed player position 1600 stored units above
 the plane, and `d` is the excess or shortfall from that separation. For
 example, the initial stage contains a plane 576 units below the initial
 player position; if it supplies the selected result with zero proposed Y
-movement, then `q = 576` and `d = -1024`. This conditional calculation does
+movement, then `q = 0x240` (0.140625 cells) and `d = -0x400` (-0.25 cells).
+This conditional calculation does
 not establish which collision record wins or the player's full height. See
 [STAGE_UNITS.md](STAGE_UNITS.md) for that plane's data.
 

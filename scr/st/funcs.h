@@ -299,7 +299,7 @@ void sub_800385B0(uint8_t* rdram, recomp_context* ctx);
 void sub_8003BC10(uint8_t* rdram, recomp_context* ctx);
 void sub_8003BC40(uint8_t* rdram, recomp_context* ctx);
 void sub_8003BD14(uint8_t* rdram, recomp_context* ctx);
-void sub_8003BDB0(uint8_t* rdram, recomp_context* ctx);
+void ST_CheckHighDownwardMovement(uint8_t* rdram, recomp_context* ctx);
 void ST_UpdatePlayerCollisionYFlags(uint8_t* rdram, recomp_context* ctx);
 void sub_8003BEB4(uint8_t* rdram, recomp_context* ctx);
 void ST_ResetPlayerViewAndVerticalMovement(uint8_t* rdram, recomp_context* ctx);

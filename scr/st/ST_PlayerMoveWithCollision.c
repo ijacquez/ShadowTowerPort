@@ -634,7 +634,7 @@ L_800419E4:
     // jal         0x8003BDB0
     // nop
 
-    sub_8003BDB0(rdram, ctx);
+    ST_CheckHighDownwardMovement(rdram, ctx);
     goto after_11;
     // nop
 

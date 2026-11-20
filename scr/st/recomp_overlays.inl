@@ -309,7 +309,7 @@ static FuncEntry section_1_text_funcs[] = {
     { .func = sub_8003BC10, .offset = 0x0002bc10 },
     { .func = sub_8003BC40, .offset = 0x0002bc40 },
     { .func = sub_8003BD14, .offset = 0x0002bd14 },
-    { .func = sub_8003BDB0, .offset = 0x0002bdb0 },
+    { .func = ST_CheckHighDownwardMovement, .offset = 0x0002bdb0 },
     { .func = ST_UpdatePlayerCollisionYFlags, .offset = 0x0002be10 },
     { .func = sub_8003BEB4, .offset = 0x0002beb4 },
     { .func = ST_ResetPlayerViewAndVerticalMovement, .offset = 0x0002c054 },
