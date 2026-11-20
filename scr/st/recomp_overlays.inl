@@ -336,7 +336,7 @@ static FuncEntry section_1_text_funcs[] = {
     { .func = sub_8003E874, .offset = 0x0002e874 },
     { .func = sub_8003EA20, .offset = 0x0002ea20 },
     { .func = ST_ClearPlayerMovementLimits, .offset = 0x0002ead0 },
-    { .func = sub_8003EAF8, .offset = 0x0002eaf8 },
+    { .func = ST_ClearPlayerMovementLimitsAndVertical, .offset = 0x0002eaf8 },
     { .func = sub_8003EB34, .offset = 0x0002eb34 },
     { .func = sub_8003EBFC, .offset = 0x0002ebfc },
     { .func = sub_8003EC5C, .offset = 0x0002ec5c },

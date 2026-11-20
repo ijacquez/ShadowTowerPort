@@ -158,7 +158,7 @@ L_8003CA04:
     // jal         0x8003EAF8
     // nop
 
-    sub_8003EAF8(rdram, ctx);
+    ST_ClearPlayerMovementLimitsAndVertical(rdram, ctx);
     goto after_8;
     // nop
 

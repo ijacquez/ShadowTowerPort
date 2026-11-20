@@ -327,7 +327,7 @@ L_80014B7C:
     // jal         0x8003EAF8
     // nop
     
-    sub_8003EAF8(rdram, ctx);
+    ST_ClearPlayerMovementLimitsAndVertical(rdram, ctx);
     goto after_29;
     // nop
 

@@ -326,7 +326,7 @@ void sub_8003E840(uint8_t* rdram, recomp_context* ctx);
 void sub_8003E874(uint8_t* rdram, recomp_context* ctx);
 void sub_8003EA20(uint8_t* rdram, recomp_context* ctx);
 void ST_ClearPlayerMovementLimits(uint8_t* rdram, recomp_context* ctx);
-void sub_8003EAF8(uint8_t* rdram, recomp_context* ctx);
+void ST_ClearPlayerMovementLimitsAndVertical(uint8_t* rdram, recomp_context* ctx);
 void sub_8003EB34(uint8_t* rdram, recomp_context* ctx);
 void sub_8003EBFC(uint8_t* rdram, recomp_context* ctx);
 void sub_8003EC5C(uint8_t* rdram, recomp_context* ctx);

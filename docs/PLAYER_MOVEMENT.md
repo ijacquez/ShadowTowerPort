@@ -186,6 +186,12 @@ magnitude, then sets player byte `0x21E` to 1. It does not clear the local
 X/Z input accumulators. The [game state machine](../scr/st/sub_80042D74.c)
 and other game routines call it on different paths.
 
+[ST_ClearPlayerMovementLimitsAndVertical](../scr/st/ST_ClearPlayerMovementLimitsAndVertical.c)
+also clears vertical movement and player bytes `0x218` and `0x239`, clears
+word `0x23C`, and sets byte `0x21C` to 1. It calls
+`ST_ClearPlayerMovementLimits` and likewise leaves the local X/Z input
+accumulators unchanged.
+
 ## Turning and pitch input
 
 The [default bindings](../scr/st/ST_InitDefaultControlBindings.c) store

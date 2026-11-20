@@ -590,7 +590,7 @@ SRCS:= scr/st/AddPrim.c \
 	scr/st/sub_8003E874.c \
 	scr/st/sub_8003EA20.c \
 	scr/st/ST_ClearPlayerMovementLimits.c \
-	scr/st/sub_8003EAF8.c \
+	scr/st/ST_ClearPlayerMovementLimitsAndVertical.c \
 	scr/st/sub_8003EB34.c \
 	scr/st/sub_8003EBFC.c \
 	scr/st/sub_8003EC5C.c \
