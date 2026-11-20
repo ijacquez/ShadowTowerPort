@@ -209,7 +209,8 @@ X/Z input accumulators. The [game state machine](../scr/st/ST_UpdatePlayerState.
 and other game routines call it on different paths.
 
 [ST_ClearPlayerMovementLimitsAndVertical](../scr/st/ST_ClearPlayerMovementLimitsAndVertical.c)
-also clears vertical movement, `ST_PLAYER_STATE`, and player byte `0x239`, clears
+also clears vertical movement, `ST_PLAYER_STATE`, and
+`ST_PLAYER_VIEW_AND_SOUND_UPDATE_DISABLED`, clears
 word `0x23C`, and sets byte `0x21C` to 1. It calls
 `ST_ClearPlayerMovementLimits` and likewise leaves the local X/Z input
 accumulators unchanged.
@@ -552,22 +553,46 @@ to [DrawScene](../scr/st/DrawScene.c). Thus 1600 is also an offset in the
 scene-view Y calculation; this does not establish the player's full height.
 
 `ST_PLAYER_VIEW_OSCILLATION_Y` (`0x2CE`) is updated by
-`ST_PlayerMoveWithCollision` when player byte `0x239` is zero. If
+`ST_PlayerMoveWithCollision` when `ST_PLAYER_VIEW_AND_SOUND_UPDATE_DISABLED`
+(`0x239`) is zero. If
 the byte at `ST_ADJUST_WALK_SETTING_ADDRESS` (`0x801CD122`) is zero, the adjustment is cleared. Otherwise the routine adds
 the unsigned `ST_PLAYER_MOVE_MAGNITUDE` to the unsigned
 `ST_PLAYER_VIEW_OSCILLATION_PHASE` (`0x2D0`), masks the sum with `0xFFF`, and stores it as the new phase.
 It computes `t = rsin(phase) >> 5` using an arithmetic shift, then stores
-`abs(t) - (abs(t) >> 2)` as the adjustment. If player byte `0x239` is
+`abs(t) - (abs(t) >> 2)` as the adjustment. If the disable byte is
 nonzero, this part of the routine leaves both phase and adjustment unchanged.
 [ST_ResetPlayerViewAndVerticalMovement](../scr/st/ST_ResetPlayerViewAndVerticalMovement.c) clears the phase and both Y
-adjustments. **OPEN:** the meanings of byte `0x239` and the second
-adjustment have not been established.
+adjustments. **OPEN:** the in-game meaning and producers of the disable byte
+and the second adjustment have not been established.
 
 [sub_8002B2E8](../scr/st/sub_8002B2E8.c) also reads `ST_ADJUST_WALK_SETTING_ADDRESS` as
 the first of four consecutive bytes. For each byte it renders a pair of
 text entries with their two styles exchanged when the byte equals 1. On the
 supplied disc, the first setting is labeled **ADJUST WALK**, with ON and OFF
 choices. Its movement effect is the view oscillation described above.
+
+## Movement sound countdown
+
+When `ST_PLAYER_VIEW_AND_SOUND_UPDATE_DISABLED` is zero and signed
+`ST_PLAYER_VERTICAL_MOVE` is less than `0x100` (0.0625 cells per update),
+`ST_PlayerMoveWithCollision` updates the signed 32-bit
+`ST_PLAYER_MOVEMENT_SOUND_COUNTDOWN` (`0x244`). Let `m` be the signed
+`ST_PLAYER_MOVE_MAGNITUDE` and `L` the signed movement limit. The countdown
+decrement is `3 * m` if `m < (L >> 2)`, `(3 * m) / 2` rounded toward zero
+if `m < (L >> 1)`, and `m` otherwise. The comparisons are evaluated in that
+order and the shifts are arithmetic. The subtraction wraps to 32 bits. If
+the signed countdown becomes negative, it is reset to `0x800` (0.5 in the
+spatial-cell scale) and [ST_RequestMovementSound](../scr/st/ST_RequestMovementSound.c)
+receives `m`. [sub_8003E874](../scr/st/sub_8003E874.c) also initializes the
+countdown to `0x800` (0.5).
+
+The sound helper reads `ST_COLLISION_QUERY_RECORD_FLAGS` from the shared
+collision state. It requests sound ID `0x13` when any bit in `0x34` is set;
+otherwise it requests `0x12` when the low two bits equal 2, or `0x11` for
+the remaining values. Its parameter is `(m >> 2) + 0x40`, with an arithmetic
+shift. [ST_QueryLevelGeometry](../scr/st/ST_QueryLevelGeometry.c) writes
+the flag word from its collision-record scratch flags. **OPEN:** the names
+of these sounds and the complete meaning and lifetime of the flags.
 
 In [ST_UpdateLevelStreaming](../scr/st/ST_UpdateLevelStreaming.c), when
 signed halfwords at `0x801B5920` and `0x801B5922` both equal 1, the game
@@ -725,9 +750,9 @@ on successive updates. Actual query results may change as the player moves.
 For the positive-vertical branch, [ST_HandleDownwardCollisionFeedback](../scr/st/ST_HandleDownwardCollisionFeedback.c)
 does not call either helper when its signed input is below `0x100` (0.0625 cells per update).
 Otherwise it subtracts `0x100`, limits the result to `0x200` (0.125 cells per
-update), and calls `sub_800582F0` with ID `0x14` and parameter
+update), and calls `ST_RequestSoundEffect` with ID `0x14` and parameter
 `0x40 + (limited_result >> 3)`. The latter can reach `SsUtKeyOn` through
-`sub_80058318`. It also calls
+`ST_StartSoundEffect`. It also calls
 [ST_SetControllerActuatorFeedback](../scr/st/ST_SetControllerActuatorFeedback.c)
 with `limited_result >> 2`.
 
@@ -755,7 +780,7 @@ For `d > 0`:
 - A positive value increases by 48 only if the collision query flags above
   the low four bits are zero. The movement limit is cleared if `d <= 1024`.
 
-When `d == 0`, vertical movement and the byte at player offset `0x239` are
+When `d == 0`, vertical movement and `ST_PLAYER_VIEW_AND_SOUND_UPDATE_DISABLED` are
 cleared. Other collision branches may change the applied displacement. These
 are per-update stored integer values; the physical units have not been
 established. With one spatial cell as one world unit, divide

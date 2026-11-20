@@ -202,7 +202,7 @@ L_8004E020:
     // jal         0x800582F0
     // addiu       $a1, $zero, 0x80
     ctx->r5 = ADD32(0, 0X80);
-    sub_800582F0(rdram, ctx);
+    ST_RequestSoundEffect(rdram, ctx);
     goto after_2;
     // addiu       $a1, $zero, 0x80
     ctx->r5 = ADD32(0, 0X80);

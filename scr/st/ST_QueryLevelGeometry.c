@@ -1245,7 +1245,7 @@ L_80049190:
     // sh          $a0, 0x44C8($v1)
     MEM_H(0X44C8, ctx->r3) = ctx->r4;
     // sw          $a1, 0x47DC($v1)
-    MEM_W(0X47DC, ctx->r3) = ctx->r5;
+    MEM_W(ST_COLLISION_QUERY_RECORD_FLAGS, ctx->r3) = ctx->r5;
 L_800492C4:
     // lw          $ra, 0x1830($sp)
     ctx->r31 = MEM_W(0X1830, ctx->r29);

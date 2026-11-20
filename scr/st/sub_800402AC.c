@@ -853,7 +853,7 @@ L_8004079C:
     // jal         0x800582F0
     // addiu       $s0, $s0, 0xD
     ctx->r16 = ADD32(ctx->r16, 0XD);
-    sub_800582F0(rdram, ctx);
+    ST_RequestSoundEffect(rdram, ctx);
     goto after_2;
     // addiu       $s0, $s0, 0xD
     ctx->r16 = ADD32(ctx->r16, 0XD);
@@ -1178,7 +1178,7 @@ L_8004099C:
     // jal         0x800582F0
     // addiu       $a1, $zero, 0x80
     ctx->r5 = ADD32(0, 0X80);
-    sub_800582F0(rdram, ctx);
+    ST_RequestSoundEffect(rdram, ctx);
     goto after_4;
     // addiu       $a1, $zero, 0x80
     ctx->r5 = ADD32(0, 0X80);
@@ -1441,7 +1441,7 @@ L_80040B3C:
     // jal         0x800582F0
     // addiu       $a1, $zero, 0x80
     ctx->r5 = ADD32(0, 0X80);
-    sub_800582F0(rdram, ctx);
+    ST_RequestSoundEffect(rdram, ctx);
     goto after_6;
     // addiu       $a1, $zero, 0x80
     ctx->r5 = ADD32(0, 0X80);

@@ -1,7 +1,7 @@
 #include "recomp.h"
 #include "disable_warnings.h"
 
-void sub_800582F0(uint8_t* rdram, recomp_context* ctx) {
+void ST_RequestSoundEffect(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
     unsigned int rounding_mode = DEFAULT_ROUNDING_MODE;
     int c1cs = 0; 
@@ -14,7 +14,7 @@ void sub_800582F0(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x80058318
     // addu        $a3, $zero, $zero
     ctx->r7 = ADD32(0, 0);
-    sub_80058318(rdram, ctx);
+    ST_StartSoundEffect(rdram, ctx);
     goto after_0;
     // addu        $a3, $zero, $zero
     ctx->r7 = ADD32(0, 0);

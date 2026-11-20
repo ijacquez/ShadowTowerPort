@@ -877,7 +877,7 @@ L_80055850:
     // jal         0x800582F0
     // sh          $v1, 0x2($v0)
     MEM_H(0X2, ctx->r2) = ctx->r3;
-    sub_800582F0(rdram, ctx);
+    ST_RequestSoundEffect(rdram, ctx);
     goto after_13;
     // sh          $v1, 0x2($v0)
     MEM_H(0X2, ctx->r2) = ctx->r3;

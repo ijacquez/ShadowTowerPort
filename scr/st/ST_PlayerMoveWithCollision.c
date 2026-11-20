@@ -678,7 +678,7 @@ L_800419E4:
     } else {
         ctx->r6 = verticalPlayer;
         if (difference == 0) {
-            MEM_B(0x239, verticalPlayer) = 0;
+            MEM_B(ST_PLAYER_VIEW_AND_SOUND_UPDATE_DISABLED, verticalPlayer) = 0;
             MEM_H(ST_PLAYER_VERTICAL_MOVE, verticalPlayer) = 0;
         } else if (vertical > 0) {
             ctx->r4 = rawVertical;
@@ -768,7 +768,7 @@ L_80041BB4:
     // lhu         $v0, 0x17C($gp)
     ctx->r2 = MEM_HU(0X17C, ctx->r28);
     // lbu         $v1, 0x239($s0)
-    ctx->r3 = MEM_BU(0X239, ctx->r16);
+    ctx->r3 = MEM_BU(ST_PLAYER_VIEW_AND_SOUND_UPDATE_DISABLED, ctx->r16);
     // nop
 
     // bne         $v1, $zero, L_80041CD4
@@ -841,7 +841,7 @@ L_80041C20:
     // addiu       $a1, $v0, -0x70D8
     ctx->r5 = ADD32(ctx->r2, -0X70D8);
     // lbu         $v0, 0x239($a1)
-    ctx->r2 = MEM_BU(0X239, ctx->r5);
+    ctx->r2 = MEM_BU(ST_PLAYER_VIEW_AND_SOUND_UPDATE_DISABLED, ctx->r5);
     // nop
 
     // bne         $v0, $zero, L_80041CD4
@@ -883,7 +883,7 @@ L_80041C20:
     // sll         $v0, $a0, 1
     ctx->r2 = S32(ctx->r4) << 1;
     // lw          $v1, 0x244($a1)
-    ctx->r3 = MEM_W(0X244, ctx->r5);
+    ctx->r3 = MEM_W(ST_PLAYER_MOVEMENT_SOUND_COUNTDOWN, ctx->r5);
     // j           L_80041C94
     // addu        $v0, $v0, $a0
     ctx->r2 = ADD32(ctx->r2, ctx->r4);
@@ -910,7 +910,7 @@ L_80041C70:
     // addu        $v0, $v0, $v1
     ctx->r2 = ADD32(ctx->r2, ctx->r3);
     // lw          $v1, 0x244($a1)
-    ctx->r3 = MEM_W(0X244, ctx->r5);
+    ctx->r3 = MEM_W(ST_PLAYER_MOVEMENT_SOUND_COUNTDOWN, ctx->r5);
     // sra         $v0, $v0, 1
     ctx->r2 = S32(ctx->r2) >> 1;
 L_80041C94:
@@ -918,26 +918,26 @@ L_80041C94:
     ctx->r3 = SUB32(ctx->r3, ctx->r2);
     // j           L_80041CB0
     // sw          $v1, 0x244($a1)
-    MEM_W(0X244, ctx->r5) = ctx->r3;
+    MEM_W(ST_PLAYER_MOVEMENT_SOUND_COUNTDOWN, ctx->r5) = ctx->r3;
     goto L_80041CB0;
     // sw          $v1, 0x244($a1)
-    MEM_W(0X244, ctx->r5) = ctx->r3;
+    MEM_W(ST_PLAYER_MOVEMENT_SOUND_COUNTDOWN, ctx->r5) = ctx->r3;
 L_80041CA0:
     // lw          $v0, 0x244($a1)
-    ctx->r2 = MEM_W(0X244, ctx->r5);
+    ctx->r2 = MEM_W(ST_PLAYER_MOVEMENT_SOUND_COUNTDOWN, ctx->r5);
     // nop
 
     // subu        $v0, $v0, $a0
     ctx->r2 = SUB32(ctx->r2, ctx->r4);
     // sw          $v0, 0x244($a1)
-    MEM_W(0X244, ctx->r5) = ctx->r2;
+    MEM_W(ST_PLAYER_MOVEMENT_SOUND_COUNTDOWN, ctx->r5) = ctx->r2;
 L_80041CB0:
     // lui         $v0, 0x801A
     ctx->r2 = S32(0X801A << 16);
     // addiu       $v1, $v0, -0x70D8
     ctx->r3 = ADD32(ctx->r2, -0X70D8);
     // lw          $v0, 0x244($v1)
-    ctx->r2 = MEM_W(0X244, ctx->r3);
+    ctx->r2 = MEM_W(ST_PLAYER_MOVEMENT_SOUND_COUNTDOWN, ctx->r3);
     // nop
 
     // bgez        $v0, L_80041CD4
@@ -952,11 +952,11 @@ L_80041CB0:
     ctx->r4 = MEM_HS(ST_PLAYER_MOVE_MAGNITUDE, ctx->r3);
     // jal         0x80057BAC
     // sw          $v0, 0x244($v1)
-    MEM_W(0X244, ctx->r3) = ctx->r2;
-    sub_80057BAC(rdram, ctx);
+    MEM_W(ST_PLAYER_MOVEMENT_SOUND_COUNTDOWN, ctx->r3) = ctx->r2;
+    ST_RequestMovementSound(rdram, ctx);
     goto after_14;
     // sw          $v0, 0x244($v1)
-    MEM_W(0X244, ctx->r3) = ctx->r2;
+    MEM_W(ST_PLAYER_MOVEMENT_SOUND_COUNTDOWN, ctx->r3) = ctx->r2;
     after_14:
 L_80041CD4:
     // jal         0x8003BE10

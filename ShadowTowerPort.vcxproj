@@ -906,7 +906,7 @@
     <ClCompile Include="scr\st\ST_SetControllerActuatorFeedback.c" />
     <ClCompile Include="scr\st\ST_UpdateControllerActuatorTimer.c" />
     <ClCompile Include="scr\st\ST_HandleDownwardCollisionFeedback.c" />
-    <ClCompile Include="scr\st\sub_80057BAC.c" />
+    <ClCompile Include="scr\st\ST_RequestMovementSound.c" />
     <ClCompile Include="scr\st\sub_80057C0C.c" />
     <ClCompile Include="scr\st\sub_80057C54.c" />
     <ClCompile Include="scr\st\sub_80057C78.c" />
@@ -923,8 +923,8 @@
     <ClCompile Include="scr\st\sub_80058220.c" />
     <ClCompile Include="scr\st\sub_80058254.c" />
     <ClCompile Include="scr\st\sub_80058288.c" />
-    <ClCompile Include="scr\st\sub_800582F0.c" />
-    <ClCompile Include="scr\st\sub_80058318.c" />
+    <ClCompile Include="scr\st\ST_RequestSoundEffect.c" />
+    <ClCompile Include="scr\st\ST_StartSoundEffect.c" />
     <ClCompile Include="scr\st\sub_8005850C.c" />
     <ClCompile Include="scr\st\sub_80058534.c" />
     <ClCompile Include="scr\st\ProcessCDAudioLoad.c" />

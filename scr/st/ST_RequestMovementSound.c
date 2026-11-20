@@ -1,7 +1,8 @@
 #include "recomp.h"
 #include "disable_warnings.h"
+#include "ST_CollisionQuery.h"
 
-void sub_80057BAC(uint8_t* rdram, recomp_context* ctx) {
+void ST_RequestMovementSound(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
     unsigned int rounding_mode = DEFAULT_ROUNDING_MODE;
     int c1cs = 0; 
@@ -10,7 +11,7 @@ void sub_80057BAC(uint8_t* rdram, recomp_context* ctx) {
     // lui         $v0, 0x801C
     ctx->r2 = S32(0X801C << 16);
     // lw          $v1, -0x5EDC($v0)
-    ctx->r3 = MEM_W(-0X5EDC, ctx->r2);
+    ctx->r3 = MEM_W(ST_COLLISION_QUERY_RECORD_FLAGS, 0x801B5948);
     // addu        $a1, $a0, $zero
     ctx->r5 = ADD32(ctx->r4, 0);
     // andi        $v0, $v1, 0x34
@@ -60,7 +61,7 @@ L_80057BF0:
     // jal         0x800582F0
     // addiu       $a1, $a1, 0x40
     ctx->r5 = ADD32(ctx->r5, 0X40);
-    sub_800582F0(rdram, ctx);
+    ST_RequestSoundEffect(rdram, ctx);
     goto after_0;
     // addiu       $a1, $a1, 0x40
     ctx->r5 = ADD32(ctx->r5, 0X40);

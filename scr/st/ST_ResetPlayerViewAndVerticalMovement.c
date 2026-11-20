@@ -10,7 +10,7 @@ void ST_ResetPlayerViewAndVerticalMovement(uint8_t* rdram, recomp_context* ctx) 
         0x294, 0x292, 0x290, 0x28C, 0x28A, 0x288, 0x284, 0x282, 0x280
     };
     for (int offset : clearedHalfwords) MEM_H(offset, player) = 0;
-    MEM_B(0x239, player) = 0;
+    MEM_B(ST_PLAYER_VIEW_AND_SOUND_UPDATE_DISABLED, player) = 0;
     MEM_B(0x218, player) = 0;
 
     // Copy the two aligned words containing pitch, yaw, and the next angles.

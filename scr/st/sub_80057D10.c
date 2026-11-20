@@ -14,7 +14,7 @@ void sub_80057D10(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x800582F0
     // addiu       $a1, $zero, 0x80
     ctx->r5 = ADD32(0, 0X80);
-    sub_800582F0(rdram, ctx);
+    ST_RequestSoundEffect(rdram, ctx);
     goto after_0;
     // addiu       $a1, $zero, 0x80
     ctx->r5 = ADD32(0, 0X80);

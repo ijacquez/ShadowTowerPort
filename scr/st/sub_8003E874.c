@@ -1,5 +1,6 @@
 #include "recomp.h"
 #include "disable_warnings.h"
+#include "ST_PlayerState.h"
 
 void sub_8003E874(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
@@ -30,7 +31,7 @@ void sub_8003E874(uint8_t* rdram, recomp_context* ctx) {
     // addiu       $v0, $zero, 0x800
     ctx->r2 = ADD32(0, 0X800);
     // sw          $v0, 0x244($s0)
-    MEM_W(0X244, ctx->r16) = ctx->r2;
+    MEM_W(ST_PLAYER_MOVEMENT_SOUND_COUNTDOWN, ctx->r16) = ctx->r2;
     // addiu       $v0, $zero, 0x2
     ctx->r2 = ADD32(0, 0X2);
     // sw          $zero, 0x34($s0)

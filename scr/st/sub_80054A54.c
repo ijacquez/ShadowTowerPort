@@ -661,7 +661,7 @@ L_80054DE8:
     // jal         0x800582F0
     // sw          $v0, -0x2F20($v1)
     MEM_W(-0X2F20, ctx->r3) = ctx->r2;
-    sub_800582F0(rdram, ctx);
+    ST_RequestSoundEffect(rdram, ctx);
     goto after_5;
     // sw          $v0, -0x2F20($v1)
     MEM_W(-0X2F20, ctx->r3) = ctx->r2;

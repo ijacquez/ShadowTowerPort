@@ -2166,7 +2166,7 @@
     <ClCompile Include="scr\st\ST_HandleDownwardCollisionFeedback.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_80057BAC.c">
+    <ClCompile Include="scr\st\ST_RequestMovementSound.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\sub_80057C0C.c">
@@ -2544,7 +2544,7 @@
     <ClCompile Include="scr\st\sub_800575A0.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_800582F0.c">
+    <ClCompile Include="scr\st\ST_RequestSoundEffect.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\sub_800588B4.c">
@@ -3099,7 +3099,7 @@
     <ClCompile Include="scr\st\sub_80058288.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_80058318.c">
+    <ClCompile Include="scr\st\ST_StartSoundEffect.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\sub_80058534.c">

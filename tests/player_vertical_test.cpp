@@ -6,6 +6,8 @@
 uint8_t rdram[2 * 1024 * 1024];
 static int helperCalls;
 static int32_t sineResult;
+static int soundCalls;
+static int32_t soundMagnitude;
 void memset_recomp(uint8_t*, recomp_context* ctx) { std::memset(GET_PTR(ctx->r4), ctx->r5, ctx->r6); ctx->r2 = ctx->r4; }
 void SquareRoot0(uint8_t*, recomp_context* ctx) { ctx->r2 = 0; }
 void ratan2(uint8_t*, recomp_context* ctx) { ctx->r2 = 0; }
@@ -14,7 +16,11 @@ void rsin(uint8_t*, recomp_context* ctx) { ctx->r2 = sineResult; }
 void ST_RunCollisionQuery(uint8_t*, recomp_context* ctx) { ctx->r2 = 0; }
 void ST_CheckHighDownwardMovement(uint8_t*, recomp_context* ctx) { ctx->r2 = 0; }
 void ST_HandleDownwardCollisionFeedback(uint8_t*, recomp_context*) { ++helperCalls; }
-void sub_80057BAC(uint8_t*, recomp_context* ctx) { ctx->r2 = 0; }
+void ST_RequestMovementSound(uint8_t*, recomp_context* ctx) {
+    ++soundCalls;
+    soundMagnitude = S32(ctx->r4);
+    ctx->r2 = 0;
+}
 void ST_UpdatePlayerCollisionYFlags(uint8_t*, recomp_context* ctx) { ctx->r2 = 0; }
 
 struct VerticalCase {
@@ -104,7 +110,43 @@ int main() {
             return 1;
         }
     }
+    struct SoundCase {
+        int16_t magnitude;
+        int32_t countdown;
+        uint8_t disabled;
+        int32_t expectedCountdown;
+        int expectedCalls;
+    };
+    const SoundCase soundCases[] = {
+        {10, 30, 0, 0, 0},
+        {10, 29, 0, 0x800, 1},
+        {25, 37, 0, 0, 0},
+        {25, 36, 0, 0x800, 1},
+        {50, 49, 0, 0x800, 1},
+        {50, 49, 1, 49, 0},
+    };
+    for (const auto& test : soundCases) {
+        std::memset(rdram, 0, sizeof rdram);
+        MEM_H(ST_PLAYER_MOVE_MAGNITUDE, player) = test.magnitude;
+        MEM_W(ST_PLAYER_MOVE_LIMIT, player) = 80;
+        MEM_W(ST_PLAYER_MOVEMENT_SOUND_COUNTDOWN, player) = test.countdown;
+        MEM_B(ST_PLAYER_VIEW_AND_SOUND_UPDATE_DISABLED, player) = test.disabled;
+        MEM_W(0x2C, query) = 1601;
+        recomp_context ctx{};
+        ctx.r28 = 0x80080000;
+        ctx.r29 = 0x801EF000;
+        soundCalls = 0;
+        soundMagnitude = -1;
+        ST_PlayerMoveWithCollision(rdram, &ctx);
+        if (S32(MEM_W(ST_PLAYER_MOVEMENT_SOUND_COUNTDOWN, player)) != test.expectedCountdown ||
+            soundCalls != test.expectedCalls ||
+            (soundCalls && soundMagnitude != test.magnitude)) {
+            std::fprintf(stderr, "movement sound countdown case failed for magnitude %d\n", test.magnitude);
+            return 1;
+        }
+    }
     std::printf("%zu vertical cases passed\n", sizeof cases / sizeof cases[0]);
     std::printf("%zu view oscillation cases passed\n", sizeof oscillationCases / sizeof oscillationCases[0]);
+    std::printf("%zu movement sound countdown cases passed\n", sizeof soundCases / sizeof soundCases[0]);
     return 0;
 }

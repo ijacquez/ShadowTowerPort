@@ -1063,7 +1063,7 @@ L_80024CF8:
     // addiu       $fp, $fp, -0x1
     ctx->r30 = ADD32(ctx->r30, -0X1);
 
-    sub_800582F0(rdram, ctx);
+    ST_RequestSoundEffect(rdram, ctx);
     goto after_10;
     // addiu       $fp, $fp, -0x1
     ctx->r30 = ADD32(ctx->r30, -0X1);

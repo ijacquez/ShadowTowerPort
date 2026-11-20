@@ -1044,7 +1044,7 @@ L_800432BC:
     // jal         0x800582F0
     // addiu       $a1, $zero, 0x80
     ctx->r5 = ADD32(0, 0X80);
-    sub_800582F0(rdram, ctx);
+    ST_RequestSoundEffect(rdram, ctx);
     goto after_38;
     // addiu       $a1, $zero, 0x80
     ctx->r5 = ADD32(0, 0X80);
@@ -3119,7 +3119,7 @@ L_80043E24:
     // jal         0x800582F0
     // addiu       $a1, $zero, 0x80
     ctx->r5 = ADD32(0, 0X80);
-    sub_800582F0(rdram, ctx);
+    ST_RequestSoundEffect(rdram, ctx);
     goto after_107;
     // addiu       $a1, $zero, 0x80
     ctx->r5 = ADD32(0, 0X80);

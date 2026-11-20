@@ -763,7 +763,7 @@ SRCS:= scr/st/AddPrim.c \
 	scr/st/ST_SetControllerActuatorFeedback.c \
 	scr/st/ST_UpdateControllerActuatorTimer.c \
 	scr/st/ST_HandleDownwardCollisionFeedback.c \
-	scr/st/sub_80057BAC.c \
+	scr/st/ST_RequestMovementSound.c \
 	scr/st/sub_80057C0C.c \
 	scr/st/sub_80057C54.c \
 	scr/st/sub_80057C78.c \
@@ -780,8 +780,8 @@ SRCS:= scr/st/AddPrim.c \
 	scr/st/sub_80058220.c \
 	scr/st/sub_80058254.c \
 	scr/st/sub_80058288.c \
-	scr/st/sub_800582F0.c \
-	scr/st/sub_80058318.c \
+	scr/st/ST_RequestSoundEffect.c \
+	scr/st/ST_StartSoundEffect.c \
 	scr/st/sub_8005850C.c \
 	scr/st/sub_80058534.c \
 	scr/st/ProcessCDAudioLoad.c \
@@ -1128,6 +1128,8 @@ test-player-movement:
 	scratchpad/player-active-collision-test
 	$(CXX) $(CFLAGS) -std=c++17 tests/player_high_downward_test.cpp scr/st/ST_CheckHighDownwardMovement.c scr/st/ST_EnterPlayerZeroHpState.c -o scratchpad/player-high-downward-test
 	scratchpad/player-high-downward-test
+	$(CXX) $(CFLAGS) -std=c++17 tests/player_movement_sound_test.cpp scr/st/ST_RequestMovementSound.c -o scratchpad/player-movement-sound-test
+	scratchpad/player-movement-sound-test
 	$(CXX) $(CFLAGS) -std=c++17 tests/player_rotation_test.cpp scr/st/RotMatrix.c scr/gte.cpp PsyCross/src/gte/PsyX_GTE.cpp -o scratchpad/player-rotation-test
 	scratchpad/player-rotation-test
 	$(CXX) $(CFLAGS) -std=c++17 -ffunction-sections -fdata-sections tests/player_movement_axis_test.cpp -Wl,--gc-sections -o scratchpad/player-movement-axis-test

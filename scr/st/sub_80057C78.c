@@ -18,7 +18,7 @@ void sub_80057C78(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x80058318
     // addiu       $a3, $zero, 0x32
     ctx->r7 = ADD32(0, 0X32);
-    sub_80058318(rdram, ctx);
+    ST_StartSoundEffect(rdram, ctx);
     goto after_0;
     // addiu       $a3, $zero, 0x32
     ctx->r7 = ADD32(0, 0X32);

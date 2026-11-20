@@ -370,7 +370,7 @@ L_800581DC:
     // jal         0x80058318
     // addu        $a2, $s0, $zero
     ctx->r6 = ADD32(ctx->r16, 0);
-    sub_80058318(rdram, ctx);
+    ST_StartSoundEffect(rdram, ctx);
     goto after_4;
     // addu        $a2, $s0, $zero
     ctx->r6 = ADD32(ctx->r16, 0);
