@@ -576,8 +576,8 @@ SRCS:= scr/st/AddPrim.c \
 	scr/st/sub_8003CEDC.c \
 	scr/st/ST_AdjustPlayerHp.c \
 	scr/st/sub_8003CF94.c \
-	scr/st/sub_8003CFDC.c \
-	scr/st/sub_8003D030.c \
+	scr/st/ST_SetPlayerFlagForLowRecordValue.c \
+	scr/st/ST_RecalculatePlayerLowRecordValueFlag.c \
 	scr/st/sub_8003D104.c \
 	scr/st/sub_8003D288.c \
 	scr/st/sub_8003D594.c \
@@ -608,7 +608,7 @@ SRCS:= scr/st/AddPrim.c \
 	scr/st/ST_PlayerUpdateTurning.c \
 	scr/st/ST_PlayerUpdateMovement.c \
 	scr/st/sub_80042620.c \
-	scr/st/sub_80042900.c \
+	scr/st/ST_ProcessPlayerActionControls.c \
 	scr/st/sub_80042B9C.c \
 	scr/st/ST_ResetPlayerStateAndViewRotationOffsets.c \
 	scr/st/sub_80042C44.c \
@@ -1106,6 +1106,8 @@ $(OBJS) $(GLUE_OBJS): scr/_context.h
 PsyCross/src/psx/LIBGTE.o: CFLAGS += -Wno-narrowing
 scr/st/ST_PlayerUpdateMovement.o scr/st/ST_PlayerUpdateTurning.o scr/st/ST_PlayerMoveWithCollision.o scr/st/ST_BuildPlayerView.o scr/st/ST_TranslatePlayerPosition.o scr/st/ST_ClearPlayerMovementLimits.o scr/st/ST_UpdatePlayerState.o scr/st/ST_RecalculatePlayerDerivedAttributes.o: scr/st/ST_PlayerState.h
 scr/st/ST_RecalculatePlayerDerivedAttributes.o scr/st/ST_RecalculatePlayerAttributeScratch.o scr/st/ST_RecalculatePlayerRecordModifiers.o: scr/st/ST_PlayerAttributes.h
+scr/st/ST_ProcessPlayerActionControls.o scr/st/ST_RecalculatePlayerLowRecordValueFlag.o: scr/st/ST_PlayerAttributes.h
+scr/st/ST_ProcessPlayerActionControls.o: scr/st/ST_PlayerState.h scr/st/ST_PlayerControls.h
 
 %.o: %.c
 	$(CXX) $(CFLAGS) -o $@ -c $<
@@ -1125,6 +1127,8 @@ test-player-movement:
 	scratchpad/player-attribute-scratch-test
 	$(CXX) $(CFLAGS) -O2 tests/player_effect_caps_test.cpp scr/st/ST_ApplyPlayerDamageAndEffects.c -o scratchpad/player-effect-caps-test
 	scratchpad/player-effect-caps-test
+	$(CXX) $(CFLAGS) -O2 tests/player_rotation_stack_source_test.cpp scr/st/ST_ProcessPlayerActionControls.c scr/st/ST_RecalculatePlayerLowRecordValueFlag.c scr/st/ST_SetPlayerFlagForLowRecordValue.c scr/st/ST_PlayerUpdateTurning.c scr/st/ST_IsShiftedAngleGreater.c -o scratchpad/player-rotation-stack-source-test
+	scratchpad/player-rotation-stack-source-test
 	$(CXX) $(CFLAGS) -std=c++17 tests/player_record_modifiers_test.cpp scr/st/ST_RecalculatePlayerRecordModifiers.c -o scratchpad/player-record-modifiers-test
 	scratchpad/player-record-modifiers-test
 	$(CXX) $(CFLAGS) -std=c++17 tests/resource_vector_sample_test.cpp scr/st/ST_SampleResourceVector.c scr/st/ST_SelectResourceSequenceInterval.c -o scratchpad/resource-vector-sample-test

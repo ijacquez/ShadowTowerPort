@@ -1192,7 +1192,7 @@ L_8005512C:
     // jal         0x8003D030
     // nop
 
-    sub_8003D030(rdram, ctx);
+    ST_RecalculatePlayerLowRecordValueFlag(rdram, ctx);
     goto after_6;
     // nop
 

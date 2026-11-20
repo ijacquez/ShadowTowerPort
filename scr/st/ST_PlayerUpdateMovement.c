@@ -149,8 +149,9 @@ L_800423D4:
     after_1:
     // lhu         $v0, 0x18($sp)
     ctx->r2 = MEM_HU(0X18, ctx->r29);
-    // The final prior writer is unknown. With the game's zero-angle table
-    // entry this contributes only to rotated Y, which is subsequently squared.
+    // Some control paths leave a copied table pointer here; other prior
+    // writers remain unknown. This contributes only to rotated Y when the
+    // executable's zero-angle table entry is intact.
     // lhu         $v1, 0x1C($sp)
     ctx->r3 = MEM_HU(ST_PLAYER_ROTATION_INPUT_Y_STACK_OFFSET, ctx->r29);
     // lhu         $a0, 0x20($sp)

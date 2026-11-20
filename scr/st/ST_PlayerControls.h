@@ -3,6 +3,7 @@
 // Halfword offsets in the configurable control state at 0x801CD180.
 enum ST_PlayerControlOffset {
     ST_CONTROL_HELD = 0x02,
+    ST_CONTROL_ACTION_SELECTION = 0x14,
     ST_CONTROL_MOVE_Z_POSITIVE = 0x22,
     ST_CONTROL_MOVE_Z_NEGATIVE = 0x24,
     ST_CONTROL_TURN_POSITIVE = 0x26,

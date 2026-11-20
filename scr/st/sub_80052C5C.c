@@ -20,7 +20,7 @@ void sub_80052C5C(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x8003D030
     // sb          $v0, 0x218($s0)
     MEM_B(0X218, ctx->r16) = ctx->r2;
-    sub_8003D030(rdram, ctx);
+    ST_RecalculatePlayerLowRecordValueFlag(rdram, ctx);
     goto after_0;
     // sb          $v0, 0x218($s0)
     MEM_B(0X218, ctx->r16) = ctx->r2;

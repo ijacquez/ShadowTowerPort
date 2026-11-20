@@ -1,7 +1,8 @@
 #include "recomp.h"
 #include "disable_warnings.h"
+#include "ST_PlayerAttributes.h"
 
-void sub_8003D030(uint8_t* rdram, recomp_context* ctx) {
+void ST_RecalculatePlayerLowRecordValueFlag(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
     unsigned int rounding_mode = DEFAULT_ROUNDING_MODE;
     int c1cs = 0; 
@@ -12,7 +13,7 @@ void sub_8003D030(uint8_t* rdram, recomp_context* ctx) {
     // lui         $v0, 0x8001
     ctx->r2 = S32(0X8001 << 16);
     // addiu       $a2, $v0, 0x1C7C
-    ctx->r6 = ADD32(ctx->r2, 0X1C7C);
+    ctx->r6 = ADD32(ctx->r2, ST_LOW_RECORD_VALUE_SLOT_POINTERS & 0xFFFF);
     // addiu       $t0, $a2, 0x20
     ctx->r8 = ADD32(ctx->r6, 0X20);
     // sw          $ra, 0x40($sp)
@@ -102,7 +103,7 @@ L_8003D0B8:
     // jal         0x8003CFDC
     // addu        $a0, $v0, $zero
     ctx->r4 = ADD32(ctx->r2, 0);
-    sub_8003CFDC(rdram, ctx);
+    ST_SetPlayerFlagForLowRecordValue(rdram, ctx);
     goto after_0;
     // addu        $a0, $v0, $zero
     ctx->r4 = ADD32(ctx->r2, 0);

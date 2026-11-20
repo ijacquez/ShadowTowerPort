@@ -36,7 +36,7 @@ movement update. Other code can also write those vectors.
 
 On reaching its state dispatch, [ST_UpdatePlayerState](../scr/st/ST_UpdatePlayerState.c)
 selects a path from `ST_PLAYER_STATE`. For states 0 and 1 it first calls
-`sub_80042900`. If the signed halfword at
+`ST_ProcessPlayerActionControls`. If the signed halfword at
 `ST_LEVEL_STREAMING_STATUS_ADDRESS` is 1, or the byte at
 `ST_PLAYER_UPDATE_GATE_ADDRESS` is nonzero, it skips the turning, movement,
 and collision calls. Otherwise it calls those three functions in that order,
@@ -297,8 +297,24 @@ the call to `ST_PlayerUpdateMovement`. Each call in
 [ST_UpdatePlayerState](../scr/st/ST_UpdatePlayerState.c) is immediately
 preceded by [ST_PlayerUpdateTurning](../scr/st/ST_PlayerUpdateTurning.c),
 whose stack writes and angle-comparison helper do not write that address.
-**OPEN:** the final prior writer and the halfword's intended role are not
-established. In the supplied executable, the zero-angle
+One source is the table copy in
+[ST_RecalculatePlayerLowRecordValueFlag](../scr/st/ST_RecalculatePlayerLowRecordValueFlag.c).
+[ST_ProcessPlayerActionControls](../scr/st/ST_ProcessPlayerActionControls.c)
+calls it when `ST_CONTROL_ACTION_SELECTION` is 2 or 3,
+`ST_PLAYER_ACTION_STATE_PAIR` is `0xFFFFFFFF`, and the corresponding
+`ST_PLAYER_ACTION_FIRST_RECORD_SLOT` or `ST_PLAYER_ACTION_SECOND_RECORD_SLOT`
+is not `0xFFFF`. The caller allocates `0x20` bytes and the recalculation
+function allocates `0x48`. The latter copies the second word of
+`ST_LOW_RECORD_VALUE_SLOT_POINTERS` to its frame offset `0x14`; this word
+overlaps `ST_PLAYER_ROTATION_INPUT_Y_STACK_OFFSET` in the later movement
+frame. In the supplied `ST.EXE`, that table word is `0x80198F64`, so its low
+halfword is `0x8F64` (-28828). If the table retains that value and both
+`ST_PLAYER_FIRST_ACTION_REPEAT` and `ST_PLAYER_SECOND_ACTION_REPEAT` are
+`0xFF` after the recalculation, the remaining control and turning code does
+not overwrite that halfword before the movement call.
+
+**OPEN:** the final prior writer on other paths and the halfword's intended
+role are not established. In the supplied executable, the zero-angle
 table entry read by [RotMatrix](../scr/st/RotMatrix.c) has a signed low
 halfword of zero and a high halfword of `0x1000` (1.0).
 
@@ -313,7 +329,7 @@ Y row is `(0, 0x1000, 0)` (0.0, 1.0, 0.0), so the rotated Y is the signed
 input halfword. The routine writes that result as a word to stack offset
 `0x1C`, then squares it with the GTE and writes the square to stack offset
 `0x2C`. The GTE's Y result and flags can therefore depend on the input even
-though the horizontal results do not. **OPEN:** the final prior writer and
+though the horizontal results do not. **OPEN:** the final prior writer on other paths and
 any later uses of this GTE state have not been established.
 
 The rotation uses `-yaw` and writes GTE results back to the stack before

@@ -1212,10 +1212,10 @@
     <ClCompile Include="scr\st\sub_8003CF94.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_8003CFDC.c">
+    <ClCompile Include="scr\st\ST_SetPlayerFlagForLowRecordValue.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_8003D030.c">
+    <ClCompile Include="scr\st\ST_RecalculatePlayerLowRecordValueFlag.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\sub_8003D104.c">
@@ -3012,7 +3012,7 @@
     <ClCompile Include="scr\st\sub_80042620.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_80042900.c">
+    <ClCompile Include="scr\st\ST_ProcessPlayerActionControls.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\sub_80044404.c">

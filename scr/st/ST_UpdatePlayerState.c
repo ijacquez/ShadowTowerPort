@@ -640,7 +640,7 @@ L_800430A8:
     // jal         0x8003D030
     // nop
 
-    sub_8003D030(rdram, ctx);
+    ST_RecalculatePlayerLowRecordValueFlag(rdram, ctx);
     goto after_24;
     // nop
 
@@ -1166,7 +1166,7 @@ L_80043390:
     // jal         0x80042900
     // nop
 
-    sub_80042900(rdram, ctx);
+    ST_ProcessPlayerActionControls(rdram, ctx);
     goto after_39;
     // nop
 
@@ -1358,7 +1358,7 @@ L_80043490:
     // jal         0x80042900
     // nop
 
-    sub_80042900(rdram, ctx);
+    ST_ProcessPlayerActionControls(rdram, ctx);
     goto after_45;
     // nop
 
@@ -2640,7 +2640,7 @@ L_80043BCC:
     // jal         0x80042900
     // nop
 
-    sub_80042900(rdram, ctx);
+    ST_ProcessPlayerActionControls(rdram, ctx);
     goto after_90;
     // nop
 

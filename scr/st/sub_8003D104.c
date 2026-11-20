@@ -266,7 +266,7 @@ L_8003D264:
     // jal         0x8003D030
     // nop
 
-    sub_8003D030(rdram, ctx);
+    ST_RecalculatePlayerLowRecordValueFlag(rdram, ctx);
     goto after_5;
     // nop
 
