@@ -1,5 +1,9 @@
 #include "recomp.h"
 #include "disable_warnings.h"
+#include "ST_CollisionQuery.h"
+#include "ST_LevelPlacement.h"
+#include "ST_LevelStreaming.h"
+#include "ST_SpatialCandidate.h"
 
 void ST_SelectSpatialCandidates(uint8_t* rdram, recomp_context* ctx) {
     // Select candidate record indices by intersecting coordinate-indexed
@@ -31,7 +35,7 @@ L_80046284:
     // lui         $v1, 0x8018
     ctx->r3 = S32(0X8018 << 16);
     // addiu       $t1, $v1, 0x56D0
-    ctx->r9 = ADD32(ctx->r3, 0X56D0);
+    ctx->r9 = ST_SPATIAL_CANDIDATE_X_BITSETS_ADDRESS;
     // bgez        $a3, L_800462A4
     if (SIGNED(ctx->r7) >= 0) {
         // addu        $t4, $v0, $t1
@@ -50,7 +54,7 @@ L_800462A4:
     // sll         $v0, $v0, 6
     ctx->r2 = S32(ctx->r2) << 6;
     // addiu       $v1, $t1, 0x2000
-    ctx->r3 = ADD32(ctx->r9, 0X2000);
+    ctx->r3 = ADD32(ctx->r9, ST_SPATIAL_CANDIDATE_Y_BITSETS_OFFSET);
     // bgez        $a0, L_800462C0
     if (SIGNED(ctx->r4) >= 0) {
         // addu        $v0, $v0, $v1
@@ -73,7 +77,7 @@ L_800462C0:
     // sll         $v0, $v0, 6
     ctx->r2 = S32(ctx->r2) << 6;
     // addiu       $v1, $t1, 0x4000
-    ctx->r3 = ADD32(ctx->r9, 0X4000);
+    ctx->r3 = ADD32(ctx->r9, ST_SPATIAL_CANDIDATE_Z_BITSETS_OFFSET);
     // addu        $t1, $v0, $v1
     ctx->r9 = ADD32(ctx->r2, ctx->r3);
     // addu        $a3, $t4, $zero
@@ -141,7 +145,7 @@ L_80046330:
     // lui         $v1, 0x8018
     ctx->r3 = S32(0X8018 << 16);
     // addiu       $t1, $v1, 0x56D0
-    ctx->r9 = ADD32(ctx->r3, 0X56D0);
+    ctx->r9 = ST_SPATIAL_CANDIDATE_X_BITSETS_ADDRESS;
     // bgez        $a0, L_80046350
     if (SIGNED(ctx->r4) >= 0) {
         // addu        $t3, $v0, $t1
@@ -160,7 +164,7 @@ L_80046350:
     // sll         $v0, $v0, 6
     ctx->r2 = S32(ctx->r2) << 6;
     // addiu       $v1, $t1, 0x2000
-    ctx->r3 = ADD32(ctx->r9, 0X2000);
+    ctx->r3 = ADD32(ctx->r9, ST_SPATIAL_CANDIDATE_Y_BITSETS_OFFSET);
     // bgez        $a1, L_8004636C
     if (SIGNED(ctx->r5) >= 0) {
         // addu        $v0, $v0, $v1
@@ -183,7 +187,7 @@ L_8004636C:
     // sll         $v0, $v0, 6
     ctx->r2 = S32(ctx->r2) << 6;
     // addiu       $v1, $t1, 0x4000
-    ctx->r3 = ADD32(ctx->r9, 0X4000);
+    ctx->r3 = ADD32(ctx->r9, ST_SPATIAL_CANDIDATE_Z_BITSETS_OFFSET);
     // addu        $t1, $v0, $v1
     ctx->r9 = ADD32(ctx->r2, ctx->r3);
     // addu        $a1, $t3, $zero
@@ -256,7 +260,7 @@ L_800463E4:
     // lui         $v1, 0x8018
     ctx->r3 = S32(0X8018 << 16);
     // addiu       $a3, $v1, 0x56D0
-    ctx->r7 = ADD32(ctx->r3, 0X56D0);
+    ctx->r7 = ST_SPATIAL_CANDIDATE_X_BITSETS_ADDRESS;
     // bgez        $a0, L_80046404
     if (SIGNED(ctx->r4) >= 0) {
         // addu        $t2, $v0, $a3
@@ -275,7 +279,7 @@ L_80046404:
     // sll         $v0, $v0, 6
     ctx->r2 = S32(ctx->r2) << 6;
     // addiu       $v1, $a3, 0x2000
-    ctx->r3 = ADD32(ctx->r7, 0X2000);
+    ctx->r3 = ADD32(ctx->r7, ST_SPATIAL_CANDIDATE_Y_BITSETS_OFFSET);
     // bgez        $a2, L_80046420
     if (SIGNED(ctx->r6) >= 0) {
         // addu        $v0, $v0, $v1
@@ -298,7 +302,7 @@ L_80046420:
     // sll         $v0, $v0, 6
     ctx->r2 = S32(ctx->r2) << 6;
     // addiu       $v1, $a3, 0x4000
-    ctx->r3 = ADD32(ctx->r7, 0X4000);
+    ctx->r3 = ADD32(ctx->r7, ST_SPATIAL_CANDIDATE_Z_BITSETS_OFFSET);
     // addu        $a3, $v0, $v1
     ctx->r7 = ADD32(ctx->r2, ctx->r3);
     // addu        $a2, $t2, $zero
@@ -392,7 +396,7 @@ L_800464AC:
     // nop
 
     // lbu         $v0, 0x1D($t4)
-    ctx->r2 = MEM_BU(0X1D, ctx->r12);
+    ctx->r2 = MEM_BU(ST_LEVEL_STREAMING_CANDIDATE_FILTER_ENABLED, ctx->r12);
     // nop
 
     // beq         $v0, $zero, L_80046510
@@ -412,13 +416,13 @@ L_800464AC:
     // sll         $v0, $v0, 2
     ctx->r2 = S32(ctx->r2) << 2;
     // lw          $v1, 0x30C($t1)
-    ctx->r3 = MEM_W(0X30C, ctx->r9);
+    ctx->r3 = MEM_W(0, ST_SPATIAL_FILTER_DESCRIPTOR_POINTER_ADDRESS);
     // addu        $v0, $v0, $t3
     ctx->r2 = ADD32(ctx->r2, ctx->r11);
     // lw          $v1, 0x4($v1)
-    ctx->r3 = MEM_W(0X4, ctx->r3);
+    ctx->r3 = MEM_W(ST_SPATIAL_FILTER_DESCRIPTOR_LIMIT_SOURCE, ctx->r3);
     // lbu         $v0, 0x0($v0)
-    ctx->r2 = MEM_BU(0X0, ctx->r2);
+    ctx->r2 = MEM_BU(ST_LEVEL_PLACEMENT_RESOURCE_INDEX, ctx->r2);
     // srl         $v1, $v1, 1
     ctx->r3 = S32(U32(ctx->r3) >> 1);
     // sltu        $v0, $v0, $v1
@@ -433,7 +437,7 @@ L_800464AC:
 
 L_80046510:
     // lhu         $v0, 0x44CA($a3)
-    ctx->r2 = MEM_HU(0X44CA, ctx->r7);
+    ctx->r2 = MEM_HU(ST_COLLISION_QUERY_CANDIDATE_COUNT, ctx->r7);
     // nop
 
     // sll         $v0, $v0, 1
@@ -441,15 +445,15 @@ L_80046510:
     // addu        $v0, $v0, $a3
     ctx->r2 = ADD32(ctx->r2, ctx->r7);
     // sh          $a2, 0x44CE($v0)
-    MEM_H(0X44CE, ctx->r2) = ctx->r6;
+    MEM_H(ST_COLLISION_QUERY_CANDIDATE_INDICES, ctx->r2) = ctx->r6;
     // lhu         $v0, 0x44CA($a3)
-    ctx->r2 = MEM_HU(0X44CA, ctx->r7);
+    ctx->r2 = MEM_HU(ST_COLLISION_QUERY_CANDIDATE_COUNT, ctx->r7);
     // nop
 
     // addiu       $v0, $v0, 0x1
     ctx->r2 = ADD32(ctx->r2, 0X1);
     // sh          $v0, 0x44CA($a3)
-    MEM_H(0X44CA, ctx->r7) = ctx->r2;
+    MEM_H(ST_COLLISION_QUERY_CANDIDATE_COUNT, ctx->r7) = ctx->r2;
 L_80046534:
     // lw          $v0, 0x0($a0)
     ctx->r2 = MEM_W(0X0, ctx->r4);

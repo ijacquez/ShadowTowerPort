@@ -420,17 +420,17 @@ L_800452B0:
     ctx->r2 = S32(0X801B << 16);
     // j           L_80045534
     // sb          $zero, 0x593D($v0)
-    MEM_B(0X593D, ctx->r2) = 0;
+    MEM_B(ST_LEVEL_STREAMING_CANDIDATE_FILTER_ENABLED, ST_LEVEL_STREAMING_STATUS_ADDRESS) = 0;
     goto L_80045534;
     // sb          $zero, 0x593D($v0)
-    MEM_B(0X593D, ctx->r2) = 0;
+    MEM_B(ST_LEVEL_STREAMING_CANDIDATE_FILTER_ENABLED, ST_LEVEL_STREAMING_STATUS_ADDRESS) = 0;
 L_800452CC:
     // addiu       $v0, $v0, 0x5920
     ctx->r2 = ADD32(ctx->r2, 0X5920);
     // addiu       $v1, $zero, 0x1
     ctx->r3 = ADD32(0, 0X1);
     // sb          $v1, 0x1D($v0)
-    MEM_B(0X1D, ctx->r2) = ctx->r3;
+    MEM_B(ST_LEVEL_STREAMING_CANDIDATE_FILTER_ENABLED, ctx->r2) = ctx->r3;
     // j           L_80045534
     // sb          $v1, 0x1F($v0)
     MEM_B(0X1F, ctx->r2) = ctx->r3;

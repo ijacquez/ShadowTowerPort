@@ -1,5 +1,6 @@
 #include "recomp.h"
 #include "disable_warnings.h"
+#include "ST_CollisionQuery.h"
 
 void ST_DecodeCandidateOrigins(uint8_t* rdram, recomp_context* ctx) {
     // Decode selected 12-byte records into 16-byte coordinate entries.
@@ -11,7 +12,7 @@ void ST_DecodeCandidateOrigins(uint8_t* rdram, recomp_context* ctx) {
     // addiu       $v1, $v0, 0x5948
     ctx->r3 = ADD32(ctx->r2, 0X5948);
     // lhu         $a2, 0x44CA($v1)
-    ctx->r6 = MEM_HU(0X44CA, ctx->r3);
+    ctx->r6 = MEM_HU(ST_COLLISION_QUERY_CANDIDATE_COUNT, ctx->r3);
     // addiu       $v0, $zero, -0x1
     ctx->r2 = ADD32(0, -0X1);
     // addiu       $a2, $a2, -0x1
@@ -38,7 +39,7 @@ void ST_DecodeCandidateOrigins(uint8_t* rdram, recomp_context* ctx) {
     ctx->r7 = ADD32(ctx->r2, ctx->r3);
 L_800465A0:
     // lhu         $v0, 0x44CE($a3)
-    ctx->r2 = MEM_HU(0X44CE, ctx->r7);
+    ctx->r2 = MEM_HU(ST_COLLISION_QUERY_CANDIDATE_INDICES, ctx->r7);
     // nop
 
     // sll         $a0, $v0, 1

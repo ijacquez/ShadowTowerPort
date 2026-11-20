@@ -36,7 +36,7 @@ void ST_TestFourVertexCollisionRecords(uint8_t* rdram, recomp_context* ctx) {
     // sw          $s0, 0x18($sp)
     MEM_W(0X18, ctx->r29) = ctx->r16;
     // lhu         $t3, 0x44CA($v1)
-    ctx->r11 = MEM_HU(0X44CA, ctx->r3);
+    ctx->r11 = MEM_HU(ST_COLLISION_QUERY_CANDIDATE_COUNT, ctx->r3);
     // addiu       $v0, $zero, -0x1
     ctx->r2 = ADD32(0, -0X1);
     // addiu       $t3, $t3, -0x1
@@ -1501,7 +1501,7 @@ L_800482AC:
     // nop
 
     // lhu         $v0, 0x44CE($t3)
-    ctx->r2 = MEM_HU(0X44CE, ctx->r11);
+    ctx->r2 = MEM_HU(ST_COLLISION_QUERY_CANDIDATE_INDICES, ctx->r11);
     // sw          $s3, 0x114($t8)
     MEM_W(0X114, ctx->r24) = ctx->r19;
     // sh          $v0, 0x22($t8)
@@ -1697,7 +1697,7 @@ L_800483A4:
     // nop
 
     // lhu         $v0, 0x44CE($t3)
-    ctx->r2 = MEM_HU(0X44CE, ctx->r11);
+    ctx->r2 = MEM_HU(ST_COLLISION_QUERY_CANDIDATE_INDICES, ctx->r11);
     // nop
 
     // sw          $v0, 0x47D8($s6)
@@ -2088,7 +2088,7 @@ L_800486AC:
     // nop
 
     // lhu         $v0, 0x44CE($t3)
-    ctx->r2 = MEM_HU(0X44CE, ctx->r11);
+    ctx->r2 = MEM_HU(ST_COLLISION_QUERY_CANDIDATE_INDICES, ctx->r11);
     // sw          $s3, 0x128($t8)
     MEM_W(0X128, ctx->r24) = ctx->r19;
     // sh          $v0, 0x22($t8)
@@ -2188,7 +2188,7 @@ L_800486E8:
     // nop
 
     // lhu         $v0, 0x44CE($t3)
-    ctx->r2 = MEM_HU(0X44CE, ctx->r11);
+    ctx->r2 = MEM_HU(ST_COLLISION_QUERY_CANDIDATE_INDICES, ctx->r11);
     // sw          $s4, 0x11C($t8)
     MEM_W(0X11C, ctx->r24) = ctx->r20;
     // sh          $v0, 0x22($t8)

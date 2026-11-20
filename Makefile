@@ -1115,6 +1115,8 @@ scr/st/ST_SetCollisionReference.o: scr/st/ST_LevelRecord.h scr/st/ST_ActiveColli
 scr/st/ST_ApplyDirectionalMovementWithCollision.o: scr/st/ST_CollisionQuery.h
 scr/st/ST_ResolveActiveCollisionRecordDisplacement.o: scr/st/ST_CollisionQuery.h scr/st/ST_ActiveCollisionRecord.h scr/st/ST_LevelPlacement.h
 scr/st/ST_RunCollisionQuery.o scr/st/ST_QueryLevelGeometry.o scr/st/ST_TestThreeVertexCollisionRecords.o scr/st/ST_TestFourVertexCollisionRecords.o: scr/st/ST_CollisionQuery.h
+scr/st/ST_SelectSpatialCandidates.o scr/st/ST_DecodeCandidateOrigins.o scr/st/ST_TransformCandidateVertices.o: scr/st/ST_CollisionQuery.h
+scr/st/ST_SelectSpatialCandidates.o: scr/st/ST_SpatialCandidate.h scr/st/ST_LevelPlacement.h scr/st/ST_LevelStreaming.h
 scr/st/ST_RequestLevelStreaming.o scr/st/ST_StartLevelStreamingAndWait.o scr/st/ST_UpdateLevelStreaming.o: scr/st/ST_LevelStreaming.h
 scr/st/ST_UpdateLevelStreaming.o: scr/st/ST_PlayerState.h
 
@@ -1142,6 +1144,8 @@ test-player-movement:
 	scratchpad/indexed-collision-record-test
 	$(CXX) $(CFLAGS) -O2 tests/streaming_translation_request_test.cpp scr/st/ST_RequestLevelStreaming.c -o scratchpad/streaming-translation-request-test
 	scratchpad/streaming-translation-request-test
+	$(CXX) $(CFLAGS) -O2 tests/spatial_candidates_test.cpp scr/st/ST_SelectSpatialCandidates.c -o scratchpad/spatial-candidates-test
+	scratchpad/spatial-candidates-test
 	$(CXX) $(CFLAGS) -std=c++17 tests/player_record_modifiers_test.cpp scr/st/ST_RecalculatePlayerRecordModifiers.c -o scratchpad/player-record-modifiers-test
 	scratchpad/player-record-modifiers-test
 	$(CXX) $(CFLAGS) -std=c++17 tests/resource_vector_sample_test.cpp scr/st/ST_SampleResourceVector.c scr/st/ST_SelectResourceSequenceInterval.c -o scratchpad/resource-vector-sample-test

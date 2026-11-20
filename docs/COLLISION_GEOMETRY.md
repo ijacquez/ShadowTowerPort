@@ -29,10 +29,26 @@ full model and collision formats have not yet been established. See
    `ST_RunCollisionQuery`. When the relevant query flag is set, it calls
    `ST_QueryLevelGeometry`.
 2. `ST_QueryLevelGeometry` reads a shared level-data pointer from
-   `0x8016539C` and calls `ST_SelectSpatialCandidates`. Selection converts
-   coordinates to cell indices using division by 4096, then intersects
-   coordinate-indexed bitsets to form a list of candidate record indices.
-   Negative coordinates are rounded toward zero by the instruction sequence.
+   `ST_SPATIAL_FILTER_DESCRIPTOR_POINTER_ADDRESS`, clears
+   `ST_COLLISION_QUERY_CANDIDATE_COUNT`, and calls
+   `ST_SelectSpatialCandidates` with two position vectors and a null third
+   vector. The selector accepts up to three position vectors. For each, it
+   divides each signed coordinate by `0x1000` (1.0 cell), rounding toward
+   zero, and uses the resulting X, Y, and Z indices to select one 64-byte
+   bitset from each axis table. It ANDs the three bitsets for each vector,
+   then ORs those intersections across the supplied vectors. It scans the
+   512 resulting bits in ascending index order and appends set-bit indices
+   to `ST_COLLISION_QUERY_CANDIDATE_INDICES`, incrementing
+   `ST_COLLISION_QUERY_CANDIDATE_COUNT` for each accepted index.
+
+   When the signed streaming status is 1 and
+   `ST_LEVEL_STREAMING_CANDIDATE_FILTER_ENABLED` is nonzero, the selector
+   accepts an index only if the corresponding
+   `ST_LEVEL_PLACEMENT_RESOURCE_INDEX` is less than the unsigned
+   `ST_SPATIAL_FILTER_DESCRIPTOR_LIMIT_SOURCE` word shifted right by one.
+   The selector reads that word through the pointer at
+   `ST_SPATIAL_FILTER_DESCRIPTOR_POINTER_ADDRESS`. **OPEN:** the in-game
+   meaning of the filter and the descriptor word.
 3. `ST_DecodeCandidateOrigins` resolves each selected index into a 12-byte
    record at `0x8017BED0 + 12 * index` and writes a 16-byte output entry.
    The decoded coordinates are:

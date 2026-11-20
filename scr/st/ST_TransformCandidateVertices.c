@@ -1,5 +1,6 @@
 #include "recomp.h"
 #include "disable_warnings.h"
+#include "ST_CollisionQuery.h"
 
 void ST_TransformCandidateVertices(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
@@ -24,7 +25,7 @@ void ST_TransformCandidateVertices(uint8_t* rdram, recomp_context* ctx) {
     // sw          $s0, 0x8($sp)
     MEM_W(0X8, ctx->r29) = ctx->r16;
     // lhu         $t7, 0x44CA($v1)
-    ctx->r15 = MEM_HU(0X44CA, ctx->r3);
+    ctx->r15 = MEM_HU(ST_COLLISION_QUERY_CANDIDATE_COUNT, ctx->r3);
     // addiu       $v0, $zero, -0x1
     ctx->r2 = ADD32(0, -0X1);
     // addiu       $t7, $t7, -0x1
@@ -57,7 +58,7 @@ L_80046658:
     // addu        $v0, $v0, $s0
     ctx->r2 = ADD32(ctx->r2, ctx->r16);
     // lhu         $v0, 0x44CE($v0)
-    ctx->r2 = MEM_HU(0X44CE, ctx->r2);
+    ctx->r2 = MEM_HU(ST_COLLISION_QUERY_CANDIDATE_INDICES, ctx->r2);
     // nop
 
     // sll         $v1, $v0, 1

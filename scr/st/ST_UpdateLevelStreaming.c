@@ -1383,7 +1383,7 @@ L_80045E98:
     // lbu         $v1, 0x13($s0)
     ctx->r3 = MEM_BU(0X13, ctx->r16);
     // sb          $zero, 0x1D($s0)
-    MEM_B(0X1D, ctx->r16) = 0;
+    MEM_B(ST_LEVEL_STREAMING_CANDIDATE_FILTER_ENABLED, ctx->r16) = 0;
     // bne         $v1, $s1, L_80045ED0
     if (ctx->r3 != ctx->r17) {
         // sb          $zero, 0x1F($s0)
