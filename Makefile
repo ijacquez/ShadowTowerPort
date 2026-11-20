@@ -1110,6 +1110,7 @@ scr/st/ST_ProcessPlayerActionControls.o scr/st/ST_RecalculatePlayerLowRecordValu
 scr/st/ST_ProcessPlayerActionControls.o: scr/st/ST_PlayerState.h scr/st/ST_PlayerControls.h
 scr/st/ST_QueryActiveCollisionRecords.o scr/st/ST_ResetActiveCollisionRecords.o: scr/st/ST_ActiveCollisionRecord.h
 scr/st/ST_QueryActiveCollisionRecords.o: scr/st/ST_ActiveCollisionClass.h
+scr/st/ST_QueryIndexedCollisionRecords.o scr/st/ST_UpdateLevelRecords.o: scr/st/ST_LevelRecord.h
 
 %.o: %.c
 	$(CXX) $(CFLAGS) -o $@ -c $<
@@ -1131,6 +1132,8 @@ test-player-movement:
 	scratchpad/player-effect-caps-test
 	$(CXX) $(CFLAGS) -O2 tests/player_rotation_stack_source_test.cpp scr/st/ST_ProcessPlayerActionControls.c scr/st/ST_RecalculatePlayerLowRecordValueFlag.c scr/st/ST_SetPlayerFlagForLowRecordValue.c scr/st/ST_PlayerUpdateTurning.c scr/st/ST_IsShiftedAngleGreater.c -o scratchpad/player-rotation-stack-source-test
 	scratchpad/player-rotation-stack-source-test
+	$(CXX) $(CFLAGS) -O2 tests/indexed_collision_record_test.cpp scr/st/ST_QueryIndexedCollisionRecords.c -o scratchpad/indexed-collision-record-test
+	scratchpad/indexed-collision-record-test
 	$(CXX) $(CFLAGS) -std=c++17 tests/player_record_modifiers_test.cpp scr/st/ST_RecalculatePlayerRecordModifiers.c -o scratchpad/player-record-modifiers-test
 	scratchpad/player-record-modifiers-test
 	$(CXX) $(CFLAGS) -std=c++17 tests/resource_vector_sample_test.cpp scr/st/ST_SampleResourceVector.c scr/st/ST_SelectResourceSequenceInterval.c -o scratchpad/resource-vector-sample-test

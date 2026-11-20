@@ -942,15 +942,22 @@ unidentified.
 ### Indexed-record collision check
 
 [ST_QueryIndexedCollisionRecords](../scr/st/ST_QueryIndexedCollisionRecords.c)
-scans up to 240 records beginning at `0x801C2230`, with a stride of 88 bytes.
-For each record it reads an unsigned index at offset `0x0A`. It skips the
-record if the index is `0xFFFF`, if the record address equals the word at
-`0x801C74C0`, or if halfword `0x04` of the indexed 24-byte record at
-`0x801C0310` is zero.
+scans up to 240 records beginning at `ST_LEVEL_RECORD_TABLE_ADDRESS`, with a
+stride of 88 bytes. For each record it reads the unsigned
+`ST_LEVEL_RECORD_INDEXED_DATA_INDEX`. It skips the record if the index is
+`0xFFFF`, if the record address equals the pointer at
+`ST_LEVEL_RECORD_QUERY_EXCLUDED_ADDRESS`, or if
+`ST_LEVEL_RECORD_INDEXED_HORIZONTAL_EXTENT` of the indexed 24-byte record in
+`ST_LEVEL_RECORD_INDEXED_DATA_TABLE_ADDRESS` is zero.
+[ST_UpdateLevelRecords](../scr/st/ST_UpdateLevelRecords.c) sets the pointer
+at `ST_LEVEL_RECORD_QUERY_EXCLUDED_ADDRESS` to each nonempty record while
+processing it and clears the pointer after its 240-record loop. A collision
+query made during that processing skips the current record.
 
 The routine subtracts `ST_COLLISION_QUERY_POSITION_X` (`0x04`) and
 `ST_COLLISION_QUERY_POSITION_Z` (`0x0C`) from record X
-and Z (words `0x24` and `0x2C`) using 32-bit arithmetic. It skips the
+and Z (`ST_LEVEL_RECORD_POSITION_X` and `ST_LEVEL_RECORD_POSITION_Z`) using
+32-bit arithmetic. It skips the
 record unless both differences lie in `[-0x2800, 0x2800]`. It calculates a
 distance with `SquareRoot0` from the 32-bit wrapped sum of their squares,
 and an angle with `ratan2` from those differences. It interprets the low
@@ -959,13 +966,13 @@ halfword of that angle as signed. From the distance it subtracts the low
 `rcos(ST_COLLISION_QUERY_DIRECTION - angle)`, divided by 4096
 with rounding toward zero. It skips the record unless this result is less
 than the sum of unsigned `ST_COLLISION_QUERY_HORIZONTAL_PARAMETER` and the indexed record's
-unsigned halfword `0x04`.
+unsigned `ST_LEVEL_RECORD_INDEXED_HORIZONTAL_EXTENT`.
 
 After a record passes that horizontal test, the function compares its Y
-word at `0x28` to `ST_COLLISION_QUERY_POSITION_Y` (`0x08`). If record Y is numerically less, it returns `-1`
+`ST_LEVEL_RECORD_POSITION_Y` to `ST_COLLISION_QUERY_POSITION_Y` (`0x08`). If record Y is numerically less, it returns `-1`
 immediately when record Y is less than query Y minus unsigned query
 `ST_COLLISION_QUERY_VERTICAL_PARAMETER`. Otherwise, it returns `-1` immediately when query Y is
-less than record Y minus the record's unsigned halfword `0x12`. If neither
+less than record Y minus the record's unsigned `ST_LEVEL_RECORD_VERTICAL_EXTENT`. If neither
 rejection applies, it returns the current record index. If no record passes
 the earlier checks, it returns `-1`. The comparisons are signed 32-bit
 comparisons after the indicated 32-bit subtraction. The early `-1` returns
@@ -977,8 +984,8 @@ is `0x100` (0.0625 cells) and `ST_COLLISION_QUERY_VERTICAL_PARAMETER` is
 `0x640` (0.390625 cells). The dispatcher adds 1600 to query Y before calling
 the check. If the initial query Y is the player Y and the additions and
 subtractions do not wrap, the vertical comparisons accept a record Y in the
-inclusive interval from player Y to `player Y + 1600 + record[0x12]`.
-The horizontal comparison adds 256 to the indexed record's `0x04` value.
+inclusive interval from player Y to `player Y + 1600 + ST_LEVEL_RECORD_VERTICAL_EXTENT`.
+The horizontal comparison adds 256 to `ST_LEVEL_RECORD_INDEXED_HORIZONTAL_EXTENT`.
 These are properties of this particular check; they do not establish the
 player's physical height or all checks made by the dispatcher.
 

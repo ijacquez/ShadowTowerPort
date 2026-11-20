@@ -17,7 +17,7 @@ void ST_UpdateLevelRecords(uint8_t* rdram, recomp_context* ctx) {
     // sw          $s5, 0x8C($sp)
     MEM_W(0X8C, ctx->r29) = ctx->r21;
     // addiu       $s5, $v0, 0x2230
-    ctx->r21 = ADD32(ctx->r2, 0X2230);
+    ctx->r21 = ST_LEVEL_RECORD_TABLE_ADDRESS;
     // addiu       $t2, $zero, 0xF0
     ctx->r10 = ADD32(0, 0XF0);
     // lui         $v0, 0x801A
@@ -31,7 +31,7 @@ void ST_UpdateLevelRecords(uint8_t* rdram, recomp_context* ctx) {
     // addiu       $s1, $s5, 0x50
     ctx->r17 = ADD32(ctx->r21, ST_LEVEL_RECORD_CURSOR_OFFSET);
     // addiu       $t3, $s5, 0x24
-    ctx->r11 = ADD32(ctx->r21, 0X24);
+    ctx->r11 = ADD32(ctx->r21, ST_LEVEL_RECORD_POSITION_X);
     // sw          $ra, 0x9C($sp)
     MEM_W(0X9C, ctx->r29) = ctx->r31;
     // sw          $fp, 0x98($sp)
@@ -52,7 +52,7 @@ void ST_UpdateLevelRecords(uint8_t* rdram, recomp_context* ctx) {
     MEM_W(0X70, ctx->r29) = ctx->r11;
 L_800507B8:
     // lhu         $v1, -0x46($s1)
-    ctx->r3 = MEM_HU(-0X46, ctx->r17);
+    ctx->r3 = MEM_HU(ST_LEVEL_RECORD_INDEXED_DATA_INDEX, ctx->r21);
     // ori         $v0, $zero, 0xFFFF
     ctx->r2 = 0 | 0XFFFF;
     // beq         $v1, $v0, L_8005279C
@@ -68,9 +68,9 @@ L_800507B8:
     // lui         $t3, 0x801C
     ctx->r11 = S32(0X801C << 16);
     // sw          $s5, 0x71B0($t2)
-    MEM_W(0X71B0, ctx->r10) = ctx->r21;
+    MEM_W(0, ST_LEVEL_RECORD_QUERY_EXCLUDED_ADDRESS) = ctx->r21;
     // lhu         $v1, -0x46($s1)
-    ctx->r3 = MEM_HU(-0X46, ctx->r17);
+    ctx->r3 = MEM_HU(ST_LEVEL_RECORD_INDEXED_DATA_INDEX, ctx->r21);
     // addiu       $t3, $t3, 0x310
     ctx->r11 = ADD32(ctx->r11, 0X310);
     // sll         $v0, $v1, 1
@@ -5740,7 +5740,7 @@ L_800527A4:
     // lhu         $v1, 0x71A8($a2)
     ctx->r3 = MEM_HU(0, ST_PLAYER_QUARTER_CONTRIBUTION_Z_ADDRESS);
     // sw          $zero, 0x71B0($a2)
-    MEM_W(0X71B0, ctx->r6) = 0;
+    MEM_W(0, ST_LEVEL_RECORD_QUERY_EXCLUDED_ADDRESS) = 0;
     // sll         $v0, $v0, 16
     ctx->r2 = S32(ctx->r2) << 16;
     // sra         $a1, $v0, 16

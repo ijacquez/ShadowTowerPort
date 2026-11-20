@@ -1,6 +1,7 @@
 #include "recomp.h"
 #include "disable_warnings.h"
 #include "ST_CollisionQuery.h"
+#include "ST_LevelRecord.h"
 
 // Scan the indexed 88-byte records for a collision-query match. The horizontal
 // and vertical tests, including the early -1 return, are documented in
@@ -20,7 +21,7 @@ void ST_QueryIndexedCollisionRecords(uint8_t* rdram, recomp_context* ctx) {
     // sw          $s3, 0x1C($sp)
     MEM_W(0X1C, ctx->r29) = ctx->r19;
     // addiu       $s3, $v0, 0x2230
-    ctx->r19 = ADD32(ctx->r2, 0X2230);
+    ctx->r19 = ST_LEVEL_RECORD_TABLE_ADDRESS;
     // sw          $s4, 0x20($sp)
     MEM_W(0X20, ctx->r29) = ctx->r20;
     // addu        $s4, $zero, $zero
@@ -28,11 +29,11 @@ void ST_QueryIndexedCollisionRecords(uint8_t* rdram, recomp_context* ctx) {
     // sw          $s7, 0x2C($sp)
     MEM_W(0X2C, ctx->r29) = ctx->r23;
     // addiu       $s7, $s3, -0x1F20
-    ctx->r23 = ADD32(ctx->r19, -0X1F20);
+    ctx->r23 = ST_LEVEL_RECORD_INDEXED_DATA_TABLE_ADDRESS;
     // sw          $s2, 0x18($sp)
     MEM_W(0X18, ctx->r29) = ctx->r18;
     // addiu       $s2, $s3, 0x12
-    ctx->r18 = ADD32(ctx->r19, 0X12);
+    ctx->r18 = ADD32(ctx->r19, ST_LEVEL_RECORD_VERTICAL_EXTENT);
     // sw          $ra, 0x30($sp)
     MEM_W(0X30, ctx->r29) = ctx->r31;
     // sw          $s6, 0x28($sp)
@@ -43,7 +44,7 @@ void ST_QueryIndexedCollisionRecords(uint8_t* rdram, recomp_context* ctx) {
     MEM_W(0X10, ctx->r29) = ctx->r16;
 L_8004F57C:
     // lhu         $v1, -0x8($s2)
-    ctx->r3 = MEM_HU(-0X8, ctx->r18);
+    ctx->r3 = MEM_HU(ST_LEVEL_RECORD_INDEXED_DATA_INDEX, ctx->r19);
     // ori         $v0, $zero, 0xFFFF
     ctx->r2 = 0 | 0XFFFF;
     // beq         $v1, $v0, L_8004F6D0
@@ -55,7 +56,7 @@ L_8004F57C:
     // nop
 
     // lw          $v0, 0x71B0($s7)
-    ctx->r2 = MEM_W(0X71B0, ctx->r23);
+    ctx->r2 = MEM_W(0, ST_LEVEL_RECORD_QUERY_EXCLUDED_ADDRESS);
     // nop
 
     // beq         $s3, $v0, L_8004F6D0
@@ -75,7 +76,7 @@ L_8004F57C:
     // addu        $s6, $v1, $s7
     ctx->r22 = ADD32(ctx->r3, ctx->r23);
     // lhu         $v0, 0x4($s6)
-    ctx->r2 = MEM_HU(0X4, ctx->r22);
+    ctx->r2 = MEM_HU(ST_LEVEL_RECORD_INDEXED_HORIZONTAL_EXTENT, ctx->r22);
     // nop
 
     // beq         $v0, $zero, L_8004F6D0
@@ -87,7 +88,7 @@ L_8004F57C:
     // nop
 
     // lw          $v1, 0x12($s2)
-    ctx->r3 = MEM_W(0X12, ctx->r18);
+    ctx->r3 = MEM_W(ST_LEVEL_RECORD_POSITION_X, ctx->r19);
     // lw          $v0, 0x4($s5)
     ctx->r2 = MEM_W(ST_COLLISION_QUERY_POSITION_X, ctx->r21);
     // nop
@@ -107,7 +108,7 @@ L_8004F57C:
     // nop
 
     // lw          $v1, 0x1A($s2)
-    ctx->r3 = MEM_W(0X1A, ctx->r18);
+    ctx->r3 = MEM_W(ST_LEVEL_RECORD_POSITION_Z, ctx->r19);
     // lw          $v0, 0xC($s5)
     ctx->r2 = MEM_W(ST_COLLISION_QUERY_POSITION_Z, ctx->r21);
     // nop
@@ -192,7 +193,7 @@ L_8004F658:
     // sra         $v0, $v0, 12
     ctx->r2 = S32(ctx->r2) >> 12;
     // lhu         $v1, 0x4($s6)
-    ctx->r3 = MEM_HU(0X4, ctx->r22);
+    ctx->r3 = MEM_HU(ST_LEVEL_RECORD_INDEXED_HORIZONTAL_EXTENT, ctx->r22);
     // lhu         $a0, 0x1C($s5)
     ctx->r4 = MEM_HU(ST_COLLISION_QUERY_HORIZONTAL_PARAMETER, ctx->r21);
     // subu        $v0, $s0, $v0
@@ -210,7 +211,7 @@ L_8004F658:
     // nop
 
     // lw          $a1, 0x16($s2)
-    ctx->r5 = MEM_W(0X16, ctx->r18);
+    ctx->r5 = MEM_W(ST_LEVEL_RECORD_POSITION_Y, ctx->r19);
     // lw          $a0, 0x8($s5)
     ctx->r4 = MEM_W(ST_COLLISION_QUERY_POSITION_Y, ctx->r21);
     // nop
@@ -249,7 +250,7 @@ L_8004F658:
 
 L_8004F6B0:
     // lhu         $v1, 0x0($s2)
-    ctx->r3 = MEM_HU(0X0, ctx->r18);
+    ctx->r3 = MEM_HU(ST_LEVEL_RECORD_VERTICAL_EXTENT, ctx->r19);
     // nop
 
     // subu        $v1, $a1, $v1
