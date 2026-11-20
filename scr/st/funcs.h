@@ -418,7 +418,7 @@ void sub_8004B2DC(uint8_t* rdram, recomp_context* ctx);
 void sub_8004B658(uint8_t* rdram, recomp_context* ctx);
 void ST_QueryActiveCollisionRecords(uint8_t* rdram, recomp_context* ctx);
 void sub_8004BE80(uint8_t* rdram, recomp_context* ctx);
-void sub_8004C03C(uint8_t* rdram, recomp_context* ctx);
+void ST_SetCurrentActiveCollisionRecord(uint8_t* rdram, recomp_context* ctx);
 void sub_8004C1B4(uint8_t* rdram, recomp_context* ctx);
 void sub_8004C934(uint8_t* rdram, recomp_context* ctx);
 void sub_8004CA90(uint8_t* rdram, recomp_context* ctx);

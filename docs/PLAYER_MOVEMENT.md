@@ -299,6 +299,17 @@ latter. The function pointers come from the table addressed by
 `ST_LEVEL_STREAMING_CALLBACK_TABLE_OFFSET`. **OPEN:** the complete set of
 callback targets and their writes to the contribution vectors.
 
+Before dispatch, [ST_SetCurrentActiveCollisionRecord](../scr/st/ST_SetCurrentActiveCollisionRecord.c)
+sets `ST_CURRENT_ACTIVE_COLLISION_RECORD_ADDRESS` to the record and
+`ST_CURRENT_ACTIVE_COLLISION_CLASS_ADDRESS` to its selected class. In stage
+0's slot-2 resource, the periodic and update entries contain
+`ST_STAGE_ZERO_ACTIVE_RECORD_PERIODIC_CALLBACK` and
+`ST_STAGE_ZERO_ACTIVE_RECORD_UPDATE_CALLBACK`, respectively. The port executes
+these addresses through its MIPS interpreter. The update callback begins by
+adding `ST_ACTIVE_COLLISION_RECORD_UPDATE_STEP` to
+`ST_ACTIVE_COLLISION_RECORD_UPDATE_ACCUMULATOR` and storing the low halfword,
+then calls another function. **OPEN:** the callbacks' complete effects.
+
 After this processing, if the signed 16-bit movement magnitude is nonzero and
 `ST_PLAYER_DIRECTIONAL_MOVE_DISABLED` (`0x21E`) is zero, `ST_PlayerUpdateMovement` calls
 [ST_ApplyDirectionalMovementWithCollision](../scr/st/ST_ApplyDirectionalMovementWithCollision.c)

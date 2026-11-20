@@ -377,7 +377,7 @@ L_8004E51C:
     // jal         0x8004C03C
     // addu        $a0, $s3, $zero
     ctx->r4 = ADD32(ctx->r19, 0);
-    sub_8004C03C(rdram, ctx);
+    ST_SetCurrentActiveCollisionRecord(rdram, ctx);
     goto after_10;
     // addu        $a0, $s3, $zero
     ctx->r4 = ADD32(ctx->r19, 0);
@@ -975,7 +975,7 @@ L_8004E898:
     // jal         0x8004C03C
     // addu        $a0, $zero, $zero
     ctx->r4 = ADD32(0, 0);
-    sub_8004C03C(rdram, ctx);
+    ST_SetCurrentActiveCollisionRecord(rdram, ctx);
     goto after_19;
     // addu        $a0, $zero, $zero
     ctx->r4 = ADD32(0, 0);

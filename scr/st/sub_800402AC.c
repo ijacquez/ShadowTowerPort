@@ -1565,7 +1565,7 @@ L_80040C24:
     // jal         0x8004C03C
     // addu        $a0, $s1, $zero
     ctx->r4 = ADD32(ctx->r17, 0);
-    sub_8004C03C(rdram, ctx);
+    ST_SetCurrentActiveCollisionRecord(rdram, ctx);
     goto after_7;
     // addu        $a0, $s1, $zero
     ctx->r4 = ADD32(ctx->r17, 0);

@@ -1,7 +1,8 @@
 #include "recomp.h"
 #include "disable_warnings.h"
+#include "ST_ActiveCollisionRecord.h"
 
-void sub_8004C03C(uint8_t* rdram, recomp_context* ctx) {
+void ST_SetCurrentActiveCollisionRecord(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
     unsigned int rounding_mode = DEFAULT_ROUNDING_MODE;
     int c1cs = 0; 
@@ -16,9 +17,9 @@ void sub_8004C03C(uint8_t* rdram, recomp_context* ctx) {
     // addiu       $a1, $v0, -0x5EC8
     ctx->r5 = ADD32(ctx->r2, -0X5EC8);
     // sw          $a0, 0x6138($a1)
-    MEM_W(0X6138, ctx->r5) = ctx->r4;
+    MEM_W(0, ST_CURRENT_ACTIVE_COLLISION_RECORD_ADDRESS) = ctx->r4;
     // lbu         $v1, 0x2($a0)
-    ctx->r3 = MEM_BU(0X2, ctx->r4);
+    ctx->r3 = MEM_BU(ST_ACTIVE_COLLISION_RECORD_CLASS_INDEX, ctx->r4);
     // addiu       $a2, $a1, 0x3500
     ctx->r6 = ADD32(ctx->r5, 0X3500);
     // sll         $v0, $v1, 1
@@ -30,9 +31,9 @@ void sub_8004C03C(uint8_t* rdram, recomp_context* ctx) {
     // addu        $v0, $v0, $a2
     ctx->r2 = ADD32(ctx->r2, ctx->r6);
     // sw          $v0, 0x6134($a1)
-    MEM_W(0X6134, ctx->r5) = ctx->r2;
+    MEM_W(0, ST_CURRENT_ACTIVE_COLLISION_CLASS_ADDRESS) = ctx->r2;
     // lbu         $v1, 0x2($a0)
-    ctx->r3 = MEM_BU(0X2, ctx->r4);
+    ctx->r3 = MEM_BU(ST_ACTIVE_COLLISION_RECORD_CLASS_INDEX, ctx->r4);
     // nop
 
     // sw          $v1, 0x6148($a1)
@@ -95,9 +96,9 @@ L_8004C0D4:
     // addiu       $v0, $v0, -0x5EC8
     ctx->r2 = ADD32(ctx->r2, -0X5EC8);
     // sw          $zero, 0x6138($v0)
-    MEM_W(0X6138, ctx->r2) = 0;
+    MEM_W(0, ST_CURRENT_ACTIVE_COLLISION_RECORD_ADDRESS) = 0;
     // sw          $zero, 0x6134($v0)
-    MEM_W(0X6134, ctx->r2) = 0;
+    MEM_W(0, ST_CURRENT_ACTIVE_COLLISION_CLASS_ADDRESS) = 0;
     // sw          $zero, 0x6148($v0)
     MEM_W(0X6148, ctx->r2) = 0;
     // sw          $zero, 0x6140($v0)
