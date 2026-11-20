@@ -63,7 +63,7 @@ L_800478E0:
     // nop
 
     // lhu         $v0, 0x44CE($t3)
-    ctx->r2 = MEM_HU(0X44CE, ctx->r11);
+    ctx->r2 = MEM_HU(ST_COLLISION_QUERY_CANDIDATE_INDICES, ctx->r11);
     // nop
 
     // sll         $a2, $v0, 1
@@ -1701,7 +1701,7 @@ L_800483A4:
     // nop
 
     // sw          $v0, 0x47D8($s6)
-    MEM_W(0X47D8, ctx->r22) = ctx->r2;
+    MEM_W(ST_COLLISION_QUERY_SELECTED_PLACEMENT_INDEX, ctx->r22) = ctx->r2;
     // lw          $v0, 0x0($s2)
     ctx->r2 = MEM_W(0X0, ctx->r18);
     // lw          $v1, 0x4($s2)

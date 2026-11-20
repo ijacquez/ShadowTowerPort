@@ -2,6 +2,7 @@
 #include "st/ST_ActiveCollisionRecord.h"
 #include "st/ST_ActiveCollisionClass.h"
 #include "st/ST_CollisionQuery.h"
+#include "st/ST_LevelPlacement.h"
 #include <cmath>
 #include <cstdlib>
 #include <cstdio>
@@ -11,6 +12,8 @@ uint8_t rdram[2 * 1024 * 1024];
 static int queryCount;
 static uint32_t queryResult;
 static uint32_t proposedYResult;
+static uint16_t candidateCount;
+static uint16_t selectedPlacement;
 
 // This resolver uses the paired operations only for aligned words.
 uint32_t do_lwl(uint8_t*, uint32_t, uint32_t offset, uint32_t base) {
@@ -41,6 +44,8 @@ void ST_RunCollisionQuery(uint8_t* memory, recomp_context* ctx) {
     ++queryCount;
     MEM_W(ST_COLLISION_QUERY_RESULT_FLAGS, ST_COLLISION_QUERY_BASE_ADDRESS) = queryResult;
     MEM_W(ST_COLLISION_QUERY_PROPOSED_Y_RESULT, ST_COLLISION_QUERY_BASE_ADDRESS) = proposedYResult;
+    MEM_H(ST_COLLISION_QUERY_CANDIDATE_COUNT, ST_COLLISION_QUERY_BASE_ADDRESS) = candidateCount;
+    MEM_H(ST_COLLISION_QUERY_SELECTED_PLACEMENT_INDEX, ST_COLLISION_QUERY_BASE_ADDRESS) = selectedPlacement;
     MEM_W(ST_COLLISION_QUERY_FIRST_NORMAL_RESULT, ST_COLLISION_QUERY_BASE_ADDRESS) = 0x100;
     MEM_H(ST_COLLISION_QUERY_FIRST_NORMAL_X, ST_COLLISION_QUERY_BASE_ADDRESS) = 0x1000;
     MEM_W(ST_COLLISION_QUERY_SECOND_NORMAL_RESULT, ST_COLLISION_QUERY_BASE_ADDRESS) = 0x100;
@@ -57,6 +62,8 @@ int main() {
     struct Case { uint32_t result; int16_t x; uint8_t hit; };
     const Case cases[] = {
         {ST_COLLISION_RESULT_PLAYER_HIT, 0, 1},
+        {ST_COLLISION_RESULT_ACTIVE_RECORD_HIT, 0, 0},
+        {ST_COLLISION_RESULT_INDEXED_RECORD_HIT, 0, 0},
         {ST_COLLISION_RESULT_FIRST_NORMAL_THRESHOLD, 1, 0},
         {ST_COLLISION_RESULT_SECOND_NORMAL_THRESHOLD, 1, 0},
     };
@@ -79,7 +86,7 @@ int main() {
             return 1;
         }
     }
-    std::puts("3 repeated collision response cases passed");
+    std::puts("5 repeated collision response cases passed");
 
     struct VerticalCase {
         uint8_t mode;
@@ -120,4 +127,39 @@ int main() {
         }
     }
     std::puts("9 vertical collision response cases passed");
+
+    struct PlacementCase { uint16_t count, initialIndex, selectedIndex; uint8_t initialFlag, filter, value; int16_t x; uint8_t finalFlag; uint16_t finalIndex; };
+    const PlacementCase placementCases[] = {
+        {1, 0, 2, 1, 7, 7, 100, 0, 2},
+        {1, 0, 2, 1, 7, 8, 0, 0, 2},
+        {0, 3, 2, 0, 7, 7, 100, 1, 3},
+        {0, 3, 2, 0, 7, 8, 0, 1, 3},
+    };
+    for (const auto& test : placementCases) {
+        std::memset(rdram, 0, sizeof rdram);
+        queryCount = 0;
+        queryResult = 0;
+        proposedYResult = 0;
+        candidateCount = test.count;
+        selectedPlacement = test.selectedIndex;
+        MEM_H(ST_ACTIVE_COLLISION_RECORD_DISPLACEMENT_X, record) = 100;
+        MEM_B(ST_ACTIVE_COLLISION_RECORD_VERTICAL_MODE, record) = 1;
+        MEM_B(ST_ACTIVE_COLLISION_RECORD_NO_CANDIDATE_FLAG, record) = test.initialFlag;
+        MEM_B(ST_ACTIVE_COLLISION_RECORD_PLACEMENT_FILTER, record) = test.filter;
+        MEM_H(ST_ACTIVE_COLLISION_RECORD_SELECTED_PLACEMENT_INDEX, record) = test.initialIndex;
+        MEM_B(ST_LEVEL_PLACEMENT_FILTER_VALUE + 12 * test.finalIndex,
+              ST_LEVEL_PLACEMENT_TABLE_ADDRESS) = test.value;
+        recomp_context ctx{};
+        ctx.r4 = record;
+        ctx.r29 = 0x80100000;
+        ST_ResolveActiveCollisionRecordDisplacement(rdram, &ctx);
+        if (queryCount != 1 ||
+            MEM_HS(ST_ACTIVE_COLLISION_RECORD_DISPLACEMENT_X, record) != test.x ||
+            MEM_BU(ST_ACTIVE_COLLISION_RECORD_NO_CANDIDATE_FLAG, record) != test.finalFlag ||
+            MEM_HU(ST_ACTIVE_COLLISION_RECORD_SELECTED_PLACEMENT_INDEX, record) != test.finalIndex) {
+            std::fprintf(stderr, "placement collision response case %zu failed\n", &test - placementCases);
+            return 1;
+        }
+    }
+    std::puts("4 placement collision response cases passed");
 }

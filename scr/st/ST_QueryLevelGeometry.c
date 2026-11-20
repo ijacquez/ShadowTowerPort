@@ -117,7 +117,7 @@ void ST_QueryLevelGeometry(uint8_t* rdram, recomp_context* ctx) {
     // addiu       $s0, $v0, 0x5948
     ctx->r16 = ADD32(ctx->r2, 0X5948);
     // sh          $zero, 0x44CA($s0)
-    MEM_H(0X44CA, ctx->r16) = 0;
+    MEM_H(ST_COLLISION_QUERY_CANDIDATE_COUNT, ctx->r16) = 0;
     // jal         0x80046270
     // sw          $v1, 0x10C($s4)
     MEM_W(0X10C, ctx->r20) = ctx->r3;
@@ -127,7 +127,7 @@ void ST_QueryLevelGeometry(uint8_t* rdram, recomp_context* ctx) {
     MEM_W(0X10C, ctx->r20) = ctx->r3;
     after_0:
     // lhu         $v0, 0x44CA($s0)
-    ctx->r2 = MEM_HU(0X44CA, ctx->r16);
+    ctx->r2 = MEM_HU(ST_COLLISION_QUERY_CANDIDATE_COUNT, ctx->r16);
     // nop
 
     // bne         $v0, $zero, L_80048BD8
@@ -439,13 +439,13 @@ L_80048D3C:
     // sw          $s1, 0x18($s4)
     MEM_W(0X18, ctx->r20) = ctx->r17;
     // lhu         $v1, 0x44CE($v0)
-    ctx->r3 = MEM_HU(0X44CE, ctx->r2);
+    ctx->r3 = MEM_HU(ST_COLLISION_QUERY_CANDIDATE_INDICES, ctx->r2);
     // addiu       $s0, $v0, 0x33C0
     ctx->r16 = ADD32(ctx->r2, 0X33C0);
     // sw          $s0, 0x1C($s4)
     MEM_W(0X1C, ctx->r20) = ctx->r16;
     // sw          $v1, 0x47D8($v0)
-    MEM_W(0X47D8, ctx->r2) = ctx->r3;
+    MEM_W(ST_COLLISION_QUERY_SELECTED_PLACEMENT_INDEX, ctx->r2) = ctx->r3;
     // lw          $a1, 0x0($s6)
     ctx->r5 = MEM_W(0X0, ctx->r22);
     // jal         0x800468C0

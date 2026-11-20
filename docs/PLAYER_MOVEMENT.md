@@ -474,8 +474,22 @@ Unless `ST_PLAYER_EFFECT_BLOCK_ACTIVE_RECORD_POSITION_UPDATE` is set, the
 update then adds each signed displacement halfword to its corresponding
 record position with 32-bit wrapping. These record positions are subsequently
 used by `ST_QueryActiveCollisionRecords` when checking player movement.
-**OPEN:** the full collision-response branches and the complete set of
-displacement writers.
+**OPEN:** the complete set of displacement writers.
+
+On the first query in the resolver, a nonzero
+`ST_COLLISION_QUERY_CANDIDATE_COUNT` clears
+`ST_ACTIVE_COLLISION_RECORD_NO_CANDIDATE_FLAG` if it is exactly 1, then
+copies `ST_COLLISION_QUERY_SELECTED_PLACEMENT_INDEX` into
+`ST_ACTIVE_COLLISION_RECORD_SELECTED_PLACEMENT_INDEX`. With no candidates,
+it sets that flag to 1 only if it was zero and retains the previous selected
+index. It indexes `ST_LEVEL_PLACEMENT_TABLE_ADDRESS` with that index and
+compares `ST_LEVEL_PLACEMENT_FILTER_VALUE` with
+`ST_ACTIVE_COLLISION_RECORD_PLACEMENT_FILTER`. If the bytes differ, it clears
+the working X and Z displacement and continues to the vertical response
+without processing the query's horizontal result bits. The candidate index
+is initialized from the first candidate by `ST_QueryLevelGeometry` and can
+be updated by its three- and four-vertex collision tests. **OPEN:** the
+in-game meanings of the two compared bytes and the no-candidate flag.
 
 In the resolver, result bits `ST_COLLISION_RESULT_FIRST_NORMAL_THRESHOLD` and
 `ST_COLLISION_RESULT_SECOND_NORMAL_THRESHOLD` take precedence over the
@@ -494,12 +508,16 @@ toward zero, and each stored working component is a halfword. If the same
 normal bit occurs again, it keeps the newly calculated working X/Z and
 continues to the vertical response without another query.
 
-When the player-hit response is reached with
-`ST_COLLISION_RESULT_PLAYER_HIT`, the resolver sets
-`ST_ACTIVE_COLLISION_RECORD_HIT_PLAYER_FLAG`. `ST_SetCollisionReference`
-then selects the player position as the reference. The resolver clears the
+When the result contains `ST_COLLISION_RESULT_ACTIVE_RECORD_HIT`,
+`ST_COLLISION_RESULT_INDEXED_RECORD_HIT`, or
+`ST_COLLISION_RESULT_PLAYER_HIT`, the resolver calls
+`ST_SetCollisionReference`. For a player hit it also sets
+`ST_ACTIVE_COLLISION_RECORD_HIT_PLAYER_FLAG`, and the reference selector
+chooses the player position. Otherwise the reference selector uses the
+available active or indexed record as described below; it can retain an old
+reference if neither index is available. The resolver clears the
 working X/Z displacement and, on the first such response, computes
-`t = (ratan2(recordZ - playerZ, recordX - playerX) + 0x400) & 0xFFF`.
+`t = (ratan2(recordZ - referenceZ, recordX - referenceX) + 0x400) & 0xFFF`.
 It computes `p` from the original horizontal displacement magnitude times
 `rcos(originalDirection - t)`, using the low 32-bit product divided by 4096
 toward zero. If `p` is nonzero, it adds `rcos(t) * p / 4096` to working X
@@ -508,7 +526,8 @@ division toward zero; each component is stored as a halfword. It then repeats
 the collision query. If the reference-response path is reached a second time,
 it leaves working X/Z at zero and continues to the vertical response. The
 resolver allows at most three nonzero-result correction passes before that
-vertical response. Other query-result branches remain **OPEN**.
+vertical response. A nonzero result containing none of the horizontal bits
+above proceeds directly to the vertical response.
 
 For the vertical response, the resolver sets `D` to
 `ST_COLLISION_QUERY_PROPOSED_Y_RESULT` minus the unsigned

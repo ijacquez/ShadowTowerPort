@@ -3,6 +3,7 @@
 // Twelve-byte placement entries used by geometry and active records.
 enum {
     ST_LEVEL_PLACEMENT_TABLE_ADDRESS = 0x8017BED0,
+    ST_LEVEL_PLACEMENT_FILTER_VALUE = 0x01,
     ST_LEVEL_PLACEMENT_X_CELL = 0x08,
     ST_LEVEL_PLACEMENT_Y_CELL = 0x09,
     ST_LEVEL_PLACEMENT_Z_CELL = 0x0A,

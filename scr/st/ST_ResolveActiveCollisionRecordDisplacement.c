@@ -3,6 +3,7 @@
 #include "ST_ActiveCollisionRecord.h"
 #include "ST_CollisionQuery.h"
 #include "ST_ActiveCollisionClass.h"
+#include "ST_LevelPlacement.h"
 
 void ST_ResolveActiveCollisionRecordDisplacement(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
@@ -271,7 +272,7 @@ L_8004C2E8:
     // addu        $s1, $v0, $zero
     ctx->r17 = ADD32(ctx->r2, 0);
     // lhu         $v0, 0x44CA($s0)
-    ctx->r2 = MEM_HU(0X44CA, ctx->r16);
+    ctx->r2 = MEM_HU(ST_COLLISION_QUERY_CANDIDATE_COUNT, ctx->r16);
     // nop
 
     // beq         $v0, $zero, L_8004C3B4
@@ -283,7 +284,7 @@ L_8004C2E8:
     // addiu       $v0, $zero, 0x1
     ctx->r2 = ADD32(0, 0X1);
     // lbu         $v1, 0x3($s2)
-    ctx->r3 = MEM_BU(0X3, ctx->r18);
+    ctx->r3 = MEM_BU(ST_ACTIVE_COLLISION_RECORD_NO_CANDIDATE_FLAG, ctx->r18);
     // nop
 
     // bne         $v1, $v0, L_8004C3A8
@@ -295,19 +296,19 @@ L_8004C2E8:
     // nop
 
     // sb          $zero, 0x3($s2)
-    MEM_B(0X3, ctx->r18) = 0;
+    MEM_B(ST_ACTIVE_COLLISION_RECORD_NO_CANDIDATE_FLAG, ctx->r18) = 0;
 L_8004C3A8:
     // lhu         $v0, 0x47D8($s0)
-    ctx->r2 = MEM_HU(0X47D8, ctx->r16);
+    ctx->r2 = MEM_HU(ST_COLLISION_QUERY_SELECTED_PLACEMENT_INDEX, ctx->r16);
     // j           L_8004C3CC
     // sh          $v0, 0x26($s2)
-    MEM_H(0X26, ctx->r18) = ctx->r2;
+    MEM_H(ST_ACTIVE_COLLISION_RECORD_SELECTED_PLACEMENT_INDEX, ctx->r18) = ctx->r2;
     goto L_8004C3CC;
     // sh          $v0, 0x26($s2)
-    MEM_H(0X26, ctx->r18) = ctx->r2;
+    MEM_H(ST_ACTIVE_COLLISION_RECORD_SELECTED_PLACEMENT_INDEX, ctx->r18) = ctx->r2;
 L_8004C3B4:
     // lbu         $v0, 0x3($s2)
-    ctx->r2 = MEM_BU(0X3, ctx->r18);
+    ctx->r2 = MEM_BU(ST_ACTIVE_COLLISION_RECORD_NO_CANDIDATE_FLAG, ctx->r18);
     // nop
 
     // bne         $v0, $zero, L_8004C3D0
@@ -321,15 +322,15 @@ L_8004C3B4:
     // addiu       $v0, $zero, 0x1
     ctx->r2 = ADD32(0, 0X1);
     // sb          $v0, 0x3($s2)
-    MEM_B(0X3, ctx->r18) = ctx->r2;
+    MEM_B(ST_ACTIVE_COLLISION_RECORD_NO_CANDIDATE_FLAG, ctx->r18) = ctx->r2;
 L_8004C3CC:
     // lui         $v1, 0x8018
     ctx->r3 = S32(0X8018 << 16);
 L_8004C3D0:
     // lhu         $a0, 0x26($s2)
-    ctx->r4 = MEM_HU(0X26, ctx->r18);
+    ctx->r4 = MEM_HU(ST_ACTIVE_COLLISION_RECORD_SELECTED_PLACEMENT_INDEX, ctx->r18);
     // addiu       $v1, $v1, -0x4130
-    ctx->r3 = ADD32(ctx->r3, -0X4130);
+    ctx->r3 = ST_LEVEL_PLACEMENT_TABLE_ADDRESS;
     // sll         $v0, $a0, 1
     ctx->r2 = S32(ctx->r4) << 1;
     // addu        $v0, $v0, $a0
@@ -339,9 +340,9 @@ L_8004C3D0:
     // addu        $v0, $v0, $v1
     ctx->r2 = ADD32(ctx->r2, ctx->r3);
     // lbu         $v1, 0x1($v0)
-    ctx->r3 = MEM_BU(0X1, ctx->r2);
+    ctx->r3 = MEM_BU(ST_LEVEL_PLACEMENT_FILTER_VALUE, ctx->r2);
     // lbu         $v0, 0x6($s2)
-    ctx->r2 = MEM_BU(0X6, ctx->r18);
+    ctx->r2 = MEM_BU(ST_ACTIVE_COLLISION_RECORD_PLACEMENT_FILTER, ctx->r18);
     // nop
 
     // beq         $v1, $v0, L_8004C408
@@ -594,7 +595,7 @@ L_8004C514:
     MEM_W(0X34, ctx->r29) = ctx->r6;
 L_8004C554:
     // andi        $v0, $s1, 0xD0
-    ctx->r2 = ctx->r17 & 0XD0;
+    ctx->r2 = ctx->r17 & ST_COLLISION_RESULT_REFERENCE_HITS;
     // beq         $v0, $zero, L_8004C654
     if (ctx->r2 == 0) {
         // andi        $v0, $s1, 0x80

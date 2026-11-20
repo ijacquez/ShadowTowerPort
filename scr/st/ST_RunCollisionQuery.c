@@ -89,10 +89,10 @@ L_80049578:
 
     // j           L_800495D0
     // ori         $s0, $s0, 0x10
-    ctx->r16 = ctx->r16 | 0X10;
+    ctx->r16 = ctx->r16 | ST_COLLISION_RESULT_ACTIVE_RECORD_HIT;
     goto L_800495D0;
     // ori         $s0, $s0, 0x10
-    ctx->r16 = ctx->r16 | 0X10;
+    ctx->r16 = ctx->r16 | ST_COLLISION_RESULT_ACTIVE_RECORD_HIT;
 L_800495C4:
     // lui         $v1, 0x801B
     ctx->r3 = S32(0X801B << 16);
@@ -139,10 +139,10 @@ L_800495D0:
 
     // j           L_80049610
     // ori         $s0, $s0, 0x10
-    ctx->r16 = ctx->r16 | 0X10;
+    ctx->r16 = ctx->r16 | ST_COLLISION_RESULT_ACTIVE_RECORD_HIT;
     goto L_80049610;
     // ori         $s0, $s0, 0x10
-    ctx->r16 = ctx->r16 | 0X10;
+    ctx->r16 = ctx->r16 | ST_COLLISION_RESULT_ACTIVE_RECORD_HIT;
 L_80049608:
     // addiu       $v0, $zero, -0x1
     ctx->r2 = ADD32(0, -0X1);
@@ -187,10 +187,10 @@ L_80049610:
 
     // j           L_80049650
     // ori         $s0, $s0, 0x40
-    ctx->r16 = ctx->r16 | 0X40;
+    ctx->r16 = ctx->r16 | ST_COLLISION_RESULT_INDEXED_RECORD_HIT;
     goto L_80049650;
     // ori         $s0, $s0, 0x40
-    ctx->r16 = ctx->r16 | 0X40;
+    ctx->r16 = ctx->r16 | ST_COLLISION_RESULT_INDEXED_RECORD_HIT;
 L_80049648:
     // addiu       $v0, $zero, -0x1
     ctx->r2 = ADD32(0, -0X1);
