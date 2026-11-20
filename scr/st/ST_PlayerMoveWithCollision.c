@@ -197,16 +197,16 @@ L_80041714:
     // sh          $v0, 0x22($s2)
     MEM_H(ST_COLLISION_QUERY_HORIZONTAL_MAGNITUDE, ctx->r18) = ctx->r2;
     // sh          $zero, 0x47CE($s2)
-    MEM_H(0X47CE, ctx->r18) = 0;
+    MEM_H(ST_COLLISION_QUERY_RECORD_VECTOR_SUM_X, ctx->r18) = 0;
     // sh          $zero, 0x47D0($s2)
-    MEM_H(0X47D0, ctx->r18) = 0;
+    MEM_H(ST_COLLISION_QUERY_RECORD_VECTOR_SUM_Y, ctx->r18) = 0;
     // jal         0x80049544
     // sh          $zero, 0x47D2($s2)
-    MEM_H(0X47D2, ctx->r18) = 0;
+    MEM_H(ST_COLLISION_QUERY_RECORD_VECTOR_SUM_Z, ctx->r18) = 0;
     ST_RunCollisionQuery(rdram, ctx);
     goto after_4;
     // sh          $zero, 0x47D2($s2)
-    MEM_H(0X47D2, ctx->r18) = 0;
+    MEM_H(ST_COLLISION_QUERY_RECORD_VECTOR_SUM_Z, ctx->r18) = 0;
     after_4:
     // addu        $a3, $v0, $zero
     ctx->r7 = ADD32(ctx->r2, 0);
@@ -577,7 +577,7 @@ L_80041988:
     // addiu       $a0, $v0, 0x5948
     ctx->r4 = ADD32(ctx->r2, 0X5948);
     // lh          $v1, 0x47CE($a0)
-    ctx->r3 = MEM_HS(0X47CE, ctx->r4);
+    ctx->r3 = MEM_HS(ST_COLLISION_QUERY_RECORD_VECTOR_SUM_X, ctx->r4);
     // lui         $v0, 0x801A
     ctx->r2 = S32(0X801A << 16);
     // bgez        $v1, L_800419A0
@@ -596,7 +596,7 @@ L_800419A0:
     // lhu         $v0, 0x1CC($a3)
     ctx->r2 = MEM_HU(ST_PLAYER_MOVE_X, ctx->r7);
     // lh          $a0, 0x47D2($a0)
-    ctx->r4 = MEM_HS(0X47D2, ctx->r4);
+    ctx->r4 = MEM_HS(ST_COLLISION_QUERY_RECORD_VECTOR_SUM_Z, ctx->r4);
     // addu        $v0, $v0, $v1
     ctx->r2 = ADD32(ctx->r2, ctx->r3);
     // bgez        $a0, L_800419BC

@@ -1,5 +1,6 @@
 #include "recomp.h"
 #include "disable_warnings.h"
+#include "ST_CollisionQuery.h"
 
 void ST_TestThreeVertexCollisionRecords(uint8_t* rdram, recomp_context* ctx) {
     // Tests the 12-byte collision records using three transformed vertices.
@@ -1406,7 +1407,7 @@ L_800471B0:
     // sh          $t6, 0x4($v0)
     MEM_H(0X4, ctx->r2) = ctx->r14;
     // lhu         $v0, 0x47CE($s3)
-    ctx->r2 = MEM_HU(0X47CE, ctx->r19);
+    ctx->r2 = MEM_HU(ST_COLLISION_QUERY_RECORD_VECTOR_SUM_X, ctx->r19);
     // lhu         $v1, 0x190($t3)
     ctx->r3 = MEM_HU(0X190, ctx->r11);
     // nop
@@ -1414,13 +1415,13 @@ L_800471B0:
     // addu        $v0, $v0, $v1
     ctx->r2 = ADD32(ctx->r2, ctx->r3);
     // sh          $v0, 0x47CE($s3)
-    MEM_H(0X47CE, ctx->r19) = ctx->r2;
+    MEM_H(ST_COLLISION_QUERY_RECORD_VECTOR_SUM_X, ctx->r19) = ctx->r2;
     // lhu         $v0, 0x47D0($s3)
-    ctx->r2 = MEM_HU(0X47D0, ctx->r19);
+    ctx->r2 = MEM_HU(ST_COLLISION_QUERY_RECORD_VECTOR_SUM_Y, ctx->r19);
     // lhu         $a0, 0x192($t3)
     ctx->r4 = MEM_HU(0X192, ctx->r11);
     // lhu         $v1, 0x47D2($s3)
-    ctx->r3 = MEM_HU(0X47D2, ctx->r19);
+    ctx->r3 = MEM_HU(ST_COLLISION_QUERY_RECORD_VECTOR_SUM_Z, ctx->r19);
     // lhu         $a1, 0x194($t3)
     ctx->r5 = MEM_HU(0X194, ctx->r11);
     // addu        $v0, $v0, $a0
@@ -1428,9 +1429,9 @@ L_800471B0:
     // addu        $v1, $v1, $a1
     ctx->r3 = ADD32(ctx->r3, ctx->r5);
     // sh          $v0, 0x47D0($s3)
-    MEM_H(0X47D0, ctx->r19) = ctx->r2;
+    MEM_H(ST_COLLISION_QUERY_RECORD_VECTOR_SUM_Y, ctx->r19) = ctx->r2;
     // sh          $v1, 0x47D2($s3)
-    MEM_H(0X47D2, ctx->r19) = ctx->r3;
+    MEM_H(ST_COLLISION_QUERY_RECORD_VECTOR_SUM_Z, ctx->r19) = ctx->r3;
 L_80047294:
     // slti        $v0, $s1, -0x100
     ctx->r2 = SIGNED(ctx->r17) < -0X100 ? 1 : 0;

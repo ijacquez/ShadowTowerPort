@@ -378,13 +378,28 @@ The query result controls the next step, in this order:
 
 On the first occurrence of any of the three correction cases, the function
 also calculates an angle, uses `rcos`/`rsin` to add another X/Z component,
-and queries again. On exit it adds one quarter of signed query halfwords
-`0x47CE` and `0x47D2` to `ST_PLAYER_MOVE_X` and `ST_PLAYER_MOVE_Z`,
+and queries again. On exit it adds one quarter of signed
+`ST_COLLISION_QUERY_RECORD_VECTOR_SUM_X` (`0x47CE`) and
+`ST_COLLISION_QUERY_RECORD_VECTOR_SUM_Z` (`0x47D2`) to `ST_PLAYER_MOVE_X` and `ST_PLAYER_MOVE_Z`,
 respectively, rounding toward zero, and stores the final X/Y/Z displacement
 as `ST_PLAYER_COLLISION_DISPLACEMENT_X`, `ST_PLAYER_COLLISION_DISPLACEMENT_Y`,
 and `ST_PLAYER_COLLISION_DISPLACEMENT_Z` (`0x260`, `0x262`, `0x264`). The query fields
 and result bits are identified by their offsets and masks. **OPEN:**
 their complete geometric meanings have not been established.
+
+Each movement query clears `ST_COLLISION_QUERY_RECORD_VECTOR_SUM_X`,
+`ST_COLLISION_QUERY_RECORD_VECTOR_SUM_Y` (`0x47D0`), and
+`ST_COLLISION_QUERY_RECORD_VECTOR_SUM_Z` before dispatch. On a qualifying
+current-position collision-record path, the three- and four-vertex geometry
+helpers form a vector from signed record bytes 0 and 1 as `(byte0, 0, byte1)`,
+rotate it by the selected placement matrix with the GTE, and add the resulting
+halfwords to these sums with halfword wrapping. They skip this vector update
+when the record's flag halfword at offset 2 has bit `0x400` set. Other
+geometric checks also determine whether this path is reached.
+`ST_UpdatePlayerState` subsequently halves each sum, rounding toward zero,
+and clears each halved result in the range -4 through 3 on that state path.
+**OPEN:** the in-game meaning of the record vector and the complete set of
+paths that modify the sums remain unestablished.
 
 ### Collision reference selection
 
