@@ -244,6 +244,22 @@ not been established. [ST_RunCollisionQuery](../scr/st/ST_RunCollisionQuery.c) d
 them, [ST_QueryLevelGeometry](../scr/st/ST_QueryLevelGeometry.c) searches level geometry. The query returns a bitmask and
 stores additional collision data in the shared query structure.
 
+For queries made by `ST_PlayerMoveWithCollision`, query halfword `0x20` is
+set to `9999`.
+`ST_QueryLevelGeometry` uses that value to build a signed-halfword vector
+from the candidate displacement. When X and Z are both zero, the vector's
+X and Z are zero. Otherwise it computes `angle = ratan2(Z, X)` and adds
+`rcos(angle) * 0x100 / 4096` to X and `rsin(angle) * 0x100 / 4096` to Z,
+with the divisions rounded toward zero. Its Y is the candidate Y plus
+`0x640`. Each component is stored as a halfword. These operations establish
+how the two query values affect this vector; their complete geometric
+interpretation remains **OPEN**.
+`ST_ApplyDirectionalMovementWithCollision` instead stores the result of
+`ratan2` on its combined Z and X movement halfwords in query offset `0x20`.
+When that halfword is not `9999`, the geometry routine uses it for the
+cosine and sine terms and uses the query's Y displacement without adding
+`0x640` to that vector component.
+
 ### Query dispatcher: observed input and output flags
 
 [ST_RunCollisionQuery](../scr/st/ST_RunCollisionQuery.c) reads a 32-bit
