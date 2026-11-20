@@ -770,7 +770,7 @@
     <ClCompile Include="scr\st\sub_800455DC.c" />
     <ClCompile Include="scr\st\sub_800455F4.c" />
     <ClCompile Include="scr\st\sub_80045648.c" />
-    <ClCompile Include="scr\st\sub_8004567C.c" />
+    <ClCompile Include="scr\st\ST_CompleteLevelStreamingRequest.c" />
     <ClCompile Include="scr\st\ST_UpdateLevelStreaming.c" />
     <ClCompile Include="scr\st\sub_80045F90.c" />
     <ClCompile Include="scr\st\sub_80045FB8.c" />

@@ -2,7 +2,7 @@
 #include "disable_warnings.h"
 #include "ST_LevelStreaming.h"
 
-void sub_8004567C(uint8_t* rdram, recomp_context* ctx) {
+void ST_CompleteLevelStreamingRequest(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
     unsigned int rounding_mode = DEFAULT_ROUNDING_MODE;
     int c1cs = 0; 
@@ -15,22 +15,22 @@ void sub_8004567C(uint8_t* rdram, recomp_context* ctx) {
     // addiu       $v0, $a1, 0x5920
     ctx->r2 = ADD32(ctx->r5, 0X5920);
     // lbu         $v1, 0x10($v0)
-    ctx->r3 = MEM_BU(0X10, ctx->r2);
+    ctx->r3 = MEM_BU(ST_LEVEL_STREAMING_REQUEST_PRIMARY_ID, ctx->r2);
     // addiu       $a0, $zero, 0xFF
     ctx->r4 = ADD32(0, 0XFF);
     // beq         $v1, $a0, L_800456A0
     if (ctx->r3 == ctx->r4) {
         // sb          $zero, 0x1E($v0)
-        MEM_B(0X1E, ctx->r2) = 0;
+        MEM_B(ST_LEVEL_STREAMING_COMPLETION_CLEARED_FLAG, ctx->r2) = 0;
         goto L_800456A0;
     }
     // sb          $zero, 0x1E($v0)
-    MEM_B(0X1E, ctx->r2) = 0;
+    MEM_B(ST_LEVEL_STREAMING_COMPLETION_CLEARED_FLAG, ctx->r2) = 0;
     // sb          $v1, 0x4($v0)
-    MEM_B(0X4, ctx->r2) = ctx->r3;
+    MEM_B(ST_LEVEL_STREAMING_APPLIED_ID_FIRST, ctx->r2) = ctx->r3;
 L_800456A0:
     // lbu         $v1, 0x11($v0)
-    ctx->r3 = MEM_BU(0X11, ctx->r2);
+    ctx->r3 = MEM_BU(ST_LEVEL_STREAMING_REQUEST_PRIMARY_ID + 1, ctx->r2);
     // nop
 
     // beq         $v1, $a0, L_800456B4
@@ -42,10 +42,10 @@ L_800456A0:
     // nop
 
     // sb          $v1, 0x5($v0)
-    MEM_B(0X5, ctx->r2) = ctx->r3;
+    MEM_B(ST_LEVEL_STREAMING_APPLIED_ID_FIRST + 1, ctx->r2) = ctx->r3;
 L_800456B4:
     // lbu         $v1, 0x12($v0)
-    ctx->r3 = MEM_BU(0X12, ctx->r2);
+    ctx->r3 = MEM_BU(ST_LEVEL_STREAMING_REQUEST_PRIMARY_ID + 2, ctx->r2);
     // nop
 
     // beq         $v1, $a0, L_800456C8
@@ -57,10 +57,10 @@ L_800456B4:
     // nop
 
     // sb          $v1, 0x6($v0)
-    MEM_B(0X6, ctx->r2) = ctx->r3;
+    MEM_B(ST_LEVEL_STREAMING_APPLIED_ID_FIRST + 2, ctx->r2) = ctx->r3;
 L_800456C8:
     // lbu         $v1, 0x13($v0)
-    ctx->r3 = MEM_BU(0X13, ctx->r2);
+    ctx->r3 = MEM_BU(ST_LEVEL_STREAMING_REQUEST_PRIMARY_ID + 3, ctx->r2);
     // nop
 
     // beq         $v1, $a0, L_800456DC
@@ -72,10 +72,10 @@ L_800456C8:
     // nop
 
     // sb          $v1, 0x7($v0)
-    MEM_B(0X7, ctx->r2) = ctx->r3;
+    MEM_B(ST_LEVEL_STREAMING_APPLIED_ID_FIRST + 3, ctx->r2) = ctx->r3;
 L_800456DC:
     // lbu         $v1, 0x14($v0)
-    ctx->r3 = MEM_BU(0X14, ctx->r2);
+    ctx->r3 = MEM_BU(ST_LEVEL_STREAMING_REQUEST_PRIMARY_ID + 4, ctx->r2);
     // nop
 
     // beq         $v1, $a0, L_800456F0
@@ -87,7 +87,7 @@ L_800456DC:
     // nop
 
     // sb          $v1, 0x8($v0)
-    MEM_B(0X8, ctx->r2) = ctx->r3;
+    MEM_B(ST_LEVEL_STREAMING_APPLIED_ID_FIRST + 4, ctx->r2) = ctx->r3;
 L_800456F0:
     // jr          $ra
     // sh          $zero, 0x5920($a1)

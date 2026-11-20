@@ -70,7 +70,14 @@ values to the X and Z quarter-contribution halfwords; its end-of-loop
 damping, described below, then applies to the copied values. A subsequent condition
 in the same slot loop can set the gate to 3. At gate 3 the routine clears the
 stored direction values, sets the gate to 4, and requests level streaming.
-[sub_8004567C](../scr/st/sub_8004567C.c) clears the gate. **OPEN:** the
+[ST_CompleteLevelStreamingRequest](../scr/st/ST_CompleteLevelStreamingRequest.c) clears the gate,
+`ST_LEVEL_STREAMING_COMPLETION_CLEARED_FLAG`, and the status halfword at
+`ST_LEVEL_STREAMING_STATUS_ADDRESS`.
+For each of five consecutive bytes starting at `ST_LEVEL_STREAMING_REQUEST_PRIMARY_ID`,
+it copies the byte to the corresponding position starting at
+`ST_LEVEL_STREAMING_APPLIED_ID_FIRST` unless the requested byte is `0xFF`.
+`ST_UpdateLevelStreaming` sets the completion-cleared flag on one of its paths.
+**OPEN:** the purpose of that flag and the
 in-game meanings of these record types and gate states remain
 unestablished.
 

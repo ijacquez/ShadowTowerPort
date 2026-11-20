@@ -1260,7 +1260,7 @@ L_80045DD4:
     // lui         $v0, 0x801B
     ctx->r2 = S32(0X801B << 16);
     // sb          $v1, 0x593E($v0)
-    MEM_B(0X593E, ctx->r2) = ctx->r3;
+    MEM_B(ST_LEVEL_STREAMING_COMPLETION_CLEARED_FLAG, ST_LEVEL_STREAMING_STATUS_ADDRESS) = ctx->r3;
 L_80045DF8:
     // lui         $v0, 0x801B
     ctx->r2 = S32(0X801B << 16);
@@ -1518,7 +1518,7 @@ L_80045F60:
     // jal         0x8004567C
     // nop
 
-    sub_8004567C(rdram, ctx);
+    ST_CompleteLevelStreamingRequest(rdram, ctx);
     goto after_37;
     // nop
 

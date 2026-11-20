@@ -364,7 +364,7 @@ void sub_800455C4(uint8_t* rdram, recomp_context* ctx);
 void sub_800455DC(uint8_t* rdram, recomp_context* ctx);
 void sub_800455F4(uint8_t* rdram, recomp_context* ctx);
 void sub_80045648(uint8_t* rdram, recomp_context* ctx);
-void sub_8004567C(uint8_t* rdram, recomp_context* ctx);
+void ST_CompleteLevelStreamingRequest(uint8_t* rdram, recomp_context* ctx);
 void ST_UpdateLevelStreaming(uint8_t* rdram, recomp_context* ctx);
 void sub_80045F90(uint8_t* rdram, recomp_context* ctx);
 void sub_80045FB8(uint8_t* rdram, recomp_context* ctx);

@@ -2712,7 +2712,7 @@
     <ClCompile Include="scr\st\ST_OnLevelDataChunkLoaded.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_8004567C.c">
+    <ClCompile Include="scr\st\ST_CompleteLevelStreamingRequest.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\ST_DecodeCandidateOrigins.c">

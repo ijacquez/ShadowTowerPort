@@ -375,7 +375,7 @@ static FuncEntry section_1_text_funcs[] = {
     { .func = sub_800455DC, .offset = 0x000355dc },
     { .func = sub_800455F4, .offset = 0x000355f4 },
     { .func = sub_80045648, .offset = 0x00035648 },
-    { .func = sub_8004567C, .offset = 0x0003567c },
+    { .func = ST_CompleteLevelStreamingRequest, .offset = 0x0003567c },
     { .func = ST_UpdateLevelStreaming, .offset = 0x000356f8 },
     { .func = sub_80045F90, .offset = 0x00035f90 },
     { .func = sub_80045FB8, .offset = 0x00035fb8 },

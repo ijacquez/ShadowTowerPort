@@ -627,7 +627,7 @@ SRCS:= scr/st/AddPrim.c \
 	scr/st/sub_800455DC.c \
 	scr/st/sub_800455F4.c \
 	scr/st/sub_80045648.c \
-	scr/st/sub_8004567C.c \
+	scr/st/ST_CompleteLevelStreamingRequest.c \
 	scr/st/ST_UpdateLevelStreaming.c \
 	scr/st/sub_80045F90.c \
 	scr/st/sub_80045FB8.c \
