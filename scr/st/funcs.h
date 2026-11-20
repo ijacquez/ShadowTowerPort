@@ -409,7 +409,7 @@ void ST_InitializeActiveCollisionRecordClass(uint8_t* rdram, recomp_context* ctx
 void sub_8004AD70(uint8_t* rdram, recomp_context* ctx);
 void sub_8004AF24(uint8_t* rdram, recomp_context* ctx);
 void sub_8004AF7C(uint8_t* rdram, recomp_context* ctx);
-void sub_8004AFDC(uint8_t* rdram, recomp_context* ctx);
+void ST_ResetActiveCollisionRecords(uint8_t* rdram, recomp_context* ctx);
 void sub_8004B058(uint8_t* rdram, recomp_context* ctx);
 void sub_8004B090(uint8_t* rdram, recomp_context* ctx);
 void sub_8004B098(uint8_t* rdram, recomp_context* ctx);

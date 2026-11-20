@@ -1,7 +1,8 @@
 #include "recomp.h"
 #include "disable_warnings.h"
+#include "ST_ActiveCollisionRecord.h"
 
-void sub_8004AFDC(uint8_t* rdram, recomp_context* ctx) {
+void ST_ResetActiveCollisionRecords(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
     unsigned int rounding_mode = DEFAULT_ROUNDING_MODE;
     int c1cs = 0; 
@@ -53,7 +54,7 @@ L_8004AFF8:
     // addiu       $v1, $zero, 0xFF
     ctx->r3 = ADD32(0, 0XFF);
     // sb          $zero, 0x6101($v0)
-    MEM_B(0X6101, ctx->r2) = 0;
+    MEM_B(0, ST_ACTIVE_COLLISION_RECORD_FILTER_MASK_ADDRESS) = 0;
     // sh          $v1, 0x615E($v0)
     MEM_H(0X615E, ctx->r2) = ctx->r3;
     // sh          $v1, 0x615C($v0)

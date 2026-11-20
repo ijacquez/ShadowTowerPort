@@ -672,7 +672,7 @@ SRCS:= scr/st/AddPrim.c \
 	scr/st/sub_8004AD70.c \
 	scr/st/sub_8004AF24.c \
 	scr/st/sub_8004AF7C.c \
-	scr/st/sub_8004AFDC.c \
+	scr/st/ST_ResetActiveCollisionRecords.c \
 	scr/st/sub_8004B058.c \
 	scr/st/sub_8004B090.c \
 	scr/st/sub_8004B098.c \
@@ -1108,6 +1108,8 @@ scr/st/ST_PlayerUpdateMovement.o scr/st/ST_PlayerUpdateTurning.o scr/st/ST_Playe
 scr/st/ST_RecalculatePlayerDerivedAttributes.o scr/st/ST_RecalculatePlayerAttributeScratch.o scr/st/ST_RecalculatePlayerRecordModifiers.o: scr/st/ST_PlayerAttributes.h
 scr/st/ST_ProcessPlayerActionControls.o scr/st/ST_RecalculatePlayerLowRecordValueFlag.o: scr/st/ST_PlayerAttributes.h
 scr/st/ST_ProcessPlayerActionControls.o: scr/st/ST_PlayerState.h scr/st/ST_PlayerControls.h
+scr/st/ST_QueryActiveCollisionRecords.o scr/st/ST_ResetActiveCollisionRecords.o: scr/st/ST_ActiveCollisionRecord.h
+scr/st/ST_QueryActiveCollisionRecords.o: scr/st/ST_ActiveCollisionClass.h
 
 %.o: %.c
 	$(CXX) $(CFLAGS) -o $@ -c $<

@@ -815,7 +815,7 @@
     <ClCompile Include="scr\st\sub_8004AD70.c" />
     <ClCompile Include="scr\st\sub_8004AF24.c" />
     <ClCompile Include="scr\st\sub_8004AF7C.c" />
-    <ClCompile Include="scr\st\sub_8004AFDC.c" />
+    <ClCompile Include="scr\st\ST_ResetActiveCollisionRecords.c" />
     <ClCompile Include="scr\st\sub_8004B058.c" />
     <ClCompile Include="scr\st\sub_8004B090.c" />
     <ClCompile Include="scr\st\sub_8004B098.c" />

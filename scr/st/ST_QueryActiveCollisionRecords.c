@@ -1,6 +1,7 @@
 #include "recomp.h"
 #include "disable_warnings.h"
 #include "ST_ActiveCollisionRecord.h"
+#include "ST_ActiveCollisionClass.h"
 #include "ST_CollisionQuery.h"
 #include "ST_PlayerState.h"
 
@@ -35,7 +36,7 @@ void ST_QueryActiveCollisionRecords(uint8_t* rdram, recomp_context* ctx) {
     // sw          $s6, 0x30($sp)
     MEM_W(0X30, ctx->r29) = ctx->r22;
     // addiu       $s6, $v0, -0x5EC8
-    ctx->r22 = ADD32(ctx->r2, -0X5EC8);
+    ctx->r22 = ST_ACTIVE_COLLISION_RECORD_TABLE_ADDRESS;
     // sw          $s4, 0x28($sp)
     MEM_W(0X28, ctx->r29) = ctx->r20;
     // addu        $s4, $zero, $zero
@@ -74,7 +75,7 @@ L_8004BBE8:
     // addiu       $a3, $a3, -0x5EC8
     ctx->r7 = ADD32(ctx->r7, -0X5EC8);
     // lbu         $v1, 0x6101($a3)
-    ctx->r3 = MEM_BU(0X6101, ctx->r7);
+    ctx->r3 = MEM_BU(0, ST_ACTIVE_COLLISION_RECORD_FILTER_MASK_ADDRESS);
     // lw          $v0, 0x40($s2)
     ctx->r2 = MEM_W(ST_ACTIVE_COLLISION_RECORD_FILTER_FLAGS, ctx->r22);
     // nop
@@ -90,7 +91,7 @@ L_8004BBE8:
     // nop
 
     // lw          $v0, 0x6138($a3)
-    ctx->r2 = MEM_W(0X6138, ctx->r7);
+    ctx->r2 = MEM_W(0, ST_CURRENT_ACTIVE_COLLISION_RECORD_ADDRESS);
     // nop
 
     // beq         $s6, $v0, L_8004BE2C
@@ -212,7 +213,7 @@ L_8004BC78:
 
 L_8004BCBC:
     // lhu         $v0, 0x16($s0)
-    ctx->r2 = MEM_HU(0X16, ctx->r16);
+    ctx->r2 = MEM_HU(ST_ACTIVE_COLLISION_CLASS_HORIZONTAL_EXTENT, ctx->r16);
     // nop
 
     // beq         $v0, $zero, L_8004BE2C

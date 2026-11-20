@@ -69,7 +69,7 @@ void ST_MainGameLoop(uint8_t* rdram, recomp_context* ctx)
     // jal         0x8004AFDC
     // nop
     
-    sub_8004AFDC(rdram, ctx);
+    ST_ResetActiveCollisionRecords(rdram, ctx);
     goto after_6;
     // nop
 

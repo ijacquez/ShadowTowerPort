@@ -757,13 +757,19 @@ calculation does not use `ST_LEVEL_PLACEMENT_Y_SUBCELL`; the geometry origin
 calculation in `ST_DecodeCandidateOrigins` does use it.
 
 [ST_QueryActiveCollisionRecords](../scr/st/ST_QueryActiveCollisionRecords.c)
-examines up to 64 records at `0x801BA138`, each 212 bytes long. With the
+examines up to 64 records at `ST_ACTIVE_COLLISION_RECORD_TABLE_ADDRESS`, each 212 bytes long. With the
 movement query's second argument of 2, a record is considered only if
 `ST_ACTIVE_COLLISION_RECORD_STATE` equals 1, its
 `ST_ACTIVE_COLLISION_RECORD_FILTER_FLAGS` has no bit in common with the byte
-at `0x801C0239`, and its address differs from the word at `0x801C0270`.
-Its `ST_ACTIVE_COLLISION_RECORD_CLASS_INDEX` selects a 192-byte entry at
-`0x801BD638`; the entry's unsigned halfword at `0x16` must be nonzero.
+at `ST_ACTIVE_COLLISION_RECORD_FILTER_MASK_ADDRESS`, and its address differs
+from the pointer stored at `ST_CURRENT_ACTIVE_COLLISION_RECORD_ADDRESS`.
+Its `ST_ACTIVE_COLLISION_RECORD_CLASS_INDEX` selects a 192-byte entry in
+`ST_ACTIVE_COLLISION_CLASS_TABLE_ADDRESS`; the entry's unsigned
+`ST_ACTIVE_COLLISION_CLASS_HORIZONTAL_EXTENT` must be nonzero.
+[ST_SetCurrentActiveCollisionRecord](../scr/st/ST_SetCurrentActiveCollisionRecord.c)
+sets the current record pointer to its record argument, or clears it for a
+null argument. [ST_ResetActiveCollisionRecords](../scr/st/ST_ResetActiveCollisionRecords.c)
+clears the filter-mask byte while resetting the records.
 
 The check subtracts the query X and Z from the record's
 `ST_ACTIVE_COLLISION_RECORD_POSITION_X` and `_Z`, using 32-bit arithmetic,

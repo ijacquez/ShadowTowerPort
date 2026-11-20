@@ -421,7 +421,7 @@ static FuncEntry section_1_text_funcs[] = {
     { .func = ST_EnterActiveCollisionRecordStateThree, .offset = 0x0003ae38 },
     { .func = sub_8004AF24, .offset = 0x0003af24 },
     { .func = sub_8004AF7C, .offset = 0x0003af7c },
-    { .func = sub_8004AFDC, .offset = 0x0003afdc },
+    { .func = ST_ResetActiveCollisionRecords, .offset = 0x0003afdc },
     { .func = sub_8004B058, .offset = 0x0003b058 },
     { .func = sub_8004B090, .offset = 0x0003b090 },
     { .func = sub_8004B098, .offset = 0x0003b098 },
