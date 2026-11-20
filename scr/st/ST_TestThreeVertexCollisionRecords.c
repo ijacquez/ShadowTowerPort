@@ -2,6 +2,7 @@
 #include "disable_warnings.h"
 #include "ST_CollisionQuery.h"
 #include "ST_LevelGeometry.h"
+#include "ST_LevelPlacement.h"
 
 void ST_TestThreeVertexCollisionRecords(uint8_t* rdram, recomp_context* ctx) {
     // Tests the 12-byte collision records using three transformed vertices.
@@ -174,9 +175,9 @@ L_8004691C:
     // addu        $t8, $t8, $v1
     ctx->r24 = ADD32(ctx->r24, ctx->r3);
     // lbu         $v1, 0x3($a2)
-    ctx->r3 = MEM_BU(0X3, ctx->r6);
+    ctx->r3 = MEM_BU(ST_LEVEL_PLACEMENT_ORIENTATION, ctx->r6);
     // addiu       $v0, $v0, 0x42C
-    ctx->r2 = ADD32(ctx->r2, 0X42C);
+    ctx->r2 = ADD32(ctx->r2, ST_LEVEL_QUARTER_TURN_MATRICES_ADDRESS & 0xFFFF);
     // andi        $v1, $v1, 0x3
     ctx->r3 = ctx->r3 & 0X3;
     // sll         $v1, $v1, 5

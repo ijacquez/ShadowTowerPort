@@ -1116,6 +1116,7 @@ scr/st/ST_ApplyDirectionalMovementWithCollision.o: scr/st/ST_CollisionQuery.h
 scr/st/ST_ResolveActiveCollisionRecordDisplacement.o: scr/st/ST_CollisionQuery.h scr/st/ST_ActiveCollisionRecord.h scr/st/ST_LevelPlacement.h
 scr/st/ST_RunCollisionQuery.o scr/st/ST_QueryLevelGeometry.o scr/st/ST_TestThreeVertexCollisionRecords.o scr/st/ST_TestFourVertexCollisionRecords.o: scr/st/ST_CollisionQuery.h
 scr/st/ST_TransformCandidateVertices.o scr/st/ST_TestThreeVertexCollisionRecords.o scr/st/ST_TestFourVertexCollisionRecords.o: scr/st/ST_LevelGeometry.h
+scr/st/ST_TransformCandidateVertices.o scr/st/ST_TestThreeVertexCollisionRecords.o scr/st/ST_TestFourVertexCollisionRecords.o: scr/st/ST_LevelPlacement.h
 scr/st/sub_80055F9C.o: scr/st/ST_CollisionQuery.h
 scr/st/ST_UpdatePlayerCollisionYFlags.o: scr/st/ST_CollisionQuery.h scr/st/ST_LevelStreaming.h scr/st/ST_PlayerState.h
 scr/st/SquareRoot0.o: scr/st/ST_VectorNormalization.h
@@ -1157,6 +1158,8 @@ test-player-movement:
 	scratchpad/spatial-candidates-test
 	$(CXX) $(CFLAGS) -O2 -ffunction-sections -fdata-sections tests/empty_geometry_query_test.cpp scr/st/ST_QueryLevelGeometry.c scr/recomp.cpp -Wl,--gc-sections -o scratchpad/empty-geometry-query-test
 	scratchpad/empty-geometry-query-test
+	$(CXX) $(CFLAGS) -O2 -w -Wno-narrowing -ffunction-sections -fdata-sections tests/player_geometry_plane_test.cpp scr/st/ST_QueryLevelGeometry.c scr/st/ST_SelectSpatialCandidates.c scr/st/ST_DecodeCandidateOrigins.c scr/st/ST_TransformCandidateVertices.c scr/st/ST_TestThreeVertexCollisionRecords.c scr/st/ST_TestFourVertexCollisionRecords.c scr/st/SquareRoot0.c scr/st/ratan2.c scr/st/rcos.c scr/st/rsin.c scr/st/sin_1.c scr/gte.cpp scr/recomp.cpp PsyCross/src/gte/PsyX_GTE.cpp -Wl,--gc-sections -o scratchpad/player-geometry-plane-test
+	scratchpad/player-geometry-plane-test
 	$(CXX) $(CFLAGS) -O2 tests/player_directional_collision_test.cpp scr/st/ST_ApplyDirectionalMovementWithCollision.c -o scratchpad/player-directional-collision-test
 	scratchpad/player-directional-collision-test
 	$(CXX) $(CFLAGS) -O2 tests/gte_normalization_test.cpp scr/st/VectorNormalS.c scr/st/ST_NormalizeVectorRegisters.c scr/gte.cpp PsyCross/src/gte/PsyX_GTE.cpp -o scratchpad/gte-normalization-test

@@ -754,7 +754,7 @@ them, [ST_QueryLevelGeometry](../scr/st/ST_QueryLevelGeometry.c) searches level 
 stores additional collision data in the shared query structure.
 
 For queries made by `ST_PlayerMoveWithCollision`, `ST_COLLISION_QUERY_DIRECTION` (`0x20`) is
-set to `9999`.
+set to `ST_COLLISION_QUERY_DIRECTION_FROM_DISPLACEMENT` (`9999`).
 `ST_QueryLevelGeometry` uses that value to build a signed-halfword vector
 from the candidate displacement. When X and Z are both zero, the vector's
 X and Z are zero. Otherwise it computes `angle = ratan2(Z, X)` and adds
@@ -765,7 +765,7 @@ how the two query values affect this vector; their complete geometric
 interpretation remains **OPEN**.
 `ST_ApplyDirectionalMovementWithCollision` instead stores the result of
 `ratan2` on its combined Z and X movement halfwords in `ST_COLLISION_QUERY_DIRECTION`.
-When that halfword is not `9999`, the geometry routine uses it for the
+When that halfword is not `ST_COLLISION_QUERY_DIRECTION_FROM_DISPLACEMENT`, the geometry routine uses it for the
 cosine and sine terms and uses the query's Y displacement without adding
 `0x640` to that vector component.
 
@@ -1395,6 +1395,26 @@ movement, then `q = 0x240` (0.140625 cells) and `d = -0x400` (-0.25 cells).
 This conditional calculation does
 not establish which collision record wins or the player's full height. See
 [STAGE_UNITS.md](STAGE_UNITS.md) for that plane's data.
+
+With only one candidate placement containing that horizontal plane, the initial player position,
+zero X/Z displacement, and the normal movement query dimensions, the
+geometry routine produces the following `ST_COLLISION_QUERY_PROPOSED_Y_RESULT`
+values. In each case `ST_COLLISION_QUERY_CURRENT_Y_RESULT` is `0x240`
+(0.140625 cells), and the result mask is
+`ST_COLLISION_RESULT_CURRENT_Y_THRESHOLD` (`0x1`).
+
+| Proposed Y displacement | Proposed Y result |
+| --- | --- |
+| `0` | `0x240` (0.140625 cells) |
+| `0x100` (0.0625 cells) | `0x140` (0.078125 cells) |
+| `0x240` (0.140625 cells) | `0` |
+| `-0x100` (-0.0625 cells) | `0x340` (0.203125 cells) |
+| `0x340` (0.203125 cells) | `-0x100` (-0.0625 cells) |
+| `0x341` (0.203369140625 cells) | `0x240` (0.140625 cells) |
+
+At the final displacement the proposed-position value is below `-0x100`
+(-0.0625 cells), so that record does not replace the proposed-position
+sentinel; the query uses the current-position result instead.
 
 For `d < 0`:
 

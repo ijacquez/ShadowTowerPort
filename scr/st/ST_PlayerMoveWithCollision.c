@@ -173,7 +173,7 @@ L_80041714:
     // addiu       $s2, $v0, 0x5948
     ctx->r18 = ADD32(ctx->r2, 0X5948);
     // addiu       $v0, $zero, 0x270F
-    ctx->r2 = ADD32(0, 0X270F);
+    ctx->r2 = ADD32(0, ST_COLLISION_QUERY_DIRECTION_FROM_DISPLACEMENT);
     // sh          $v0, 0x20($s2)
     MEM_H(ST_COLLISION_QUERY_DIRECTION, ctx->r18) = ctx->r2;
     // sh          $v1, 0x14($s2)

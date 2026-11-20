@@ -1,6 +1,7 @@
 #include "recomp.h"
 #include "disable_warnings.h"
 #include "ST_LevelGeometry.h"
+#include "ST_LevelPlacement.h"
 #include "ST_CollisionQuery.h"
 
 void ST_TransformCandidateVertices(uint8_t* rdram, recomp_context* ctx) {
@@ -46,7 +47,7 @@ void ST_TransformCandidateVertices(uint8_t* rdram, recomp_context* ctx) {
     // lui         $v0, 0x8008
     ctx->r2 = S32(0X8008 << 16);
     // addiu       $s2, $v0, 0x42C
-    ctx->r18 = ADD32(ctx->r2, 0X42C);
+    ctx->r18 = ADD32(ctx->r2, ST_LEVEL_QUARTER_TURN_MATRICES_ADDRESS & 0xFFFF);
     // addu        $s0, $v1, $zero
     ctx->r16 = ADD32(ctx->r3, 0);
     // addiu       $s1, $s0, 0x11B0
@@ -71,7 +72,7 @@ L_80046658:
     // addu        $v1, $v1, $s3
     ctx->r3 = ADD32(ctx->r3, ctx->r19);
     // lbu         $v0, 0x3($v1)
-    ctx->r2 = MEM_BU(0X3, ctx->r3);
+    ctx->r2 = MEM_BU(ST_LEVEL_PLACEMENT_ORIENTATION, ctx->r3);
     // nop
 
     // andi        $v0, $v0, 0x3

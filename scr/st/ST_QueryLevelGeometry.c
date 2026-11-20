@@ -186,7 +186,7 @@ L_80048BD8:
     // lh          $a0, 0x20($s6)
     ctx->r4 = MEM_HS(ST_COLLISION_QUERY_DIRECTION, ctx->r22);
     // addiu       $v0, $zero, 0x270F
-    ctx->r2 = ADD32(0, 0X270F);
+    ctx->r2 = ADD32(0, ST_COLLISION_QUERY_DIRECTION_FROM_DISPLACEMENT);
     // bne         $a0, $v0, L_80048CC4
     if (ctx->r4 != ctx->r2) {
         // nop
