@@ -1179,7 +1179,7 @@
     <ClCompile Include="scr\st\ST_UpdatePlayerCollisionYFlags.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_8003BEB4.c">
+    <ClCompile Include="scr\st\ST_QueryPlayerCollision.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\sub_8003C0E0.c">

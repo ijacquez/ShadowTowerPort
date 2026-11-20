@@ -353,7 +353,7 @@ a division break. The corresponding fields are named
 The vector write requires the callback-data word and halfword gates to equal
 `-1` and `0xFFFF`, respectively; the record's
 `ST_ACTIVE_COLLISION_RECORD_IMPULSE_APPLIED` to be zero;
-`ST_ACTIVE_COLLISION_RECORD_COLLISION_RESULT_80_FLAG` to equal 1; magnitude
+`ST_ACTIVE_COLLISION_RECORD_HIT_PLAYER_FLAG` to equal 1; magnitude
 to be nonzero; and the signed `ST_ACTIVE_COLLISION_RECORD_PLAYER_ANGLE_DISTANCE`
 to lie between the negative and positive unsigned
 `ST_STAGE_ZERO_BEHAVIOR_ANGLE_LIMIT`, inclusive. It calls
@@ -367,6 +367,14 @@ call. The effects helper calls
 it passes `0x1000` (1.0 in Q.12) and dispatch value
 `(ST_STAGE_ZERO_BEHAVIOR_EFFECT_FLAGS >> 8) & 0xFF`. The latter can select
 the movement-related counter branches described above.
+
+On the state-1 update path, the callback reads the current
+`ST_ACTIVE_COLLISION_RECORD_HIT_PLAYER_FLAG` before the updater clears it.
+The displacement resolver sets it to 1 when its collision result contains
+`ST_COLLISION_RESULT_PLAYER_HIT`. That result bit is produced by
+[ST_QueryPlayerCollision](../scr/st/ST_QueryPlayerCollision.c). A player
+collision in the resolver can therefore supply the flag for a later callback;
+other writes before that callback can also affect its value.
 
 One routine called by that stage-zero code,
 `ST_STAGE_ZERO_SET_ACTIVE_RECORD_HORIZONTAL_DISPLACEMENT`, writes the current
@@ -503,7 +511,7 @@ the following input bits in order:
 | `0x10` | Calls [ST_QueryActiveCollisionRecords](../scr/st/ST_QueryActiveCollisionRecords.c), passing `2` as its second argument if input bit `0x400` is set, otherwise `0`. | ORs `0x10` if the helper returns anything other than `-1`. |
 | `0x40` | Calls [sub_8004BE80](../scr/st/sub_8004BE80.c). | ORs `0x10` if the helper returns anything other than `-1`. |
 | `0x20` | Calls [ST_QueryIndexedCollisionRecords](../scr/st/ST_QueryIndexedCollisionRecords.c). | ORs `0x40` if the helper returns anything other than `-1`. |
-| `0x80` | Calls [sub_8003BEB4](../scr/st/sub_8003BEB4.c). If input bit `0x800` is also set, first adds `0x200` (0.125 cells) to `ST_COLLISION_QUERY_HORIZONTAL_PARAMETER`. | ORs `0x80` if the helper returns anything other than `-1`. |
+| `ST_COLLISION_QUERY_CHECK_PLAYER` (`0x80`) | Calls [ST_QueryPlayerCollision](../scr/st/ST_QueryPlayerCollision.c). If input bit `0x800` is also set, first adds `0x200` (0.125 cells) to `ST_COLLISION_QUERY_HORIZONTAL_PARAMETER`. | ORs `ST_COLLISION_RESULT_PLAYER_HIT` (`0x80`) if the helper returns anything other than `-1`. |
 
 The three helpers for input bits `0x10`, `0x40`, and `0x20` have their
 return values stored at `0x801B59A4`, `0x801B59A8`, and `0x801B59AC`,
@@ -520,6 +528,18 @@ horizontal comparison. The candidate records begin at `0x801BA138`, have a
 stride of 212 bytes, and the scan examines at most 64 records. These
 operations identify the result bits' producers; the
 physical meanings of the helpers and their results are **OPEN**.
+
+`ST_QueryPlayerCollision` subtracts the query X/Z position from the player
+X/Z position, rejecting a difference outside `[-0x2800, 0x2800]` (-2.5 to
+2.5 cells) on either axis. It calculates the horizontal distance and the
+angle of that difference. It subtracts from the distance the low 32-bit
+product of the signed query magnitude and the cosine of query direction minus
+that angle, divided by 4096 toward zero. The result must be strictly less than
+the unsigned query horizontal parameter plus `0x100` (0.0625 cells).
+For the vertical check, absent 32-bit wrap, the query Y must be in the
+inclusive interval from player Y to player Y plus `0x640` (0.390625 cells)
+plus the unsigned query vertical parameter. A match returns the horizontal
+distance; a rejection returns -1.
 
 ### Active-record collision check for movement
 

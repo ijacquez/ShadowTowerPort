@@ -565,7 +565,7 @@ SRCS:= scr/st/AddPrim.c \
 	scr/st/ST_EnterPlayerZeroHpState.c \
 	scr/st/ST_CheckHighDownwardMovement.c \
 	scr/st/ST_UpdatePlayerCollisionYFlags.c \
-	scr/st/sub_8003BEB4.c \
+	scr/st/ST_QueryPlayerCollision.c \
 	scr/st/ST_ResetPlayerViewAndVerticalMovement.c \
 	scr/st/sub_8003C0E0.c \
 	scr/st/ST_UpdateCounterAndTarget.c \
@@ -1116,6 +1116,8 @@ scr/st/ST_PlayerUpdateMovement.o scr/st/ST_PlayerUpdateTurning.o scr/st/ST_Playe
 .PHONY: test-player-movement
 test-player-movement:
 	mkdir -p scratchpad
+	$(CXX) $(CFLAGS) -std=c++17 tests/player_collision_query_test.cpp scr/st/ST_QueryPlayerCollision.c -o scratchpad/player-collision-query-test
+	scratchpad/player-collision-query-test
 	$(CXX) $(CFLAGS) -std=c++17 tests/player_active_record_initialization_test.cpp scr/st/ST_InitializeActiveCollisionRecordClass.c scr/st/ST_SetActiveCollisionRecordPositionFromPlacement.c -o scratchpad/player-active-record-initialization-test
 	scratchpad/player-active-record-initialization-test
 	$(CXX) $(CFLAGS) -std=c++17 tests/player_bounds_test.cpp scr/st/ST_IsPlayerWithinGridBounds.c scr/st/ST_IsPlayerWithinWorldBounds.c -o scratchpad/player-bounds-test

@@ -708,7 +708,7 @@
     <ClCompile Include="scr\st\ST_EnterPlayerZeroHpState.c" />
     <ClCompile Include="scr\st\sub_8003BDB0.c" />
     <ClCompile Include="scr\st\ST_UpdatePlayerCollisionYFlags.c" />
-    <ClCompile Include="scr\st\sub_8003BEB4.c" />
+    <ClCompile Include="scr\st\ST_QueryPlayerCollision.c" />
     <ClCompile Include="scr\st\sub_8003C054.c" />
     <ClCompile Include="scr\st\sub_8003C0E0.c" />
     <ClCompile Include="scr\st\ST_UpdateCounterAndTarget.c" />

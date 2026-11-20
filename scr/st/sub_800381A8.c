@@ -126,7 +126,7 @@ void sub_800381A8(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x8003BEB4
     // sw          $v0, 0x5948($s1)
     MEM_W(0X5948, ctx->r17) = ctx->r2;
-    sub_8003BEB4(rdram, ctx);
+    ST_QueryPlayerCollision(rdram, ctx);
     goto after_2;
     // sw          $v0, 0x5948($s1)
     MEM_W(0X5948, ctx->r17) = ctx->r2;

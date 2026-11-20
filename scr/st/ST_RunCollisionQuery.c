@@ -202,7 +202,7 @@ L_80049650:
     // nop
 
     // andi        $v0, $v1, 0x80
-    ctx->r2 = ctx->r3 & 0X80;
+    ctx->r2 = ctx->r3 & ST_COLLISION_QUERY_CHECK_PLAYER;
     // beq         $v0, $zero, L_80049694
     if (ctx->r2 == 0) {
         // andi        $v0, $v1, 0x800
@@ -231,7 +231,7 @@ L_8004967C:
     // jal         0x8003BEB4
     // nop
 
-    sub_8003BEB4(rdram, ctx);
+    ST_QueryPlayerCollision(rdram, ctx);
     goto after_4;
     // nop
 
@@ -247,7 +247,7 @@ L_8004967C:
     // nop
 
     // ori         $s0, $s0, 0x80
-    ctx->r16 = ctx->r16 | 0X80;
+    ctx->r16 = ctx->r16 | ST_COLLISION_RESULT_PLAYER_HIT;
 L_80049694:
     // lhu         $v1, 0x1E($s1)
     ctx->r3 = MEM_HU(ST_COLLISION_QUERY_VERTICAL_PARAMETER, ctx->r17);

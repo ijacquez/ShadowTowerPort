@@ -1,6 +1,7 @@
 #include "recomp.h"
 #include "disable_warnings.h"
 #include "ST_ActiveCollisionRecord.h"
+#include "ST_CollisionQuery.h"
 
 void ST_ResolveActiveCollisionRecordDisplacement(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
@@ -596,11 +597,11 @@ L_8004C554:
     // beq         $v0, $zero, L_8004C654
     if (ctx->r2 == 0) {
         // andi        $v0, $s1, 0x80
-        ctx->r2 = ctx->r17 & 0X80;
+        ctx->r2 = ctx->r17 & ST_COLLISION_RESULT_PLAYER_HIT;
         goto L_8004C654;
     }
     // andi        $v0, $s1, 0x80
-    ctx->r2 = ctx->r17 & 0X80;
+    ctx->r2 = ctx->r17 & ST_COLLISION_RESULT_PLAYER_HIT;
     // beq         $v0, $zero, L_8004C56C
     if (ctx->r2 == 0) {
         // addiu       $v0, $zero, 0x1
@@ -610,7 +611,7 @@ L_8004C554:
     // addiu       $v0, $zero, 0x1
     ctx->r2 = ADD32(0, 0X1);
     // sb          $v0, 0x39($s2)
-    MEM_B(ST_ACTIVE_COLLISION_RECORD_COLLISION_RESULT_80_FLAG, ctx->r18) = ctx->r2;
+    MEM_B(ST_ACTIVE_COLLISION_RECORD_HIT_PLAYER_FLAG, ctx->r18) = ctx->r2;
 L_8004C56C:
     // jal         0x800492F4
     // addiu       $a0, $s2, 0x74

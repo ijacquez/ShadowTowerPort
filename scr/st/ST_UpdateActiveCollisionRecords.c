@@ -714,11 +714,11 @@ L_8004E710:
     // bne         $v0, $zero, L_8004E740
     if (ctx->r2 != 0) {
         // sb          $zero, 0x16($s0)
-        MEM_B(0X16, ctx->r16) = 0;
+        MEM_B(ST_ACTIVE_COLLISION_RECORD_HIT_PLAYER_FLAG - ST_ACTIVE_COLLISION_RECORD_UPDATE_CURSOR, ctx->r16) = 0;
         goto L_8004E740;
     }
     // sb          $zero, 0x16($s0)
-    MEM_B(0X16, ctx->r16) = 0;
+    MEM_B(ST_ACTIVE_COLLISION_RECORD_HIT_PLAYER_FLAG - ST_ACTIVE_COLLISION_RECORD_UPDATE_CURSOR, ctx->r16) = 0;
     // lh          $v0, 0x7D($s0)
     ctx->r2 = MEM_HS(ST_ACTIVE_COLLISION_RECORD_DISPLACEMENT_Z - ST_ACTIVE_COLLISION_RECORD_UPDATE_CURSOR, ctx->r16);
     // nop

@@ -311,7 +311,7 @@ static FuncEntry section_1_text_funcs[] = {
     { .func = ST_EnterPlayerZeroHpState, .offset = 0x0002bd14 },
     { .func = ST_CheckHighDownwardMovement, .offset = 0x0002bdb0 },
     { .func = ST_UpdatePlayerCollisionYFlags, .offset = 0x0002be10 },
-    { .func = sub_8003BEB4, .offset = 0x0002beb4 },
+    { .func = ST_QueryPlayerCollision, .offset = 0x0002beb4 },
     { .func = ST_ResetPlayerViewAndVerticalMovement, .offset = 0x0002c054 },
     { .func = sub_8003C0E0, .offset = 0x0002c0e0 },
     { .func = ST_UpdateCounterAndTarget, .offset = 0x0002c17c },
