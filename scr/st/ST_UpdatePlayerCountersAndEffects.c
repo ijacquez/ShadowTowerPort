@@ -508,7 +508,7 @@ L_8003C500:
     // jal         0x8005A3A8
     // sw          $v0, 0x2C($s0)
     MEM_W(0X2C, ctx->r16) = ctx->r2;
-    sub_8005A3A8(rdram, ctx);
+    ST_RecalculatePlayerDerivedAttributes(rdram, ctx);
     goto after_10;
     // sw          $v0, 0x2C($s0)
     MEM_W(0X2C, ctx->r16) = ctx->r2;
@@ -605,7 +605,7 @@ L_8003C574:
     // jal         0x8005A3A8
     // sw          $v0, 0x2C($s0)
     MEM_W(0X2C, ctx->r16) = ctx->r2;
-    sub_8005A3A8(rdram, ctx);
+    ST_RecalculatePlayerDerivedAttributes(rdram, ctx);
     goto after_13;
     // sw          $v0, 0x2C($s0)
     MEM_W(0X2C, ctx->r16) = ctx->r2;

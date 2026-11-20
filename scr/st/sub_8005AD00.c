@@ -793,7 +793,7 @@ L_8005B144:
     // jal         0x8005A3A8
     // sh          $v0, 0x2DA($s3)
     MEM_H(0X2DA, ctx->r19) = ctx->r2;
-    sub_8005A3A8(rdram, ctx);
+    ST_RecalculatePlayerDerivedAttributes(rdram, ctx);
     goto after_33;
     // sh          $v0, 0x2DA($s3)
     MEM_H(0X2DA, ctx->r19) = ctx->r2;
@@ -2752,7 +2752,7 @@ L_8005BC50:
     // jal         0x8005A3A8
     // sh          $v0, 0x2C0($s3)
     MEM_H(0X2C0, ctx->r19) = ctx->r2;
-    sub_8005A3A8(rdram, ctx);
+    ST_RecalculatePlayerDerivedAttributes(rdram, ctx);
     goto after_61;
     // sh          $v0, 0x2C0($s3)
     MEM_H(0X2C0, ctx->r19) = ctx->r2;
@@ -3079,7 +3079,7 @@ L_8005BDD4:
     // jal         0x8005A3A8
     // addu        $a0, $zero, $zero
     ctx->r4 = ADD32(0, 0);
-    sub_8005A3A8(rdram, ctx);
+    ST_RecalculatePlayerDerivedAttributes(rdram, ctx);
     goto after_71;
     // addu        $a0, $zero, $zero
     ctx->r4 = ADD32(0, 0);
@@ -3821,7 +3821,7 @@ L_8005C1B4:
     // jal         0x8005A3A8
     // addu        $a0, $zero, $zero
     ctx->r4 = ADD32(0, 0);
-    sub_8005A3A8(rdram, ctx);
+    ST_RecalculatePlayerDerivedAttributes(rdram, ctx);
     goto after_76;
     // addu        $a0, $zero, $zero
     ctx->r4 = ADD32(0, 0);
@@ -4140,7 +4140,7 @@ L_8005C33C:
     // jal         0x8005A3A8
     // addiu       $a0, $zero, 0x1
     ctx->r4 = ADD32(0, 0X1);
-    sub_8005A3A8(rdram, ctx);
+    ST_RecalculatePlayerDerivedAttributes(rdram, ctx);
     goto after_83;
     // addiu       $a0, $zero, 0x1
     ctx->r4 = ADD32(0, 0X1);
@@ -4535,7 +4535,7 @@ L_8005C5EC:
     // jal         0x8005A3A8
     // addu        $a0, $zero, $zero
     ctx->r4 = ADD32(0, 0);
-    sub_8005A3A8(rdram, ctx);
+    ST_RecalculatePlayerDerivedAttributes(rdram, ctx);
     goto after_90;
     // addu        $a0, $zero, $zero
     ctx->r4 = ADD32(0, 0);
@@ -4610,7 +4610,7 @@ L_8005C614:
     // jal         0x8005A3A8
     // sh          $v0, 0x2C0($s3)
     MEM_H(0X2C0, ctx->r19) = ctx->r2;
-    sub_8005A3A8(rdram, ctx);
+    ST_RecalculatePlayerDerivedAttributes(rdram, ctx);
     goto after_94;
     // sh          $v0, 0x2C0($s3)
     MEM_H(0X2C0, ctx->r19) = ctx->r2;
@@ -4643,7 +4643,7 @@ L_8005C664:
     // jal         0x8005A3A8
     // sh          $zero, 0x4($s4)
     MEM_H(0X4, ctx->r20) = 0;
-    sub_8005A3A8(rdram, ctx);
+    ST_RecalculatePlayerDerivedAttributes(rdram, ctx);
     goto after_96;
     // sh          $zero, 0x4($s4)
     MEM_H(0X4, ctx->r20) = 0;

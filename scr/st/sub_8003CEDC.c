@@ -20,7 +20,7 @@ void sub_8003CEDC(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x8005A3A8
     // addu        $a0, $zero, $zero
     ctx->r4 = ADD32(0, 0);
-    sub_8005A3A8(rdram, ctx);
+    ST_RecalculatePlayerDerivedAttributes(rdram, ctx);
     goto after_1;
     // addu        $a0, $zero, $zero
     ctx->r4 = ADD32(0, 0);

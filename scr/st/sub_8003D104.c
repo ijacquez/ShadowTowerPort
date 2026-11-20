@@ -228,7 +228,7 @@ L_8003D228:
     // jal         0x8005A3A8
     // addu        $a0, $zero, $zero
     ctx->r4 = ADD32(0, 0);
-    sub_8005A3A8(rdram, ctx);
+    ST_RecalculatePlayerDerivedAttributes(rdram, ctx);
     goto after_4;
     // addu        $a0, $zero, $zero
     ctx->r4 = ADD32(0, 0);

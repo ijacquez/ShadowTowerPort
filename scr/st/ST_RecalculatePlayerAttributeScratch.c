@@ -1,7 +1,8 @@
 #include "recomp.h"
 #include "disable_warnings.h"
+#include "ST_PlayerAttributes.h"
 
-void sub_80059DC0(uint8_t* rdram, recomp_context* ctx) {
+void ST_RecalculatePlayerAttributeScratch(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
     unsigned int rounding_mode = DEFAULT_ROUNDING_MODE;
     int c1cs = 0; 
@@ -31,17 +32,17 @@ L_80059DEC:
     // sh          $zero, 0x25C($v1)
     MEM_H(0X25C, ctx->r3) = 0;
     // lhu         $v0, 0x9A($a0)
-    ctx->r2 = MEM_HU(0X9A, ctx->r4);
+    ctx->r2 = MEM_HU(ST_PLAYER_BASE_ATTRIBUTES, ctx->r4);
     // addiu       $s0, $s0, 0x1
     ctx->r16 = ADD32(ctx->r16, 0X1);
     // sh          $v0, 0x240($v1)
-    MEM_H(0X240, ctx->r3) = ctx->r2;
+    MEM_H(ST_ATTRIBUTE_SCRATCH_BASE_VALUES, ctx->r3) = ctx->r2;
     // lhu         $v0, 0x7E($a0)
     ctx->r2 = MEM_HU(0X7E, ctx->r4);
     // addiu       $a0, $a0, 0x2
     ctx->r4 = ADD32(ctx->r4, 0X2);
     // sh          $zero, 0x208($v1)
-    MEM_H(0X208, ctx->r3) = 0;
+    MEM_H(ST_ATTRIBUTE_SCRATCH_RECORD_SUMS, ctx->r3) = 0;
     // sh          $v0, 0x224($v1)
     MEM_H(0X224, ctx->r3) = ctx->r2;
     // slti        $v0, $s0, 0xE
@@ -57,7 +58,7 @@ L_80059DEC:
     // lui         $v0, 0x801A
     ctx->r2 = S32(0X801A << 16);
     // addiu       $s1, $v0, -0x70A0
-    ctx->r17 = ADD32(ctx->r2, -0X70A0);
+    ctx->r17 = ADD32(ctx->r2, -0X70D8 + ST_PLAYER_RECORD_SLOTS);
     // addu        $s0, $zero, $zero
     ctx->r16 = ADD32(0, 0);
     // ori         $a3, $zero, 0xFFFF
@@ -103,15 +104,15 @@ L_80059E48:
     // addu        $v0, $v0, $a1
     ctx->r2 = ADD32(ctx->r2, ctx->r5);
     // lbu         $v1, 0x128($v0)
-    ctx->r3 = MEM_BU(0X128, ctx->r2);
+    ctx->r3 = MEM_BU(ST_ATTRIBUTE_RECORD_BASE_BIAS + ST_RECORD_ATTRIBUTE_VALUES, ctx->r2);
     // lhu         $v0, 0x208($a0)
-    ctx->r2 = MEM_HU(0X208, ctx->r4);
+    ctx->r2 = MEM_HU(ST_ATTRIBUTE_SCRATCH_RECORD_SUMS, ctx->r4);
     // addiu       $a1, $a1, 0x1
     ctx->r5 = ADD32(ctx->r5, 0X1);
     // addu        $v0, $v0, $v1
     ctx->r2 = ADD32(ctx->r2, ctx->r3);
     // sh          $v0, 0x208($a0)
-    MEM_H(0X208, ctx->r4) = ctx->r2;
+    MEM_H(ST_ATTRIBUTE_SCRATCH_RECORD_SUMS, ctx->r4) = ctx->r2;
     // slti        $v0, $a1, 0xE
     ctx->r2 = SIGNED(ctx->r5) < 0XE ? 1 : 0;
     // bne         $v0, $zero, L_80059E48
@@ -247,9 +248,9 @@ L_80059F0C:
     ctx->r5 = ADD32(ctx->r18, 0X1C);
 L_80059F38:
     // lhu         $v0, 0x240($a0)
-    ctx->r2 = MEM_HU(0X240, ctx->r4);
+    ctx->r2 = MEM_HU(ST_ATTRIBUTE_SCRATCH_BASE_VALUES, ctx->r4);
     // lhu         $v1, 0x208($a0)
-    ctx->r3 = MEM_HU(0X208, ctx->r4);
+    ctx->r3 = MEM_HU(ST_ATTRIBUTE_SCRATCH_RECORD_SUMS, ctx->r4);
     // nop
 
     // addu        $v0, $v0, $v1
@@ -287,13 +288,13 @@ L_80059F64:
 
     // j           L_80059F80
     // sh          $zero, 0x1B4($a0)
-    MEM_H(0X1B4, ctx->r4) = 0;
+    MEM_H(ST_ATTRIBUTE_SCRATCH_CLAMPED, ctx->r4) = 0;
     goto L_80059F80;
     // sh          $zero, 0x1B4($a0)
-    MEM_H(0X1B4, ctx->r4) = 0;
+    MEM_H(ST_ATTRIBUTE_SCRATCH_CLAMPED, ctx->r4) = 0;
 L_80059F7C:
     // sh          $v1, 0x1B4($a0)
-    MEM_H(0X1B4, ctx->r4) = ctx->r3;
+    MEM_H(ST_ATTRIBUTE_SCRATCH_CLAMPED, ctx->r4) = ctx->r3;
 L_80059F80:
     // lh          $v0, 0x208($a0)
     ctx->r2 = MEM_HS(0X208, ctx->r4);
@@ -330,7 +331,7 @@ L_80059F9C:
     // lui         $v0, 0x801A
     ctx->r2 = S32(0X801A << 16);
     // addiu       $s1, $v0, -0x70A0
-    ctx->r17 = ADD32(ctx->r2, -0X70A0);
+    ctx->r17 = ADD32(ctx->r2, -0X70D8 + ST_PLAYER_RECORD_SLOTS);
     // addu        $s0, $zero, $zero
     ctx->r16 = ADD32(0, 0);
     // lui         $v0, 0x801C

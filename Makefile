@@ -798,9 +798,9 @@ SRCS:= scr/st/AddPrim.c \
 	scr/st/sub_800595D4.c \
 	scr/st/sub_8005975C.c \
 	scr/st/sub_80059CEC.c \
-	scr/st/sub_80059DC0.c \
+	scr/st/ST_RecalculatePlayerAttributeScratch.c \
 	scr/st/sub_8005A36C.c \
-	scr/st/sub_8005A3A8.c \
+	scr/st/ST_RecalculatePlayerDerivedAttributes.c \
 	scr/st/sub_8005AA80.c \
 	scr/st/sub_8005AD00.c \
 	scr/st/sub_8005C7FC.c \
@@ -1096,13 +1096,16 @@ PSYCROSS_OBJS2:= $(PSYCROSS_OBJS1:.C=.o)
 PSYCROSS_OBJS:= $(PSYCROSS_OBJS2) $(PSYCROSS_CPP_SRCS:.cpp=.o)
 GLUE_OBJS:= $(GLUE_SRCS:.cpp=.o)
 
-CFLAGS:= -I./PsyCross/include -I./PsyCross/src -I./scr -fpermissive -I/usr/include  -D_REENTRANT -I/usr/include/SDL2 
+CFLAGS:= -std=c++17 -I./PsyCross/include -I./PsyCross/src -I./scr -fpermissive -I/usr/include  -D_REENTRANT -I/usr/include/SDL2
 
 Shadow_Tower: $(OBJS) $(PSYCROSS_OBJS) $(GLUE_OBJS)
 	$(CXX) -o $@ $^ -lSDL2 -lopenal
 
 scr/recomp.o: scr/st/recomp_overlays.inl scr/st/funcs.h
-scr/st/ST_PlayerUpdateMovement.o scr/st/ST_PlayerUpdateTurning.o scr/st/ST_PlayerMoveWithCollision.o scr/st/ST_BuildPlayerView.o scr/st/ST_TranslatePlayerPosition.o scr/st/ST_ClearPlayerMovementLimits.o scr/st/ST_UpdatePlayerState.o scr/st/sub_8005A3A8.o: scr/st/ST_PlayerState.h
+$(OBJS) $(GLUE_OBJS): scr/_context.h
+PsyCross/src/psx/LIBGTE.o: CFLAGS += -Wno-narrowing
+scr/st/ST_PlayerUpdateMovement.o scr/st/ST_PlayerUpdateTurning.o scr/st/ST_PlayerMoveWithCollision.o scr/st/ST_BuildPlayerView.o scr/st/ST_TranslatePlayerPosition.o scr/st/ST_ClearPlayerMovementLimits.o scr/st/ST_UpdatePlayerState.o scr/st/ST_RecalculatePlayerDerivedAttributes.o: scr/st/ST_PlayerState.h
+scr/st/ST_RecalculatePlayerDerivedAttributes.o scr/st/ST_RecalculatePlayerAttributeScratch.o scr/st/ST_RecalculatePlayerRecordModifiers.o: scr/st/ST_PlayerAttributes.h
 
 %.o: %.c
 	$(CXX) $(CFLAGS) -o $@ -c $<
@@ -1116,6 +1119,10 @@ scr/st/ST_PlayerUpdateMovement.o scr/st/ST_PlayerUpdateTurning.o scr/st/ST_Playe
 .PHONY: test-player-movement
 test-player-movement:
 	mkdir -p scratchpad
+	$(CXX) $(CFLAGS) -std=c++17 -O2 tests/scratchpad_memory_test.cpp tests/scratchpad_memory_writer.cpp -o scratchpad/scratchpad-memory-test
+	scratchpad/scratchpad-memory-test
+	$(CXX) $(CFLAGS) -O2 tests/player_attribute_scratch_test.cpp scr/st/ST_RecalculatePlayerAttributeScratch.c scr/st/ST_RecalculatePlayerDerivedAttributes.c -o scratchpad/player-attribute-scratch-test
+	scratchpad/player-attribute-scratch-test
 	$(CXX) $(CFLAGS) -std=c++17 tests/player_record_modifiers_test.cpp scr/st/ST_RecalculatePlayerRecordModifiers.c -o scratchpad/player-record-modifiers-test
 	scratchpad/player-record-modifiers-test
 	$(CXX) $(CFLAGS) -std=c++17 tests/resource_vector_sample_test.cpp scr/st/ST_SampleResourceVector.c scr/st/ST_SelectResourceSequenceInterval.c -o scratchpad/resource-vector-sample-test

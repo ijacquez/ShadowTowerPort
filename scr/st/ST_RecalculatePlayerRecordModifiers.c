@@ -1,6 +1,7 @@
 #include "recomp.h"
 #include "disable_warnings.h"
 #include "ST_PlayerState.h"
+#include "ST_PlayerAttributes.h"
 
 enum {
     ST_RECORD_PACKED_MODIFIERS = 0x20,
@@ -17,7 +18,7 @@ void ST_RecalculatePlayerRecordModifiers(uint8_t* rdram, recomp_context* ctx) {
     // lui         $v0, 0x801A
     ctx->r2 = S32(0X801A << 16);
     // addiu       $t5, $v0, -0x70A0
-    ctx->r13 = ADD32(ctx->r2, -0X70A0);
+    ctx->r13 = ADD32(ctx->r2, -0X70D8 + ST_PLAYER_RECORD_SLOTS);
     // addu        $a1, $zero, $zero
     ctx->r5 = ADD32(0, 0);
     // addu        $a2, $a1, $zero

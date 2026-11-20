@@ -840,7 +840,7 @@ L_8003E064:
     // jal         0x8005A3A8
     // sw          $v0, 0x2C($s0)
     MEM_W(0X2C, ctx->r16) = ctx->r2;
-    sub_8005A3A8(rdram, ctx);
+    ST_RecalculatePlayerDerivedAttributes(rdram, ctx);
     goto after_5;
     // sw          $v0, 0x2C($s0)
     MEM_W(0X2C, ctx->r16) = ctx->r2;

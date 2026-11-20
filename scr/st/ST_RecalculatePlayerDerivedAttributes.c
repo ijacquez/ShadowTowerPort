@@ -1,8 +1,9 @@
 #include "recomp.h"
 #include "disable_warnings.h"
 #include "ST_PlayerState.h"
+#include "ST_PlayerAttributes.h"
 
-void sub_8005A3A8(uint8_t* rdram, recomp_context* ctx) {
+void ST_RecalculatePlayerDerivedAttributes(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
     unsigned int rounding_mode = DEFAULT_ROUNDING_MODE;
     int c1cs = 0; 
@@ -36,7 +37,7 @@ L_8005A3CC:
     // jal         0x80059DC0
     // nop
 
-    sub_80059DC0(rdram, ctx);
+    ST_RecalculatePlayerAttributeScratch(rdram, ctx);
     goto after_1;
     // nop
 
@@ -108,7 +109,7 @@ L_8005A3CC:
     // addu        $a0, $a0, $v0
     ctx->r4 = ADD32(ctx->r4, ctx->r2);
     // lhu         $v0, 0x1C8($s0)
-    ctx->r2 = MEM_HU(0X1C8, ctx->r16);
+    ctx->r2 = MEM_HU(ST_ATTRIBUTE_SCRATCH_EFFECT_CAP, ctx->r16);
     // lhu         $v1, 0x1CA($s0)
     ctx->r3 = MEM_HU(0X1CA, ctx->r16);
     // addu        $v0, $v0, $a0
@@ -601,7 +602,7 @@ L_8005A6D8:
     // sra         $v1, $v1, 20
     ctx->r3 = S32(ctx->r3) >> 20;
     // lhu         $v0, 0x1C8($s0)
-    ctx->r2 = MEM_HU(0X1C8, ctx->r16);
+    ctx->r2 = MEM_HU(ST_ATTRIBUTE_SCRATCH_EFFECT_CAP, ctx->r16);
     // addiu       $v1, $v1, 0x32
     ctx->r3 = ADD32(ctx->r3, 0X32);
     // sh          $v1, 0x1E($a3)
@@ -617,7 +618,7 @@ L_8005A6D8:
     // sll         $v1, $v1, 16
     ctx->r3 = S32(ctx->r3) << 16;
     // sh          $v0, 0x20($a3)
-    MEM_H(0X20, ctx->r7) = ctx->r2;
+    MEM_H(ST_PLAYER_EFFECT_CAP_ATTRIBUTE, ctx->r7) = ctx->r2;
     // mfhi        $a2
     ctx->r6 = hi;
     // lhu         $a0, 0x284($s0)

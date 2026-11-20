@@ -48,7 +48,7 @@ void sub_80063BDC(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x8005A3A8
     // sh          $v1, 0x2DA($s1)
     MEM_H(0X2DA, ctx->r17) = ctx->r3;
-    sub_8005A3A8(rdram, ctx);
+    ST_RecalculatePlayerDerivedAttributes(rdram, ctx);
     goto after_0;
     // sh          $v1, 0x2DA($s1)
     MEM_H(0X2DA, ctx->r17) = ctx->r3;

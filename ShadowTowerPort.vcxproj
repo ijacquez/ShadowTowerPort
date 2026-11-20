@@ -941,9 +941,9 @@
     <ClCompile Include="scr\st\sub_800595D4.c" />
     <ClCompile Include="scr\st\sub_8005975C.c" />
     <ClCompile Include="scr\st\sub_80059CEC.c" />
-    <ClCompile Include="scr\st\sub_80059DC0.c" />
+    <ClCompile Include="scr\st\ST_RecalculatePlayerAttributeScratch.c" />
     <ClCompile Include="scr\st\sub_8005A36C.c" />
-    <ClCompile Include="scr\st\sub_8005A3A8.c" />
+    <ClCompile Include="scr\st\ST_RecalculatePlayerDerivedAttributes.c" />
     <ClCompile Include="scr\st\sub_8005AA80.c" />
     <ClCompile Include="scr\st\sub_8005AD00.c" />
     <ClCompile Include="scr\st\sub_8005C7FC.c" />

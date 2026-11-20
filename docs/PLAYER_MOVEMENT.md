@@ -185,13 +185,13 @@ the vectors beginning at `ST_PLAYER_QUARTER_CONTRIBUTION_X_ADDRESS` and
 and `ST_COLLISION_QUERY_RECORD_VECTOR_SUM_Z`. If the word containing the counter and
 target is then zero, it clears bits `0x08` and `0x10` in player word `0x2C`.
 
-[sub_8005A3A8](../scr/st/sub_8005A3A8.c) sets `ST_PLAYER_MOVE_PENALTY_TOTAL`
+[ST_RecalculatePlayerDerivedAttributes](../scr/st/ST_RecalculatePlayerDerivedAttributes.c) sets `ST_PLAYER_MOVE_PENALTY_TOTAL`
 from a halfword calculated by
-[sub_80059DC0](../scr/st/sub_80059DC0.c). The latter starts the halfword at
-zero and iterates player halfword slots beginning at `0x38`. For slot indices
+[ST_RecalculatePlayerAttributeScratch](../scr/st/ST_RecalculatePlayerAttributeScratch.c). The latter starts the halfword at
+zero and iterates player halfword slots beginning at `ST_PLAYER_RECORD_SLOTS`. For slot indices
 0 through 16, excluding 4, 5, 6, 11, 12, and 15, a slot other than `0xFFFF`
 indexes a 44-byte record at `0x801C7810`; the unsigned record halfword at
-`0x24` is added to the total with halfword wrapping. `sub_8005A3A8` sets the
+`0x24` is added to the total with halfword wrapping. `ST_RecalculatePlayerDerivedAttributes` sets the
 `ST_PLAYER_MOVE_PENALTY_THRESHOLD` to `120 + ST_PLAYER_MAX_HP / 12`, using
 unsigned HP and integer division. **OPEN:** the in-game names of the slot
 records and their summed field have not been established.
@@ -218,6 +218,22 @@ player fields `ST_PLAYER_EFFECT_CAP_ATTRIBUTE` and
 limit, the routine replaces it with the low halfword of that limit. The
 75 and 300 values above therefore are subject to this later cap. **OPEN:** the
 in-game meanings of the two fields used to calculate the caps are not established.
+
+`ST_RecalculatePlayerAttributeScratch` calculates 14 attribute values in
+scratch memory. For each index, it starts a halfword sum at zero, then adds
+the unsigned byte at that index in `ST_RECORD_ATTRIBUTE_VALUES` for each
+selected record. Each addition wraps to a halfword. It adds the corresponding
+halfword in `ST_PLAYER_BASE_ATTRIBUTES`, retains the low halfword, interprets
+it as signed, and clamps it to 0 through 999. For this calculation the
+selected slots are indices 0 through 3, 7 through 10, 13, 14, and 16;
+`0xFFFF` indicates an empty slot.
+
+`ST_RecalculatePlayerDerivedAttributes` derives
+`ST_PLAYER_EFFECT_CAP_ATTRIBUTE` from element
+`ST_EFFECT_CAP_ATTRIBUTE_INDEX` of that clamped array. It shifts the value
+right by four bits and adds 50. This attribute is therefore between 50 and
+112 for values produced by the described calculation. **OPEN:** the
+in-game meaning of this attribute and its underlying base and record values.
 
 [ST_RecalculatePlayerRecordModifiers](../scr/st/ST_RecalculatePlayerRecordModifiers.c)
 calculates `ST_PLAYER_EFFECT_CAP_PERCENT` from the same indexed 44-byte
