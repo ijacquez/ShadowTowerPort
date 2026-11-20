@@ -246,7 +246,7 @@ L_80046A20:
     // sh          $t6, 0x4($t9)
     MEM_H(0X4, ctx->r25) = ctx->r14;
     // lhu         $v0, 0x148($t3)
-    ctx->r2 = MEM_HU(0X148, ctx->r11);
+    ctx->r2 = MEM_HU(ST_COLLISION_GEOMETRY_SCRATCH_EXTENDED_DISPLACEMENT_X, ctx->r11);
     // lh          $v1, 0x0($t9)
     ctx->r3 = MEM_HS(0X0, ctx->r25);
     // sll         $v0, $v0, 16
@@ -258,7 +258,7 @@ L_80046A20:
     // lhu         $v1, 0x2($t9)
     ctx->r3 = MEM_HU(0X2, ctx->r25);
     // lhu         $v0, 0x14A($t3)
-    ctx->r2 = MEM_HU(0X14A, ctx->r11);
+    ctx->r2 = MEM_HU(ST_COLLISION_GEOMETRY_SCRATCH_EXTENDED_DISPLACEMENT_Y, ctx->r11);
     // sll         $v1, $v1, 16
     ctx->r3 = S32(ctx->r3) << 16;
     // sra         $v1, $v1, 16
@@ -274,7 +274,7 @@ L_80046A20:
     // lhu         $v1, 0x4($t9)
     ctx->r3 = MEM_HU(0X4, ctx->r25);
     // lhu         $v0, 0x14C($t3)
-    ctx->r2 = MEM_HU(0X14C, ctx->r11);
+    ctx->r2 = MEM_HU(ST_COLLISION_GEOMETRY_SCRATCH_EXTENDED_DISPLACEMENT_Z, ctx->r11);
     // sll         $v1, $v1, 16
     ctx->r3 = S32(ctx->r3) << 16;
     // sra         $v1, $v1, 16
@@ -1655,7 +1655,7 @@ L_80047310:
 
 L_800473FC:
     // lhu         $v0, 0x148($t3)
-    ctx->r2 = MEM_HU(0X148, ctx->r11);
+    ctx->r2 = MEM_HU(ST_COLLISION_GEOMETRY_SCRATCH_EXTENDED_DISPLACEMENT_X, ctx->r11);
     // lw          $v1, 0x24($t3)
     ctx->r3 = MEM_W(0X24, ctx->r11);
     // sll         $v0, $v0, 16
@@ -1665,7 +1665,7 @@ L_800473FC:
     // mult        $a3, $v1
     result = S64(S32(ctx->r7)) * S64(S32(ctx->r3)); lo = S32(result >> 0); hi = S32(result >> 32);
     // lhu         $v0, 0x14A($t3)
-    ctx->r2 = MEM_HU(0X14A, ctx->r11);
+    ctx->r2 = MEM_HU(ST_COLLISION_GEOMETRY_SCRATCH_EXTENDED_DISPLACEMENT_Y, ctx->r11);
     // lw          $v1, 0x28($t3)
     ctx->r3 = MEM_W(0X28, ctx->r11);
     // mflo        $t0
@@ -1677,7 +1677,7 @@ L_800473FC:
     // mult        $a2, $v1
     result = S64(S32(ctx->r6)) * S64(S32(ctx->r3)); lo = S32(result >> 0); hi = S32(result >> 32);
     // lhu         $v0, 0x14C($t3)
-    ctx->r2 = MEM_HU(0X14C, ctx->r11);
+    ctx->r2 = MEM_HU(ST_COLLISION_GEOMETRY_SCRATCH_EXTENDED_DISPLACEMENT_Z, ctx->r11);
     // nop
 
     // sll         $v0, $v0, 16
@@ -2048,7 +2048,7 @@ L_800475B0:
 
 L_80047690:
     // lhu         $v0, 0x148($t3)
-    ctx->r2 = MEM_HU(0X148, ctx->r11);
+    ctx->r2 = MEM_HU(ST_COLLISION_GEOMETRY_SCRATCH_EXTENDED_DISPLACEMENT_X, ctx->r11);
     // lw          $v1, 0xA4($t3)
     ctx->r3 = MEM_W(0XA4, ctx->r11);
     // sll         $v0, $v0, 16
@@ -2058,7 +2058,7 @@ L_80047690:
     // mult        $a3, $v1
     result = S64(S32(ctx->r7)) * S64(S32(ctx->r3)); lo = S32(result >> 0); hi = S32(result >> 32);
     // lhu         $v0, 0x14A($t3)
-    ctx->r2 = MEM_HU(0X14A, ctx->r11);
+    ctx->r2 = MEM_HU(ST_COLLISION_GEOMETRY_SCRATCH_EXTENDED_DISPLACEMENT_Y, ctx->r11);
     // lw          $v1, 0xA8($t3)
     ctx->r3 = MEM_W(0XA8, ctx->r11);
     // mflo        $t0
@@ -2070,7 +2070,7 @@ L_80047690:
     // mult        $a2, $v1
     result = S64(S32(ctx->r6)) * S64(S32(ctx->r3)); lo = S32(result >> 0); hi = S32(result >> 32);
     // lhu         $v0, 0x14C($t3)
-    ctx->r2 = MEM_HU(0X14C, ctx->r11);
+    ctx->r2 = MEM_HU(ST_COLLISION_GEOMETRY_SCRATCH_EXTENDED_DISPLACEMENT_Z, ctx->r11);
     // nop
 
     // sll         $v0, $v0, 16

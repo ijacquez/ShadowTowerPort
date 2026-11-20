@@ -123,5 +123,66 @@ int main() {
             return 1;
         }
     }
-    std::puts("6 plane geometry queries and 9 movement updates passed");
+    // Replace the plane with the stage's positive-X vertical record.
+    std::memcpy(rdram, initial, sizeof rdram);
+    const int16_t wall[4][3] = {
+        {1024, -1024, -2048}, {1024, -1024, 2048},
+        {1024, -512, -2048}, {1024, -512, 2048}
+    };
+    for (int i = 0; i < 4; ++i)
+        for (int j = 0; j < 3; ++j) MEM_H(i * 8 + j * 2, vertices) = wall[i][j];
+    MEM_H(0, normal) = 4096;
+    MEM_H(2, normal) = 0;
+    MEM_B(1, record) = 4;
+    MEM_H(ST_GEOMETRY_RECORD_FLAGS, record) = 0xA;
+    // The axis-aligned query uses the sine table's quarter-turn entry.
+    MEM_H(0x800, 0x80081710) = 4096;
+    static uint8_t wallInitial[sizeof rdram];
+    std::memcpy(wallInitial, rdram, sizeof rdram);
+    struct WallCase { int y, flag, resultOffset, normalOffset; };
+    const WallCase wallCases[] = {
+        {0x41480, ST_COLLISION_RESULT_SECOND_NORMAL_THRESHOLD,
+            ST_COLLISION_QUERY_SECOND_NORMAL_RESULT, ST_COLLISION_QUERY_SECOND_NORMAL_Z},
+        {0x416C0, ST_COLLISION_RESULT_FIRST_NORMAL_THRESHOLD,
+            ST_COLLISION_QUERY_FIRST_NORMAL_RESULT, ST_COLLISION_QUERY_FIRST_NORMAL_Z}
+    };
+    for (const auto& test : wallCases) {
+        std::memcpy(rdram, wallInitial, sizeof rdram);
+        std::memset(g_psxScratchpad, 0, sizeof g_psxScratchpad);
+        MEM_W(ST_COLLISION_QUERY_POSITION_Y, query) = test.y;
+        MEM_W(ST_COLLISION_QUERY_POSITION_Z, query) = 0x3F500;
+        MEM_H(ST_COLLISION_QUERY_DISPLACEMENT_Z, query) = -48;
+        recomp_context queryCtx{};
+        queryCtx.r4 = query;
+        queryCtx.r29 = 0x801EF000;
+        ST_QueryLevelGeometry(rdram, &queryCtx);
+        if (queryCtx.r2 != test.flag || MEM_HU(ST_COLLISION_QUERY_CANDIDATE_COUNT, query) != 1 ||
+            S32(MEM_W(test.resultOffset, query)) != 256 ||
+            MEM_HS(test.normalOffset, query) != 4096) {
+            std::fprintf(stderr, "wall geometry query failed at Y 0x%x\n", test.y);
+            return 1;
+        }
+
+        std::memcpy(rdram, wallInitial, sizeof rdram);
+        std::memset(g_psxScratchpad, 0, sizeof g_psxScratchpad);
+        MEM_W(ST_PLAYER_POSITION_X, player) = 0x40000;
+        MEM_W(ST_PLAYER_POSITION_Y, player) = test.y;
+        MEM_W(ST_PLAYER_POSITION_Z, player) = 0x3F500;
+        MEM_H(ST_PLAYER_MOVE_Z, player) = -48;
+        MEM_B(ST_PLAYER_VIEW_AND_SOUND_UPDATE_DISABLED, player) = 1;
+        recomp_context moveCtx{};
+        moveCtx.r29 = 0x801EF000;
+        moveCtx.r28 = 0x80080000;
+        ST_PlayerMoveWithCollision(rdram, &moveCtx);
+        if (MEM_W(ST_PLAYER_POSITION_X, player) != 0x40000 ||
+            MEM_W(ST_PLAYER_POSITION_Y, player) != test.y ||
+            MEM_W(ST_PLAYER_POSITION_Z, player) != 0x3F501 ||
+            MEM_HS(ST_PLAYER_COLLISION_DISPLACEMENT_Z, player) != 1 ||
+            MEM_HS(ST_PLAYER_VERTICAL_MOVE, player) != 16 ||
+            MEM_W(ST_COLLISION_QUERY_RESULT_FLAGS, query) != 0 || unexpectedCalls) {
+            std::fprintf(stderr, "wall movement failed at Y 0x%x\n", test.y);
+            return 1;
+        }
+    }
+    std::puts("plane and wall geometry queries and movement updates passed");
 }

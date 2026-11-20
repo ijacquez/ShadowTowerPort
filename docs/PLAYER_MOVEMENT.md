@@ -1082,6 +1082,44 @@ and `ST_PLAYER_COLLISION_DISPLACEMENT_Z` (`0x260`, `0x262`, `0x264`). The query 
 and result bits are identified by their offsets and masks. **OPEN:**
 their complete geometric meanings have not been established.
 
+Both geometry record helpers first rotate the record vector and take its dot
+product with a signed-halfword displacement prepared by
+`ST_QueryLevelGeometry`. When the signed 32-bit sum is positive and neither
+bit `0x1` nor bit `0x4` is set in `ST_GEOMETRY_RECORD_FLAGS`, the helper skips
+that record. The prepared components are
+`ST_COLLISION_GEOMETRY_SCRATCH_EXTENDED_DISPLACEMENT_X`,
+`ST_COLLISION_GEOMETRY_SCRATCH_EXTENDED_DISPLACEMENT_Y`, and
+`ST_COLLISION_GEOMETRY_SCRATCH_EXTENDED_DISPLACEMENT_Z`. The products and sum
+wrap to 32 bits. For the movement query's
+`ST_COLLISION_QUERY_DIRECTION_FROM_DISPLACEMENT` direction, the prepared X/Z
+components are the displacement plus a horizontal extension of
+`ST_COLLISION_QUERY_HORIZONTAL_PARAMETER` in the displacement direction; its Y
+component is the displacement Y plus `ST_COLLISION_QUERY_VERTICAL_PARAMETER`.
+Each prepared component is stored as a halfword. If the horizontal displacement
+is zero, the prepared X/Z components are zero. Passing this test does not by
+itself select a record: distance and edge tests follow.
+
+For example, take only stage 0 model 2's `0x29CC` record, with placement 3's
+rotation and origin, and no matching active or indexed records. Its transformed
+vector is `(0, 0, 0x1000)` (0.0, 0.0, 1.0) and its plane Z is `0x3F400`
+(63.25 cells). With query X `0x40000` (64.0 cells), Z `0x3F500` (63.3125
+cells), zero X/Y displacement, Z displacement `-0x30` (-0.01171875 cells),
+and the normal movement query parameters, the record produces:
+
+| Query Y (cells) | Result bit | Selected normal result (cells) |
+| --- | --- | --- |
+| `0x41480` (65.28125) | `ST_COLLISION_RESULT_SECOND_NORMAL_THRESHOLD` | `0x100` (0.0625) |
+| `0x416C0` (65.421875) | `ST_COLLISION_RESULT_FIRST_NORMAL_THRESHOLD` | `0x100` (0.0625) |
+
+In either case, starting `ST_PlayerMoveWithCollision` with those coordinates,
+`ST_PLAYER_MOVE_Z = -0x30` (-0.01171875 cells), zero X and vertical movement,
+and zero movement magnitude replaces the Z displacement with `0x1`
+(0.000244140625 cells). The next query returns zero, and the call stores Z
+`0x3F501` (63.312744140625 cells). With this record alone, the geometry Y
+result is the no-result sentinel, so the subsequent vertical update sets
+`ST_PLAYER_VERTICAL_MOVE` to `0x10` (0.00390625 cells per call). This example
+does not establish which records are selected when other geometry is present.
+
 Each movement query clears `ST_COLLISION_QUERY_RECORD_VECTOR_SUM_X`,
 `ST_COLLISION_QUERY_RECORD_VECTOR_SUM_Y` (`0x47D0`), and
 `ST_COLLISION_QUERY_RECORD_VECTOR_SUM_Z` before dispatch. On a qualifying
