@@ -1148,6 +1148,8 @@ test-player-movement:
 	scratchpad/spatial-candidates-test
 	$(CXX) $(CFLAGS) -O2 tests/player_directional_collision_test.cpp scr/st/ST_ApplyDirectionalMovementWithCollision.c -o scratchpad/player-directional-collision-test
 	scratchpad/player-directional-collision-test
+	$(CXX) $(CFLAGS) -O2 tests/gte_normalization_test.cpp scr/st/VectorNormalS.c scr/st/sub_80074854.c scr/gte.cpp PsyCross/src/gte/PsyX_GTE.cpp -o scratchpad/gte-normalization-test
+	scratchpad/gte-normalization-test
 	$(CXX) $(CFLAGS) -std=c++17 tests/player_record_modifiers_test.cpp scr/st/ST_RecalculatePlayerRecordModifiers.c -o scratchpad/player-record-modifiers-test
 	scratchpad/player-record-modifiers-test
 	$(CXX) $(CFLAGS) -std=c++17 tests/resource_vector_sample_test.cpp scr/st/ST_SampleResourceVector.c scr/st/ST_SelectResourceSequenceInterval.c -o scratchpad/resource-vector-sample-test

@@ -1,5 +1,6 @@
 ﻿#include "gte.h"
 #include "psx/gtereg.h"
+#include "gte/PsyX_GTE.h"
 #include <cstring>
     
 
@@ -34,7 +35,10 @@ void gte_command(recomp_context* ctx, uint32_t cmd) {
 }
 
 void gte_mtc2(recomp_context* ctx, int rt, int rd) {
-    ctx->cp2d[rd] = (&ctx->r0)[rt];
+    const uint32_t value = (&ctx->r0)[rt];
+    if (rd == 31) return;
+    if (rd == 30) ctx->cp2d[31] = gte_leadingzerocount(value);
+    ctx->cp2d[rd] = value;
 }
 
 void gte_lwc2(uint8_t* rdram, recomp_context* ctx, int rt, int rs, int imm) {
