@@ -359,6 +359,15 @@ there addresses earlier emulated memory. The all-ones input takes the
 routine's zero-result branch. Thus a wrapped negative squared sum does not
 establish a nonnegative geometric distance.
 
+For positive input `s`, the PsyCross implementation clears the low bit of
+the leading-sign-bit count to obtain `n`, then computes `index` by shifting
+`s` right by `24 - n` if `n < 24`, or left by `n - 24` otherwise. It
+returns `SQRT[index - 64] << ((31 - n) >> 1) >> 12`. Zero returns zero.
+The supplied executable's 192 table halfwords at
+`ST_SQUARE_ROOT_TABLE_ADDRESS` match the PsyCross `SQRT` table. The lookup
+and integer shifts define the result; it is not specified as an exact
+real-valued square root.
+
 The rotation input's Y halfword is loaded from
 `ST_PLAYER_ROTATION_INPUT_Y_STACK_OFFSET` in the movement function's stack
 frame. The function allocates `0x70` bytes and does not write that halfword
