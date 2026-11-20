@@ -25,6 +25,8 @@ This Project is being REVERSE ENGINEERED.
 - Broken tooling is never acceptable.
   Fix it when identified.
 - Always adhere to the "Reverse Engineering Rules" section.
+- If the `AGENTS.md` file changes that requires a change, you must verify and be
+  thoroughly done with the change, unless the values are not yet resolved.
 
 ## Reverse Engineering Rules
 
