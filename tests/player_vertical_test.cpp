@@ -1,5 +1,6 @@
 #include "recomp.h"
 #include "st/ST_PlayerState.h"
+#include "st/ST_CollisionQuery.h"
 #include <cstdio>
 #include <cstring>
 
@@ -8,12 +9,17 @@ static int helperCalls;
 static int32_t sineResult;
 static int soundCalls;
 static int32_t soundMagnitude;
+static uint32_t collisionResult;
+static int collisionQueries;
 void memset_recomp(uint8_t*, recomp_context* ctx) { std::memset(GET_PTR(ctx->r4), ctx->r5, ctx->r6); ctx->r2 = ctx->r4; }
 void SquareRoot0(uint8_t*, recomp_context* ctx) { ctx->r2 = 0; }
 void ratan2(uint8_t*, recomp_context* ctx) { ctx->r2 = 0; }
 void rcos(uint8_t*, recomp_context* ctx) { ctx->r2 = 0; }
 void rsin(uint8_t*, recomp_context* ctx) { ctx->r2 = sineResult; }
-void ST_RunCollisionQuery(uint8_t*, recomp_context* ctx) { ctx->r2 = 0; }
+void ST_RunCollisionQuery(uint8_t*, recomp_context* ctx) {
+    ++collisionQueries;
+    ctx->r2 = collisionResult;
+}
 void ST_CheckHighDownwardMovement(uint8_t*, recomp_context* ctx) { ctx->r2 = 0; }
 void ST_HandleDownwardCollisionFeedback(uint8_t*, recomp_context*) { ++helperCalls; }
 void ST_RequestMovementSound(uint8_t*, recomp_context* ctx) {
@@ -107,6 +113,30 @@ int main() {
             return 1;
         }
     }
+    struct CollisionResultCase { uint32_t result; int expectedX; };
+    const CollisionResultCase collisionCases[] = {
+        {0, 100},
+        {ST_COLLISION_RESULT_CURRENT_Y_THRESHOLD, 100},
+        {ST_COLLISION_RESULT_ACTIVE_RECORD_HIT, 0},
+        {ST_COLLISION_RESULT_CURRENT_Y_THRESHOLD | ST_COLLISION_RESULT_ACTIVE_RECORD_HIT, 100},
+    };
+    for (const auto& test : collisionCases) {
+        std::memset(rdram, 0, sizeof rdram);
+        MEM_H(ST_PLAYER_MOVE_X, player) = 100;
+        MEM_W(ST_COLLISION_QUERY_PROPOSED_Y_RESULT, query) = ST_PLAYER_COLLISION_Y_OFFSET;
+        recomp_context ctx{};
+        ctx.r28 = 0x80080000;
+        ctx.r29 = 0x801EF000;
+        collisionResult = test.result;
+        collisionQueries = 0;
+        ST_PlayerMoveWithCollision(rdram, &ctx);
+        if (S32(MEM_W(ST_PLAYER_POSITION_X, player)) != test.expectedX || collisionQueries != 1) {
+            std::fprintf(stderr, "collision result %x produced position %d after %d queries\n",
+                         test.result, S32(MEM_W(ST_PLAYER_POSITION_X, player)), collisionQueries);
+            return 1;
+        }
+    }
+    collisionResult = 0;
     struct OscillationCase {
         uint8_t disabled, enabled;
         uint16_t phase, magnitude;
@@ -177,6 +207,7 @@ int main() {
     }
     std::printf("%zu vertical cases passed\n", sizeof cases / sizeof cases[0]);
     std::printf("%zu vertical view pitch cases passed\n", sizeof pitchCases / sizeof pitchCases[0]);
+    std::printf("%zu collision result application cases passed\n", sizeof collisionCases / sizeof collisionCases[0]);
     std::printf("%zu view oscillation cases passed\n", sizeof oscillationCases / sizeof oscillationCases[0]);
     std::printf("%zu movement sound countdown cases passed\n", sizeof soundCases / sizeof soundCases[0]);
     return 0;

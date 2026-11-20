@@ -969,9 +969,11 @@ the geometry function returns zero without these comparisons. **OPEN:** the
 complete physical interpretation of these thresholds and result bits.
 
 When the result is zero, the current candidate displacement is applied to
-position. A result equal to `ST_COLLISION_RESULT_CURRENT_Y_THRESHOLD` also
-applies it; that bit combined with other bits does not by itself apply the
-displacement. The two normal-threshold bits select separate horizontal correction paths. These use
+position and the query loop ends. For a nonzero result,
+`ST_COLLISION_RESULT_CURRENT_Y_THRESHOLD` applies the current candidate even
+when other result bits are set. The routine then checks those other bits;
+normal correction and another query can result in additional position changes.
+The two normal-threshold bits select separate horizontal correction paths. These use
 query data and the original movement direction to form another X/Z candidate,
 which is queried again. The routine calculates angles and perpendicular
 directions; the precise meaning of the result bits and query fields is not

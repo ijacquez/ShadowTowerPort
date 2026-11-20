@@ -213,11 +213,11 @@ L_80041714:
     // bne         $a3, $zero, L_800417C8
     if (ctx->r7 != 0) {
         // andi        $v0, $a3, 0x1
-        ctx->r2 = ctx->r7 & 0X1;
+        ctx->r2 = ctx->r7 & ST_COLLISION_RESULT_CURRENT_Y_THRESHOLD;
         goto L_800417C8;
     }
     // andi        $v0, $a3, 0x1
-    ctx->r2 = ctx->r7 & 0X1;
+    ctx->r2 = ctx->r7 & ST_COLLISION_RESULT_CURRENT_Y_THRESHOLD;
 L_80041788:
     // Apply the current candidate. This is reached for a zero result, bit
     // 0x1, or after the same horizontal correction case has been retried.
@@ -267,7 +267,7 @@ L_800417C8:
     // addiu       $v1, $v1, -0x70D8
     ctx->r3 = ADD32(ctx->r3, -0X70D8);
     // lw          $v0, 0x248($v1)
-    ctx->r2 = MEM_W(0X248, ctx->r3);
+    ctx->r2 = MEM_W(ST_PLAYER_POSITION_X, ctx->r3);
     // lw          $a0, 0x10($sp)
     ctx->r4 = MEM_W(0X10, ctx->r29);
     // nop
@@ -275,13 +275,13 @@ L_800417C8:
     // addu        $v0, $v0, $a0
     ctx->r2 = ADD32(ctx->r2, ctx->r4);
     // sw          $v0, 0x248($v1)
-    MEM_W(0X248, ctx->r3) = ctx->r2;
+    MEM_W(ST_PLAYER_POSITION_X, ctx->r3) = ctx->r2;
     // lw          $v0, 0x24C($v1)
-    ctx->r2 = MEM_W(0X24C, ctx->r3);
+    ctx->r2 = MEM_W(ST_PLAYER_POSITION_Y, ctx->r3);
     // lw          $a1, 0x14($sp)
     ctx->r5 = MEM_W(0X14, ctx->r29);
     // lw          $a0, 0x250($v1)
-    ctx->r4 = MEM_W(0X250, ctx->r3);
+    ctx->r4 = MEM_W(ST_PLAYER_POSITION_Z, ctx->r3);
     // lw          $a2, 0x18($sp)
     ctx->r6 = MEM_W(0X18, ctx->r29);
     // addu        $v0, $v0, $a1
@@ -289,14 +289,14 @@ L_800417C8:
     // addu        $a0, $a0, $a2
     ctx->r4 = ADD32(ctx->r4, ctx->r6);
     // sw          $v0, 0x24C($v1)
-    MEM_W(0X24C, ctx->r3) = ctx->r2;
+    MEM_W(ST_PLAYER_POSITION_Y, ctx->r3) = ctx->r2;
     // sw          $a0, 0x250($v1)
-    MEM_W(0X250, ctx->r3) = ctx->r4;
+    MEM_W(ST_PLAYER_POSITION_Z, ctx->r3) = ctx->r4;
 L_80041808:
     // Bits 0x2 and 0x8 select separate horizontal correction cases. Each
     // case is recalculated at most once before applying its current candidate.
     // andi        $v0, $a3, 0x2
-    ctx->r2 = ctx->r7 & 0X2;
+    ctx->r2 = ctx->r7 & ST_COLLISION_RESULT_FIRST_NORMAL_THRESHOLD;
     // beq         $v0, $zero, L_8004188C
     if (ctx->r2 == 0) {
         // addiu       $v1, $zero, 0x101
@@ -391,7 +391,7 @@ L_80041854:
     result = S64(S32(ctx->r20)) * S64(S32(ctx->r2)); lo = S32(result >> 0); hi = S32(result >> 32);
 L_8004188C:
     // andi        $v0, $a3, 0x8
-    ctx->r2 = ctx->r7 & 0X8;
+    ctx->r2 = ctx->r7 & ST_COLLISION_RESULT_SECOND_NORMAL_THRESHOLD;
     // beq         $v0, $zero, L_80041988
     if (ctx->r2 == 0) {
         // lui         $v0, 0x801B
