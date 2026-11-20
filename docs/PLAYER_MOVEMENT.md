@@ -400,7 +400,22 @@ displacement writers.
 
 In the resolver, result bits `ST_COLLISION_RESULT_FIRST_NORMAL_THRESHOLD` and
 `ST_COLLISION_RESULT_SECOND_NORMAL_THRESHOLD` take precedence over the
-player-hit response. When that response is reached with
+player-hit response, in that order. For either normal, let `R` be its query
+result, `N` its signed X/Z normal, and `E` the record's unsigned horizontal
+extent. The resolver replaces working X/Z with the low halfwords of
+`(1 - (R - E)) * N / 4096`, using wrapped 32-bit arithmetic and division
+toward zero. On the first occurrence of that particular normal bit, it also
+sets `t = (ratan2(Nz, Nx) + 0x400) & 0xFFF` and stores `t` in
+`ST_ACTIVE_COLLISION_RECORD_COLLISION_CORRECTION_ANGLE`. It projects the
+original horizontal displacement magnitude onto that direction with
+`p = originalMagnitude * rcos(originalDirection - t) / 4096`, then adds
+`rcos(t) * p / 4096` and `rsin(t) * p / 4096` to working X and Z and
+repeats the query. Each product uses its low 32 bits, each division rounds
+toward zero, and each stored working component is a halfword. If the same
+normal bit occurs again, it keeps the newly calculated working X/Z and
+continues to the vertical response without another query.
+
+When the player-hit response is reached with
 `ST_COLLISION_RESULT_PLAYER_HIT`, the resolver sets
 `ST_ACTIVE_COLLISION_RECORD_HIT_PLAYER_FLAG`. `ST_SetCollisionReference`
 then selects the player position as the reference. The resolver clears the

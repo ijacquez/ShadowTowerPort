@@ -155,7 +155,7 @@ L_8004C288:
     // sw          $v0, 0x8($v1)
     MEM_W(0X8, ctx->r3) = ctx->r2;
     // lhu         $v0, 0x2E($s2)
-    ctx->r2 = MEM_HU(0X2E, ctx->r18);
+    ctx->r2 = MEM_HU(ST_ACTIVE_COLLISION_RECORD_HORIZONTAL_EXTENT, ctx->r18);
     // nop
 
     // sh          $v0, 0x1C($v1)
@@ -379,7 +379,7 @@ L_8004C408:
     // addiu       $s4, $s4, 0x1
     ctx->r20 = ADD32(ctx->r20, 0X1);
     // andi        $v0, $s1, 0x2
-    ctx->r2 = ctx->r17 & 0X2;
+    ctx->r2 = ctx->r17 & ST_COLLISION_RESULT_FIRST_NORMAL_THRESHOLD;
     // beq         $v0, $zero, L_8004C4B8
     if (ctx->r2 == 0) {
         // lui         $v0, 0x801B
@@ -391,11 +391,11 @@ L_8004C408:
     // addiu       $s3, $v0, 0x5948
     ctx->r19 = ADD32(ctx->r2, 0X5948);
     // lhu         $v1, 0x2E($s2)
-    ctx->r3 = MEM_HU(0X2E, ctx->r18);
+    ctx->r3 = MEM_HU(ST_ACTIVE_COLLISION_RECORD_HORIZONTAL_EXTENT, ctx->r18);
     // lw          $v0, 0x3C($s3)
-    ctx->r2 = MEM_W(0X3C, ctx->r19);
+    ctx->r2 = MEM_W(ST_COLLISION_QUERY_FIRST_NORMAL_RESULT, ctx->r19);
     // lh          $a1, 0x8C($s3)
-    ctx->r5 = MEM_HS(0X8C, ctx->r19);
+    ctx->r5 = MEM_HS(ST_COLLISION_QUERY_FIRST_NORMAL_X, ctx->r19);
     // subu        $v0, $v0, $v1
     ctx->r2 = SUB32(ctx->r2, ctx->r3);
     // addiu       $v1, $zero, 0x1
@@ -418,7 +418,7 @@ L_8004C408:
     ctx->r2 = ADD32(ctx->r2, 0XFFF);
 L_8004C458:
     // lh          $a0, 0x90($s3)
-    ctx->r4 = MEM_HS(0X90, ctx->r19);
+    ctx->r4 = MEM_HS(ST_COLLISION_QUERY_FIRST_NORMAL_Z, ctx->r19);
     // nop
 
     // mult        $v1, $a0
@@ -468,11 +468,11 @@ L_8004C478:
     MEM_W(ST_COLLISION_QUERY_REFERENCE_DIRECTION, ctx->r19) = ctx->r2;
     // jal         0x800744C4
     // sh          $v1, 0x5E($s2)
-    MEM_H(0X5E, ctx->r18) = ctx->r3;
+    MEM_H(ST_ACTIVE_COLLISION_RECORD_COLLISION_CORRECTION_ANGLE, ctx->r18) = ctx->r3;
     rcos(rdram, ctx);
     goto after_6;
     // sh          $v1, 0x5E($s2)
-    MEM_H(0X5E, ctx->r18) = ctx->r3;
+    MEM_H(ST_ACTIVE_COLLISION_RECORD_COLLISION_CORRECTION_ANGLE, ctx->r18) = ctx->r3;
     after_6:
     // mult        $s6, $v0
     result = S64(S32(ctx->r22)) * S64(S32(ctx->r2)); lo = S32(result >> 0); hi = S32(result >> 32);
@@ -486,7 +486,7 @@ L_8004C478:
     MEM_W(0X30, ctx->r29) = ctx->r6;
 L_8004C4B8:
     // andi        $v0, $s1, 0x8
-    ctx->r2 = ctx->r17 & 0X8;
+    ctx->r2 = ctx->r17 & ST_COLLISION_RESULT_SECOND_NORMAL_THRESHOLD;
     // beq         $v0, $zero, L_8004C554
     if (ctx->r2 == 0) {
         // lui         $v0, 0x801B
@@ -498,11 +498,11 @@ L_8004C4B8:
     // addiu       $s3, $v0, 0x5948
     ctx->r19 = ADD32(ctx->r2, 0X5948);
     // lhu         $v1, 0x2E($s2)
-    ctx->r3 = MEM_HU(0X2E, ctx->r18);
+    ctx->r3 = MEM_HU(ST_ACTIVE_COLLISION_RECORD_HORIZONTAL_EXTENT, ctx->r18);
     // lw          $v0, 0x44($s3)
-    ctx->r2 = MEM_W(0X44, ctx->r19);
+    ctx->r2 = MEM_W(ST_COLLISION_QUERY_SECOND_NORMAL_RESULT, ctx->r19);
     // lh          $a1, 0x9C($s3)
-    ctx->r5 = MEM_HS(0X9C, ctx->r19);
+    ctx->r5 = MEM_HS(ST_COLLISION_QUERY_SECOND_NORMAL_X, ctx->r19);
     // subu        $v0, $v0, $v1
     ctx->r2 = SUB32(ctx->r2, ctx->r3);
     // addiu       $v1, $zero, 0x1
@@ -525,7 +525,7 @@ L_8004C4B8:
     ctx->r2 = ADD32(ctx->r2, 0XFFF);
 L_8004C4F4:
     // lh          $a0, 0xA0($s3)
-    ctx->r4 = MEM_HS(0XA0, ctx->r19);
+    ctx->r4 = MEM_HS(ST_COLLISION_QUERY_SECOND_NORMAL_Z, ctx->r19);
     // nop
 
     // mult        $v1, $a0
@@ -575,11 +575,11 @@ L_8004C514:
     MEM_W(ST_COLLISION_QUERY_REFERENCE_DIRECTION, ctx->r19) = ctx->r2;
     // jal         0x800744C4
     // sh          $v1, 0x5E($s2)
-    MEM_H(0X5E, ctx->r18) = ctx->r3;
+    MEM_H(ST_ACTIVE_COLLISION_RECORD_COLLISION_CORRECTION_ANGLE, ctx->r18) = ctx->r3;
     rcos(rdram, ctx);
     goto after_8;
     // sh          $v1, 0x5E($s2)
-    MEM_H(0X5E, ctx->r18) = ctx->r3;
+    MEM_H(ST_ACTIVE_COLLISION_RECORD_COLLISION_CORRECTION_ANGLE, ctx->r18) = ctx->r3;
     after_8:
     // mult        $s6, $v0
     result = S64(S32(ctx->r22)) * S64(S32(ctx->r2)); lo = S32(result >> 0); hi = S32(result >> 32);
