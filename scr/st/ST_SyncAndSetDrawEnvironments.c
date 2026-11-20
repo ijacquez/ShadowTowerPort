@@ -2,9 +2,9 @@
 #include "disable_warnings.h"
 
 
-void sub_800175A4(uint8_t* rdram, recomp_context* ctx) 
+void ST_SyncAndSetDrawEnvironments(uint8_t* rdram, recomp_context* ctx)
 {
-  //  printf("sub_800175A4  end draw?\n");
+  //  printf("ST_SyncAndSetDrawEnvironments  end draw?\n");
     uint64_t hi = 0, lo = 0, result = 0;
     unsigned int rounding_mode = DEFAULT_ROUNDING_MODE;
     int c1cs = 0; 

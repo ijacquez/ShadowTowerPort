@@ -14,6 +14,18 @@ their in-game meanings remain **OPEN**. Some collision fields and recompiled
 functions still have offsets or generated names because their complete roles
 are not established.
 
+## Update timing in the port
+
+[ST_MainGameLoop](../scr/st/ST_MainGameLoop.c) calls `ST_UpdatePlayerState`
+once per loop iteration, then calls `DrawScene`. The scene calls
+[ST_PresentScene](../scr/st/ST_PresentScene.c), which calls
+[ST_SyncAndSetDrawEnvironments](../scr/st/ST_SyncAndSetDrawEnvironments.c);
+that routine calls [VSync](../scr/st/VSync.c). The port's `VSync` targets
+an interval of 1/24 second between calls, using millisecond-truncated sleep
+when more than one millisecond remains. Other work and other calls to `VSync`
+can affect the elapsed time between movement updates. The target is not a
+guaranteed update rate, and the original game's update rate is **OPEN**.
+
 ## Horizontal input
 
 `ST_PLAYER_LOCAL_MOVE_X` (`0x2B8`) and `ST_PLAYER_LOCAL_MOVE_Z` (`0x2C0`)
@@ -664,8 +676,8 @@ For `d > 0`:
 
 When `d == 0`, vertical movement and the byte at player offset `0x239` are
 cleared. Other collision branches may change the applied displacement. These
-are per-update stored integer values; the update frequency and physical units
-have not been established. With one spatial cell as one world unit, divide
+are per-update stored integer values; the physical units have not been
+established. With one spatial cell as one world unit, divide
 positions and movement displacements by 4096 to obtain values with 12
 fractional bits. See [STAGE_UNITS.md](STAGE_UNITS.md) for the extracted
 geometry and the relationship between model, grid, and player coordinates.

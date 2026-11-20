@@ -20,7 +20,7 @@ void sub_80031D50(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x800175A4
     // nop
 
-    sub_800175A4(rdram, ctx);
+    ST_SyncAndSetDrawEnvironments(rdram, ctx);
     goto after_1;
     // nop
 
@@ -86,7 +86,7 @@ void sub_80031D50(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x80017634
     // nop
 
-    sub_80017634(rdram, ctx);
+    ST_DrawOrderingTable(rdram, ctx);
     goto after_4;
     // nop
 

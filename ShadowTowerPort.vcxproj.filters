@@ -2367,7 +2367,7 @@
     <ClCompile Include="scr\st\ST_BeginDraw2D.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_800175A4.c">
+    <ClCompile Include="scr\st\ST_SyncAndSetDrawEnvironments.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\sub_800176A8.c">
@@ -2829,10 +2829,10 @@
     <ClCompile Include="scr\st\sub_80017220.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_80017634.c">
+    <ClCompile Include="scr\st\ST_DrawOrderingTable.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_80017680.c">
+    <ClCompile Include="scr\st\ST_PresentScene.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\sub_80018440.c">

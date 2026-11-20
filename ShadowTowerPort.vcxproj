@@ -472,9 +472,9 @@
     <ClCompile Include="scr\st\sub_800172BC.c" />
     <ClCompile Include="scr\st\sub_800173A8.c" />
     <ClCompile Include="scr\st\ST_BeginDraw2D.c" />
-    <ClCompile Include="scr\st\sub_800175A4.c" />
-    <ClCompile Include="scr\st\sub_80017634.c" />
-    <ClCompile Include="scr\st\sub_80017680.c" />
+    <ClCompile Include="scr\st\ST_SyncAndSetDrawEnvironments.c" />
+    <ClCompile Include="scr\st\ST_DrawOrderingTable.c" />
+    <ClCompile Include="scr\st\ST_PresentScene.c" />
     <ClCompile Include="scr\st\sub_800176A8.c" />
     <ClCompile Include="scr\st\sub_800177A0.c" />
     <ClCompile Include="scr\st\sub_80017D28.c" />

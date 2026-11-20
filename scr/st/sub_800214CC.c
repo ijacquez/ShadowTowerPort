@@ -44,7 +44,7 @@ void sub_800214CC(uint8_t* rdram, recomp_context* ctx)
     // jal         0x80017680
     // nop
 
-    sub_80017680(rdram, ctx);
+    ST_PresentScene(rdram, ctx);
     goto after_1;
     // nop
 

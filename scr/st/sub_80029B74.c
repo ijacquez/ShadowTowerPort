@@ -963,7 +963,7 @@ L_8002A128:
     // jal         0x800175A4
     // nop
 
-    sub_800175A4(rdram, ctx);
+    ST_SyncAndSetDrawEnvironments(rdram, ctx);
     goto after_24;
     // nop
 
@@ -979,7 +979,7 @@ L_8002A128:
     // jal         0x80017634
     // nop
 
-    sub_80017634(rdram, ctx);
+    ST_DrawOrderingTable(rdram, ctx);
     goto after_26;
     // nop
 

@@ -608,10 +608,10 @@ L_80026D90:
     // jal         0x80017680
     // nop
 
-    sub_80017680(rdram, ctx);
+    ST_PresentScene(rdram, ctx);
 
     // otBase = MEM_W(0, 0x80165174); // текущий OTag
-    // printf("after sub_80017680: %d prims\n", countOTag(rdram, otBase, 0x1000));
+    // printf("after ST_PresentScene: %d prims\n", countOTag(rdram, otBase, 0x1000));
     // printf("[frame] state=%d\n", MEM_B(0, 0x80199140));
     goto after_28;
     // nop

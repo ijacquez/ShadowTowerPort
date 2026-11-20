@@ -308,7 +308,7 @@ L_80068404:
     // jal         0x80017680
     // nop
 
-    sub_80017680(rdram, ctx);
+    ST_PresentScene(rdram, ctx);
     goto after_9;
     // nop
 

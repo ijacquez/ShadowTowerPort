@@ -329,9 +329,9 @@ SRCS:= scr/st/AddPrim.c \
 	scr/st/sub_800172BC.c \
 	scr/st/sub_800173A8.c \
 	scr/st/ST_BeginDraw2D.c \
-	scr/st/sub_800175A4.c \
-	scr/st/sub_80017634.c \
-	scr/st/sub_80017680.c \
+	scr/st/ST_SyncAndSetDrawEnvironments.c \
+	scr/st/ST_DrawOrderingTable.c \
+	scr/st/ST_PresentScene.c \
 	scr/st/sub_800176A8.c \
 	scr/st/sub_800177A0.c \
 	scr/st/sub_80017D28.c \

@@ -103,7 +103,7 @@ sub_80021AC4(1)       — same, second pass
 sub_80020A80()        — **more GTE render** (scratchpad)
 sub_8001C8E0..CAB8    — unknown
 sub_800241D0..800255F0 — various render (some with GTE)
-sub_80017680()        — DrawOTag + buffer swap
+ST_PresentScene()        — DrawOTag + buffer swap
 sub_8001535C()        — wait CD (stubbed)
 ```
 

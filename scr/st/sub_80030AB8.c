@@ -176,7 +176,7 @@ L_80030BC0:
     // jal         0x80017680
     // nop
 
-    sub_80017680(rdram, ctx);
+    ST_PresentScene(rdram, ctx);
     goto after_4;
     // nop
 

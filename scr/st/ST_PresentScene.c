@@ -3,7 +3,7 @@
 #include "PsyX/PsyX_public.h"
 #include "PsyX/PsyX_render.h"
 
-void sub_80017680(uint8_t* rdram, recomp_context* ctx) {
+void ST_PresentScene(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
     unsigned int rounding_mode = DEFAULT_ROUNDING_MODE;
     int c1cs = 0; 
@@ -14,7 +14,7 @@ void sub_80017680(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x800175A4
     // nop
 
-    sub_800175A4(rdram, ctx);
+    ST_SyncAndSetDrawEnvironments(rdram, ctx);
     goto after_0;
     // nop
 
@@ -22,7 +22,7 @@ void sub_80017680(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x80017634
     // nop
 
-    sub_80017634(rdram, ctx);
+    ST_DrawOrderingTable(rdram, ctx);
     goto after_1;
     // nop
 
