@@ -219,5 +219,26 @@ int main() {
             return 1;
         }
     }
+    // Use the first three wall vertices as a triangle with the same winding.
+    for (const auto& test : wallCases) {
+        std::memcpy(rdram, wallInitial, sizeof rdram);
+        std::memset(g_psxScratchpad, 0, sizeof g_psxScratchpad);
+        MEM_H(ST_GEOMETRY_MODEL_THREE_VERTEX_COUNT, model) = 1;
+        MEM_H(ST_GEOMETRY_MODEL_FOUR_VERTEX_COUNT, model) = 0;
+        MEM_W(ST_COLLISION_QUERY_POSITION_Y, query) = test.y;
+        MEM_W(ST_COLLISION_QUERY_POSITION_Z, query) = 0x3F500;
+        MEM_H(ST_COLLISION_QUERY_DISPLACEMENT_Z, query) = -48;
+        recomp_context triangleCtx{};
+        triangleCtx.r4 = query;
+        triangleCtx.r29 = 0x801EF000;
+        ST_QueryLevelGeometry(rdram, &triangleCtx);
+        if (triangleCtx.r2 != test.flag || MEM_HU(ST_COLLISION_QUERY_CANDIDATE_COUNT, query) != 1 ||
+            S32(MEM_W(test.resultOffset, query)) != 256 ||
+            MEM_HS(test.normalOffset, query) != 4096 ||
+            MEM_W(test.fallbackOffset, 0x1F800000) != test.fallbackDistance) {
+            std::fprintf(stderr, "triangle geometry query failed at Y 0x%x\n", test.y);
+            return 1;
+        }
+    }
     std::puts("plane and wall geometry queries and movement updates passed");
 }

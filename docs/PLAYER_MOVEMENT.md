@@ -1102,20 +1102,21 @@ the horizontal extension and Y is the displacement Y without the vertical
 parameter added. Passing this test does not by itself select a record: distance
 and edge tests follow.
 
-For a four-vertex record that reaches horizontal selection with bit `0x2` set
-in `ST_GEOMETRY_RECORD_FLAGS`, the helper tests two points: the query's current
+For a three- or four-vertex record that reaches horizontal selection with bit
+`0x2` set in `ST_GEOMETRY_RECORD_FLAGS`, the helper tests two points: the query's current
 position, and a reference point with the same X/Z and Y equal to query Y plus
 `ST_COLLISION_QUERY_VERTICAL_PARAMETER` minus
 `ST_COLLISION_GEOMETRY_REFERENCE_Y_BIAS` (`0x403`, 0.250732421875 cells).
 For each point it subtracts that point from each transformed vertex, takes the
 signed low halfword of each component, and uses the GTE outer-product command
-to form four cross products in vertex order `(0,1)`, `(1,3)`, `(3,2)`,
-`(2,0)`. The command arithmetic-shifts each cross-product component right by
+to form cross products in vertex order `(0,1)`, `(1,2)`, `(2,0)` for a
+three-vertex record, or `(0,1)`, `(1,3)`, `(3,2)`, `(2,0)` for a four-vertex
+record. The command arithmetic-shifts each cross-product component right by
 12 before storing its 32-bit result. For each cross product, the helper takes
 the dot product with the rotated record vector using 32-bit wrapped products
-and sums. If all four signed results are nonpositive, it considers that record
+and sums. If all signed results are nonpositive, it considers that record
 for the point's direct normal result. Otherwise it takes the dot products with
-the signed extended displacement; if all four are nonnegative, it considers
+the signed extended displacement; if all are nonnegative, it considers
 the record for the point's fallback result. Equality passes both comparisons.
 
 The current-position test updates
@@ -1131,6 +1132,7 @@ corresponding direct value remains at `ST_COLLISION_GEOMETRY_NO_RESULT`. The lat
 threshold comparisons produce the query's first and second normal result bits.
 Earlier direction, distance, and record-flag checks can reject the record
 before these tests. See
+[ST_TestThreeVertexCollisionRecords](../scr/st/ST_TestThreeVertexCollisionRecords.c),
 [ST_TestFourVertexCollisionRecords](../scr/st/ST_TestFourVertexCollisionRecords.c),
 [ST_TransformCandidateVertices](../scr/st/ST_TransformCandidateVertices.c),
 and [ST_QueryLevelGeometry](../scr/st/ST_QueryLevelGeometry.c).
