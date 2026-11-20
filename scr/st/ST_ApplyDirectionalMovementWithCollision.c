@@ -3,6 +3,12 @@
 #include "ST_PlayerState.h"
 #include "ST_CollisionQuery.h"
 
+enum {
+    ST_DIRECTIONAL_NORMAL_CORRECTION_BIAS = 0x101,
+    ST_DIRECTIONAL_ACTIVE_RECORD_MARGIN = 0x300,
+    ST_DIRECTIONAL_INDEXED_RECORD_MARGIN = 0x100
+};
+
 void ST_ApplyDirectionalMovementWithCollision(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
     unsigned int rounding_mode = DEFAULT_ROUNDING_MODE;
@@ -294,7 +300,7 @@ L_80041320:
     // addiu       $s3, $s3, 0x1
     ctx->r19 = ADD32(ctx->r19, 0X1);
     // andi        $v0, $s0, 0x1
-    ctx->r2 = ctx->r16 & 0X1;
+    ctx->r2 = ctx->r16 & ST_COLLISION_RESULT_CURRENT_Y_THRESHOLD;
     // beq         $v0, $zero, L_80041344
     if (ctx->r2 == 0) {
         // addiu       $v0, $zero, -0x2
@@ -316,15 +322,15 @@ L_80041320:
 // Bit 0x2 uses query fields 0x3C, 0x8C, and 0x90 for X/Z correction.
 L_80041344:
     // andi        $v0, $s0, 0x2
-    ctx->r2 = ctx->r16 & 0X2;
+    ctx->r2 = ctx->r16 & ST_COLLISION_RESULT_FIRST_NORMAL_THRESHOLD;
     // beq         $v0, $zero, L_800413C8
     if (ctx->r2 == 0) {
         // addiu       $v1, $zero, 0x101
-        ctx->r3 = ADD32(0, 0X101);
+        ctx->r3 = ADD32(0, ST_DIRECTIONAL_NORMAL_CORRECTION_BIAS);
         goto L_800413C8;
     }
     // addiu       $v1, $zero, 0x101
-    ctx->r3 = ADD32(0, 0X101);
+    ctx->r3 = ADD32(0, ST_DIRECTIONAL_NORMAL_CORRECTION_BIAS);
     // lw          $v0, 0x3C($s2)
     ctx->r2 = MEM_W(ST_COLLISION_QUERY_FIRST_NORMAL_RESULT, ctx->r18);
     // lh          $a1, 0x8C($s2)
@@ -392,7 +398,7 @@ L_80041390:
     // sra         $v0, $v0, 16
     ctx->r2 = S32(ctx->r2) >> 16;
     // sw          $v0, 0x78($s2)
-    MEM_W(0X78, ctx->r18) = ctx->r2;
+    MEM_W(ST_COLLISION_QUERY_REFERENCE_DIRECTION, ctx->r18) = ctx->r2;
     // addiu       $a0, $s4, -0x400
     ctx->r4 = ADD32(ctx->r20, -0X400);
     // jal         0x800744C4
@@ -412,15 +418,15 @@ L_80041390:
 // Bit 0x8 selects the parallel correction using fields 0x44, 0x9C, 0xA0.
 L_800413C8:
     // andi        $v0, $s0, 0x8
-    ctx->r2 = ctx->r16 & 0X8;
+    ctx->r2 = ctx->r16 & ST_COLLISION_RESULT_SECOND_NORMAL_THRESHOLD;
     // beq         $v0, $zero, L_8004144C
     if (ctx->r2 == 0) {
         // andi        $v0, $s0, 0x50
-        ctx->r2 = ctx->r16 & 0X50;
+        ctx->r2 = ctx->r16 & ST_COLLISION_RESULT_OBJECT_HITS;
         goto L_8004144C;
     }
     // andi        $v0, $s0, 0x50
-    ctx->r2 = ctx->r16 & 0X50;
+    ctx->r2 = ctx->r16 & ST_COLLISION_RESULT_OBJECT_HITS;
     // lw          $v0, 0x44($s2)
     ctx->r2 = MEM_W(ST_COLLISION_QUERY_SECOND_NORMAL_RESULT, ctx->r18);
     // lh          $a1, 0x9C($s2)
@@ -488,7 +494,7 @@ L_80041414:
     // sra         $v0, $v0, 16
     ctx->r2 = S32(ctx->r2) >> 16;
     // sw          $v0, 0x78($s2)
-    MEM_W(0X78, ctx->r18) = ctx->r2;
+    MEM_W(ST_COLLISION_QUERY_REFERENCE_DIRECTION, ctx->r18) = ctx->r2;
     // addiu       $a0, $s4, -0x400
     ctx->r4 = ADD32(ctx->r20, -0X400);
     // jal         0x800744C4
@@ -560,17 +566,17 @@ L_8004144C:
     // subu        $v1, $v0, $v1
     ctx->r3 = SUB32(ctx->r2, ctx->r3);
     // andi        $v0, $s0, 0x10
-    ctx->r2 = ctx->r16 & 0X10;
+    ctx->r2 = ctx->r16 & ST_COLLISION_RESULT_ACTIVE_RECORD_HIT;
     // beq         $v0, $zero, L_800414AC
     if (ctx->r2 == 0) {
         // addiu       $a0, $v1, -0x100
-        ctx->r4 = ADD32(ctx->r3, -0X100);
+        ctx->r4 = ADD32(ctx->r3, -ST_DIRECTIONAL_INDEXED_RECORD_MARGIN);
         goto L_800414AC;
     }
     // addiu       $a0, $v1, -0x100
-    ctx->r4 = ADD32(ctx->r3, -0X100);
+    ctx->r4 = ADD32(ctx->r3, -ST_DIRECTIONAL_INDEXED_RECORD_MARGIN);
     // addiu       $a0, $v1, -0x300
-    ctx->r4 = ADD32(ctx->r3, -0X300);
+    ctx->r4 = ADD32(ctx->r3, -ST_DIRECTIONAL_ACTIVE_RECORD_MARGIN);
 L_800414AC:
     // addiu       $v0, $zero, 0x1
     ctx->r2 = ADD32(0, 0X1);
@@ -644,11 +650,11 @@ L_800414EC:
     ctx->r4 = SUB32(ctx->r4, ctx->r17);
     // jal         0x800744C4
     // sw          $s1, 0x78($s2)
-    MEM_W(0X78, ctx->r18) = ctx->r17;
+    MEM_W(ST_COLLISION_QUERY_REFERENCE_DIRECTION, ctx->r18) = ctx->r17;
     rcos(rdram, ctx);
     goto after_12;
     // sw          $s1, 0x78($s2)
-    MEM_W(0X78, ctx->r18) = ctx->r17;
+    MEM_W(ST_COLLISION_QUERY_REFERENCE_DIRECTION, ctx->r18) = ctx->r17;
     after_12:
     // mult        $s5, $v0
     result = S64(S32(ctx->r21)) * S64(S32(ctx->r2)); lo = S32(result >> 0); hi = S32(result >> 32);
@@ -671,11 +677,11 @@ L_80041534:
     // beq         $s0, $zero, L_80041224
     if (ctx->r16 == 0) {
         // sh          $s0, 0x44C6($s2)
-        MEM_H(0X44C6, ctx->r18) = ctx->r16;
+        MEM_H(ST_COLLISION_QUERY_CORRECTION_MAGNITUDE, ctx->r18) = ctx->r16;
         goto L_80041224;
     }
     // sh          $s0, 0x44C6($s2)
-    MEM_H(0X44C6, ctx->r18) = ctx->r16;
+    MEM_H(ST_COLLISION_QUERY_CORRECTION_MAGNITUDE, ctx->r18) = ctx->r16;
     // addiu       $s1, $s1, 0x400
     ctx->r17 = ADD32(ctx->r17, 0X400);
     // jal         0x800744C4

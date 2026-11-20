@@ -849,8 +849,9 @@ the geometry function returns zero without these comparisons. **OPEN:** the
 complete physical interpretation of these thresholds and result bits.
 
 When the result is zero, the current candidate displacement is applied to
-position. Bit `0x1` also applies it, after which other bits are still handled.
-Bits `0x2` and `0x8` select separate horizontal correction paths. These use
+position. A result equal to `ST_COLLISION_RESULT_CURRENT_Y_THRESHOLD` also
+applies it; that bit combined with other bits does not by itself apply the
+displacement. The two normal-threshold bits select separate horizontal correction paths. These use
 query data and the original movement direction to form another X/Z candidate,
 which is queried again. The routine calculates angles and perpendicular
 directions; the precise meaning of the result bits and query fields is not
@@ -892,17 +893,31 @@ The query result controls the next step, in this order:
   `ST_COLLISION_QUERY_SECOND_NORMAL_RESULT`, `ST_COLLISION_QUERY_SECOND_NORMAL_X`,
   and `ST_COLLISION_QUERY_SECOND_NORMAL_Z`. A second occurrence also applies
   the replacement displacement immediately.
-- Otherwise, if either bit in `0x50` is set, the function calls
-  `ST_SetCollisionReference`, forms the X/Z difference between player position and query
-  words `0xAC`/`0xB4`, and passes that vector to `VectorNormalS`. It derives
-  replacement X/Z from that result and query values `0xBC` and `0x44C0`,
-  with an additional `0x300` if bit `0x10` is set, or `0x100` otherwise.
-  On a second occurrence it exits without adding the replacement to position.
+- Otherwise, if `ST_COLLISION_RESULT_OBJECT_HITS` is nonzero, the function
+  calls `ST_SetCollisionReference` and passes the player-to-reference X/Z
+  difference to `VectorNormalS`. Let `N` be the resulting signed halfwords,
+  `D` be `ST_COLLISION_QUERY_REFERENCE_HORIZONTAL_DISTANCE`, and `E` be
+  `ST_COLLISION_QUERY_REFERENCE_HORIZONTAL_EXTENT`. It computes
+  `C = 1 - (D - E - margin)` with wrapped 32-bit arithmetic, where the margin
+  is `ST_DIRECTIONAL_ACTIVE_RECORD_MARGIN` (`0x300`, 0.1875 cells) when the
+  active-record hit bit is set, or `ST_DIRECTIONAL_INDEXED_RECORD_MARGIN`
+  (`0x100`, 0.0625 cells) otherwise. Each replacement component is the low
+  32-bit product of `C` and the corresponding component of `N`, divided by
+  `0x1000` (1.0) with rounding toward zero. On a second occurrence it exits
+  without adding the replacement to position.
 - If none of these cases applies, it exits without adding the displacement.
 
-On the first occurrence of any of the three correction cases, the function
-also calculates an angle, uses `rcos`/`rsin` to add another X/Z component,
-and queries again. On exit it adds one quarter of signed
+On the first occurrence of any of the three correction cases, let `t` be
+`ratan2(normalZ, normalX)` for a normal-threshold result, or
+`ratan2(playerZ - referenceZ, playerX - referenceX)` for an object hit. Let
+`p` be the low 32-bit product of the original input magnitude and
+`rcos(inputAngle - 0x400 - t)`, divided by `0x1000` (1.0) toward zero. The
+function stores the low halfword of `p` in
+`ST_COLLISION_QUERY_CORRECTION_MAGNITUDE`. If `p` is nonzero, it adds
+`rcos(t + 0x400) * p / 4096` to replacement X and
+`rsin(t + 0x400) * p / 4096` to replacement Z, using low 32-bit products
+and division toward zero, then queries again. If `p` is zero it queries again
+without those additions. On exit it adds one quarter of signed
 `ST_COLLISION_QUERY_RECORD_VECTOR_SUM_X` (`0x47CE`) and
 `ST_COLLISION_QUERY_RECORD_VECTOR_SUM_Z` (`0x47D2`) to `ST_PLAYER_MOVE_X` and `ST_PLAYER_MOVE_Z`,
 respectively, rounding toward zero, and stores the final X/Y/Z displacement

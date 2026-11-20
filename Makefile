@@ -1146,6 +1146,8 @@ test-player-movement:
 	scratchpad/streaming-translation-request-test
 	$(CXX) $(CFLAGS) -O2 tests/spatial_candidates_test.cpp scr/st/ST_SelectSpatialCandidates.c -o scratchpad/spatial-candidates-test
 	scratchpad/spatial-candidates-test
+	$(CXX) $(CFLAGS) -O2 tests/player_directional_collision_test.cpp scr/st/ST_ApplyDirectionalMovementWithCollision.c -o scratchpad/player-directional-collision-test
+	scratchpad/player-directional-collision-test
 	$(CXX) $(CFLAGS) -std=c++17 tests/player_record_modifiers_test.cpp scr/st/ST_RecalculatePlayerRecordModifiers.c -o scratchpad/player-record-modifiers-test
 	scratchpad/player-record-modifiers-test
 	$(CXX) $(CFLAGS) -std=c++17 tests/resource_vector_sample_test.cpp scr/st/ST_SampleResourceVector.c scr/st/ST_SelectResourceSequenceInterval.c -o scratchpad/resource-vector-sample-test
