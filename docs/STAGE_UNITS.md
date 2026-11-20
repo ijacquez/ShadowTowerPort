@@ -57,6 +57,20 @@ across these slots. The 512 placement records include unused records.
   The record format and transformation are described in
   [COLLISION_GEOMETRY.md](COLLISION_GEOMETRY.md).
 
+Model 2 has no three-vertex collision records and has four four-vertex
+records. Their local coordinates and vectors, before the placement rotation
+and translation, are:
+
+| Resource offset | `ST_GEOMETRY_RECORD_FLAGS` | Referenced vector in Q.12 | Plane and vertex extent in cells |
+| --- | --- | --- | --- |
+| `0x29BC` | `0x4` | `(0, 0x1000, 0)` (0, 1.0, 0) | Y = `-0x200` (-0.125); X = `±0x400` (±0.25); Z = `±0x800` (±0.5) |
+| `0x29CC` | `0xA` | `(0x1000, 0, 0)` (1.0, 0, 0) | X = `0x400` (0.25); Y = `-0x400` to `-0x200` (-0.25 to -0.125); Z = `±0x800` (±0.5) |
+| `0x29DC` | `0x1` | `(0, -0x1000, 0)` (0, -1.0, 0) | Y = `-0x400` (-0.25); X = `±0x400` (±0.25); Z = `±0x800` (±0.5) |
+| `0x29EC` | `0xA` | `(-0x1000, 0, 0)` (-1.0, 0, 0) | X = `-0x400` (-0.25); Y = `-0x400` to `-0x200` (-0.25 to -0.125); Z = `±0x800` (±0.5) |
+
+These are the records selected through model 2's geometry fields. Their
+presence alone does not determine which record a movement query selects.
+
 Using one spatial cell as one world unit, positions and movement displacements
 have 12 fractional bits: divide stored values by 4096. A cell is `0x1000`
 (1.0), the model edge above is `0x800` (0.5), and the player Y offset is
