@@ -1,5 +1,6 @@
 #include "recomp.h"
 #include "disable_warnings.h"
+#include "ST_LevelGeometry.h"
 #include "ST_CollisionQuery.h"
 
 void ST_TransformCandidateVertices(uint8_t* rdram, recomp_context* ctx) {
@@ -148,7 +149,7 @@ L_80046658:
     // sw          $v1, 0x4($a1)
     MEM_W(0X4, ctx->r5) = ctx->r3;
     // lw          $v1, 0x0($v1)
-    ctx->r3 = MEM_W(0X0, ctx->r3);
+    ctx->r3 = MEM_W(ST_GEOMETRY_MODEL_VERTEX_OFFSET, ctx->r3);
     // lw          $v0, 0x0($a1)
     ctx->r2 = MEM_W(0X0, ctx->r5);
     // lw          $a0, 0x4($a1)
@@ -160,7 +161,7 @@ L_80046658:
     // sw          $v0, 0xC($a1)
     MEM_W(0XC, ctx->r5) = ctx->r2;
     // lw          $a2, 0x4($a0)
-    ctx->r6 = MEM_W(0X4, ctx->r4);
+    ctx->r6 = MEM_W(ST_GEOMETRY_MODEL_VERTEX_COUNT, ctx->r4);
     // addu        $t4, $v0, $zero
     ctx->r12 = ADD32(ctx->r2, 0);
     // sll         $v0, $a2, 4

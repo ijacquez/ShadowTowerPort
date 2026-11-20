@@ -1,6 +1,7 @@
 #include "recomp.h"
 #include "disable_warnings.h"
 #include "ST_CollisionQuery.h"
+#include "ST_LevelGeometry.h"
 
 void ST_TestFourVertexCollisionRecords(uint8_t* rdram, recomp_context* ctx) {
     // Tests the 16-byte collision records using four transformed vertices.
@@ -97,7 +98,7 @@ L_800478E0:
     // sw          $v1, 0x4($t8)
     MEM_W(0X4, ctx->r24) = ctx->r3;
     // lw          $v1, 0x0($v1)
-    ctx->r3 = MEM_W(0X0, ctx->r3);
+    ctx->r3 = MEM_W(ST_GEOMETRY_MODEL_VERTEX_OFFSET, ctx->r3);
     // lw          $v0, 0x0($t8)
     ctx->r2 = MEM_W(0X0, ctx->r24);
     // lw          $a0, 0x4($t8)
@@ -111,7 +112,7 @@ L_800478E0:
     // sw          $v0, 0xC($t8)
     MEM_W(0XC, ctx->r24) = ctx->r2;
     // lw          $v1, 0x8($a0)
-    ctx->r3 = MEM_W(0X8, ctx->r4);
+    ctx->r3 = MEM_W(ST_GEOMETRY_MODEL_VECTOR_OFFSET, ctx->r4);
     // lw          $v0, 0x0($t8)
     ctx->r2 = MEM_W(0X0, ctx->r24);
     // addiu       $v1, $v1, 0xC
@@ -121,13 +122,13 @@ L_800478E0:
     // sw          $v0, 0x8($t8)
     MEM_W(0X8, ctx->r24) = ctx->r2;
     // lw          $v0, 0x10($a1)
-    ctx->r2 = MEM_W(0X10, ctx->r5);
+    ctx->r2 = MEM_W(ST_GEOMETRY_MODEL_RECORD_OFFSET, ctx->r5);
     // lhu         $fp, 0x24($a1)
-    ctx->r30 = MEM_HU(0X24, ctx->r5);
+    ctx->r30 = MEM_HU(ST_GEOMETRY_MODEL_FOUR_VERTEX_COUNT, ctx->r5);
     // lw          $v1, 0x0($t8)
     ctx->r3 = MEM_W(0X0, ctx->r24);
     // lhu         $a0, 0x18($a1)
-    ctx->r4 = MEM_HU(0X18, ctx->r5);
+    ctx->r4 = MEM_HU(ST_GEOMETRY_MODEL_20_BYTE_RECORD_COUNT, ctx->r5);
     // addiu       $v0, $v0, 0xC
     ctx->r2 = ADD32(ctx->r2, 0XC);
     // addu        $s1, $v1, $v0
@@ -141,9 +142,9 @@ L_800478E0:
     // addu        $s1, $s1, $v0
     ctx->r17 = ADD32(ctx->r17, ctx->r2);
     // lhu         $v1, 0x1C($a1)
-    ctx->r3 = MEM_HU(0X1C, ctx->r5);
+    ctx->r3 = MEM_HU(ST_GEOMETRY_MODEL_28_BYTE_RECORD_COUNT, ctx->r5);
     // lhu         $a0, 0x20($a1)
-    ctx->r4 = MEM_HU(0X20, ctx->r5);
+    ctx->r4 = MEM_HU(ST_GEOMETRY_MODEL_THREE_VERTEX_COUNT, ctx->r5);
     // sll         $v0, $v1, 3
     ctx->r2 = S32(ctx->r3) << 3;
     // subu        $v0, $v0, $v1
@@ -151,7 +152,7 @@ L_800478E0:
     // sll         $v0, $v0, 2
     ctx->r2 = S32(ctx->r2) << 2;
     // lhu         $v1, 0x1A($a1)
-    ctx->r3 = MEM_HU(0X1A, ctx->r5);
+    ctx->r3 = MEM_HU(ST_GEOMETRY_MODEL_24_BYTE_RECORD_COUNT, ctx->r5);
     // addu        $s1, $s1, $v0
     ctx->r17 = ADD32(ctx->r17, ctx->r2);
     // sll         $v0, $v1, 1
@@ -171,7 +172,7 @@ L_800478E0:
     // addu        $a0, $fp, $zero
     ctx->r4 = ADD32(ctx->r30, 0);
     // lhu         $v1, 0x1E($a1)
-    ctx->r3 = MEM_HU(0X1E, ctx->r5);
+    ctx->r3 = MEM_HU(ST_GEOMETRY_MODEL_32_BYTE_RECORD_COUNT, ctx->r5);
     // addiu       $fp, $fp, -0x1
     ctx->r30 = ADD32(ctx->r30, -0X1);
     // sll         $v1, $v1, 5
@@ -203,12 +204,12 @@ L_800478E0:
     // lw          $t3, 0x14($sp)
     ctx->r11 = MEM_W(0X14, ctx->r29);
     // addiu       $t9, $s1, 0x2
-    ctx->r25 = ADD32(ctx->r17, 0X2);
+    ctx->r25 = ADD32(ctx->r17, ST_GEOMETRY_RECORD_CURSOR_OFFSET);
     // sw          $t3, 0x10($sp)
     MEM_W(0X10, ctx->r29) = ctx->r11;
 L_80047A00:
     // lhu         $v1, 0x2($t9)
-    ctx->r3 = MEM_HU(0X2, ctx->r25);
+    ctx->r3 = MEM_HU(ST_GEOMETRY_RECORD_VECTOR_OFFSET - ST_GEOMETRY_RECORD_CURSOR_OFFSET, ctx->r25);
     // lw          $v0, 0x8($t8)
     ctx->r2 = MEM_W(0X8, ctx->r24);
     // lw          $t3, 0xC($sp)
@@ -329,7 +330,7 @@ L_80047A00:
 
 L_80047AE0:
     // lhu         $v0, 0x4($t9)
-    ctx->r2 = MEM_HU(0X4, ctx->r25);
+    ctx->r2 = MEM_HU(ST_GEOMETRY_RECORD_VERTEX_0_OFFSET - ST_GEOMETRY_RECORD_CURSOR_OFFSET, ctx->r25);
     // lw          $a0, 0x10($t8)
     ctx->r4 = MEM_W(0X10, ctx->r24);
     // lh          $t1, 0x0($s2)
@@ -516,11 +517,11 @@ L_80047C1C:
     // lw          $v1, 0x14($t8)
     ctx->r3 = MEM_W(0X14, ctx->r24);
     // lhu         $a2, 0x6($t9)
-    ctx->r6 = MEM_HU(0X6, ctx->r25);
+    ctx->r6 = MEM_HU(ST_GEOMETRY_RECORD_VERTEX_1_OFFSET - ST_GEOMETRY_RECORD_CURSOR_OFFSET, ctx->r25);
     // lhu         $a3, 0x8($t9)
-    ctx->r7 = MEM_HU(0X8, ctx->r25);
+    ctx->r7 = MEM_HU(ST_GEOMETRY_RECORD_VERTEX_2_OFFSET - ST_GEOMETRY_RECORD_CURSOR_OFFSET, ctx->r25);
     // lhu         $v0, 0xA($t9)
-    ctx->r2 = MEM_HU(0XA, ctx->r25);
+    ctx->r2 = MEM_HU(ST_GEOMETRY_RECORD_VERTEX_3_OFFSET - ST_GEOMETRY_RECORD_CURSOR_OFFSET, ctx->r25);
     // lw          $a0, 0x18($t8)
     ctx->r4 = MEM_W(0X18, ctx->r24);
     // lw          $a1, 0x1C($t8)
@@ -940,7 +941,7 @@ L_80047C1C:
     // swc2        $27, 0x8($v0)
     gte_swc2(rdram, ctx, 27, 2, 8);
     // lhu         $v0, 0x0($t9)
-    ctx->r2 = MEM_HU(0X0, ctx->r25);
+    ctx->r2 = MEM_HU(ST_GEOMETRY_RECORD_FLAGS - ST_GEOMETRY_RECORD_CURSOR_OFFSET, ctx->r25);
     // nop
 
     // andi        $v0, $v0, 0x4
@@ -1134,7 +1135,7 @@ L_80048020:
     MEM_W(0X124, ctx->r24) = ctx->r20;
 L_800480A0:
     // lhu         $v1, 0x0($t9)
-    ctx->r3 = MEM_HU(0X0, ctx->r25);
+    ctx->r3 = MEM_HU(ST_GEOMETRY_RECORD_FLAGS - ST_GEOMETRY_RECORD_CURSOR_OFFSET, ctx->r25);
     // nop
 
     // andi        $v0, $v1, 0x1
@@ -1259,7 +1260,7 @@ L_800480A0:
     MEM_W(ST_COLLISION_GEOMETRY_SCRATCH_RECORD_FLAGS, ctx->r24) = ctx->r2;
 L_80048158:
     // lhu         $v0, 0x0($t9)
-    ctx->r2 = MEM_HU(0X0, ctx->r25);
+    ctx->r2 = MEM_HU(ST_GEOMETRY_RECORD_FLAGS - ST_GEOMETRY_RECORD_CURSOR_OFFSET, ctx->r25);
     // nop
 
     // andi        $v0, $v0, 0x10
@@ -1290,7 +1291,7 @@ L_80048158:
     MEM_W(ST_COLLISION_GEOMETRY_SCRATCH_RECORD_FLAGS, ctx->r24) = ctx->r2;
 L_80048184:
     // lhu         $v0, 0x0($t9)
-    ctx->r2 = MEM_HU(0X0, ctx->r25);
+    ctx->r2 = MEM_HU(ST_GEOMETRY_RECORD_FLAGS - ST_GEOMETRY_RECORD_CURSOR_OFFSET, ctx->r25);
     // nop
 
     // andi        $v0, $v0, 0x20
@@ -1323,7 +1324,7 @@ L_80048184:
     MEM_W(ST_COLLISION_GEOMETRY_SCRATCH_RECORD_FLAGS, ctx->r24) = ctx->r2;
 L_800481B4:
     // lhu         $v0, 0x0($t9)
-    ctx->r2 = MEM_HU(0X0, ctx->r25);
+    ctx->r2 = MEM_HU(ST_GEOMETRY_RECORD_FLAGS - ST_GEOMETRY_RECORD_CURSOR_OFFSET, ctx->r25);
     // nop
 
     // andi        $v0, $v0, 0x40
@@ -1370,7 +1371,7 @@ L_800481B4:
     MEM_W(0X138, ctx->r24) = ctx->r2;
 L_80048200:
     // lhu         $v0, 0x0($t9)
-    ctx->r2 = MEM_HU(0X0, ctx->r25);
+    ctx->r2 = MEM_HU(ST_GEOMETRY_RECORD_FLAGS - ST_GEOMETRY_RECORD_CURSOR_OFFSET, ctx->r25);
     // nop
 
     // andi        $v0, $v0, 0x80
@@ -1403,7 +1404,7 @@ L_80048200:
     MEM_W(ST_COLLISION_GEOMETRY_SCRATCH_RECORD_FLAGS, ctx->r24) = ctx->r2;
 L_80048230:
     // lhu         $v0, 0x0($t9)
-    ctx->r2 = MEM_HU(0X0, ctx->r25);
+    ctx->r2 = MEM_HU(ST_GEOMETRY_RECORD_FLAGS - ST_GEOMETRY_RECORD_CURSOR_OFFSET, ctx->r25);
     // nop
 
     // andi        $v0, $v0, 0x100
@@ -1436,7 +1437,7 @@ L_80048230:
     MEM_W(ST_COLLISION_GEOMETRY_SCRATCH_RECORD_FLAGS, ctx->r24) = ctx->r2;
 L_80048260:
     // lhu         $v0, 0x0($t9)
-    ctx->r2 = MEM_HU(0X0, ctx->r25);
+    ctx->r2 = MEM_HU(ST_GEOMETRY_RECORD_FLAGS - ST_GEOMETRY_RECORD_CURSOR_OFFSET, ctx->r25);
     // nop
 
     // andi        $v0, $v0, 0x200
@@ -1483,7 +1484,7 @@ L_80048260:
     MEM_W(0X144, ctx->r24) = ctx->r2;
 L_800482AC:
     // lhu         $v0, 0x0($t9)
-    ctx->r2 = MEM_HU(0X0, ctx->r25);
+    ctx->r2 = MEM_HU(ST_GEOMETRY_RECORD_FLAGS - ST_GEOMETRY_RECORD_CURSOR_OFFSET, ctx->r25);
     // nop
 
     // andi        $v0, $v0, 0x400
@@ -1712,7 +1713,7 @@ L_800483A4:
     MEM_W(0X164, ctx->r24) = ctx->r3;
 L_80048438:
     // lhu         $v0, 0x0($t9)
-    ctx->r2 = MEM_HU(0X0, ctx->r25);
+    ctx->r2 = MEM_HU(ST_GEOMETRY_RECORD_FLAGS - ST_GEOMETRY_RECORD_CURSOR_OFFSET, ctx->r25);
     // nop
 
     // andi        $v0, $v0, 0x2

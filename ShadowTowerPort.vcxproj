@@ -1277,6 +1277,7 @@
     <ClInclude Include="scr\st\disable_warnings.h" />
     <ClInclude Include="scr\st\funcs.h" />
     <ClInclude Include="scr\st\ST_PlayerState.h" />
+    <ClInclude Include="scr\st\ST_LevelGeometry.h" />
     <ClInclude Include="scr\st\ST_PlayerPositionRequest.h" />
     <ClInclude Include="scr\_context.h" />
   </ItemGroup>

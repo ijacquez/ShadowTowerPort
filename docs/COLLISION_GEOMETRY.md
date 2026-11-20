@@ -64,9 +64,10 @@ full model and collision formats have not yet been established. See
    the same scale. A spatial cell is `0x1000` stored units (1.0 cell). Their physical units
    are not established; see [STAGE_UNITS.md](STAGE_UNITS.md).
 4. `ST_TransformCandidateVertices` uses each selected record's byte 0 to
-   select a 40-byte entry at `level_data + 12`. The entry's word at offset 0
-   locates an eight-byte-stride vertex array at `level_data + offset + 12`,
-   and its word at offset 4 gives the vertex count. The routine selects a
+   select a 40-byte entry at `level_data + 12`. The entry's
+   `ST_GEOMETRY_MODEL_VERTEX_OFFSET` locates an eight-byte-stride vertex array
+   at `level_data + offset + 12`, and `ST_GEOMETRY_MODEL_VERTEX_COUNT` gives
+   the vertex count. The routine selects a
    matrix using the low two bits of record byte 3, and uses the decoded
    origin as the GTE translation. For every vertex it writes the transformed
    coordinates, then writes three more vectors by subtracting the query's
@@ -77,26 +78,30 @@ full model and collision formats have not yet been established. See
 5. The geometry query invokes `ST_TestThreeVertexCollisionRecords` and `ST_TestFourVertexCollisionRecords` to test
    candidate geometry. In `ST_TestThreeVertexCollisionRecords`, let `entry` be the selected
    40-byte entry and `base` the shared level-data pointer. It reads an
-   unsigned halfword count at `entry + 0x20` and iterates 12-byte records
+   unsigned `ST_GEOMETRY_MODEL_THREE_VERTEX_COUNT` and iterates 12-byte records
    beginning at:
 
    ```text
-   base + 12 + word(entry + 0x10)
-       + 20 * halfword(entry + 0x18) + 24 * halfword(entry + 0x1A)
-       + 28 * halfword(entry + 0x1C) + 32 * halfword(entry + 0x1E)
+   base + 12 + ST_GEOMETRY_MODEL_RECORD_OFFSET
+       + 20 * ST_GEOMETRY_MODEL_20_BYTE_RECORD_COUNT
+       + 24 * ST_GEOMETRY_MODEL_24_BYTE_RECORD_COUNT
+       + 28 * ST_GEOMETRY_MODEL_28_BYTE_RECORD_COUNT
+       + 32 * ST_GEOMETRY_MODEL_32_BYTE_RECORD_COUNT
    ```
 
-   The halfwords in this expression are unsigned. For each such record,
-   its unsigned halfword at offset 4 is added to `base + 12 + word(entry +
-   8)` to address a vector loaded into the GTE and transformed with the
-   selected record's matrix. The three unsigned halfwords at record offsets
-   `6`, `8`, and `10` select transformed vertices: each halfword is doubled
-   and added to each transformed-vertex array's base address.
+   The expression uses the values of these fields in `entry`; the count
+   halfwords are unsigned. For each record,
+   `ST_GEOMETRY_RECORD_VECTOR_OFFSET` is added to
+   `base + 12 + ST_GEOMETRY_MODEL_VECTOR_OFFSET` to address a vector loaded
+   into the GTE and transformed with the selected record's matrix. The
+   unsigned `ST_GEOMETRY_RECORD_VERTEX_0_OFFSET`, `_1_OFFSET`, and
+   `_2_OFFSET` select transformed vertices: each halfword is doubled and
+   added to each transformed-vertex array's base address.
    `ST_TestFourVertexCollisionRecords` starts at the same calculated
-   address plus `12 * halfword(entry + 0x20)` and iterates
-   `halfword(entry + 0x24)` records with a 16-byte stride. Both count
-   halfwords are unsigned. It uses the same three vertex offsets and a
-   fourth at record offset `12`. Both helpers compute cross products from
+   address plus `12 * ST_GEOMETRY_MODEL_THREE_VERTEX_COUNT` and iterates
+   `ST_GEOMETRY_MODEL_FOUR_VERTEX_COUNT` records with a 16-byte stride. Both
+   count halfwords are unsigned. It uses the same three vertex offsets and
+   `ST_GEOMETRY_RECORD_VERTEX_3_OFFSET`. Both helpers compute cross products from
    the selected transformed vertices and compare the results against the
    transformed vector. **OPEN:** the remaining record fields and complete
    collision result meanings are not established.

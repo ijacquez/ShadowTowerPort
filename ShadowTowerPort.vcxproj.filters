@@ -3338,6 +3338,9 @@
     <ClInclude Include="scr\st\ST_PlayerState.h">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClInclude>
+    <ClInclude Include="scr\st\ST_LevelGeometry.h">
+      <Filter>Исходные файлы\scr\st</Filter>
+    </ClInclude>
     <ClInclude Include="scr\st\ST_PlayerPositionRequest.h">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClInclude>
