@@ -529,17 +529,17 @@ L_8004E5E8:
     // bne         $v0, $zero, L_8004E624
     if (ctx->r2 != 0) {
         // sh          $v1, 0x35($s0)
-        MEM_H(0X35, ctx->r16) = ctx->r3;
+        MEM_H(ST_ACTIVE_COLLISION_RECORD_PLAYER_ANGLE_DISTANCE - ST_ACTIVE_COLLISION_RECORD_UPDATE_CURSOR, ctx->r16) = ctx->r3;
         goto L_8004E624;
     }
     // sh          $v1, 0x35($s0)
-    MEM_H(0X35, ctx->r16) = ctx->r3;
+    MEM_H(ST_ACTIVE_COLLISION_RECORD_PLAYER_ANGLE_DISTANCE - ST_ACTIVE_COLLISION_RECORD_UPDATE_CURSOR, ctx->r16) = ctx->r3;
     // addiu       $v0, $zero, 0x1000
     ctx->r2 = ADD32(0, 0X1000);
     // subu        $v0, $v0, $v1
     ctx->r2 = SUB32(ctx->r2, ctx->r3);
     // sh          $v0, 0x35($s0)
-    MEM_H(0X35, ctx->r16) = ctx->r2;
+    MEM_H(ST_ACTIVE_COLLISION_RECORD_PLAYER_ANGLE_DISTANCE - ST_ACTIVE_COLLISION_RECORD_UPDATE_CURSOR, ctx->r16) = ctx->r2;
 L_8004E624:
     // sh          $zero, 0x7D($s0)
     MEM_H(ST_ACTIVE_COLLISION_RECORD_DISPLACEMENT_Z - ST_ACTIVE_COLLISION_RECORD_UPDATE_CURSOR, ctx->r16) = 0;

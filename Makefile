@@ -582,7 +582,7 @@ SRCS:= scr/st/AddPrim.c \
 	scr/st/sub_8003D288.c \
 	scr/st/sub_8003D594.c \
 	scr/st/sub_8003D788.c \
-	scr/st/sub_8003DBE0.c \
+	scr/st/ST_ApplyPlayerDamageAndEffects.c \
 	scr/st/sub_8003E718.c \
 	scr/st/ST_BuildPlayerView.c \
 	scr/st/ST_ResetPlayerCountersAndState.c \

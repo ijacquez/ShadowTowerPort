@@ -318,7 +318,7 @@ void sub_8003D104(uint8_t* rdram, recomp_context* ctx);
 void sub_8003D288(uint8_t* rdram, recomp_context* ctx);
 void sub_8003D594(uint8_t* rdram, recomp_context* ctx);
 void sub_8003D788(uint8_t* rdram, recomp_context* ctx);
-void sub_8003DBE0(uint8_t* rdram, recomp_context* ctx);
+void ST_ApplyPlayerDamageAndEffects(uint8_t* rdram, recomp_context* ctx);
 void sub_8003E718(uint8_t* rdram, recomp_context* ctx);
 void ST_BuildPlayerView(uint8_t* rdram, recomp_context* ctx);
 void ST_ResetPlayerCountersAndState(uint8_t* rdram, recomp_context* ctx);

@@ -1230,7 +1230,7 @@
     <ClCompile Include="scr\st\sub_8003D788.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_8003DBE0.c">
+    <ClCompile Include="scr\st\ST_ApplyPlayerDamageAndEffects.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\sub_8003E718.c">

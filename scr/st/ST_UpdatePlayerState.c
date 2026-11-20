@@ -2843,7 +2843,7 @@ L_80043C90:
     // jal         0x8003DBE0
     // addu        $a3, $s0, $zero
     ctx->r7 = ADD32(ctx->r16, 0);
-    sub_8003DBE0(rdram, ctx);
+    ST_ApplyPlayerDamageAndEffects(rdram, ctx);
     goto after_99;
     // addu        $a3, $s0, $zero
     ctx->r7 = ADD32(ctx->r16, 0);
@@ -2917,7 +2917,7 @@ L_80043CF8:
     // jal         0x8003DBE0
     // addu        $a3, $s0, $zero
     ctx->r7 = ADD32(ctx->r16, 0);
-    sub_8003DBE0(rdram, ctx);
+    ST_ApplyPlayerDamageAndEffects(rdram, ctx);
     goto after_102;
     // addu        $a3, $s0, $zero
     ctx->r7 = ADD32(ctx->r16, 0);
@@ -2995,7 +2995,7 @@ L_80043D60:
     // jal         0x8003DBE0
     // addu        $a3, $s1, $zero
     ctx->r7 = ADD32(ctx->r17, 0);
-    sub_8003DBE0(rdram, ctx);
+    ST_ApplyPlayerDamageAndEffects(rdram, ctx);
     goto after_105;
     // addu        $a3, $s1, $zero
     ctx->r7 = ADD32(ctx->r17, 0);

@@ -3051,7 +3051,7 @@ L_800517B0:
     // jal         0x8003DBE0
     // sh          $v0, 0x36($sp)
     MEM_H(0X36, ctx->r29) = ctx->r2;
-    sub_8003DBE0(rdram, ctx);
+    ST_ApplyPlayerDamageAndEffects(rdram, ctx);
     goto after_27;
     // sh          $v0, 0x36($sp)
     MEM_H(0X36, ctx->r29) = ctx->r2;
@@ -3354,7 +3354,7 @@ L_800519B4:
     // jal         0x8003DBE0
     // nop
 
-    sub_8003DBE0(rdram, ctx);
+    ST_ApplyPlayerDamageAndEffects(rdram, ctx);
     goto after_32;
     // nop
 
@@ -3784,7 +3784,7 @@ L_80051BE8:
     // jal         0x8003DBE0
     // sh          $v0, 0x36($sp)
     MEM_H(0X36, ctx->r29) = ctx->r2;
-    sub_8003DBE0(rdram, ctx);
+    ST_ApplyPlayerDamageAndEffects(rdram, ctx);
     goto after_42;
     // sh          $v0, 0x36($sp)
     MEM_H(0X36, ctx->r29) = ctx->r2;

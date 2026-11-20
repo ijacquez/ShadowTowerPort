@@ -610,7 +610,7 @@ L_8004C554:
     // addiu       $v0, $zero, 0x1
     ctx->r2 = ADD32(0, 0X1);
     // sb          $v0, 0x39($s2)
-    MEM_B(0X39, ctx->r18) = ctx->r2;
+    MEM_B(ST_ACTIVE_COLLISION_RECORD_COLLISION_RESULT_80_FLAG, ctx->r18) = ctx->r2;
 L_8004C56C:
     // jal         0x800492F4
     // addiu       $a0, $s2, 0x74

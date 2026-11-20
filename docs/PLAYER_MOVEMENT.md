@@ -204,7 +204,7 @@ and is 13,824 bytes long. The 44-byte records used for the penalty total
 are indexed within this copied data. **OPEN:** the full record format and
 the in-game meaning of its halfword at `0x24` remain unestablished.
 
-On paths in [sub_8003DBE0](../scr/st/sub_8003DBE0.c) that reach its
+On paths in [ST_ApplyPlayerDamageAndEffects](../scr/st/ST_ApplyPlayerDamageAndEffects.c) that reach its
 third-argument dispatch, values `0x08`, `0x10`, and `0x18` select the
 suppression pair. The code sets `ST_PLAYER_MOVE_SUPPRESSION_TARGET` to 75. Depending
 on bits `0x08` and `0x10` of player word `0x2C`, it either clears the
@@ -335,6 +335,38 @@ periodic callback when the step is nonnegative and the accumulator is at
 least 4096, or the step is negative and the accumulator is at most zero.
 Afterward, if `ST_ACTIVE_COLLISION_RECORD_CALLBACK_DATA` is nonzero, it calls
 another stage-zero routine and sets the control byte to `0xF0`.
+
+That other routine is `ST_STAGE_ZERO_ACTIVE_RECORD_BEHAVIOR_CALLBACK`. For
+`ST_ACTIVE_COLLISION_RECORD_CALLBACK_BEHAVIOR` equal to
+`ST_STAGE_ZERO_ACTIVE_RECORD_IMPULSE_BEHAVIOR`, it can write the player's
+half-contribution vector. It begins with magnitude zero and checks two
+intervals from the callback data. An interval qualifies when its unsigned
+start is not `0xFFFF` and the signed update accumulator lies inclusively
+between its unsigned start and end. For a qualifying interval, magnitude is
+the low 32 bits of its signed scale multiplied by the absolute signed update
+step, divided by `end - start` with signed division toward zero. The second
+interval replaces the first magnitude if both qualify. A zero divisor reaches
+a division break. The corresponding fields are named
+`ST_STAGE_ZERO_BEHAVIOR_FIRST_*` and `ST_STAGE_ZERO_BEHAVIOR_SECOND_*` in
+[ST_StageZeroActiveRecordBehavior.h](../scr/st/ST_StageZeroActiveRecordBehavior.h).
+
+The vector write requires the callback-data word and halfword gates to equal
+`-1` and `0xFFFF`, respectively; the record's
+`ST_ACTIVE_COLLISION_RECORD_IMPULSE_APPLIED` to be zero;
+`ST_ACTIVE_COLLISION_RECORD_COLLISION_RESULT_80_FLAG` to equal 1; magnitude
+to be nonzero; and the signed `ST_ACTIVE_COLLISION_RECORD_PLAYER_ANGLE_DISTANCE`
+to lie between the negative and positive unsigned
+`ST_STAGE_ZERO_BEHAVIOR_ANGLE_LIMIT`, inclusive. It calls
+`ST_STAGE_ZERO_ACTIVE_RECORD_APPLY_PLAYER_EFFECTS`, sets the impulse-applied
+halfword to 1, and adds the low 32-bit products of magnitude with
+`rcos(angle - 0x400)` and `rsin(angle - 0x400)` to the X and Z
+half-contribution values after an arithmetic right shift by 11. Here `angle`
+is `ST_ACTIVE_COLLISION_RECORD_PLAYER_TO_RECORD_ANGLE`, read after the effects
+call. The effects helper calls
+[ST_ApplyPlayerDamageAndEffects](../scr/st/ST_ApplyPlayerDamageAndEffects.c);
+it passes `0x1000` (1.0 in Q.12) and dispatch value
+`(ST_STAGE_ZERO_BEHAVIOR_EFFECT_FLAGS >> 8) & 0xFF`. The latter can select
+the movement-related counter branches described above.
 
 One routine called by that stage-zero code,
 `ST_STAGE_ZERO_SET_ACTIVE_RECORD_HORIZONTAL_DISPLACEMENT`, writes the current

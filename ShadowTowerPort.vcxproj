@@ -725,7 +725,7 @@
     <ClCompile Include="scr\st\sub_8003D288.c" />
     <ClCompile Include="scr\st\sub_8003D594.c" />
     <ClCompile Include="scr\st\sub_8003D788.c" />
-    <ClCompile Include="scr\st\sub_8003DBE0.c" />
+    <ClCompile Include="scr\st\ST_ApplyPlayerDamageAndEffects.c" />
     <ClCompile Include="scr\st\sub_8003E718.c" />
     <ClCompile Include="scr\st\ST_BuildPlayerView.c" />
     <ClCompile Include="scr\st\sub_8003E794.c" />

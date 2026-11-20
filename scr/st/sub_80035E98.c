@@ -76,7 +76,7 @@ void sub_80035E98(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x8003DBE0
     // addu        $a3, $s2, $zero
     ctx->r7 = ADD32(ctx->r18, 0);
-    sub_8003DBE0(rdram, ctx);
+    ST_ApplyPlayerDamageAndEffects(rdram, ctx);
     goto after_1;
     // addu        $a3, $s2, $zero
     ctx->r7 = ADD32(ctx->r18, 0);

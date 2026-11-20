@@ -1429,7 +1429,7 @@ L_8004D66C:
     // jal         0x8003DBE0
     // addiu       $a3, $sp, 0x60
     ctx->r7 = ADD32(ctx->r29, 0X60);
-    sub_8003DBE0(rdram, ctx);
+    ST_ApplyPlayerDamageAndEffects(rdram, ctx);
     goto after_29;
     // addiu       $a3, $sp, 0x60
     ctx->r7 = ADD32(ctx->r29, 0X60);
