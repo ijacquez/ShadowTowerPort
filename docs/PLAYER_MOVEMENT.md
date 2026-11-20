@@ -514,7 +514,11 @@ its first transformed vertex `V`. They calculate a value from the proposed
 position `P` as `N dot P - N dot V`, with each product and sum wrapped to
 32 bits, then divide the signed result by 4096 toward zero. On qualifying
 paths, the smaller signed result replaces a scratch value initialized to
-`0x80000`. If that scratch value is still the sentinel after both helpers,
+`0x80000`. A record reaching that update has bit `0x1` set in its halfword
+at offset 2, a proposed-position result of at least `-256`, and three or
+four nonnegative edge-test results after the helpers' 32-bit left shift by
+12. Earlier checks can reject the record as well. If that
+scratch value is still the sentinel after both helpers,
 the geometry query copies another scratch value calculated from the current
 position instead. It also copies the associated rotated vector.
 
