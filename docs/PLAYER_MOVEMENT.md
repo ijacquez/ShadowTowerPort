@@ -212,11 +212,24 @@ current counter and sets one of those bits, or sets the current counter to
 20. Dispatch value `0x80` selects the reduction pair and sets its
 target to 300. If bit `0x80` of player word `0x2C` is clear, the code clears
 the current counter and sets the bit; otherwise, it sets the current counter
-to 20. After this dispatch, the routine calculates limits using player fields
-`0x20` and `0x1C8`; if a target interpreted as signed exceeds its calculated
+to 20. After this dispatch, the routine calculates limits using the unsigned
+player fields `ST_PLAYER_EFFECT_CAP_ATTRIBUTE` and
+`ST_PLAYER_EFFECT_CAP_PERCENT`; if a target interpreted as signed exceeds its calculated
 limit, the routine replaces it with the low halfword of that limit. The
 75 and 300 values above therefore are subject to this later cap. **OPEN:** the
 in-game meanings of the two fields used to calculate the caps are not established.
+
+[ST_RecalculatePlayerRecordModifiers](../scr/st/ST_RecalculatePlayerRecordModifiers.c)
+calculates `ST_PLAYER_EFFECT_CAP_PERCENT` from the same indexed 44-byte
+records and player slots described above. For each selected record, it reads
+three selectors from the low nibble of each of the first two bytes of
+`ST_RECORD_PACKED_MODIFIERS` and from `ST_RECORD_THIRD_MODIFIER_CODE`.
+Their corresponding values are the high nibble of each of those first two
+bytes and `ST_RECORD_THIRD_MODIFIER_VALUE`. For each
+selector equal to 5, it adds the corresponding value to a running sum and
+caps that sum at 100. The stored byte is `100 - (sum * 80 / 100)`, with
+integer division. With no matching selectors, it stores 100. **OPEN:** the
+in-game meaning of selector 5 and the names of the indexed records.
 
 [ST_SerializeGameState](../scr/st/ST_SerializeGameState.c) copies both
 current/target pairs to buffer offsets `0x1880` through `0x188A`.

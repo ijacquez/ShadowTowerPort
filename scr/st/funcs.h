@@ -308,7 +308,7 @@ void ST_UpdateCounterAndTarget(uint8_t* rdram, recomp_context* ctx);
 void ST_UpdatePlayerCountersAndEffects(uint8_t* rdram, recomp_context* ctx);
 void sub_8003C95C(uint8_t* rdram, recomp_context* ctx);
 void sub_8003CAE4(uint8_t* rdram, recomp_context* ctx);
-void sub_8003CB88(uint8_t* rdram, recomp_context* ctx);
+void ST_RecalculatePlayerRecordModifiers(uint8_t* rdram, recomp_context* ctx);
 void sub_8003CEDC(uint8_t* rdram, recomp_context* ctx);
 void ST_AdjustPlayerHp(uint8_t* rdram, recomp_context* ctx);
 void sub_8003CF94(uint8_t* rdram, recomp_context* ctx);

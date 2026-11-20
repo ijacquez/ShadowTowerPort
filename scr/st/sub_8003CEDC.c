@@ -12,7 +12,7 @@ void sub_8003CEDC(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x8003CB88
     // nop
 
-    sub_8003CB88(rdram, ctx);
+    ST_RecalculatePlayerRecordModifiers(rdram, ctx);
     goto after_0;
     // nop
 

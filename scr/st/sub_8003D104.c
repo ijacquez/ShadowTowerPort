@@ -220,7 +220,7 @@ L_8003D228:
     // jal         0x8003CB88
     // nop
 
-    sub_8003CB88(rdram, ctx);
+    ST_RecalculatePlayerRecordModifiers(rdram, ctx);
     goto after_3;
     // nop
 

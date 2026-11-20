@@ -572,7 +572,7 @@ SRCS:= scr/st/AddPrim.c \
 	scr/st/ST_UpdatePlayerCountersAndEffects.c \
 	scr/st/sub_8003C95C.c \
 	scr/st/sub_8003CAE4.c \
-	scr/st/sub_8003CB88.c \
+	scr/st/ST_RecalculatePlayerRecordModifiers.c \
 	scr/st/sub_8003CEDC.c \
 	scr/st/ST_AdjustPlayerHp.c \
 	scr/st/sub_8003CF94.c \
@@ -1116,6 +1116,8 @@ scr/st/ST_PlayerUpdateMovement.o scr/st/ST_PlayerUpdateTurning.o scr/st/ST_Playe
 .PHONY: test-player-movement
 test-player-movement:
 	mkdir -p scratchpad
+	$(CXX) $(CFLAGS) -std=c++17 tests/player_record_modifiers_test.cpp scr/st/ST_RecalculatePlayerRecordModifiers.c -o scratchpad/player-record-modifiers-test
+	scratchpad/player-record-modifiers-test
 	$(CXX) $(CFLAGS) -std=c++17 tests/resource_vector_sample_test.cpp scr/st/ST_SampleResourceVector.c scr/st/ST_SelectResourceSequenceInterval.c -o scratchpad/resource-vector-sample-test
 	scratchpad/resource-vector-sample-test
 	$(CXX) $(CFLAGS) -std=c++17 tests/resource_sequence_interval_test.cpp scr/st/ST_SelectResourceSequenceInterval.c -o scratchpad/resource-sequence-interval-test

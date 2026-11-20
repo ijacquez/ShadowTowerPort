@@ -1,7 +1,14 @@
 #include "recomp.h"
 #include "disable_warnings.h"
+#include "ST_PlayerState.h"
 
-void sub_8003CB88(uint8_t* rdram, recomp_context* ctx) {
+enum {
+    ST_RECORD_PACKED_MODIFIERS = 0x20,
+    ST_RECORD_THIRD_MODIFIER_CODE = 0x22,
+    ST_RECORD_THIRD_MODIFIER_VALUE = 0x23
+};
+
+void ST_RecalculatePlayerRecordModifiers(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
     unsigned int rounding_mode = DEFAULT_ROUNDING_MODE;
     int c1cs = 0; 
@@ -99,7 +106,7 @@ L_8003CBC8:
     // addu        $v1, $v1, $t8
     ctx->r3 = ADD32(ctx->r3, ctx->r24);
     // lw          $v0, 0x20($v1)
-    ctx->r2 = MEM_W(0X20, ctx->r3);
+    ctx->r2 = MEM_W(ST_RECORD_PACKED_MODIFIERS, ctx->r3);
     // nop
 
     // andi        $v0, $v0, 0xF
@@ -107,7 +114,7 @@ L_8003CBC8:
     // sw          $v0, 0x0($sp)
     MEM_W(0X0, ctx->r29) = ctx->r2;
     // lw          $v0, 0x20($v1)
-    ctx->r2 = MEM_W(0X20, ctx->r3);
+    ctx->r2 = MEM_W(ST_RECORD_PACKED_MODIFIERS, ctx->r3);
     // nop
 
     // srl         $v0, $v0, 8
@@ -117,13 +124,13 @@ L_8003CBC8:
     // sw          $v0, 0x4($sp)
     MEM_W(0X4, ctx->r29) = ctx->r2;
     // lbu         $v0, 0x22($v1)
-    ctx->r2 = MEM_BU(0X22, ctx->r3);
+    ctx->r2 = MEM_BU(ST_RECORD_THIRD_MODIFIER_CODE, ctx->r3);
     // nop
 
     // sw          $v0, 0x8($sp)
     MEM_W(0X8, ctx->r29) = ctx->r2;
     // lbu         $v0, 0x20($v1)
-    ctx->r2 = MEM_BU(0X20, ctx->r3);
+    ctx->r2 = MEM_BU(ST_RECORD_PACKED_MODIFIERS, ctx->r3);
     // nop
 
     // srl         $v0, $v0, 4
@@ -131,7 +138,7 @@ L_8003CBC8:
     // sw          $v0, 0x10($sp)
     MEM_W(0X10, ctx->r29) = ctx->r2;
     // lw          $v0, 0x20($v1)
-    ctx->r2 = MEM_W(0X20, ctx->r3);
+    ctx->r2 = MEM_W(ST_RECORD_PACKED_MODIFIERS, ctx->r3);
     // nop
 
     // srl         $v0, $v0, 12
@@ -141,7 +148,7 @@ L_8003CBC8:
     // sw          $v0, 0x14($sp)
     MEM_W(0X14, ctx->r29) = ctx->r2;
     // lbu         $v0, 0x23($v1)
-    ctx->r2 = MEM_BU(0X23, ctx->r3);
+    ctx->r2 = MEM_BU(ST_RECORD_THIRD_MODIFIER_VALUE, ctx->r3);
     // addu        $a0, $sp, $zero
     ctx->r4 = ADD32(ctx->r29, 0);
     // sw          $v0, 0x18($sp)
@@ -593,7 +600,7 @@ L_8003CE88:
     // subu        $v0, $v0, $v1
     ctx->r2 = SUB32(ctx->r2, ctx->r3);
     // sb          $v0, 0x1C8($a0)
-    MEM_B(0X1C8, ctx->r4) = ctx->r2;
+    MEM_B(ST_PLAYER_EFFECT_CAP_PERCENT, ctx->r4) = ctx->r2;
     // addiu       $sp, $sp, 0x20
     ctx->r29 = ADD32(ctx->r29, 0X20);
     // jr          $ra

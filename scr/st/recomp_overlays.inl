@@ -318,7 +318,7 @@ static FuncEntry section_1_text_funcs[] = {
     { .func = ST_UpdatePlayerCountersAndEffects, .offset = 0x0002c24c },
     { .func = sub_8003C95C, .offset = 0x0002c95c },
     { .func = sub_8003CAE4, .offset = 0x0002cae4 },
-    { .func = sub_8003CB88, .offset = 0x0002cb88 },
+    { .func = ST_RecalculatePlayerRecordModifiers, .offset = 0x0002cb88 },
     { .func = sub_8003CEDC, .offset = 0x0002cedc },
     { .func = ST_AdjustPlayerHp, .offset = 0x0002cf28 },
     { .func = sub_8003CF94, .offset = 0x0002cf94 },

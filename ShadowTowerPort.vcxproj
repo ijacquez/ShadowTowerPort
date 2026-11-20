@@ -715,7 +715,7 @@
     <ClCompile Include="scr\st\sub_8003C24C.c" />
     <ClCompile Include="scr\st\sub_8003C95C.c" />
     <ClCompile Include="scr\st\sub_8003CAE4.c" />
-    <ClCompile Include="scr\st\sub_8003CB88.c" />
+    <ClCompile Include="scr\st\ST_RecalculatePlayerRecordModifiers.c" />
     <ClCompile Include="scr\st\sub_8003CEDC.c" />
     <ClCompile Include="scr\st\ST_AdjustPlayerHp.c" />
     <ClCompile Include="scr\st\sub_8003CF94.c" />

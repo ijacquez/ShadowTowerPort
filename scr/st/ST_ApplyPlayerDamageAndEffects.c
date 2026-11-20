@@ -1069,7 +1069,7 @@ L_8003E1B0:
     // addiu       $t2, $v0, -0x70D8
     ctx->r10 = ADD32(ctx->r2, -0X70D8);
     // lhu         $v0, 0x20($t2)
-    ctx->r2 = MEM_HU(0X20, ctx->r10);
+    ctx->r2 = MEM_HU(ST_PLAYER_EFFECT_CAP_ATTRIBUTE, ctx->r10);
     // addiu       $v1, $zero, 0x70
     ctx->r3 = ADD32(0, 0X70);
     // subu        $v1, $v1, $v0
@@ -1139,7 +1139,7 @@ L_8003E1B0:
     // mflo        $v1
     ctx->r3 = lo;
     // lbu         $v0, 0x1C8($t2)
-    ctx->r2 = MEM_BU(0X1C8, ctx->r10);
+    ctx->r2 = MEM_BU(ST_PLAYER_EFFECT_CAP_PERCENT, ctx->r10);
     // subu        $a2, $a1, $a0
     ctx->r6 = SUB32(ctx->r5, ctx->r4);
     // mult        $a2, $v0
