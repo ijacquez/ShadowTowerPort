@@ -305,7 +305,9 @@ sets `ST_CURRENT_ACTIVE_COLLISION_RECORD_ADDRESS` to the record and
 0's slot-2 resource, the periodic and update entries contain
 `ST_STAGE_ZERO_ACTIVE_RECORD_PERIODIC_CALLBACK` and
 `ST_STAGE_ZERO_ACTIVE_RECORD_UPDATE_CALLBACK`, respectively. The port executes
-these addresses through its MIPS interpreter. The update callback begins by
+these addresses through its MIPS interpreter. In the supplied `FDAT.T`, the
+slot-2 resources for level indices 32 and 40 are byte-for-byte identical to
+the stage-zero resource, though their other level data can differ. The update callback begins by
 adding `ST_ACTIVE_COLLISION_RECORD_UPDATE_STEP` to
 `ST_ACTIVE_COLLISION_RECORD_UPDATE_ACCUMULATOR` and storing the low halfword,
 then calls `ST_STAGE_ZERO_ACTIVE_RECORD_UPDATE_COUNTDOWN`. This routine reads
@@ -395,6 +397,24 @@ record position with 32-bit wrapping. These record positions are subsequently
 used by `ST_QueryActiveCollisionRecords` when checking player movement.
 **OPEN:** the full collision-response branches and the complete set of
 displacement writers.
+
+In the resolver, result bits `ST_COLLISION_RESULT_FIRST_NORMAL_THRESHOLD` and
+`ST_COLLISION_RESULT_SECOND_NORMAL_THRESHOLD` take precedence over the
+player-hit response. When that response is reached with
+`ST_COLLISION_RESULT_PLAYER_HIT`, the resolver sets
+`ST_ACTIVE_COLLISION_RECORD_HIT_PLAYER_FLAG`. `ST_SetCollisionReference`
+then selects the player position as the reference. The resolver clears the
+working X/Z displacement and, on the first such response, computes
+`t = (ratan2(recordZ - playerZ, recordX - playerX) + 0x400) & 0xFFF`.
+It computes `p` from the original horizontal displacement magnitude times
+`rcos(originalDirection - t)`, using the low 32-bit product divided by 4096
+toward zero. If `p` is nonzero, it adds `rcos(t) * p / 4096` to working X
+and `rsin(t) * p / 4096` to working Z, again using low 32-bit products and
+division toward zero; each component is stored as a halfword. It then repeats
+the collision query. If the reference-response path is reached a second time,
+it leaves working X/Z at zero and continues to the vertical response. The
+resolver allows at most three nonzero-result correction passes before that
+vertical response. Other query-result branches remain **OPEN**.
 
 After this processing, if the signed 16-bit movement magnitude is nonzero and
 `ST_PLAYER_DIRECTIONAL_MOVE_DISABLED` (`0x21E`) is zero, `ST_PlayerUpdateMovement` calls

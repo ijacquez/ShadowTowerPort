@@ -465,7 +465,7 @@ L_8004C478:
     // subu        $a0, $s5, $v1
     ctx->r4 = SUB32(ctx->r21, ctx->r3);
     // sw          $v0, 0x78($s3)
-    MEM_W(0X78, ctx->r19) = ctx->r2;
+    MEM_W(ST_COLLISION_QUERY_REFERENCE_DIRECTION, ctx->r19) = ctx->r2;
     // jal         0x800744C4
     // sh          $v1, 0x5E($s2)
     MEM_H(0X5E, ctx->r18) = ctx->r3;
@@ -572,7 +572,7 @@ L_8004C514:
     // subu        $a0, $s5, $v1
     ctx->r4 = SUB32(ctx->r21, ctx->r3);
     // sw          $v0, 0x78($s3)
-    MEM_W(0X78, ctx->r19) = ctx->r2;
+    MEM_W(ST_COLLISION_QUERY_REFERENCE_DIRECTION, ctx->r19) = ctx->r2;
     // jal         0x800744C4
     // sh          $v1, 0x5E($s2)
     MEM_H(0X5E, ctx->r18) = ctx->r3;
@@ -628,7 +628,7 @@ L_8004C56C:
     // lw          $v0, 0x74($s2)
     ctx->r2 = MEM_W(0X74, ctx->r18);
     // lw          $v1, 0xAC($s3)
-    ctx->r3 = MEM_W(0XAC, ctx->r19);
+    ctx->r3 = MEM_W(ST_COLLISION_QUERY_REFERENCE_X, ctx->r19);
     // addiu       $a0, $sp, 0x18
     ctx->r4 = ADD32(ctx->r29, 0X18);
     // sw          $zero, 0x1C($sp)
@@ -640,7 +640,7 @@ L_8004C56C:
     // lw          $v0, 0x7C($s2)
     ctx->r2 = MEM_W(0X7C, ctx->r18);
     // lw          $v1, 0xB4($s3)
-    ctx->r3 = MEM_W(0XB4, ctx->r19);
+    ctx->r3 = MEM_W(ST_COLLISION_QUERY_REFERENCE_Z, ctx->r19);
     // addiu       $a1, $sp, 0x28
     ctx->r5 = ADD32(ctx->r29, 0X28);
     // subu        $v0, $v0, $v1
@@ -683,11 +683,11 @@ L_8004C56C:
     ctx->r4 = SUB32(ctx->r21, ctx->r4);
     // jal         0x800744C4
     // sw          $v0, 0x78($s3)
-    MEM_W(0X78, ctx->r19) = ctx->r2;
+    MEM_W(ST_COLLISION_QUERY_REFERENCE_DIRECTION, ctx->r19) = ctx->r2;
     rcos(rdram, ctx);
     goto after_12;
     // sw          $v0, 0x78($s3)
-    MEM_W(0X78, ctx->r19) = ctx->r2;
+    MEM_W(ST_COLLISION_QUERY_REFERENCE_DIRECTION, ctx->r19) = ctx->r2;
     after_12:
     // mult        $s6, $v0
     result = S64(S32(ctx->r22)) * S64(S32(ctx->r2)); lo = S32(result >> 0); hi = S32(result >> 32);
@@ -710,11 +710,11 @@ L_8004C5F4:
     // beq         $s0, $zero, L_8004C2E8
     if (ctx->r16 == 0) {
         // sh          $s0, 0x44C6($s3)
-        MEM_H(0X44C6, ctx->r19) = ctx->r16;
+        MEM_H(ST_COLLISION_QUERY_CORRECTION_MAGNITUDE, ctx->r19) = ctx->r16;
         goto L_8004C2E8;
     }
     // sh          $s0, 0x44C6($s3)
-    MEM_H(0X44C6, ctx->r19) = ctx->r16;
+    MEM_H(ST_COLLISION_QUERY_CORRECTION_MAGNITUDE, ctx->r19) = ctx->r16;
     // jal         0x800744C4
     // addu        $a0, $s1, $zero
     ctx->r4 = ADD32(ctx->r17, 0);

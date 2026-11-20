@@ -1,5 +1,6 @@
 #include "recomp.h"
 #include "disable_warnings.h"
+#include "ST_CollisionQuery.h"
 
 // Copy a selected reference position and two halfwords into the shared query and
 // calculate its X/Z distance from the supplied position.
@@ -22,11 +23,11 @@ void ST_SetCollisionReference(uint8_t* rdram, recomp_context* ctx) {
     // sw          $s0, 0x10($sp)
     MEM_W(0X10, ctx->r29) = ctx->r16;
     // lw          $v0, 0x74($s2)
-    ctx->r2 = MEM_W(0X74, ctx->r18);
+    ctx->r2 = MEM_W(ST_COLLISION_QUERY_RESULT_FLAGS, ctx->r18);
     // nop
 
     // andi        $v0, $v0, 0x80
-    ctx->r2 = ctx->r2 & 0X80;
+    ctx->r2 = ctx->r2 & ST_COLLISION_RESULT_PLAYER_HIT;
     // beq         $v0, $zero, L_80049398
     if (ctx->r2 == 0) {
         // lui         $s0, 0x801A
@@ -80,11 +81,11 @@ void ST_SetCollisionReference(uint8_t* rdram, recomp_context* ctx) {
     // lw          $a1, 0x254($s0)
     ctx->r5 = MEM_W(0X254, ctx->r16);
     // sw          $v0, 0xAC($s2)
-    MEM_W(0XAC, ctx->r18) = ctx->r2;
+    MEM_W(ST_COLLISION_QUERY_REFERENCE_X, ctx->r18) = ctx->r2;
     // sw          $v1, 0xB0($s2)
-    MEM_W(0XB0, ctx->r18) = ctx->r3;
+    MEM_W(ST_COLLISION_QUERY_REFERENCE_Y, ctx->r18) = ctx->r3;
     // sw          $a0, 0xB4($s2)
-    MEM_W(0XB4, ctx->r18) = ctx->r4;
+    MEM_W(ST_COLLISION_QUERY_REFERENCE_Z, ctx->r18) = ctx->r4;
     // sw          $a1, 0xB8($s2)
     MEM_W(0XB8, ctx->r18) = ctx->r5;
     // addiu       $v0, $zero, 0x100
@@ -173,11 +174,11 @@ L_80049398:
     // lw          $a1, 0x80($s0)
     ctx->r5 = MEM_W(0X80, ctx->r16);
     // sw          $v0, 0xAC($s2)
-    MEM_W(0XAC, ctx->r18) = ctx->r2;
+    MEM_W(ST_COLLISION_QUERY_REFERENCE_X, ctx->r18) = ctx->r2;
     // sw          $v1, 0xB0($s2)
-    MEM_W(0XB0, ctx->r18) = ctx->r3;
+    MEM_W(ST_COLLISION_QUERY_REFERENCE_Y, ctx->r18) = ctx->r3;
     // sw          $a0, 0xB4($s2)
-    MEM_W(0XB4, ctx->r18) = ctx->r4;
+    MEM_W(ST_COLLISION_QUERY_REFERENCE_Z, ctx->r18) = ctx->r4;
     // sw          $a1, 0xB8($s2)
     MEM_W(0XB8, ctx->r18) = ctx->r5;
     // lhu         $v0, 0x2E($s0)
@@ -276,11 +277,11 @@ L_80049440:
     // lw          $a1, 0x30($s0)
     ctx->r5 = MEM_W(0X30, ctx->r16);
     // sw          $v0, 0xAC($s2)
-    MEM_W(0XAC, ctx->r18) = ctx->r2;
+    MEM_W(ST_COLLISION_QUERY_REFERENCE_X, ctx->r18) = ctx->r2;
     // sw          $v1, 0xB0($s2)
-    MEM_W(0XB0, ctx->r18) = ctx->r3;
+    MEM_W(ST_COLLISION_QUERY_REFERENCE_Y, ctx->r18) = ctx->r3;
     // sw          $a0, 0xB4($s2)
-    MEM_W(0XB4, ctx->r18) = ctx->r4;
+    MEM_W(ST_COLLISION_QUERY_REFERENCE_Z, ctx->r18) = ctx->r4;
     // sw          $a1, 0xB8($s2)
     MEM_W(0XB8, ctx->r18) = ctx->r5;
     // lbu         $v1, 0x4($s0)

@@ -262,7 +262,7 @@ L_80049694:
     // sw          $a0, 0x8($s1)
     MEM_W(ST_COLLISION_QUERY_POSITION_Y, ctx->r17) = ctx->r4;
     // sw          $v0, 0x59BC($v1)
-    MEM_W(0X59BC, ctx->r3) = ctx->r2;
+    MEM_W(ST_COLLISION_QUERY_RESULT_FLAGS, ST_COLLISION_QUERY_BASE_ADDRESS) = ctx->r2;
     // lw          $ra, 0x18($sp)
     ctx->r31 = MEM_W(0X18, ctx->r29);
     // lw          $s1, 0x14($sp)
