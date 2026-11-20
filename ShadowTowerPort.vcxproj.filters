@@ -2157,10 +2157,10 @@
     <ClCompile Include="scr\st\sub_80057A28.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_80057A68.c">
+    <ClCompile Include="scr\st\ST_SetControllerActuatorFeedback.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_80057B10.c">
+    <ClCompile Include="scr\st\ST_UpdateControllerActuatorTimer.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\ST_HandleDownwardCollisionFeedback.c">

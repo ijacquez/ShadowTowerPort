@@ -760,8 +760,8 @@ SRCS:= scr/st/AddPrim.c \
 	scr/st/sub_80057744.c \
 	scr/st/sub_80057A28.c \
 	scr/st/sub_80057A3C.c \
-	scr/st/sub_80057A68.c \
-	scr/st/sub_80057B10.c \
+	scr/st/ST_SetControllerActuatorFeedback.c \
+	scr/st/ST_UpdateControllerActuatorTimer.c \
 	scr/st/ST_HandleDownwardCollisionFeedback.c \
 	scr/st/sub_80057BAC.c \
 	scr/st/sub_80057C0C.c \

@@ -15,3 +15,12 @@ enum ST_PlayerControlOffset {
 
 // Option labeled ADJUST WALK in the game's settings.
 enum { ST_ADJUST_WALK_SETTING_ADDRESS = 0x801CD122 };
+
+// Controller state at 0x801CD180 and actuator buffer at 0x801CD130.
+enum {
+    ST_CONTROLLER_ACTUATOR_MODE = 0x18,
+    ST_CONTROLLER_ACTUATOR_TIMER = 0x19,
+    ST_CONTROLLER_ACTUATOR_FIRST_BYTE = 0x45,
+    ST_CONTROLLER_ACTUATOR_SECOND_BYTE = 0x47,
+    ST_CONTROLLER_FEEDBACK_SETTING_ADDRESS = 0x801CD125
+};

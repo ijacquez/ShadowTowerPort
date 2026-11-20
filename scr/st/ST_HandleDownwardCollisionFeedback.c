@@ -62,7 +62,7 @@ L_80057B90:
     // jal         0x80057A68
     // sra         $a0, $a0, 2
     ctx->r4 = S32(ctx->r4) >> 2;
-    sub_80057A68(rdram, ctx);
+    ST_SetControllerActuatorFeedback(rdram, ctx);
     goto after_1;
     // sra         $a0, $a0, 2
     ctx->r4 = S32(ctx->r4) >> 2;

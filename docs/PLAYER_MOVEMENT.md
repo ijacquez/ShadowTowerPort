@@ -622,9 +622,25 @@ does not call either helper when its signed input is below `0x100` (0.0625 cells
 Otherwise it subtracts `0x100`, limits the result to `0x200` (0.125 cells per
 update), and calls `sub_800582F0` with ID `0x14` and parameter
 `0x40 + (limited_result >> 3)`. The latter can reach `SsUtKeyOn` through
-`sub_80058318`. It also calls `sub_80057A68` with `limited_result >> 2`.
-**OPEN:** the complete in-game meaning of the latter helper's state changes is
-not established.
+`sub_80058318`. It also calls
+[ST_SetControllerActuatorFeedback](../scr/st/ST_SetControllerActuatorFeedback.c)
+with `limited_result >> 2`.
+
+When `ST_CONTROLLER_FEEDBACK_SETTING_ADDRESS` is nonzero and that input is
+positive, the actuator helper adds 64, caps the result at 255, stores it in
+`ST_CONTROLLER_ACTUATOR_SECOND_BYTE`, and sets `ST_CONTROLLER_ACTUATOR_TIMER`
+to the result divided by 16 plus 5. If `ST_CONTROLLER_ACTUATOR_MODE` is 1,
+it also sets `ST_CONTROLLER_ACTUATOR_FIRST_BYTE` to 1. For nonpositive input,
+it clears the second byte and, when the mode is 1, the first byte. A zero
+setting leaves these values unchanged. For downward collision, the helper's
+input is 0 through 128: zero clears the applicable bytes, while positive input
+sets the second byte to 65 through 192.
+
+[ST_UpdateControllerActuatorTimer](../scr/st/ST_UpdateControllerActuatorTimer.c),
+called by [DrawScene](../scr/st/DrawScene.c), decrements a nonzero timer. If
+the timer is already zero when called, it clears both actuator bytes. The
+controller initialization passes the four-byte region containing those bytes
+to `sub_8007CCC4`; that port function currently bypasses the `PadSetAct` call.
 
 For `d > 0`:
 

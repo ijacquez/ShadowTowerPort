@@ -49,7 +49,7 @@ void DrawScene_80026AFC(uint8_t* rdram, recomp_context* ctx)
     // jal         0x80057B10
     // sw          $s2, 0x28($sp)
     MEM_W(0X28, ctx->r29) = ctx->r18;
-    sub_80057B10(rdram, ctx);
+    ST_UpdateControllerActuatorTimer(rdram, ctx);
     goto after_0;
     // sw          $s2, 0x28($sp)
     MEM_W(0X28, ctx->r29) = ctx->r18;

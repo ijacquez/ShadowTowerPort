@@ -962,7 +962,7 @@ L_80055874:
     // jal         0x80057A68
     // addu        $a0, $zero, $zero
     ctx->r4 = ADD32(0, 0);
-    sub_80057A68(rdram, ctx);
+    ST_SetControllerActuatorFeedback(rdram, ctx);
     goto after_19;
     // addu        $a0, $zero, $zero
     ctx->r4 = ADD32(0, 0);

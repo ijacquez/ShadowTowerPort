@@ -87,7 +87,7 @@ sub_80026AFC()    — RENDER FUNCTION (Begin2D, GTE, DrawOTag)
 
 ### Render Function sub_80026AFC (ST)
 ```
-sub_80057B10()        — pad vibration reset
+ST_UpdateControllerActuatorTimer()        — pad vibration reset
 sub_800176A8()        — unknown
 sub_80016A14()        — unknown
 sub_80033110()        — called when state=0,1,5,6 (camera/input setup?)

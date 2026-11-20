@@ -903,8 +903,8 @@
     <ClCompile Include="scr\st\sub_80057744.c" />
     <ClCompile Include="scr\st\sub_80057A28.c" />
     <ClCompile Include="scr\st\sub_80057A3C.c" />
-    <ClCompile Include="scr\st\sub_80057A68.c" />
-    <ClCompile Include="scr\st\sub_80057B10.c" />
+    <ClCompile Include="scr\st\ST_SetControllerActuatorFeedback.c" />
+    <ClCompile Include="scr\st\ST_UpdateControllerActuatorTimer.c" />
     <ClCompile Include="scr\st\ST_HandleDownwardCollisionFeedback.c" />
     <ClCompile Include="scr\st\sub_80057BAC.c" />
     <ClCompile Include="scr\st\sub_80057C0C.c" />

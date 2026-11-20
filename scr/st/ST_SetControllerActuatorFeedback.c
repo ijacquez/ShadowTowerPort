@@ -1,14 +1,15 @@
 #include "recomp.h"
 #include "disable_warnings.h"
+#include "ST_PlayerControls.h"
 
-void sub_80057A68(uint8_t* rdram, recomp_context* ctx) {
+void ST_SetControllerActuatorFeedback(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
     unsigned int rounding_mode = DEFAULT_ROUNDING_MODE;
     int c1cs = 0; 
     // lui         $v0, 0x801D
     ctx->r2 = S32(0X801D << 16);
     // lbu         $v0, -0x2EDB($v0)
-    ctx->r2 = MEM_BU(-0X2EDB, ctx->r2);
+    ctx->r2 = MEM_BU(0, ST_CONTROLLER_FEEDBACK_SETTING_ADDRESS);
     // nop
 
     // beq         $v0, $zero, L_80057B08
@@ -58,11 +59,11 @@ L_80057AA8:
     // sra         $v0, $v1, 4
     ctx->r2 = S32(ctx->r3) >> 4;
     // lbu         $v1, 0x18($a1)
-    ctx->r3 = MEM_BU(0X18, ctx->r5);
+    ctx->r3 = MEM_BU(ST_CONTROLLER_ACTUATOR_MODE, ctx->r5);
     // addiu       $v0, $v0, 0x5
     ctx->r2 = ADD32(ctx->r2, 0X5);
     // sb          $v0, 0x19($a1)
-    MEM_B(0X19, ctx->r5) = ctx->r2;
+    MEM_B(ST_CONTROLLER_ACTUATOR_TIMER, ctx->r5) = ctx->r2;
     // addiu       $v0, $zero, 0x1
     ctx->r2 = ADD32(0, 0X1);
     // bne         $v1, $v0, L_80057AD0
@@ -76,14 +77,14 @@ L_80057AA8:
     // addiu       $v0, $v0, -0x2ED0
     ctx->r2 = ADD32(ctx->r2, -0X2ED0);
     // sb          $v1, 0x45($v0)
-    MEM_B(0X45, ctx->r2) = ctx->r3;
+    MEM_B(ST_CONTROLLER_ACTUATOR_FIRST_BYTE, ctx->r2) = ctx->r3;
     // lui         $v0, 0x801D
     ctx->r2 = S32(0X801D << 16);
 L_80057AD0:
     // addiu       $v0, $v0, -0x2ED0
     ctx->r2 = ADD32(ctx->r2, -0X2ED0);
     // sb          $a0, 0x47($v0)
-    MEM_B(0X47, ctx->r2) = ctx->r4;
+    MEM_B(ST_CONTROLLER_ACTUATOR_SECOND_BYTE, ctx->r2) = ctx->r4;
     // j           L_80057B08
     // nop
 
@@ -108,14 +109,14 @@ L_80057AE0:
     // addiu       $v0, $v0, -0x2ED0
     ctx->r2 = ADD32(ctx->r2, -0X2ED0);
     // sb          $zero, 0x45($v0)
-    MEM_B(0X45, ctx->r2) = 0;
+    MEM_B(ST_CONTROLLER_ACTUATOR_FIRST_BYTE, ctx->r2) = 0;
     // lui         $v0, 0x801D
     ctx->r2 = S32(0X801D << 16);
 L_80057B00:
     // addiu       $v0, $v0, -0x2ED0
     ctx->r2 = ADD32(ctx->r2, -0X2ED0);
     // sb          $zero, 0x47($v0)
-    MEM_B(0X47, ctx->r2) = 0;
+    MEM_B(ST_CONTROLLER_ACTUATOR_SECOND_BYTE, ctx->r2) = 0;
 L_80057B08:
     // jr          $ra
     // nop

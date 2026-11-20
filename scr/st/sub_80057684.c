@@ -1,5 +1,6 @@
 #include "recomp.h"
 #include "disable_warnings.h"
+#include "ST_PlayerControls.h"
 
 void sub_80057684(uint8_t* rdram, recomp_context* ctx) 
 {
@@ -27,7 +28,7 @@ void sub_80057684(uint8_t* rdram, recomp_context* ctx)
     // sb          $v0, 0x48($s0)
     MEM_B(0X48, ctx->r16) = ctx->r2;
     // sb          $zero, 0x45($s0)
-    MEM_B(0X45, ctx->r16) = 0;
+    MEM_B(ST_CONTROLLER_ACTUATOR_FIRST_BYTE, ctx->r16) = 0;
     // sb          $zero, 0x49($s0)
     MEM_B(0X49, ctx->r16) = 0;
     // sb          $v0, 0x46($s0)
@@ -35,7 +36,7 @@ void sub_80057684(uint8_t* rdram, recomp_context* ctx)
     // sb          $v0, 0x4A($s0)
     MEM_B(0X4A, ctx->r16) = ctx->r2;
     // sb          $zero, 0x47($s0)
-    MEM_B(0X47, ctx->r16) = 0;
+    MEM_B(ST_CONTROLLER_ACTUATOR_SECOND_BYTE, ctx->r16) = 0;
     // sb          $zero, 0x4B($s0)
     MEM_B(0X4B, ctx->r16) = 0;
     // jal         0x8007E834

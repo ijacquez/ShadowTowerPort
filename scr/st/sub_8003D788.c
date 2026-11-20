@@ -501,7 +501,7 @@ L_8003DA38:
     // jal         0x80057A68
     // nop
 
-    sub_80057A68(rdram, ctx);
+    ST_SetControllerActuatorFeedback(rdram, ctx);
     goto after_4;
     // nop
 

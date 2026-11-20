@@ -220,7 +220,7 @@ L_80042DF0:
     // jal         0x80057A68
     // addu        $a0, $zero, $zero
     ctx->r4 = ADD32(0, 0);
-    sub_80057A68(rdram, ctx);
+    ST_SetControllerActuatorFeedback(rdram, ctx);
     goto after_4;
     // addu        $a0, $zero, $zero
     ctx->r4 = ADD32(0, 0);
@@ -433,7 +433,7 @@ L_80042F10:
     // jal         0x80057A68
     // sh          $v1, 0x6158($v0)
     MEM_H(0X6158, ctx->r2) = ctx->r3;
-    sub_80057A68(rdram, ctx);
+    ST_SetControllerActuatorFeedback(rdram, ctx);
     goto after_15;
     // sh          $v1, 0x6158($v0)
     MEM_H(0X6158, ctx->r2) = ctx->r3;
@@ -894,7 +894,7 @@ L_80043194:
     // jal         0x80057A68
     // addu        $a0, $zero, $zero
     ctx->r4 = ADD32(0, 0);
-    sub_80057A68(rdram, ctx);
+    ST_SetControllerActuatorFeedback(rdram, ctx);
     goto after_35;
     // addu        $a0, $zero, $zero
     ctx->r4 = ADD32(0, 0);
@@ -2517,7 +2517,7 @@ L_80043AB4:
     // jal         0x80057A68
     // sh          $v1, 0x6158($v0)
     MEM_H(0X6158, ctx->r2) = ctx->r3;
-    sub_80057A68(rdram, ctx);
+    ST_SetControllerActuatorFeedback(rdram, ctx);
     goto after_82;
     // sh          $v1, 0x6158($v0)
     MEM_H(0X6158, ctx->r2) = ctx->r3;
