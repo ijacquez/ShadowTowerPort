@@ -31,6 +31,9 @@ int main() {
     MEM_H(0, sineTable) = 0;
     MEM_H(0x800, sineTable) = 0x1000;
     MEM_W(0, rotationTable) = 0x10000000;
+    MEM_W(0x1000, rotationTable) = 0x00001000;
+    MEM_W(0x2000, rotationTable) = 0xF0000000;
+    MEM_W(0x3000, rotationTable) = 0x0000F000;
     MEM_H(0, atanTable) = 0;
 
     recomp_context ctx{};
@@ -70,5 +73,21 @@ int main() {
         std::fprintf(stderr, "expected twelve collision queries, got %d\n", queryCount);
         return 1;
     }
-    std::puts("5 held and 8 release clear-path movement updates passed");
+    struct CardinalCase { uint16_t yaw; int32_t x, z; };
+    const CardinalCase cardinalCases[] = {
+        {0, 0, 48}, {0x400, -48, 0}, {0x800, 0, -48}, {0xC00, 48, 0}
+    };
+    for (const auto& test : cardinalCases) {
+        std::memset(GET_PTR(player), 0, 0x300);
+        MEM_H(ST_PLAYER_YAW, player) = test.yaw;
+        MEM_H(ST_CONTROL_HELD, controls) = MEM_HU(ST_CONTROL_MOVE_Z_POSITIVE, controls);
+        MEM_W(ST_PLAYER_MOVE_LIMIT, player) = 0xC0;
+        ST_PlayerUpdateMovement(rdram, &ctx);
+        if (S32(MEM_W(ST_PLAYER_POSITION_X, player)) != test.x ||
+            S32(MEM_W(ST_PLAYER_POSITION_Z, player)) != test.z) {
+            std::fprintf(stderr, "clear movement failed for yaw %x\n", test.yaw);
+            return 1;
+        }
+    }
+    std::puts("5 held, 8 release, and 4 cardinal clear-path movement updates passed");
 }

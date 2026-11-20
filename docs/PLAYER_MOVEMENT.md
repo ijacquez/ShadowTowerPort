@@ -211,6 +211,17 @@ returns `0xA7` (0.040771484375 cells) for the accumulator magnitude, the
 subsequent squared-component division gives `0xA9` (0.041259765625 cells),
 and the second lookup returns `0xA8` (0.041015625 cells).
 
+For the first update from idle under the same clear-query conditions, the
+positive local Z control produces these world displacements at cardinal
+`ST_PLAYER_YAW` values. The angle wraps at `0x1000` per full turn.
+
+| Yaw | World X displacement | World Z displacement |
+| --- | --- | --- |
+| `0x000` | 0 | `0x30` (0.01171875 cells) |
+| `0x400` | `-0x30` (-0.01171875 cells) | 0 |
+| `0x800` | 0 | `-0x30` (-0.01171875 cells) |
+| `0xC00` | `0x30` (0.01171875 cells) | 0 |
+
 On the state machine path beginning at `L_8004323C`, `ST_PLAYER_MOVE_LIMIT` is
 set to `0xC0` (0.046875 cells) and `ST_PLAYER_TURN_LIMIT` to 32. If neither
 `ST_CONTROL_MOVE_Z_POSITIVE` nor `ST_CONTROL_MOVE_Z_NEGATIVE` is held, the turn
