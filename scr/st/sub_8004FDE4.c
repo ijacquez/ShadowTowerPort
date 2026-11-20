@@ -167,7 +167,7 @@ L_8004FEB4:
     // jal         0x8004A078
     // addiu       $a2, $s1, 0x24
     ctx->r6 = ADD32(ctx->r17, 0X24);
-    sub_8004A078(rdram, ctx);
+    ST_ApplyCompositeRotationToVector(rdram, ctx);
     goto after_1;
     // addiu       $a2, $s1, 0x24
     ctx->r6 = ADD32(ctx->r17, 0X24);

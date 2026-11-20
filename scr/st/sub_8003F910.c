@@ -502,7 +502,7 @@ L_8003FBCC:
     // jal         0x80033E30
     // sw          $s5, 0x10($sp)
     MEM_W(0X10, ctx->r29) = ctx->r21;
-    sub_80033E30(rdram, ctx);
+    ST_SampleResourceVector(rdram, ctx);
     goto after_5;
     // sw          $s5, 0x10($sp)
     MEM_W(0X10, ctx->r29) = ctx->r21;
@@ -716,7 +716,7 @@ L_8003FBCC:
     // jal         0x80033E30
     // sw          $s5, 0x10($sp)
     MEM_W(0X10, ctx->r29) = ctx->r21;
-    sub_80033E30(rdram, ctx);
+    ST_SampleResourceVector(rdram, ctx);
     goto after_8;
     // sw          $s5, 0x10($sp)
     MEM_W(0X10, ctx->r29) = ctx->r21;

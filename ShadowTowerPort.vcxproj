@@ -659,7 +659,7 @@
     <ClCompile Include="scr\st\sub_80033B00.c" />
     <ClCompile Include="scr\st\sub_80033CFC.c" />
     <ClCompile Include="scr\st\sub_80033DB8.c" />
-    <ClCompile Include="scr\st\sub_80033E30.c" />
+    <ClCompile Include="scr\st\ST_SampleResourceVector.c" />
     <ClCompile Include="scr\st\sub_800340C4.c" />
     <ClCompile Include="scr\st\sub_800340F8.c" />
     <ClCompile Include="scr\st\sub_8003413C.c" />
@@ -786,13 +786,13 @@
     <ClCompile Include="scr\st\sub_800496C8.c" />
     <ClCompile Include="scr\st\sub_800498CC.c" />
     <ClCompile Include="scr\st\sub_80049AAC.c" />
-    <ClCompile Include="scr\st\sub_80049CD4.c" />
-    <ClCompile Include="scr\st\sub_80049D48.c" />
-    <ClCompile Include="scr\st\sub_80049DBC.c" />
-    <ClCompile Include="scr\st\sub_80049E30.c" />
+    <ClCompile Include="scr\st\ST_BuildXRotationMatrix.c" />
+    <ClCompile Include="scr\st\ST_BuildYRotationMatrix.c" />
+    <ClCompile Include="scr\st\ST_BuildZRotationMatrix.c" />
+    <ClCompile Include="scr\st\ST_BuildCompositeRotationMatrix.c" />
     <ClCompile Include="scr\st\sub_80049F08.c" />
     <ClCompile Include="scr\st\sub_80049FE4.c" />
-    <ClCompile Include="scr\st\sub_8004A078.c" />
+    <ClCompile Include="scr\st\ST_ApplyCompositeRotationToVector.c" />
     <ClCompile Include="scr\st\sub_8004A0F8.c" />
     <ClCompile Include="scr\st\sub_8004A148.c" />
     <ClCompile Include="scr\st\sub_8004A184.c" />
@@ -826,7 +826,7 @@
     <ClCompile Include="scr\st\ST_QueryActiveCollisionRecordsWithOffsets.c" />
     <ClCompile Include="scr\st\ST_SetCurrentActiveCollisionRecord.c" />
     <ClCompile Include="scr\st\ST_ResolveActiveCollisionRecordDisplacement.c" />
-    <ClCompile Include="scr\st\sub_8004C934.c" />
+    <ClCompile Include="scr\st\ST_ComputeActiveCollisionRecordOffset.c" />
     <ClCompile Include="scr\st\sub_8004CA90.c" />
     <ClCompile Include="scr\st\sub_8004CBA0.c" />
     <ClCompile Include="scr\st\sub_8004CC70.c" />

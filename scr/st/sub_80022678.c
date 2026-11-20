@@ -322,7 +322,7 @@ L_800228B4:
     // jal         0x80049E30
     // addu        $a1, $s1, $zero
     ctx->r5 = ADD32(ctx->r17, 0);
-    sub_80049E30(rdram, ctx);
+    ST_BuildCompositeRotationMatrix(rdram, ctx);
     goto after_2;
     // addu        $a1, $s1, $zero
     ctx->r5 = ADD32(ctx->r17, 0);

@@ -623,15 +623,36 @@ skipped when its signed `ST_ACTIVE_COLLISION_RECORD_LOCAL_X` equals
 record X/Z and record Y minus the unsigned vertical extent plus signed
 `ST_ACTIVE_COLLISION_RECORD_LOCAL_Z`. If that flag is clear and
 `ST_ACTIVE_COLLISION_RECORD_FLAG_POSITION_OFFSET` is set, it calls
-`sub_8004C934` and adds the returned vector to the record position. With
+`ST_ComputeActiveCollisionRecordOffset` and adds the returned vector to the record position. With
 neither flag it uses the record position directly. All position arithmetic
 wraps to 32 bits. It passes this position, the query position, the sum of
 the two unsigned horizontal parameters, and both unsigned vertical
 parameters to
 [ST_QueryHorizontalDistanceWithVerticalBounds](../scr/st/ST_QueryHorizontalDistanceWithVerticalBounds.c).
 It returns the first record index for which that helper does not return -1,
-or -1 if none matches. **OPEN:** the full effects of `sub_8004C934` and the
-in-game meaning of these record flags.
+or -1 if none matches. **OPEN:** the in-game meaning of these record flags.
+
+[ST_ComputeActiveCollisionRecordOffset](../scr/st/ST_ComputeActiveCollisionRecordOffset.c)
+asks [ST_SampleResourceVector](../scr/st/ST_SampleResourceVector.c) for vector
+index zero, using `ST_ACTIVE_COLLISION_RECORD_RESOURCE_SLOT + 0x80`,
+`ST_ACTIVE_COLLISION_RECORD_RESOURCE_VECTOR_SELECTOR`, and the signed
+`ST_ACTIVE_COLLISION_RECORD_UPDATE_ACCUMULATOR`. If sampling succeeds, it
+multiplies each signed sampled halfword by its corresponding signed
+`ST_ACTIVE_COLLISION_RECORD_SCALE_*` halfword, takes the low 32-bit product,
+arithmetic-shifts it right by 12, and stores the low halfword. If sampling
+fails, it instead uses `(0, -verticalExtent >> 1, -horizontalExtent)`,
+with the extents read as unsigned halfwords and results stored as halfwords.
+The Y shift rounds a negative odd value downward.
+
+The offset helper passes that vector and the record's X, Y, and Z rotation
+halfwords to [ST_ApplyCompositeRotationToVector](../scr/st/ST_ApplyCompositeRotationToVector.c),
+after adding `0x800` to Y and storing its low halfword. That function builds
+the matrix with [ST_BuildCompositeRotationMatrix](../scr/st/ST_BuildCompositeRotationMatrix.c)
+and passes it and the vector to `ApplyMatrix`, which writes three words. The
+matrix builder constructs X, Y, and Z matrices with the named axis helpers,
+uses `MulMatrix` to combine X and Z, then `MulMatrix2` to combine Y with that
+result. These matrix operations use the GTE. **OPEN:** the full resource
+vector format and in-game purpose of the sampled vector.
 
 The distance helper first rejects either wrapped signed X/Z difference if it
 is outside `[-radius, radius]`. Unless query Y equals the sentinel `0xFFFF`,

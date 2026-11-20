@@ -516,7 +516,7 @@ SRCS:= scr/st/AddPrim.c \
 	scr/st/sub_80033B00.c \
 	scr/st/sub_80033CFC.c \
 	scr/st/sub_80033DB8.c \
-	scr/st/sub_80033E30.c \
+	scr/st/ST_SampleResourceVector.c \
 	scr/st/sub_800340C4.c \
 	scr/st/sub_800340F8.c \
 	scr/st/sub_8003413C.c \
@@ -643,13 +643,13 @@ SRCS:= scr/st/AddPrim.c \
 	scr/st/sub_800496C8.c \
 	scr/st/ST_BuildQuarterTurnMatrices.c \
 	scr/st/sub_80049AAC.c \
-	scr/st/sub_80049CD4.c \
-	scr/st/sub_80049D48.c \
-	scr/st/sub_80049DBC.c \
-	scr/st/sub_80049E30.c \
+	scr/st/ST_BuildXRotationMatrix.c \
+	scr/st/ST_BuildYRotationMatrix.c \
+	scr/st/ST_BuildZRotationMatrix.c \
+	scr/st/ST_BuildCompositeRotationMatrix.c \
 	scr/st/sub_80049F08.c \
 	scr/st/sub_80049FE4.c \
-	scr/st/sub_8004A078.c \
+	scr/st/ST_ApplyCompositeRotationToVector.c \
 	scr/st/sub_8004A0F8.c \
 	scr/st/sub_8004A148.c \
 	scr/st/sub_8004A184.c \
@@ -683,7 +683,7 @@ SRCS:= scr/st/AddPrim.c \
 	scr/st/ST_QueryActiveCollisionRecordsWithOffsets.c \
 	scr/st/ST_SetCurrentActiveCollisionRecord.c \
 	scr/st/ST_ResolveActiveCollisionRecordDisplacement.c \
-	scr/st/sub_8004C934.c \
+	scr/st/ST_ComputeActiveCollisionRecordOffset.c \
 	scr/st/sub_8004CA90.c \
 	scr/st/sub_8004CBA0.c \
 	scr/st/sub_8004CC70.c \
@@ -1116,6 +1116,8 @@ scr/st/ST_PlayerUpdateMovement.o scr/st/ST_PlayerUpdateTurning.o scr/st/ST_Playe
 .PHONY: test-player-movement
 test-player-movement:
 	mkdir -p scratchpad
+	$(CXX) $(CFLAGS) -std=c++17 tests/active_record_offset_test.cpp scr/st/ST_ComputeActiveCollisionRecordOffset.c -o scratchpad/active-record-offset-test
+	scratchpad/active-record-offset-test
 	$(CXX) $(CFLAGS) -std=c++17 tests/collision_distance_bounds_test.cpp scr/st/ST_QueryHorizontalDistanceWithVerticalBounds.c -o scratchpad/collision-distance-bounds-test
 	scratchpad/collision-distance-bounds-test
 	$(CXX) $(CFLAGS) -std=c++17 tests/collision_reference_test.cpp scr/st/ST_SetCollisionReference.c -o scratchpad/collision-reference-test

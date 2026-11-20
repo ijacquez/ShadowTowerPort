@@ -8,7 +8,7 @@ void sub_8004FF88(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x8004A078
     // addiu       $a2, $sp, 0x20
     ctx->r6 = ADD32(ctx->r29, 0X20);
-    sub_8004A078(rdram, ctx);
+    ST_ApplyCompositeRotationToVector(rdram, ctx);
     goto after_0;
     // addiu       $a2, $sp, 0x20
     ctx->r6 = ADD32(ctx->r29, 0X20);

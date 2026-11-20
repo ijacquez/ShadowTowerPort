@@ -5046,7 +5046,7 @@ L_8003A2D8:
     // jal         0x80033E30
     // addiu       $a0, $a0, 0x80
     ctx->r4 = ADD32(ctx->r4, 0X80);
-    sub_80033E30(rdram, ctx);
+    ST_SampleResourceVector(rdram, ctx);
     goto after_72;
     // addiu       $a0, $a0, 0x80
     ctx->r4 = ADD32(ctx->r4, 0X80);

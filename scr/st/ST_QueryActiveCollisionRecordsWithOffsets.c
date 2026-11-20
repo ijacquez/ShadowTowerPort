@@ -142,7 +142,7 @@ L_8004BF40:
     // jal         0x8004C934
     // addiu       $a2, $sp, 0x20
     ctx->r6 = ADD32(ctx->r29, 0X20);
-    sub_8004C934(rdram, ctx);
+    ST_ComputeActiveCollisionRecordOffset(rdram, ctx);
     goto after_0;
     // addiu       $a2, $sp, 0x20
     ctx->r6 = ADD32(ctx->r29, 0X20);

@@ -40,7 +40,7 @@ void sub_80049F08(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x80049CD4
     // sra         $a0, $a0, 16
     ctx->r4 = S32(ctx->r4) >> 16;
-    sub_80049CD4(rdram, ctx);
+    ST_BuildXRotationMatrix(rdram, ctx);
     goto after_0;
     // sra         $a0, $a0, 16
     ctx->r4 = S32(ctx->r4) >> 16;
@@ -80,7 +80,7 @@ void sub_80049F08(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x80049D48
     // addu        $a1, $s0, $zero
     ctx->r5 = ADD32(ctx->r16, 0);
-    sub_80049D48(rdram, ctx);
+    ST_BuildYRotationMatrix(rdram, ctx);
     goto after_2;
     // addu        $a1, $s0, $zero
     ctx->r5 = ADD32(ctx->r16, 0);

@@ -1,7 +1,7 @@
 #include "recomp.h"
 #include "disable_warnings.h"
 
-void sub_80049E30(uint8_t* rdram, recomp_context* ctx) {
+void ST_BuildCompositeRotationMatrix(uint8_t* rdram, recomp_context* ctx) {
     uint64_t hi = 0, lo = 0, result = 0;
     unsigned int rounding_mode = DEFAULT_ROUNDING_MODE;
     int c1cs = 0; 
@@ -22,7 +22,7 @@ void sub_80049E30(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x80049DBC
     // addiu       $a1, $sp, 0x10
     ctx->r5 = ADD32(ctx->r29, 0X10);
-    sub_80049DBC(rdram, ctx);
+    ST_BuildZRotationMatrix(rdram, ctx);
     goto after_0;
     // addiu       $a1, $sp, 0x10
     ctx->r5 = ADD32(ctx->r29, 0X10);
@@ -32,7 +32,7 @@ void sub_80049E30(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x80049CD4
     // addu        $a1, $s1, $zero
     ctx->r5 = ADD32(ctx->r17, 0);
-    sub_80049CD4(rdram, ctx);
+    ST_BuildXRotationMatrix(rdram, ctx);
     goto after_1;
     // addu        $a1, $s1, $zero
     ctx->r5 = ADD32(ctx->r17, 0);
@@ -52,7 +52,7 @@ void sub_80049E30(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x80049D48
     // addiu       $a1, $sp, 0x10
     ctx->r5 = ADD32(ctx->r29, 0X10);
-    sub_80049D48(rdram, ctx);
+    ST_BuildYRotationMatrix(rdram, ctx);
     goto after_3;
     // addiu       $a1, $sp, 0x10
     ctx->r5 = ADD32(ctx->r29, 0X10);

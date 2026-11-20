@@ -1299,7 +1299,7 @@
     <ClCompile Include="scr\st\sub_8004A67C.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_8004A078.c">
+    <ClCompile Include="scr\st\ST_ApplyCompositeRotationToVector.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\sub_8004A148.c">
@@ -1386,7 +1386,7 @@
     <ClCompile Include="scr\st\ST_SetCurrentActiveCollisionRecord.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_8004C934.c">
+    <ClCompile Include="scr\st\ST_ComputeActiveCollisionRecordOffset.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\sub_8004CA90.c">
@@ -2019,7 +2019,7 @@
     <ClCompile Include="scr\st\sub_80033DB8.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_80033E30.c">
+    <ClCompile Include="scr\st\ST_SampleResourceVector.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\sub_80034E68.c">
@@ -2088,16 +2088,16 @@
     <ClCompile Include="scr\st\sub_80049AAC.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_80049CD4.c">
+    <ClCompile Include="scr\st\ST_BuildXRotationMatrix.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_80049D48.c">
+    <ClCompile Include="scr\st\ST_BuildYRotationMatrix.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_80049DBC.c">
+    <ClCompile Include="scr\st\ST_BuildZRotationMatrix.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
-    <ClCompile Include="scr\st\sub_80049E30.c">
+    <ClCompile Include="scr\st\ST_BuildCompositeRotationMatrix.c">
       <Filter>Исходные файлы\scr\st</Filter>
     </ClCompile>
     <ClCompile Include="scr\st\sub_80049F08.c">

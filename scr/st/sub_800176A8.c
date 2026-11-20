@@ -124,7 +124,7 @@ L_8001772C:
     // jal         0x80049CD4
     // addiu       $a1, $a1, -0x41C8
     ctx->r5 = ADD32(ctx->r5, -0X41C8);
-    sub_80049CD4(rdram, ctx);
+    ST_BuildXRotationMatrix(rdram, ctx);
     goto after_1;
     // addiu       $a1, $a1, -0x41C8
     ctx->r5 = ADD32(ctx->r5, -0X41C8);

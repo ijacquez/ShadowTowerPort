@@ -40,7 +40,7 @@ void sub_80036218(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x80033E30
     // addiu       $a0, $a0, 0x28
     ctx->r4 = ADD32(ctx->r4, 0X28);
-    sub_80033E30(rdram, ctx);
+    ST_SampleResourceVector(rdram, ctx);
     goto after_0;
     // addiu       $a0, $a0, 0x28
     ctx->r4 = ADD32(ctx->r4, 0X28);
@@ -108,7 +108,7 @@ void sub_80036218(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x8004A078
     // sh          $v0, 0x1C($sp)
     MEM_H(0X1C, ctx->r29) = ctx->r2;
-    sub_8004A078(rdram, ctx);
+    ST_ApplyCompositeRotationToVector(rdram, ctx);
     goto after_1;
     // sh          $v0, 0x1C($sp)
     MEM_H(0X1C, ctx->r29) = ctx->r2;
