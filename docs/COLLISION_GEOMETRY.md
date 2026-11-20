@@ -59,10 +59,22 @@ full model and collision formats have not yet been established. See
    The routine exits if the 32-bit calculated end of the first output is
    greater than its buffer limit in an unsigned comparison.
 5. The geometry query invokes `sub_800468C0` and `sub_80047884` to test
-   candidate geometry. Both
-   access the shared level-data pointer and derive subrecord addresses using
-   fields from the selected 12-byte records. **OPEN:** their full formats
-   and exact individual responsibilities are not established.
+   candidate geometry. In `sub_800468C0`, let `entry` be the selected
+   40-byte entry and `base` the shared level-data pointer. It reads an
+   unsigned halfword count at `entry + 0x20` and iterates 12-byte records
+   beginning at:
+
+   ```text
+   base + 12 + word(entry + 0x10)
+       + 20 * halfword(entry + 0x18) + 24 * halfword(entry + 0x1A)
+       + 28 * halfword(entry + 0x1C) + 32 * halfword(entry + 0x1E)
+   ```
+
+   The halfwords in this expression are unsigned. For each such record,
+   its unsigned halfword at offset 4 is added to `base + 12 + word(entry +
+   8)` to address a vector loaded into the GTE and transformed with the
+   selected record's matrix. **OPEN:** the full formats and exact individual
+   responsibilities of the two geometry helpers are not established.
 6. Results, including flags and distance-like values, are written to the
    shared query structure. `ST_PlayerMoveWithCollision` uses them to choose
    and adjust the displacement; see [PLAYER_MOVEMENT.md](PLAYER_MOVEMENT.md).
