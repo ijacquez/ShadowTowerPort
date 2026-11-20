@@ -49,6 +49,28 @@ int main() {
             }
         }
     }
+    MEM_H(2, angles) = 0;
+    recomp_context rotation{};
+    rotation.r4 = angles;
+    rotation.r5 = matrix;
+    RotMatrix(rdram, &rotation);
+    int16_t screenY[2];
+    for (int i = 0; i < 2; ++i) {
+        recomp_context gte{};
+        for (int j = 0; j < 5; ++j)
+            gte.cp2c[j] = MEM_W(j * 4, matrix);
+        gte.cp2c[25] = 120u << 16;
+        gte.cp2c[26] = 300;
+        gte.cp2d[0] = (uint32_t)(i * 128) << 16;
+        gte.cp2d[1] = 4096;
+        gte_command(&gte, 0x4A180001);
+        screenY[i] = (int16_t)(gte.cp2d[14] >> 16);
+    }
+    if (screenY[1] <= screenY[0]) {
+        std::fprintf(stderr, "positive camera Y did not increase projected Y: %d, %d\n",
+                     screenY[0], screenY[1]);
+        return 1;
+    }
     std::puts("4096 yaw values preserve horizontal output across stack Y cases");
     return 0;
 }

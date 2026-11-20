@@ -480,7 +480,8 @@ records scanned by `ST_QueryIndexedCollisionRecords`.
 In [ST_PlayerMoveWithCollision](../scr/st/ST_PlayerMoveWithCollision.c),
 `ST_PLAYER_VERTICAL_MOVE` (`0x2D4`) is a signed 16-bit value used as the Y
 component of collision-tested movement. A positive value increases the stored
-Y coordinate when that displacement is applied. On the path that applies the
+Y coordinate when that displacement is applied. **Positive world Y is down;
+negative world Y is up.** On the path that applies the
 candidate, the current value is used before the later vertical update. After the
 collision query, let `q` be its word at `0x801B5974` and `d = q - 0x640`
 (1600). When the geometry search finds no candidates, `ST_QueryLevelGeometry` sets q
@@ -489,10 +490,22 @@ update writes 16; with a positive value and the relevant query flags clear,
 it adds 48. The initial
 player Y is also initialized from a decimal text field shifted by 12 bits,
 less `0x640`, while the collision query
-temporarily adds that same offset to Y. These operations alone do not prove
-which physical direction is up. **OPEN:** the physical meaning of q and the offset's relationship to
+temporarily adds that same offset to Y. **OPEN:** the physical meaning of q and the offset's relationship to
 the player's full height are not established. The branches below describe
 stored values.
+
+The level-rendering path establishes the Y direction. For a level,
+unrotated view, [sub_8001CB88](../scr/st/sub_8001CB88.c) subtracts player
+Y and the two view adjustments from a level placement's Y. The rotation
+matrix from [RotMatrix](../scr/st/RotMatrix.c) is the identity at zero
+angles; [sub_800498CC](../scr/st/sub_800498CC.c) preserves the Y axis in
+the placement matrices. [sub_8001CDF8](../scr/st/sub_8001CDF8.c) uses those
+matrices and the placement translation to project level vertices. In the
+[GTE projection](../PsyCross/src/gte/PsyX_GTE.cpp), for positive depth and
+without saturation, increasing relative Y increases screen Y. The
+[renderer](../PsyCross/src/render/PsyX_render.cpp) maps increasing screen Y
+downward. Thus increasing a level vertex's world Y moves it down on screen,
+and increasing player Y moves the view down relative to the level.
 
 For a selected three- or four-vertex collision record, the geometry helpers
 rotate the record's referenced vector into signed halfwords `N` and select

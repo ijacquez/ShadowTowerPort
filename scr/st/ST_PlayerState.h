@@ -10,6 +10,7 @@ enum ST_PlayerStateOffset {
     ST_PLAYER_MOVE_Z = 0x1D0,
     ST_PLAYER_DIRECTIONAL_MOVE_DISABLED = 0x21E,
     ST_PLAYER_POSITION_X = 0x248,
+    // World Y increases downward.
     ST_PLAYER_POSITION_Y = 0x24C,
     ST_PLAYER_POSITION_Z = 0x250,
     ST_PLAYER_VIEW_ROTATION_X = 0x268,
