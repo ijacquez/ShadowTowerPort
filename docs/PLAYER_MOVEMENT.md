@@ -337,8 +337,8 @@ For that command, the GTE implementation clears the previous flags and
 computes new MAC words and IR low halfwords from those loaded values. The
 function stores the MAC words as the transformed vertex, so the prior Y
 result and flags do not contribute to it. In the port's GTE implementation,
-the command leaves the upper half of each IR register unchanged; those bits
-are still present after the transformation. **OPEN:**
+the command leaves the upper half of each IR register unchanged until a
+`gte_mfc2` read sign-extends its low halfword. **OPEN:**
 the final prior writer on other paths and later uses of this GTE state on
 paths without a vertex transformation have not been established.
 

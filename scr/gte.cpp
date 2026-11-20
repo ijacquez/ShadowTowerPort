@@ -52,6 +52,14 @@ void gte_swc2(uint8_t* rdram, recomp_context* ctx, int rt, int rs, int imm) {
 }
 
 uint32_t gte_mfc2(recomp_context* ctx, int rd) {
+    switch (rd) {
+    case 1: case 3: case 5: case 8: case 9: case 10: case 11:
+        ctx->cp2d[rd] = (uint32_t)(int32_t)(int16_t)ctx->cp2d[rd];
+        break;
+    case 7: case 16: case 17: case 18: case 19:
+        ctx->cp2d[rd] = (uint16_t)ctx->cp2d[rd];
+        break;
+    }
     return ctx->cp2d[rd];
 }
 

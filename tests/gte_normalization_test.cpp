@@ -27,6 +27,23 @@ int main() {
         }
     }
 
+    recomp_context transfers{};
+    transfers.cp2d[10] = 0xFFFF0001;
+    if (gte_mfc2(&transfers, 10) != 1 || transfers.cp2d[10] != 1) {
+        std::fputs("positive IR transfer did not sign-extend\n", stderr);
+        return 1;
+    }
+    transfers.cp2d[10] = 0x12348000;
+    if (gte_mfc2(&transfers, 10) != 0xFFFF8000 || transfers.cp2d[10] != 0xFFFF8000) {
+        std::fputs("negative IR transfer did not sign-extend\n", stderr);
+        return 1;
+    }
+    transfers.cp2d[19] = 0xFFFF8001;
+    if (gte_mfc2(&transfers, 19) != 0x8001 || transfers.cp2d[19] != 0x8001) {
+        std::fputs("unsigned GTE transfer did not zero-extend\n", stderr);
+        return 1;
+    }
+
     constexpr uint32_t input = 0x80100000;
     constexpr uint32_t output = 0x80100020;
     const int values[] = {4096, -4096, -2048};
@@ -46,6 +63,6 @@ int main() {
             return 1;
         }
     }
-    std::puts("4 GTE leading-zero and 3 normalization cases passed");
+    std::puts("4 GTE leading-zero, 3 transfer, and 3 normalization cases passed");
     return 0;
 }
