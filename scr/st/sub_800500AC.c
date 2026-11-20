@@ -112,7 +112,7 @@ L_800500F8:
     // jal         0x8003C24C
     // addu        $a0, $zero, $zero
     ctx->r4 = ADD32(0, 0);
-    sub_8003C24C(rdram, ctx);
+    ST_UpdatePlayerCountersAndEffects(rdram, ctx);
     goto after_6;
     // addu        $a0, $zero, $zero
     ctx->r4 = ADD32(0, 0);

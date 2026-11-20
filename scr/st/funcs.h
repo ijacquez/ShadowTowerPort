@@ -305,7 +305,7 @@ void sub_8003BEB4(uint8_t* rdram, recomp_context* ctx);
 void sub_8003C054(uint8_t* rdram, recomp_context* ctx);
 void sub_8003C0E0(uint8_t* rdram, recomp_context* ctx);
 void ST_UpdateCounterAndTarget(uint8_t* rdram, recomp_context* ctx);
-void sub_8003C24C(uint8_t* rdram, recomp_context* ctx);
+void ST_UpdatePlayerCountersAndEffects(uint8_t* rdram, recomp_context* ctx);
 void sub_8003C95C(uint8_t* rdram, recomp_context* ctx);
 void sub_8003CAE4(uint8_t* rdram, recomp_context* ctx);
 void sub_8003CB88(uint8_t* rdram, recomp_context* ctx);

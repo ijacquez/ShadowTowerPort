@@ -26,7 +26,7 @@ void sub_80042D74(uint8_t* rdram, recomp_context* ctx)
     // jal         0x8003C24C
     // sw          $s0, 0xD0($sp)
     MEM_W(0XD0, ctx->r29) = ctx->r16;
-    sub_8003C24C(rdram, ctx);
+    ST_UpdatePlayerCountersAndEffects(rdram, ctx);
     goto after_0;
     // sw          $s0, 0xD0($sp)
     MEM_W(0XD0, ctx->r29) = ctx->r16;
@@ -714,7 +714,7 @@ L_800430F0:
     // jal         0x8003C24C
     // addu        $a0, $zero, $zero
     ctx->r4 = ADD32(0, 0);
-    sub_8003C24C(rdram, ctx);
+    ST_UpdatePlayerCountersAndEffects(rdram, ctx);
     goto after_27;
     // addu        $a0, $zero, $zero
     ctx->r4 = ADD32(0, 0);
@@ -732,7 +732,7 @@ L_800430F0:
     // jal         0x8003C24C
     // addu        $a0, $zero, $zero
     ctx->r4 = ADD32(0, 0);
-    sub_8003C24C(rdram, ctx);
+    ST_UpdatePlayerCountersAndEffects(rdram, ctx);
     goto after_29;
     // addu        $a0, $zero, $zero
     ctx->r4 = ADD32(0, 0);

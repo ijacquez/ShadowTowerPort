@@ -42,7 +42,7 @@ These changes precede the subsequent player-state dispatch; other paths can
 change the limits again. **OPEN:** the game meanings of player fields
 `0x19C`, `0x194`, `0x22`, and `0x24` have not been established here.
 
-[sub_8003C24C](../scr/st/sub_8003C24C.c) processes player halfwords
+[ST_UpdatePlayerCountersAndEffects](../scr/st/ST_UpdatePlayerCountersAndEffects.c) processes player halfwords
 `0x194`/`0x196` and `0x19C`/`0x19E` as current/target pairs through
 [ST_UpdateCounterAndTarget](../scr/st/ST_UpdateCounterAndTarget.c). When
 both signed current and target are zero, the helper returns `-1`. Otherwise,
@@ -52,9 +52,17 @@ stored as a halfword, so it wraps at the signed halfword boundaries. The
 helper writes its calculated values only when its fifth argument is nonzero.
 For these two pairs it returns `current * 4096 / 20`, truncated toward zero,
 when current is below 20, or 4096 otherwise. The state machine calls
-`sub_8003C24C` with the write-enable argument set to 1 before applying the
+`ST_UpdatePlayerCountersAndEffects` with the write-enable argument set to 1 before applying the
 movement-limit rules above. **OPEN:** the game meanings and all producers of
 these counters and targets have not been established.
+
+When the helper's signed halfword result for the `0x194`/`0x196` pair is
+not `-1`, `ST_UpdatePlayerCountersAndEffects` clears the movement and turn
+limits via `ST_ClearPlayerMovementLimits`, and clears player movement
+halfwords `0x1CC` through `0x1D0`. It also clears all three halfwords in
+each contribution set at `0x801C74B4` and `0x801C0298`, as well as the
+three halfwords at `0x801BA116`. If the word containing the counter and
+target is then zero, it clears bits `0x08` and `0x10` in player word `0x2C`.
 
 [sub_8005A3A8](../scr/st/sub_8005A3A8.c) sets the penalty total at player
 offset `0x22` from a halfword calculated by

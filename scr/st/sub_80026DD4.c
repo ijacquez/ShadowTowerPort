@@ -22,7 +22,7 @@ void sub_80026DD4(uint8_t* rdram, recomp_context* ctx) {
     // jal         0x8003C24C
     // addu        $a0, $s0, $zero
     ctx->r4 = ADD32(ctx->r16, 0);
-    sub_8003C24C(rdram, ctx);
+    ST_UpdatePlayerCountersAndEffects(rdram, ctx);
     goto after_1;
     // addu        $a0, $s0, $zero
     ctx->r4 = ADD32(ctx->r16, 0);

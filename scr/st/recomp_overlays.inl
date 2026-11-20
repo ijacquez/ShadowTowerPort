@@ -315,7 +315,7 @@ static FuncEntry section_1_text_funcs[] = {
     { .func = sub_8003C054, .offset = 0x0002c054 },
     { .func = sub_8003C0E0, .offset = 0x0002c0e0 },
     { .func = ST_UpdateCounterAndTarget, .offset = 0x0002c17c },
-    { .func = sub_8003C24C, .offset = 0x0002c24c },
+    { .func = ST_UpdatePlayerCountersAndEffects, .offset = 0x0002c24c },
     { .func = sub_8003C95C, .offset = 0x0002c95c },
     { .func = sub_8003CAE4, .offset = 0x0002cae4 },
     { .func = sub_8003CB88, .offset = 0x0002cb88 },

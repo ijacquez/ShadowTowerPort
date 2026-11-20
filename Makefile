@@ -569,7 +569,7 @@ SRCS:= scr/st/AddPrim.c \
 	scr/st/sub_8003C054.c \
 	scr/st/sub_8003C0E0.c \
 	scr/st/ST_UpdateCounterAndTarget.c \
-	scr/st/sub_8003C24C.c \
+	scr/st/ST_UpdatePlayerCountersAndEffects.c \
 	scr/st/sub_8003C95C.c \
 	scr/st/sub_8003CAE4.c \
 	scr/st/sub_8003CB88.c \

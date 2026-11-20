@@ -779,7 +779,7 @@ L_80053888:
     // jal         0x8003C24C
     // addu        $a0, $zero, $zero
     ctx->r4 = ADD32(0, 0);
-    sub_8003C24C(rdram, ctx);
+    ST_UpdatePlayerCountersAndEffects(rdram, ctx);
     goto after_1;
     // addu        $a0, $zero, $zero
     ctx->r4 = ADD32(0, 0);
@@ -991,7 +991,7 @@ L_800539F0:
     // jal         0x8003C24C
     // addu        $a0, $zero, $zero
     ctx->r4 = ADD32(0, 0);
-    sub_8003C24C(rdram, ctx);
+    ST_UpdatePlayerCountersAndEffects(rdram, ctx);
     goto after_3;
     // addu        $a0, $zero, $zero
     ctx->r4 = ADD32(0, 0);
