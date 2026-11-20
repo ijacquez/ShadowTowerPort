@@ -140,7 +140,7 @@ L_800411CC:
     // lh          $v1, 0x2D4($a0)
     ctx->r3 = MEM_HS(ST_PLAYER_VERTICAL_MOVE, ctx->r4);
     // addiu       $v0, $zero, 0x432
-    ctx->r2 = ADD32(0, 0X432);
+    ctx->r2 = ADD32(0, ST_COLLISION_QUERY_PLAYER_MOVEMENT_CHECKS);
     // sw          $v0, 0x5948($a1)
     MEM_W(0X5948, ctx->r5) = ctx->r2;
     // sw          $v1, 0x14($sp)

@@ -636,7 +636,8 @@ When the query path is entered, `ST_PlayerMoveWithCollision` builds a shared que
 player position and proposed X/Y/Z displacement. It supplies `0x100` (0.0625
 cells) as `ST_COLLISION_QUERY_HORIZONTAL_PARAMETER` (`0x1C`) and `0x640`
 (0.390625 cells) as `ST_COLLISION_QUERY_VERTICAL_PARAMETER` (`0x1E`), and
-enables checks with `ST_COLLISION_QUERY_INPUT_FLAGS` (`0x00`) set to `0x432`.
+enables checks with `ST_COLLISION_QUERY_INPUT_FLAGS` (`0x00`) set to
+`ST_COLLISION_QUERY_PLAYER_MOVEMENT_CHECKS` (`0x432`).
 If `ST_PLAYER_MOVE_MAGNITUDE` is nonzero and `ST_PLAYER_DIRECTIONAL_MOVE_DISABLED` is zero,
 the routine skips this query path and continues at the later vertical update.
 **OPEN:** the exact collision shape and the meaning of both dimensions have
@@ -668,11 +669,11 @@ the following input bits in order:
 
 | Input bit | Operation | Result contribution |
 | --- | --- | --- |
-| `0x2` | Calls [ST_QueryLevelGeometry](../scr/st/ST_QueryLevelGeometry.c). | Uses the helper's return value as the initial result. |
-| `0x10` | Calls [ST_QueryActiveCollisionRecords](../scr/st/ST_QueryActiveCollisionRecords.c), passing `2` as its second argument if input bit `0x400` is set, otherwise `0`. | ORs `0x10` if the helper returns anything other than `-1`. |
-| `0x40` | Calls [ST_QueryActiveCollisionRecordsWithOffsets](../scr/st/ST_QueryActiveCollisionRecordsWithOffsets.c). | ORs `0x10` if the helper returns anything other than `-1`. |
-| `0x20` | Calls [ST_QueryIndexedCollisionRecords](../scr/st/ST_QueryIndexedCollisionRecords.c). | ORs `0x40` if the helper returns anything other than `-1`. |
-| `ST_COLLISION_QUERY_CHECK_PLAYER` (`0x80`) | Calls [ST_QueryPlayerCollision](../scr/st/ST_QueryPlayerCollision.c). If input bit `0x800` is also set, first adds `0x200` (0.125 cells) to `ST_COLLISION_QUERY_HORIZONTAL_PARAMETER`. | ORs `ST_COLLISION_RESULT_PLAYER_HIT` (`0x80`) if the helper returns anything other than `-1`. |
+| `ST_COLLISION_QUERY_CHECK_LEVEL_GEOMETRY` (`0x2`) | Calls [ST_QueryLevelGeometry](../scr/st/ST_QueryLevelGeometry.c). | Uses the helper's return value as the initial result. |
+| `ST_COLLISION_QUERY_CHECK_ACTIVE_RECORDS` (`0x10`) | Calls [ST_QueryActiveCollisionRecords](../scr/st/ST_QueryActiveCollisionRecords.c), passing `2` as its second argument if `ST_COLLISION_QUERY_EXPAND_ACTIVE_RECORD_EXTENT` (`0x400`) is set, otherwise `0`. | ORs `ST_COLLISION_RESULT_ACTIVE_RECORD_HIT` (`0x10`) if the helper returns anything other than `-1`. |
+| `ST_COLLISION_QUERY_CHECK_ACTIVE_RECORDS_WITH_OFFSETS` (`0x40`) | Calls [ST_QueryActiveCollisionRecordsWithOffsets](../scr/st/ST_QueryActiveCollisionRecordsWithOffsets.c). | ORs `ST_COLLISION_RESULT_ACTIVE_RECORD_HIT` if the helper returns anything other than `-1`. |
+| `ST_COLLISION_QUERY_CHECK_INDEXED_RECORDS` (`0x20`) | Calls [ST_QueryIndexedCollisionRecords](../scr/st/ST_QueryIndexedCollisionRecords.c). | ORs `ST_COLLISION_RESULT_INDEXED_RECORD_HIT` (`0x40`) if the helper returns anything other than `-1`. |
+| `ST_COLLISION_QUERY_CHECK_PLAYER` (`0x80`) | Calls [ST_QueryPlayerCollision](../scr/st/ST_QueryPlayerCollision.c). If `ST_COLLISION_QUERY_EXPAND_PLAYER_EXTENT` (`0x800`) is also set, first adds `0x200` (0.125 cells) to `ST_COLLISION_QUERY_HORIZONTAL_PARAMETER`. | ORs `ST_COLLISION_RESULT_PLAYER_HIT` (`0x80`) if the helper returns anything other than `-1`. |
 
 The three helpers for input bits `0x10`, `0x40`, and `0x20` have their
 return values stored in `ST_COLLISION_QUERY_ACTIVE_RECORD_INDEX`,
@@ -681,9 +682,11 @@ return values stored in `ST_COLLISION_QUERY_ACTIVE_RECORD_INDEX`,
 `-1` at that address. After the geometry helper, the dispatcher adds the
 unsigned `ST_COLLISION_QUERY_VERTICAL_PARAMETER` to `ST_COLLISION_QUERY_POSITION_Y` for the
 remaining checks. Before returning it subtracts the then-current unsigned
-`ST_COLLISION_QUERY_VERTICAL_PARAMETER`, stores the final mask at `0x801B59BC`, and returns it.
-For the movement routines' `0x432` input mask, the enabled checks are
-`0x2`, `0x10`, and `0x20`, and `0x400` selects second argument `2` for
+`ST_COLLISION_QUERY_VERTICAL_PARAMETER`, stores the final mask in
+`ST_COLLISION_QUERY_RESULT_FLAGS` (`0x801B59BC`), and returns it.
+For the movement routines' `ST_COLLISION_QUERY_PLAYER_MOVEMENT_CHECKS` mask, the enabled checks are
+`ST_COLLISION_QUERY_CHECK_LEVEL_GEOMETRY`, `ST_COLLISION_QUERY_CHECK_ACTIVE_RECORDS`,
+and `ST_COLLISION_QUERY_CHECK_INDEXED_RECORDS`; `ST_COLLISION_QUERY_EXPAND_ACTIVE_RECORD_EXTENT` selects second argument `2` for
 `ST_QueryActiveCollisionRecords`. With that second argument, the latter adds `0x200` (0.125 cells) to the
 sum of `ST_COLLISION_QUERY_HORIZONTAL_PARAMETER` and a candidate's halfword `0x2E` before its
 horizontal comparison. The candidate records begin at `0x801BA138`, have a
