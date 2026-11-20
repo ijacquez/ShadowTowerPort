@@ -16,6 +16,22 @@ struct TurnCase {
 };
 
 int main() {
+    struct AngleCase { uint32_t first, second; bool greater; };
+    const AngleCase angleCases[] = {
+        {0, 0, false}, {1, 0, true}, {0, 1, false},
+        {0x7FF, 0x800, true}, {0x800, 0x7FF, false},
+        {0xFFF, 0, false}, {0x1001, 0, true},
+    };
+    for (const auto& test : angleCases) {
+        recomp_context ctx{};
+        ctx.r4 = test.first;
+        ctx.r5 = test.second;
+        ST_IsShiftedAngleGreater(rdram, &ctx);
+        if (ctx.r2 != test.greater || ctx.r5 != ((test.second + 0x800) & 0xFFF)) {
+            std::fprintf(stderr, "shifted angle comparison failed\n");
+            return 1;
+        }
+    }
     constexpr uint32_t player = 0x80198F28;
     constexpr uint32_t controls = 0x801CD180;
     const TurnCase cases[] = {

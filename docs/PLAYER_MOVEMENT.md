@@ -212,7 +212,7 @@ player offset `0x278` and `r` the halfword at `0x2CC`:
 If the resulting signed `r` is nonzero, the routine adds it to the pitch
 halfword and masks the result by `0xFFF`. For positive `r`, it passes the
 new pitch as the first argument and `0x2BC` as the second argument to
-[sub_8004A194](../scr/st/sub_8004A194.c); if the helper returns nonzero, it
+[ST_IsShiftedAngleGreater](../scr/st/ST_IsShiftedAngleGreater.c); if the helper returns nonzero, it
 sets pitch to `0x2BC`. For negative `r`, it passes `0xD44` first and the new
 pitch second; a nonzero return sets pitch to `0xD44`. The helper returns
 whether `((first + 0x800) & 0xFFF)` is greater than

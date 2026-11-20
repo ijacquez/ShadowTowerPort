@@ -86,7 +86,7 @@ void ST_PlayerUpdateTurning(uint8_t* rdram, recomp_context* ctx) {
     if ((int16_t)pitchRate > 0) {
         ctx->r4 = (MEM_HU(ST_PLAYER_PITCH, player) + pitchRate) & 0xFFF;
         MEM_H(ST_PLAYER_PITCH, player) = ctx->r4;
-        sub_8004A194(rdram, ctx);
+        ST_IsShiftedAngleGreater(rdram, ctx);
         const bool outOfRange = ctx->r2 != 0;
         ctx->r2 = 0x2BC;
         if (outOfRange) MEM_H(ST_PLAYER_PITCH, player) = ctx->r2;
@@ -95,7 +95,7 @@ void ST_PlayerUpdateTurning(uint8_t* rdram, recomp_context* ctx) {
         if ((int16_t)pitchRate < 0) {
             ctx->r5 = (MEM_HU(ST_PLAYER_PITCH, player) + pitchRate) & 0xFFF;
             MEM_H(ST_PLAYER_PITCH, player) = ctx->r5;
-            sub_8004A194(rdram, ctx);
+            ST_IsShiftedAngleGreater(rdram, ctx);
             const bool outOfRange = ctx->r2 != 0;
             ctx->r2 = 0xD44;
             if (outOfRange) MEM_H(ST_PLAYER_PITCH, player) = ctx->r2;

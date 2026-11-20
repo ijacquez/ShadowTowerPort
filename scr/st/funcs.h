@@ -390,7 +390,7 @@ void sub_8004A078(uint8_t* rdram, recomp_context* ctx);
 void sub_8004A0F8(uint8_t* rdram, recomp_context* ctx);
 void sub_8004A148(uint8_t* rdram, recomp_context* ctx);
 void sub_8004A184(uint8_t* rdram, recomp_context* ctx);
-void sub_8004A194(uint8_t* rdram, recomp_context* ctx);
+void ST_IsShiftedAngleGreater(uint8_t* rdram, recomp_context* ctx);
 void sub_8004A1B4(uint8_t* rdram, recomp_context* ctx);
 void sub_8004A304(uint8_t* rdram, recomp_context* ctx);
 void sub_8004A340(uint8_t* rdram, recomp_context* ctx);

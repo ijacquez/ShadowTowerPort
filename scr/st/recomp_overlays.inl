@@ -401,7 +401,7 @@ static FuncEntry section_1_text_funcs[] = {
     { .func = sub_8004A0F8, .offset = 0x0003a0f8 },
     { .func = sub_8004A148, .offset = 0x0003a148 },
     { .func = sub_8004A184, .offset = 0x0003a184 },
-    { .func = sub_8004A194, .offset = 0x0003a194 },
+    { .func = ST_IsShiftedAngleGreater, .offset = 0x0003a194 },
     { .func = sub_8004A1B4, .offset = 0x0003a1b4 },
     { .func = sub_8004A304, .offset = 0x0003a304 },
     { .func = sub_8004A340, .offset = 0x0003a340 },

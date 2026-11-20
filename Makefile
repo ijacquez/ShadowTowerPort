@@ -653,7 +653,7 @@ SRCS:= scr/st/AddPrim.c \
 	scr/st/sub_8004A0F8.c \
 	scr/st/sub_8004A148.c \
 	scr/st/sub_8004A184.c \
-	scr/st/sub_8004A194.c \
+	scr/st/ST_IsShiftedAngleGreater.c \
 	scr/st/sub_8004A1B4.c \
 	scr/st/sub_8004A304.c \
 	scr/st/sub_8004A340.c \
@@ -1128,7 +1128,7 @@ test-player-movement:
 	scratchpad/player-rotation-test
 	$(CXX) $(CFLAGS) -std=c++17 -ffunction-sections -fdata-sections tests/player_movement_axis_test.cpp -Wl,--gc-sections -o scratchpad/player-movement-axis-test
 	scratchpad/player-movement-axis-test
-	$(CXX) $(CFLAGS) -std=c++17 tests/player_turning_test.cpp scr/st/ST_PlayerUpdateTurning.c scr/st/sub_8004A194.c -o scratchpad/player-turning-test
+	$(CXX) $(CFLAGS) -std=c++17 tests/player_turning_test.cpp scr/st/ST_PlayerUpdateTurning.c scr/st/ST_IsShiftedAngleGreater.c -o scratchpad/player-turning-test
 	scratchpad/player-turning-test
 	$(CXX) $(CFLAGS) -std=c++17 tests/player_vertical_test.cpp scr/st/ST_PlayerMoveWithCollision.c -o scratchpad/player-vertical-test
 	scratchpad/player-vertical-test
